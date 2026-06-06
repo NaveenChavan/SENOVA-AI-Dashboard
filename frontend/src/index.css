@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .card-gradient {
+    @apply bg-slate-800/80 backdrop-blur-sm border border-slate-700/60 shadow-lg;
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px -4px rgba(16, 185, 129, 0.15);
+  }
+
+  .glow-emerald-text {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+}

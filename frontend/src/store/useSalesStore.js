@@ -1,5 +1,8 @@
 import { create } from 'zustand'
+import axios from 'axios'
 import api from '../services/api'
+
+let _abortController = null
 
 const useSalesStore = create((set) => ({
   data: null,
@@ -9,6 +12,7 @@ const useSalesStore = create((set) => ({
   filename: '',
   validationMessage: '',
   uploadErrors: [],
+  refreshKey: 0,
 
   uploadFile: async (file) => {
     set({
@@ -60,23 +64,47 @@ const useSalesStore = create((set) => ({
   },
 
   fetchAnalytics: async (fileId, timeFilter = 'all') => {
-    set({
-      isLoading: true,
-      error: null,
-      validationMessage: 'Loading analytics...',
-    })
+    if (_abortController) {
+      _abortController.abort()
+    }
+    _abortController = new AbortController()
+    const signal = _abortController.signal
+
+    set({ isLoading: true, error: null, data: null, validationMessage: 'Loading analytics...' })
 
     try {
-      const { data } = await api.get(`/analytics/${fileId}`, {
-        params: { time_filter: timeFilter },
+      const timestamp = new Date().getTime()
+      const url = `/api/analytics/${fileId}?time_filter=${timeFilter}&_=${timestamp}`
+      const response = await axios.get(url, {
+        signal,
+        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
       })
-      set({ data, validationMessage: '' })
+      if (signal.aborted) return
+      // Spread + freeze guarantees a brand-new object reference every time
+      const fresh = {
+        ...response.data,
+        summary: response.data.summary
+          ? {
+              ...response.data.summary,
+              revenue: { ...response.data.summary.revenue },
+              profit: { ...response.data.summary.profit },
+              cost: { ...response.data.summary.cost },
+              units_sold: { ...response.data.summary.units_sold },
+              unique_items_sold: { ...response.data.summary.unique_items_sold },
+            }
+          : response.data.summary,
+      }
+      set((state) => ({
+        data: fresh,
+        isLoading: false,
+        refreshKey: state.refreshKey + 1,
+        validationMessage: '',
+      }))
     } catch (err) {
+      if (axios.isCancel(err)) return
       const msg =
         err?.response?.data?.detail || 'Failed to load dashboard. Please retry.'
-      set({ error: msg, validationMessage: '' })
-    } finally {
-      set({ isLoading: false })
+      set({ error: msg, isLoading: false, validationMessage: '' })
     }
   },
 

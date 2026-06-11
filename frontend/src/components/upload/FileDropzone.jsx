@@ -64,7 +64,7 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onClick={() => !disabled && inputRef.current?.click()}
-        className={`card-gradient border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all duration-200 ${
+        className={`card-gradient border-2 border-dashed rounded-xl p-6 sm:p-12 text-center cursor-pointer transition-all duration-200 ${
           dragging
             ? 'border-emerald-400 bg-emerald-400/5 shadow-lg shadow-emerald-500/10'
             : 'border-slate-600 hover:border-emerald-500/50 hover:bg-slate-800/50'
@@ -81,12 +81,12 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
 
         <div className="flex flex-col items-center gap-3">
           <div className={`p-3 rounded-full ${dragging ? 'bg-emerald-400/10' : 'bg-slate-700/50'}`}>
-            <svg className={`w-10 h-10 ${dragging ? 'text-emerald-400' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-8 h-8 sm:w-10 sm:h-10 ${dragging ? 'text-emerald-400' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
           </div>
-          <p className="text-slate-200 font-medium">Drop your CSV / Excel file here, or click to browse</p>
-          <p className="text-sm text-slate-500">Expected columns: Date, Category, Item, Quantity, Selling Price, Cost Price</p>
+          <p className="text-slate-200 font-medium text-sm sm:text-base">Drop your CSV / Excel file here, or click to browse</p>
+          <p className="text-xs sm:text-sm text-slate-500">Expected columns: Date, Category, Item, Quantity, Selling Price, Cost Price</p>
 
           {progressMessage ? (
             <div className="flex items-center gap-2 mt-2">
@@ -110,7 +110,7 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
         <button
           type="button"
           onClick={downloadTemplate}
-          className="text-sm text-slate-500 hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-600 hover:decoration-emerald-400"
+          className="min-h-[44px] text-sm text-slate-500 hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-600 hover:decoration-emerald-400"
         >
           Download Standard Format (.csv)
         </button>

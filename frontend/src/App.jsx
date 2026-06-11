@@ -11,23 +11,43 @@ export default function App() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-slate-950/80 backdrop-blur-md border-b border-slate-800/60 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/upload" className="text-xl font-bold tracking-tight text-emerald-400 glow-emerald-text">
-            SENOVA
-            <span className="text-slate-100 font-light"> AI</span>
+      <header style={{
+        background: 'rgba(5, 13, 26, 0.9)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--border-subtle)',
+        position: 'sticky', top: 0, zIndex: 50
+      }}>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/upload" className="flex items-center gap-3">
+            <div style={{
+              width: 36, height: 36,
+              background: 'linear-gradient(135deg, #0ea5e9, #38bdf8)',
+              borderRadius: 10,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 16px rgba(56,189,248,0.3)'
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <span className="text-lg font-bold glow-blue-text" style={{color:'var(--accent-blue)'}}>SENOVA</span>
+              <span className="text-lg font-light" style={{color:'var(--text-primary)'}}> Digital Lab</span>
+            </div>
           </Link>
+
           <nav className="flex gap-1">
             {navLinks.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  pathname.startsWith(to)
-                    ? 'bg-emerald-500/10 text-emerald-400'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                }`}
-              >
+              <Link key={to} to={to} style={{
+                padding: '8px 16px',
+                borderRadius: 8,
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                transition: 'all 0.2s',
+                color: pathname.startsWith(to) ? 'var(--accent-blue)' : 'var(--text-secondary)',
+                background: pathname.startsWith(to) ? 'rgba(56,189,248,0.08)' : 'transparent',
+                border: pathname.startsWith(to) ? '1px solid var(--border-subtle)' : '1px solid transparent',
+              }}>
                 {label}
               </Link>
             ))}
@@ -35,12 +55,12 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-6 sm:py-8">
         <AppRoutes />
       </main>
 
-      <footer className="text-center text-xs text-slate-600 py-4 border-t border-slate-800/60">
-        SENOVA AI Dashboard &mdash; Enterprise Preview
+      <footer className="text-center text-xs py-4 border-t" style={{color:'var(--text-muted)', borderColor:'var(--border-subtle)'}}>
+        SENOVA Digital Lab &mdash; Enterprise Preview
       </footer>
     </div>
   )

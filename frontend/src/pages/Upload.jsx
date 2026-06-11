@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import useSalesStore from '../store/useSalesStore'
 import FileDropzone from '../components/upload/FileDropzone'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
@@ -22,16 +23,28 @@ export default function Upload() {
   }
 
   return (
-    <section className="max-w-2xl mx-auto pt-8">
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500/10 mb-4 glow-emerald">
-          <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
+    <section className="max-w-2xl mx-auto pt-4 sm:pt-8 px-0">
+      <Helmet>
+        <title>Upload Data — SENOVA AI Dashboard | Retail & MSME Analytics</title>
+        <meta name="description" content="Upload your CSV or Excel sales data to generate AI-powered retail analytics, category breakdowns, dead stock reports, and daily sales trends." />
+      </Helmet>
+
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6"
+          style={{
+            background: 'rgba(56,189,248,0.08)',
+            border: '1px solid var(--border-subtle)',
+            color: 'var(--accent-blue)'
+          }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse inline-block"/>
+          AI-Powered Analytics Engine
         </div>
-        <h1 className="text-3xl font-bold text-slate-100">Data Sync Portal</h1>
-        <p className="text-slate-500 mt-2 max-w-md mx-auto">
-          Upload your daily sales CSV or Excel file. We&apos;ll validate the schema and generate instant retail analytics.
+        <h1 className="text-4xl font-bold mb-3" style={{color: 'var(--text-primary)'}}>
+          Upload Your Sales Data
+        </h1>
+        <p className="text-base max-w-lg mx-auto" style={{color: 'var(--text-secondary)'}}>
+          Drop your daily sales CSV or Excel file. SENOVA validates every row and
+          generates an instant retail intelligence dashboard.
         </p>
       </div>
 
@@ -43,7 +56,7 @@ export default function Upload() {
 
       <div className="mt-6 space-y-4">
         {error && (
-          <div className="card-gradient border border-red-500/30 rounded-xl px-5 py-3 flex items-start gap-3">
+          <div className="card-gradient border border-red-500/30 rounded-xl px-4 sm:px-5 py-3 flex items-start gap-3">
             <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -56,7 +69,7 @@ export default function Upload() {
         )}
 
         {uploadDone && !isLoading && uploadErrors.length === 0 && !error && (
-          <div className="card-gradient border border-emerald-500/30 rounded-xl px-5 py-3 flex items-center gap-3">
+          <div className="card-gradient border border-emerald-500/30 rounded-xl px-4 sm:px-5 py-3 flex items-center gap-3">
             <svg className="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>

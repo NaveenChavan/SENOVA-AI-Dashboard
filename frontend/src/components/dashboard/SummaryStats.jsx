@@ -1,23 +1,83 @@
-import Card from '../common/Card'
-
 export default function SummaryStats({ summary }) {
   if (!summary) return null
+  const fmt = (n) => n != null ? Number(n).toLocaleString('en-IN', {maximumFractionDigits: 2}) : '—'
+  const rev = summary.revenue?.value ?? 0
+  const profit = summary.profit?.value ?? 0
+  const cost = summary.cost?.value ?? 0
+  const units = summary.units_sold?.value ?? 0
+  const unique = summary.unique_items_sold?.value ?? 0
+
+  const margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) : null
 
   const tiles = [
-    { label: 'Total Revenue', value: `₹${summary.total_revenue.toLocaleString('en-IN')}`, accent: 'text-emerald-400' },
-    { label: 'Total Profit', value: `₹${summary.total_profit.toLocaleString('en-IN')}`, accent: 'text-emerald-300' },
-    { label: 'Total Cost', value: `₹${summary.total_cost.toLocaleString('en-IN')}`, accent: 'text-slate-300' },
-    { label: 'Units Sold', value: summary.total_units_sold.toLocaleString('en-IN'), accent: 'text-sky-400' },
-    { label: 'Unique Items', value: summary.unique_items_sold, accent: 'text-violet-400' },
+    {
+      label: 'Total Revenue',
+      value: `₹${fmt(rev)}`,
+      color: '#38bdf8',
+      sub: margin ? `${margin}% margin` : null,
+      trend: 'up',
+    },
+    {
+      label: 'Total Profit',
+      value: `₹${fmt(profit)}`,
+      color: '#10b981',
+      sub: rev > 0 ? `${((profit / rev) * 100).toFixed(1)}% of revenue` : null,
+      trend: profit > 0 ? 'up' : 'down',
+    },
+    {
+      label: 'Total Cost',
+      value: `₹${fmt(cost)}`,
+      color: '#94a3b8',
+      sub: null,
+      trend: null,
+    },
+    {
+      label: 'Units Sold',
+      value: Number(units).toLocaleString('en-IN'),
+      color: '#a78bfa',
+      sub: `${unique} unique SKUs`,
+      trend: 'up',
+    },
+    {
+      label: 'Unique Items',
+      value: Number(unique),
+      color: '#f59e0b',
+      sub: null,
+      trend: null,
+    },
   ]
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {tiles.map((t) => (
-        <Card key={t.label}>
-          <p className="text-xs text-slate-500 uppercase tracking-wider font-medium">{t.label}</p>
-          <p className={`text-2xl font-bold mt-1.5 glow-emerald-text ${t.accent}`}>{t.value}</p>
-        </Card>
+        <div key={t.label} className="stat-tile">
+          <div className="flex items-start justify-between mb-3">
+            <span className="text-xs uppercase tracking-widest font-medium"
+              style={{color: 'var(--text-muted)'}}>
+              {t.label}
+            </span>
+            {t.trend === 'up' && (
+              <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full"
+                style={{background: 'rgba(16,185,129,0.12)', color: '#10b981'}}>
+                ▲
+              </span>
+            )}
+            {t.trend === 'down' && (
+              <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full"
+                style={{background: 'rgba(239,68,68,0.12)', color: '#f87171'}}>
+                ▼
+              </span>
+            )}
+          </div>
+          <p className="text-xl font-bold glow-blue-text" style={{color: t.color, lineHeight: 1.2}}>
+            {t.value}
+          </p>
+          {t.sub && (
+            <p className="text-xs mt-1.5" style={{color: 'var(--text-muted)'}}>
+              {t.sub}
+            </p>
+          )}
+        </div>
       ))}
     </div>
   )

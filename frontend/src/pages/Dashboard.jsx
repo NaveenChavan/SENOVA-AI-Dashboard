@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { Helmet } from "react-helmet-async";
 import useSalesStore from "../store/useSalesStore";
 import Loader from "../components/common/Loader";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import SummaryStats from "../components/dashboard/SummaryStats";
-import TopItems from "../components/dashboard/TopItems";
-import CategoryPieChart from "../components/charts/CategoryPieChart";
-import LineChart from "../components/charts/LineChart";
-import DeadStockTable from "../components/dashboard/DeadStockTable";
-import RowErrorsBanner from "../components/dashboard/RowErrorsBanner";
 import Card from "../components/common/Card";
 
+const RowErrorsBanner = lazy(() => import("../components/dashboard/RowErrorsBanner"));
+const TopItems = lazy(() => import("../components/dashboard/TopItems"));
+const CategoryPieChart = lazy(() => import("../components/charts/CategoryPieChart"));
+const LineChart = lazy(() => import("../components/charts/LineChart"));
+const DeadStockTable = lazy(() => import("../components/dashboard/DeadStockTable"));
+
 const DATE_FILTERS = [
-  { value: "all", label: "All Time" },
-  { value: "month", label: "This Month" },
-  { value: "week", label: "Last 7 Days" },
+  { value: "all",     label: "All Time" },
+  { value: "30days",  label: "Last 30 Days" },
+  { value: "month",   label: "This Month" },
+  { value: "week",    label: "Last 7 Days" },
 ];
 
 function LoadingSkeleton() {
@@ -64,18 +65,27 @@ export default function Dashboard() {
       useSalesStore.setState({ fileId });
     }
     fetchAnalytics(fileId, dateFilter);
-  }, [fileId, dateFilter]);
+  }, [fileId, dateFilter, fetchAnalytics]);
 
   const analyticsData = data;
+
+  const isEmpty = data && data.summary && data.summary.revenue?.value === 0 && data.top_items?.length === 0
 
   const exportPDF = async () => {
     if (!reportRef.current) return;
     setExporting(true);
     try {
+      const [html2canvasModule, jsPDFModule] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const html2canvas = html2canvasModule.default;
+      const jsPDF = jsPDFModule.default;
+
       const canvas = await html2canvas(reportRef.current, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#0a1128",
+        backgroundColor: "#050d1a",
       });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
@@ -91,12 +101,36 @@ export default function Dashboard() {
     }
   };
 
+  if (isEmpty) return (
+    <section className="pt-8">
+      <Helmet>
+        <title>No Data — SENOVA Digital Lab</title>
+      </Helmet>
+      <div className="flex flex-col items-center justify-center py-24 text-center card max-w-md mx-auto mt-12">
+        <span className="text-4xl mb-4">📭</span>
+        <h3 className="text-lg font-semibold mb-2" style={{color: 'var(--text-primary)'}}>
+          No data for this period
+        </h3>
+        <p className="text-sm mb-6" style={{color: 'var(--text-secondary)'}}>
+          The selected date filter returned no matching records.
+          Try switching to "All Time" or a wider window.
+        </p>
+        <button onClick={() => setDateFilter('all')} className="btn-primary">
+          Reset to All Time
+        </button>
+      </div>
+    </section>
+  )
+
   if (isLoading && !data) return <LoadingSkeleton />;
   if (isLoading && data) return <Loader message="Refreshing analytics…" />;
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="flex flex-col items-center justify-center py-12 md:py-24 text-center px-4">
+        <Helmet>
+          <title>Error — SENOVA Digital Lab</title>
+        </Helmet>
         <div className="p-4 rounded-full bg-red-500/10 mb-4">
           <svg
             className="w-8 h-8 text-red-400"
@@ -112,13 +146,14 @@ export default function Dashboard() {
             />
           </svg>
         </div>
-        <p className="text-slate-200 text-lg font-medium mb-2">
+        <p className="text-lg font-medium mb-2" style={{color:'var(--text-primary)'}}>
           Something went wrong
         </p>
-        <p className="text-slate-500 mb-6">{error}</p>
+        <p className="mb-6" style={{color:'var(--text-secondary)'}}>{error}</p>
         <Link
           to="/upload"
-          className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors"
+          className="underline underline-offset-2 transition-colors"
+          style={{color:'var(--accent-blue)'}}
         >
           Upload a new file
         </Link>
@@ -128,11 +163,15 @@ export default function Dashboard() {
 
   if (!data) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <p className="text-slate-500 mb-4">No analytics data loaded yet.</p>
+      <div className="flex flex-col items-center justify-center py-12 md:py-24 text-center px-4">
+        <Helmet>
+          <title>No Data — SENOVA Digital Lab</title>
+        </Helmet>
+        <p className="mb-4" style={{color:'var(--text-secondary)'}}>No analytics data loaded yet.</p>
         <Link
           to="/upload"
-          className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 transition-colors"
+          className="underline underline-offset-2 transition-colors"
+          style={{color:'var(--accent-blue)'}}
         >
           Upload a file to get started
         </Link>
@@ -141,81 +180,77 @@ export default function Dashboard() {
   }
 
   return (
-    <section className="space-y-8">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+    <section className="space-y-6 sm:space-y-8">
+      <Helmet>
+        <title>Dashboard — SENOVA Digital Lab | Retail & MSME Analytics</title>
+        <meta name="description" content="Real-time AI retail analytics dashboard showing revenue, profit, top-selling items, dead stock analysis, and daily sales trends for your business." />
+      </Helmet>
+
+      <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100">Dashboard</h1>
-          <p className="text-slate-500 mt-1 text-sm">
-            Snapshot of your uploaded sales data. All values in INR (₹).
+          <h1 className="text-2xl font-bold" style={{color: 'var(--text-primary)'}}>
+            Analytics Overview
+          </h1>
+          <p className="text-sm mt-0.5" style={{color: 'var(--text-secondary)'}}>
+            All values in INR (₹) · {DATE_FILTERS.find(f => f.value === dateFilter)?.label}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="appearance-none bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400/50 cursor-pointer"
-            >
-              {DATE_FILTERS.map((f) => (
-                <option key={f.value} value={f.value}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-            <svg
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+          <div className="flex items-center gap-1 p-1 rounded-xl"
+            style={{background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)'}}>
+            {DATE_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setDateFilter(f.value)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 8,
+                  fontSize: '0.8rem',
+                  fontWeight: 500,
+                  transition: 'all 0.2s',
+                  background: dateFilter === f.value
+                    ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
+                    : 'transparent',
+                  color: dateFilter === f.value ? '#fff' : 'var(--text-secondary)',
+                  boxShadow: dateFilter === f.value ? '0 2px 8px rgba(56,189,248,0.3)' : 'none',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
 
-          <button
-            onClick={exportPDF}
-            disabled={exporting}
-            className="px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-medium transition-all duration-200 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-400/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
+          <button onClick={exportPDF} disabled={exporting} className="btn-primary flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
             </svg>
-            {exporting ? "Generating…" : "Download Report (PDF)"}
+            {exporting ? 'Generating…' : 'Export PDF'}
           </button>
         </div>
       </div>
 
       {analyticsData?.errors?.length > 0 && (
-        <RowErrorsBanner errors={analyticsData.errors} />
+        <ErrorBoundary>
+          <RowErrorsBanner errors={analyticsData.errors} />
+        </ErrorBoundary>
       )}
 
-      <div ref={reportRef} className="space-y-8">
-        <SummaryStats summary={analyticsData.summary} />
+      <div ref={reportRef} className="space-y-6 sm:space-y-8">
+        <SummaryStats key={dateFilter} summary={analyticsData.summary} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <TopItems items={analyticsData.top_items} />
+          <ErrorBoundary>
+            <TopItems items={analyticsData.top_items} />
+          </ErrorBoundary>
           <Card title="Revenue by Category">
             <ErrorBoundary>
               {analyticsData.categories?.length > 0 ? (
                 <CategoryPieChart data={analyticsData.categories} />
               ) : (
-                <div className="flex items-center justify-center h-[280px] text-slate-500 text-sm">
+                <div className="flex items-center justify-center h-64 text-sm"
+                  style={{color:'var(--text-muted)'}}>
                   No category data
                 </div>
               )}
@@ -228,14 +263,17 @@ export default function Dashboard() {
             {analyticsData.daily_trend?.length > 0 ? (
               <LineChart data={analyticsData.daily_trend} />
             ) : (
-              <div className="flex items-center justify-center h-[280px] text-slate-500 text-sm">
+              <div className="flex items-center justify-center h-64 text-sm"
+                style={{color:'var(--text-muted)'}}>
                 No trend data
               </div>
             )}
           </ErrorBoundary>
         </Card>
 
-        <DeadStockTable items={analyticsData.dead_stock} />
+        <ErrorBoundary>
+          <DeadStockTable items={analyticsData.dead_stock} />
+        </ErrorBoundary>
       </div>
     </section>
   );

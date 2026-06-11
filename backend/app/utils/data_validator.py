@@ -255,7 +255,14 @@ def normalize_dataframe(df: pd.DataFrame, soft_fail: bool = False) -> tuple[pd.D
         num = num.replace([np.inf, -np.inf], np.nan)
         df[col] = num
 
+    # Two-pass date parsing: dayfirst=True handles DD-MM-YYYY (Indian format);
+    # fallback without dayfirst handles YYYY-MM-DD (ISO 8601) for any rows
+    # that the first pass rejected.
     parsed = pd.to_datetime(df["Date"], dayfirst=True, errors="coerce")
+    still_nat = parsed.isna() & df["Date"].notna()
+    if still_nat.any():
+        fallback = pd.to_datetime(df["Date"][still_nat], errors="coerce")
+        parsed[still_nat] = fallback
     df["Date"] = parsed
 
     # ── 3. Normalise text columns: empty → NaN so dropna catches them ──

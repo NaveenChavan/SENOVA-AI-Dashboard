@@ -47,31 +47,33 @@ export default function CategoryPieChart({ data }) {
   const enriched = data.map((d) => ({ ...d, percent: total > 0 ? d.revenue / total : 0 }))
 
   return (
-    <ResponsiveContainer width="100%" height={280}>
-      <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-        <Pie
-          data={enriched}
-          dataKey="revenue"
-          nameKey="category"
-          cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={85}
-          paddingAngle={3}
-          cornerRadius={4}
-        >
-          {enriched.map((_, i) => (
-            <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="transparent" />
-          ))}
-        </Pie>
-        <Tooltip content={<CustomTooltip />} />
-        <Legend
-          content={<CustomLegend />}
-          layout="vertical"
-          align="right"
-          verticalAlign="middle"
-        />
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="h-64 md:h-[280px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+          <Pie
+            data={enriched}
+            dataKey="revenue"
+            nameKey="category"
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={85}
+            paddingAngle={3}
+            cornerRadius={4}
+          >
+            {enriched.map((_, i) => (
+              <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="transparent" />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          <Legend
+            content={<CustomLegend />}
+            layout="vertical"
+            align="right"
+            verticalAlign="middle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   )
 }

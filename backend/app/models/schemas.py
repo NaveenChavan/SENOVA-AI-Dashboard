@@ -37,13 +37,23 @@ class DeadStockItem(BaseModel):
     days_since_last_sale: int = Field(..., description="Days since the last recorded sale")
 
 
+class MetricValue(BaseModel):
+    """Single KPI metric with total, trend, and sparkline data."""
+    value: float = Field(..., description="Total for the selected period")
+    trend_percentage: float = Field(0, description="Percentage change vs previous period")
+    sparkline_data: list[float] = Field(
+        default_factory=list,
+        description="Daily totals for the trailing days (sparkline source)",
+    )
+
+
 class SalesSummary(BaseModel):
-    """High-level KPIs displayed at the top of the dashboard."""
-    total_revenue: float = Field(..., ge=0)
-    total_profit: float = Field(...)
-    total_cost: float = Field(..., ge=0)
-    total_units_sold: int = Field(..., ge=0)
-    unique_items_sold: int = Field(..., ge=0)
+    """High-level KPIs with trend and sparkline data."""
+    revenue: MetricValue
+    profit: MetricValue
+    cost: MetricValue
+    units_sold: MetricValue
+    unique_items_sold: MetricValue
 
 
 class CategoryBreakdown(BaseModel):

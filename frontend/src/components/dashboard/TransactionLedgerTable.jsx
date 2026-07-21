@@ -54,7 +54,7 @@ export default function TransactionLedgerTable({ ledgerPage, loading, onPageChan
                   <td className="py-2 px-2 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(e.selling_price)}</td>
                   <td className="py-2 px-2 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(e.cost_price)}</td>
                   <td className="py-2 px-2 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(e.revenue)}</td>
-                  <td className="py-2 px-2 text-right font-mono" style={{ color: e.profit >= 0 ? '#10b981' : '#f87171' }}>
+                  <td className="py-2 px-2 text-right font-mono" style={{ color: e.profit >= 0 ? 'var(--accent-green)' : 'var(--accent-red)' }}>
                     {fmtMoney(e.profit)}
                   </td>
                 </tr>
@@ -64,11 +64,11 @@ export default function TransactionLedgerTable({ ledgerPage, loading, onPageChan
       </div>
 
       {ledgerPage && ledgerPage.total_pages > 1 && (
-        <div className="flex items-center justify-between mt-4 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-4 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
             Page {ledgerPage.page} of {ledgerPage.total_pages} &middot; {ledgerPage.total_rows.toLocaleString('en-IN')} total rows
           </p>
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-end sm:self-auto">
             <Button
               variant="secondary"
               disabled={ledgerPage.page <= 1 || loading}

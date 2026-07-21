@@ -39,54 +39,54 @@ export default function SummaryStats({ summary }) {
     {
       label: 'Total Revenue',
       value: `₹${fmt(rev)}`,
-      color: '#38bdf8',
+      color: 'var(--accent-blue)',
       sub: margin ? `${margin}% margin` : null,
       trend: trendDirection(summary.revenue),
     },
     {
       label: 'Total Profit',
       value: `₹${fmt(profit)}`,
-      color: '#10b981',
+      color: 'var(--accent-green)',
       sub: rev > 0 ? `${margin}% of revenue` : null,
       trend: trendDirection(summary.profit),
     },
     {
       label: 'Total Cost',
       value: `₹${fmt(cost)}`,
-      color: '#94a3b8',
+      color: 'var(--text-secondary)',
       sub: null,
       trend: trendDirection(summary.cost),
     },
     {
       label: 'Units Sold',
       value: Number(units).toLocaleString('en-IN'),
-      color: '#a78bfa',
+      color: 'var(--accent-purple)',
       sub: `${unique} unique SKU${unique === 1 ? '' : 's'}`,
       trend: trendDirection(summary.units_sold),
     },
     {
       label: 'Unique Items',
       value: Number(unique),
-      color: '#f59e0b',
+      color: 'var(--accent-amber)',
       sub: null,
       trend: null,
     },
   ]
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 3xl:grid-cols-5 gap-3 sm:gap-4">
       {tiles.map((t) => (
         <div key={t.label} className="stat-tile">
-          <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start justify-between mb-2 sm:mb-3">
             <span
-              className="text-xs uppercase tracking-widest font-medium"
+              className="text-[0.65rem] sm:text-xs uppercase tracking-widest font-medium"
               style={{ color: 'var(--text-muted)' }}
             >
               {t.label}
             </span>
             <TrendBadge direction={t.trend} />
           </div>
-          <p className="text-xl font-bold glow-blue-text" style={{ color: t.color, lineHeight: 1.2 }}>
+          <p className="text-lg sm:text-xl font-bold glow-blue-text" style={{ color: t.color, lineHeight: 1.2 }}>
             {t.value}
           </p>
           {t.sub && (

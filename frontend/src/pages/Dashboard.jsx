@@ -44,28 +44,28 @@ const VIEW_TABS = [
 
 function LoadingSkeleton() {
   return (
-    <div className="space-y-8 animate-pulse">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="space-y-6 sm:space-y-8 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="card-gradient rounded-xl p-6">
-            <div className="h-3 bg-slate-700/60 rounded w-20 mb-3" />
-            <div className="h-7 bg-slate-700/60 rounded w-28" />
+          <div key={i} className="card-gradient rounded-xl p-4 sm:p-6">
+            <div className="h-3 rounded w-20 mb-3" style={{ background: 'var(--bg-skeleton)' }} />
+            <div className="h-7 rounded w-28" style={{ background: 'var(--bg-skeleton)' }} />
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card-gradient rounded-xl p-6">
-          <div className="h-4 bg-slate-700/60 rounded w-48 mb-6" />
-          <div className="h-64 bg-slate-700/30 rounded" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="card-gradient rounded-xl p-4 sm:p-6">
+          <div className="h-4 rounded w-48 mb-6" style={{ background: 'var(--bg-skeleton)' }} />
+          <div className="h-64 rounded" style={{ background: 'var(--bg-skeleton)', opacity: 0.5 }} />
         </div>
-        <div className="card-gradient rounded-xl p-6">
-          <div className="h-4 bg-slate-700/60 rounded w-40 mb-6" />
-          <div className="h-64 bg-slate-700/30 rounded" />
+        <div className="card-gradient rounded-xl p-4 sm:p-6">
+          <div className="h-4 rounded w-40 mb-6" style={{ background: 'var(--bg-skeleton)' }} />
+          <div className="h-64 rounded" style={{ background: 'var(--bg-skeleton)', opacity: 0.5 }} />
         </div>
       </div>
-      <div className="card-gradient rounded-xl p-6">
-        <div className="h-4 bg-slate-700/60 rounded w-36 mb-6" />
-        <div className="h-64 bg-slate-700/30 rounded" />
+      <div className="card-gradient rounded-xl p-4 sm:p-6">
+        <div className="h-4 rounded w-36 mb-6" style={{ background: 'var(--bg-skeleton)' }} />
+        <div className="h-64 rounded" style={{ background: 'var(--bg-skeleton)', opacity: 0.5 }} />
       </div>
     </div>
   );
@@ -184,9 +184,10 @@ export default function Dashboard() {
         <Helmet>
           <title>Error — SENOVA Digital Lab</title>
         </Helmet>
-        <div className="p-4 rounded-full bg-red-500/10 mb-4">
+        <div className="p-4 rounded-full mb-4" style={{ background: 'rgba(239,68,68,0.1)' }}>
           <svg
-            className="w-8 h-8 text-red-400"
+            className="w-8 h-8"
+            style={{ color: 'var(--accent-red)' }}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -216,18 +217,27 @@ export default function Dashboard() {
 
   if (!data) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 md:py-24 text-center px-4">
+      <div className="flex flex-col items-center justify-center py-16 md:py-24 text-center px-4">
         <Helmet>
           <title>No Data — SENOVA Digital Lab</title>
         </Helmet>
-        <p className="mb-4" style={{color:'var(--text-secondary)'}}>No analytics data loaded yet.</p>
-        <Link
-          to="/upload"
-          className="underline underline-offset-2 transition-colors"
-          style={{color:'var(--accent-blue)'}}
-        >
-          Upload a file to get started
-        </Link>
+        <div className="card max-w-sm w-full p-8">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4"
+            style={{ background: 'var(--accent-blue-glow)' }}
+          >
+            <svg className="w-6 h-6" style={{ color: 'var(--accent-blue)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m3 10v-4m3 4v-7m3-4v11M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>No analytics yet</p>
+          <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>
+            Upload a sales file to generate your first dashboard.
+          </p>
+          <Link to="/upload" className="btn-primary inline-block">
+            Upload a file
+          </Link>
+        </div>
       </div>
     );
   }
@@ -254,7 +264,7 @@ export default function Dashboard() {
             role="group"
             aria-label="Filter analytics by date range"
             className="flex items-center gap-1 p-1 rounded-xl overflow-x-auto"
-            style={{background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)'}}>
+            style={{background: 'var(--bg-input)', border: '1px solid var(--border-subtle)'}}>
             {DATE_FILTERS.map((f) => {
               const meaningful = isFilterMeaningful(f, dateRange?.span_days);
               const disabled = !meaningful;
@@ -270,7 +280,8 @@ export default function Dashboard() {
                       : undefined
                   }
                   style={{
-                    padding: '6px 14px',
+                    padding: '10px 14px',
+                    minHeight: 40,
                     borderRadius: 8,
                     fontSize: '0.8rem',
                     fontWeight: 500,
@@ -279,10 +290,10 @@ export default function Dashboard() {
                     cursor: disabled ? 'not-allowed' : 'pointer',
                     opacity: disabled ? 0.35 : 1,
                     background: dateFilter === f.value
-                      ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
+                      ? 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))'
                       : 'transparent',
-                    color: dateFilter === f.value ? '#fff' : 'var(--text-secondary)',
-                    boxShadow: dateFilter === f.value ? '0 2px 8px rgba(56,189,248,0.3)' : 'none',
+                    color: dateFilter === f.value ? 'var(--text-on-accent)' : 'var(--text-secondary)',
+                    boxShadow: dateFilter === f.value ? '0 2px 8px var(--accent-blue-glow)' : 'none',
                   }}
                 >
                   {f.label}
@@ -308,14 +319,15 @@ export default function Dashboard() {
 
       {dateRange?.span_days > 0 && dateRange.span_days < 8 && (
         <div
-          className="card-gradient rounded-xl border border-sky-500/30 px-4 sm:px-5 py-3 flex items-start gap-3"
+          className="card-gradient rounded-xl px-4 sm:px-5 py-3 flex items-start gap-3"
+          style={{ border: '1px solid rgba(2,132,199,0.3)' }}
           role="note"
         >
-          <svg className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--accent-blue)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="text-sky-200 text-sm">
-            Your uploaded data covers only <strong>{dateRange.span_days} day{dateRange.span_days === 1 ? '' : 's'}</strong>{' '}
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            Your uploaded data covers only <strong style={{ color: 'var(--text-primary)' }}>{dateRange.span_days} day{dateRange.span_days === 1 ? '' : 's'}</strong>{' '}
             ({dateRange.min_date} to {dateRange.max_date}). Filters wider than that are disabled above since
             they'd show identical results to "All Time" — this isn't a bug, there just isn't more data to compare yet.
           </p>
@@ -332,7 +344,7 @@ export default function Dashboard() {
         role="tablist"
         aria-label="Dashboard view"
         className="flex items-center gap-1 p-1 rounded-xl w-fit"
-        style={{ background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)' }}
+        style={{ background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}
       >
         {VIEW_TABS.map((t) => (
           <button
@@ -340,14 +352,17 @@ export default function Dashboard() {
             role="tab"
             aria-selected={activeTab === t.value}
             onClick={() => setActiveTab(t.value)}
+            className="text-xs sm:text-sm"
             style={{
-              padding: '8px 18px',
+              padding: '10px 14px',
+              minHeight: 40,
               borderRadius: 8,
-              fontSize: '0.85rem',
               fontWeight: 500,
               transition: 'all 0.2s',
-              background: activeTab === t.value ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)' : 'transparent',
-              color: activeTab === t.value ? '#fff' : 'var(--text-secondary)',
+              background: activeTab === t.value
+                ? 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))'
+                : 'transparent',
+              color: activeTab === t.value ? 'var(--text-on-accent)' : 'var(--text-secondary)',
             }}
           >
             {t.label}
@@ -399,8 +414,8 @@ export default function Dashboard() {
       {activeTab === "report" && (
         <div className="space-y-6 sm:space-y-8">
           {caReportError && (
-            <div className="card-gradient border border-red-500/30 rounded-xl px-4 py-3">
-              <p className="text-red-300 text-sm">{caReportError}</p>
+            <div className="card-gradient rounded-xl px-4 py-3" style={{ border: '1px solid rgba(239,68,68,0.3)' }}>
+              <p className="text-sm" style={{ color: 'var(--accent-red)' }}>{caReportError}</p>
             </div>
           )}
           <ErrorBoundary>

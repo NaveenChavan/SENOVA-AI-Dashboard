@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { signInWithGoogle } from '../services/firebase'
+import useThemeStore from '../store/useThemeStore'
 
 const FEATURES = [
   {
@@ -34,6 +35,38 @@ export default function Login() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const isDark = useThemeStore((s) => s.theme === 'dark')
+
+  // Left panel uses forced colors (not CSS vars) because its background
+  // switches per theme — dark navy in dark mode, light blue-gray in
+  // light mode — so reading global vars would produce invisible text.
+  const panel = isDark
+    ? {
+        bg: 'linear-gradient(160deg, #071427 0%, #050d1a 60%, #030712 100%)',
+        glow1: 'radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%)',
+        glow2: 'radial-gradient(circle, rgba(16,185,129,0.12), transparent 70%)',
+        brandColor: '#38bdf8',
+        titleColor: '#f0f6ff',
+        textColor: '#c8ddf0',
+        mutedColor: '#7a9cc4',
+        iconBg: 'rgba(56,189,248,0.1)',
+        iconBorder: 'rgba(56,189,248,0.2)',
+        iconColor: '#38bdf8',
+        borderRight: '1px solid rgba(56,189,248,0.12)',
+      }
+    : {
+        bg: 'linear-gradient(160deg, #e0ecf7 0%, #eef3fa 60%, #f4f7fb 100%)',
+        glow1: 'radial-gradient(circle, rgba(3,105,161,0.08), transparent 70%)',
+        glow2: 'radial-gradient(circle, rgba(4,120,87,0.06), transparent 70%)',
+        brandColor: '#0369a1',
+        titleColor: '#0f172a',
+        textColor: '#334155',
+        mutedColor: '#475569',
+        iconBg: 'rgba(3,105,161,0.08)',
+        iconBorder: 'rgba(3,105,161,0.15)',
+        iconColor: '#0369a1',
+        borderRight: '1px solid rgba(15,23,42,0.1)',
+      }
 
   const handleGoogleSignIn = async () => {
     setError('')
@@ -70,45 +103,42 @@ export default function Login() {
       <div
         className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #071427 0%, #050d1a 60%, #030712 100%)',
-          borderRight: '1px solid var(--border-subtle)',
+          background: panel.bg,
+          borderRight: panel.borderRight,
         }}
       >
         <div
           aria-hidden="true"
           className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%)' }}
+          style={{ background: panel.glow1 }}
         />
         <div
           aria-hidden="true"
           className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.12), transparent 70%)' }}
+          style={{ background: panel.glow2 }}
         />
 
         <div className="relative z-10 flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{
-              background: 'linear-gradient(135deg, #0ea5e9, #38bdf8)',
-              boxShadow: '0 0 20px rgba(56,189,248,0.35)',
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <span className="text-xl font-bold" style={{ color: 'var(--accent-blue)' }}>
-            SENOVA <span className="font-light" style={{ color: 'var(--text-primary)' }}>Digital Lab</span>
+          <img
+            src="/assets/logo.jpeg"
+            alt="SENOVA"
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-xl object-cover"
+            style={{ boxShadow: `0 0 20px ${isDark ? 'rgba(56,189,248,0.35)' : 'rgba(3,105,161,0.2)'}` }}
+          />
+          <span className="text-xl font-bold" style={{ color: panel.brandColor }}>
+            SENOVA <span className="font-light" style={{ color: panel.titleColor }}>Digital Lab</span>
           </span>
         </div>
 
         <div className="relative z-10 max-w-md">
-          <h1 className="text-4xl font-bold leading-tight mb-4" style={{ color: 'var(--text-primary)' }}>
+          <h1 className="text-4xl font-bold leading-tight mb-4" style={{ color: panel.titleColor }}>
             Retail intelligence,
             <br />
-            <span className="glow-blue-text" style={{ color: 'var(--accent-blue)' }}>zero spreadsheets.</span>
+            <span style={{ color: panel.brandColor }}>zero spreadsheets.</span>
           </h1>
-          <p className="text-base mb-10" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-base mb-10" style={{ color: panel.textColor }}>
             Upload your daily sales file and get an AI-generated dashboard —
             revenue, margins, top movers, and dead stock — in seconds.
           </p>
@@ -118,22 +148,22 @@ export default function Login() {
               <li key={f.title} className="flex items-start gap-4">
                 <div
                   className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                  style={{ background: 'rgba(56,189,248,0.08)', border: '1px solid var(--border-subtle)' }}
+                  style={{ background: panel.iconBg, border: `1px solid ${panel.iconBorder}` }}
                 >
-                  <svg className="w-5 h-5" style={{ color: 'var(--accent-blue)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" style={{ color: panel.iconColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {f.icon}
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{f.title}</p>
-                  <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{f.desc}</p>
+                  <p className="text-sm font-semibold" style={{ color: panel.titleColor }}>{f.title}</p>
+                  <p className="text-sm mt-0.5" style={{ color: panel.mutedColor }}>{f.desc}</p>
                 </div>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative z-10 text-xs" style={{ color: 'var(--text-muted)' }}>
+        <p className="relative z-10 text-xs" style={{ color: panel.mutedColor }}>
           &copy; {new Date().getFullYear()} SENOVA Digital Lab. All rights reserved.
         </p>
       </div>
@@ -152,17 +182,14 @@ export default function Login() {
         <div className="relative z-10 w-full max-w-sm">
           {/* Mobile-only brand mark */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-10">
-            <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(135deg, #0ea5e9, #38bdf8)',
-                boxShadow: '0 0 20px rgba(56,189,248,0.35)',
-              }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
+            <img
+              src="/assets/logo.jpeg"
+              alt="SENOVA"
+              width={44}
+              height={44}
+              className="w-11 h-11 rounded-xl object-cover"
+              style={{ boxShadow: '0 0 20px var(--accent-blue-glow)' }}
+            />
             <span className="text-xl font-bold" style={{ color: 'var(--accent-blue)' }}>
               SENOVA <span className="font-light" style={{ color: 'var(--text-primary)' }}>Digital Lab</span>
             </span>
@@ -187,7 +214,7 @@ export default function Login() {
               aria-busy={loading}
               className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-sky-400/50"
               style={{
-                background: 'rgba(15, 28, 52, 0.9)',
+                background: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
                 color: 'var(--text-primary)',
               }}
@@ -219,7 +246,7 @@ export default function Login() {
               <div
                 role="alert"
                 className="mt-4 flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm"
-                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5' }}
+                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: 'var(--accent-red)' }}
               >
                 <svg className="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -18,11 +18,11 @@ export default class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div className="card-gradient rounded-xl p-6 text-center">
-          <svg className="w-10 h-10 mx-auto mb-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--accent-amber)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="text-slate-300 font-medium mb-1">Chart rendering error</p>
-          <p className="text-slate-500 text-sm">A temporary issue occurred. The rest of the dashboard is unaffected.</p>
+          <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Chart rendering error</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>A temporary issue occurred. The rest of the dashboard is unaffected.</p>
         </div>
       )
     }

@@ -1,19 +1,45 @@
-export default function Button({ children, onClick, variant = 'primary', disabled = false, loading = false, type = 'button', className = '' }) {
-  const base = 'px-5 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-400/50'
+const VARIANT_STYLES = {
+  primary: {
+    background: 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))',
+    color: 'var(--text-on-accent)',
+    border: '1px solid transparent',
+    boxShadow: '0 4px 16px -4px var(--accent-blue-glow)',
+  },
+  secondary: {
+    background: 'var(--bg-input)',
+    color: 'var(--text-primary)',
+    border: '1px solid var(--border-strong)',
+  },
+  danger: {
+    background: 'var(--accent-red)',
+    color: '#ffffff',
+    border: '1px solid transparent',
+  },
+  ghost: {
+    background: 'transparent',
+    color: 'var(--text-secondary)',
+    border: '1px solid transparent',
+  },
+}
 
-  const variants = {
-    primary: 'bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-400/30',
-    secondary: 'bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600',
-    danger: 'bg-red-600 hover:bg-red-500 text-white',
-    ghost: 'bg-transparent hover:bg-slate-800 text-slate-400 hover:text-slate-200',
-  }
-
+export default function Button({
+  children,
+  onClick,
+  variant = 'primary',
+  disabled = false,
+  loading = false,
+  type = 'button',
+  className = '',
+}) {
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`${base} ${variants[variant]} ${className}`}
+      style={VARIANT_STYLES[variant]}
+      className={`px-4 sm:px-5 py-2 rounded-lg font-medium text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 ${className}`}
+      onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px var(--accent-blue-glow)`)}
+      onBlur={(e) => (e.currentTarget.style.boxShadow = VARIANT_STYLES[variant].boxShadow || 'none')}
     >
       {loading ? (
         <span className="flex items-center gap-2">

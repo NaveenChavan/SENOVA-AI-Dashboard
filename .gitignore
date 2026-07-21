@@ -16,6 +16,7 @@ frontend/dist/
 frontend/.env
 frontend/.env.local
 frontend/*.log
+frontend/.vercel/
 npm-debug.log*
 
 # --- Editor / OS ---

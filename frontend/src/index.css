@@ -2,45 +2,165 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ==========================================================================
+   SENOVA Design System
+   --------------------------------------------------------------------------
+   Two first-class themes — dark (default) and light — expressed purely as
+   CSS custom properties on [data-theme]. Every component reads these
+   variables instead of hardcoding Tailwind slate/emerald classes, so the
+   whole app repaints correctly when the theme toggle flips the attribute
+   on <html>. No JS re-render needed for colour — only the attribute changes.
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  /* Surfaces */
   --bg-primary: #050d1a;
+  --bg-canvas-glow-1: rgba(56, 189, 248, 0.05);
+  --bg-canvas-glow-2: rgba(16, 185, 129, 0.04);
   --bg-card: rgba(10, 22, 45, 0.85);
+  --bg-card-solid: #0a162d;
   --bg-card-hover: rgba(14, 30, 60, 0.95);
+  --bg-header: rgba(5, 13, 26, 0.9);
+  --bg-input: rgba(10, 22, 45, 0.9);
+  --bg-skeleton: rgba(51, 65, 85, 0.6);
+
+  /* Borders */
   --border-subtle: rgba(56, 189, 248, 0.12);
   --border-active: rgba(56, 189, 248, 0.4);
+  --border-strong: rgba(148, 163, 184, 0.25);
+
+  /* Brand accents (identical across themes — this IS the brand) */
   --accent-blue: #38bdf8;
+  --accent-blue-strong: #0ea5e9;
   --accent-blue-glow: rgba(56, 189, 248, 0.2);
   --accent-green: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.2);
+  --accent-amber: #f59e0b;
+  --accent-red: #f87171;
+  --accent-purple: #a78bfa;
+
+  /* Text */
   --text-primary: #f0f6ff;
   --text-secondary: #7a9cc4;
   --text-muted: #3d5875;
+  --text-on-accent: #ffffff;
+
+  /* Elevation */
+  --shadow-color: 0deg 0% 0%;
+  --shadow-elevation-low: 0 1px 2px hsl(var(--shadow-color) / 0.4);
+  --shadow-elevation-medium: 0 4px 16px -4px hsl(var(--shadow-color) / 0.5);
+  --shadow-elevation-high: 0 12px 40px -8px hsl(var(--shadow-color) / 0.6);
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  /* Surfaces — warm gray-blue tint (not stark white) with stronger card
+     separation so content stands out as clearly as it does in dark mode.
+     Inspired by Notion/Linear light modes — paper-like layering with
+     enough contrast between background and cards to give depth. */
+  --bg-primary: #eef1f6;
+  --bg-canvas-glow-1: rgba(14, 165, 233, 0.04);
+  --bg-canvas-glow-2: rgba(16, 185, 129, 0.03);
+  --bg-card: #ffffff;
+  --bg-card-solid: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --bg-input: #f8fafc;
+  --bg-skeleton: rgba(148, 163, 184, 0.3);
+
+  /* Borders — stronger than before so cards have clear edges */
+  --border-subtle: rgba(15, 23, 42, 0.1);
+  --border-active: rgba(14, 165, 233, 0.5);
+  --border-strong: rgba(15, 23, 42, 0.15);
+
+  /* Brand accents — deepened for AA+ contrast on the light surface */
+  --accent-blue: #0369a1;
+  --accent-blue-strong: #075985;
+  --accent-blue-glow: rgba(3, 105, 161, 0.12);
+  --accent-green: #047857;
+  --accent-green-glow: rgba(4, 120, 87, 0.1);
+  --accent-amber: #92400e;
+  --accent-red: #b91c1c;
+  --accent-purple: #6d28d9;
+
+  /* Text — strong contrast against the light surface, not washed out */
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-on-accent: #ffffff;
+
+  /* Elevation — visible but refined shadows that make cards pop from bg */
+  --shadow-color: 215deg 20% 50%;
+  --shadow-elevation-low: 0 1px 3px hsl(var(--shadow-color) / 0.08), 0 1px 2px hsl(var(--shadow-color) / 0.06);
+  --shadow-elevation-medium: 0 4px 12px -2px hsl(var(--shadow-color) / 0.14), 0 2px 4px hsl(var(--shadow-color) / 0.08);
+  --shadow-elevation-high: 0 12px 32px -4px hsl(var(--shadow-color) / 0.2), 0 4px 8px hsl(var(--shadow-color) / 0.1);
+
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   Fluid typography — scales smoothly from small phones up through 4K/8K
+   displays using clamp(), so nothing looks tiny on a 40" 8K monitor or
+   cramped on a 320px phone. Base unit is rem so user font-size prefs
+   still work.
+   ========================================================================== */
+html {
+  scroll-behavior: smooth;
+  /* 15px on small phones -> 17px on typical desktops -> 19px on very large /
+     high-density displays. 1vw component makes it continuously fluid. */
+  font-size: clamp(15px, 0.9vw + 12px, 19px);
 }
 
 body {
   background-color: var(--bg-primary);
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 0%, var(--bg-canvas-glow-1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, var(--bg-canvas-glow-2) 0%, transparent 50%);
   min-height: 100vh;
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+/* Smooth, deliberate colour transitions on theme switch — avoids a harsh
+   flash while still feeling instant (150ms). Scoped to avoid animating
+   layout properties or fighting chart re-renders. */
+* {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
+  /* A content container that stays readable at 8K: capping at 1600px means
+     even on a 40"+ display the dashboard doesn't stretch into a single
+     unreadable strip of tiny widgets. */
+  .app-container {
+    width: 100%;
+    max-width: 1600px;
+    margin-inline: auto;
   }
 }
 
 @layer components {
   .card-gradient {
-    @apply bg-slate-800/80 backdrop-blur-sm border border-slate-700/60 shadow-lg;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-elevation-low);
   }
 
   .glow-emerald {
-    box-shadow: 0 0 20px -4px rgba(16, 185, 129, 0.15);
+    box-shadow: 0 0 20px -4px var(--accent-green-glow);
   }
 
   .glow-emerald-text {
     text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+  [data-theme="light"] .glow-emerald-text {
+    text-shadow: none; /* glowing text looks like a rendering bug on light surfaces */
   }
 
   .card {
@@ -48,36 +168,39 @@ body {
     border: 1px solid var(--border-subtle);
     border-radius: 16px;
     backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-elevation-low);
     transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .card:hover {
     border-color: var(--border-active);
-    box-shadow: 0 0 30px -8px var(--accent-blue-glow);
+    box-shadow: var(--shadow-elevation-medium);
   }
 
   .glow-blue { box-shadow: 0 0 24px -6px var(--accent-blue-glow); }
   .glow-blue-text { text-shadow: 0 0 16px rgba(56, 189, 248, 0.4); }
+  [data-theme="light"] .glow-blue-text { text-shadow: none; }
 
   .btn-primary {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    color: #fff;
+    background: linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue));
+    color: var(--text-on-accent);
     border-radius: 10px;
     padding: 10px 20px;
     font-weight: 600;
     transition: all 0.2s;
-    box-shadow: 0 4px 16px -4px rgba(56, 189, 248, 0.35);
+    box-shadow: 0 4px 16px -4px var(--accent-blue-glow);
   }
-  .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 20px -4px rgba(56, 189, 248, 0.5); }
+  .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 6px 20px -4px var(--accent-blue-glow); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .filter-select {
     appearance: none;
-    background: rgba(10, 22, 45, 0.9);
+    background: var(--bg-input);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
     border-radius: 10px;
-    padding: 8px 36px 8px 14px;
+    padding: 10px 36px 10px 14px;
+    min-height: 40px;
     font-size: 0.875rem;
     transition: border-color 0.2s;
   }
@@ -90,7 +213,8 @@ body {
     padding: 20px 24px;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
+    box-shadow: var(--shadow-elevation-low);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   }
   .stat-tile::before {
     content: '';
@@ -101,6 +225,48 @@ body {
     opacity: 0;
     transition: opacity 0.2s;
   }
-  .stat-tile:hover { transform: translateY(-2px); border-color: var(--border-active); }
+  .stat-tile:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-active);
+    box-shadow: var(--shadow-elevation-medium);
+  }
   .stat-tile:hover::before { opacity: 1; }
+
+  /* Premium typographic touches — tighter tracking on large numerals,
+     slightly looser tracking on small-caps labels, for the refined feel
+     of a financial product rather than a generic dashboard template. */
+  h1, h2, h3 { letter-spacing: -0.01em; }
+  .font-mono { letter-spacing: -0.01em; }
+
+  /* Theme toggle switch — a compact pill with a sliding sun/moon thumb. */
+  .theme-toggle {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--border-active); }
+  .theme-toggle__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-elevation-low);
+  }
+  [data-theme="light"] .theme-toggle__thumb {
+    transform: translateX(24px);
+  }
 }

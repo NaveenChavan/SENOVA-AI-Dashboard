@@ -68,12 +68,12 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
   }
 
   return (
-    <div className="card-gradient rounded-2xl border border-slate-700/60 overflow-hidden">
-      <div className="px-5 sm:px-6 py-5 border-b border-slate-700/60">
-        <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+    <div className="card-gradient rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border-strong)' }}>
+      <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ borderBottom: '1px solid var(--border-strong)' }}>
+        <h2 className="text-base sm:text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
           Confirm your columns
         </h2>
-        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+        <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
           Every shop's spreadsheet is a little different. We've matched what we could —
           please check the guesses below and fix anything that's wrong.
         </p>
@@ -86,17 +86,17 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-700/60 text-left">
-              <th className="px-5 sm:px-6 py-3 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
+            <tr className="text-left" style={{ borderBottom: '1px solid var(--border-strong)' }}>
+              <th className="px-4 sm:px-6 py-3 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                 Your column
               </th>
-              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
+              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                 Sample value
               </th>
-              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
+              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                 Maps to
               </th>
-              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
+              <th className="px-4 py-3 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                 Status
               </th>
             </tr>
@@ -107,8 +107,8 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
               const isDuplicate = value && duplicates.includes(value)
               const sample = preview.sample_rows?.[0]?.[col.raw_column]
               return (
-                <tr key={col.raw_column} className="border-b border-slate-700/40 last:border-0">
-                  <td className="px-5 sm:px-6 py-3 font-medium" style={{ color: 'var(--text-primary)' }}>
+                <tr key={col.raw_column} className="last:border-0" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                  <td className="px-4 sm:px-6 py-3 font-medium" style={{ color: 'var(--text-primary)' }}>
                     {col.raw_column}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs truncate max-w-[160px]" style={{ color: 'var(--text-muted)' }}>
@@ -119,7 +119,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                       value={value}
                       onChange={(e) => handleChange(col.raw_column, e.target.value)}
                       className="filter-select w-full max-w-[200px]"
-                      style={isDuplicate ? { borderColor: '#f87171' } : undefined}
+                      style={isDuplicate ? { borderColor: 'var(--accent-red)' } : undefined}
                       aria-label={`Map column ${col.raw_column} to a field`}
                     >
                       {CANONICAL_FIELDS.map((f) => (
@@ -129,7 +129,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                       ))}
                     </select>
                     {isDuplicate && (
-                      <p className="text-xs mt-1" style={{ color: '#f87171' }}>
+                      <p className="text-xs mt-1" style={{ color: 'var(--accent-red)' }}>
                         Already used by another column
                       </p>
                     )}
@@ -144,9 +144,9 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
         </table>
       </div>
 
-      <div className="px-5 sm:px-6 py-5 border-t border-slate-700/60">
+      <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ borderTop: '1px solid var(--border-strong)' }}>
         {missingRequired.length > 0 && (
-          <p className="text-sm mb-4" style={{ color: '#facc15' }}>
+          <p className="text-sm mb-4" style={{ color: 'var(--accent-amber)' }}>
             Still need a column for: <strong>{missingRequired.join(', ')}</strong>
           </p>
         )}

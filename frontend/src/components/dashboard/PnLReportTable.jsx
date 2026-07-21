@@ -11,48 +11,50 @@ function PnLStatement({ pnl }) {
 
   return (
     <Card title="Profit &amp; Loss Statement">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-            <th className="text-left py-2 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
-              Particulars
-            </th>
-            <th className="text-right py-2 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
-              Amount (₹)
-            </th>
-            <th className="text-right py-2 font-medium uppercase tracking-wider text-xs" style={{ color: 'var(--text-muted)' }}>
-              % of Revenue
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {pnl.map((line) => (
-            <tr
-              key={line.label}
-              className={line.is_subtotal ? 'border-t-2' : 'border-b'}
-              style={{
-                borderColor: line.is_subtotal ? 'var(--border-active)' : 'var(--border-subtle)',
-              }}
-            >
-              <td
-                className={`py-2.5 ${line.is_subtotal ? 'font-bold' : ''}`}
-                style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-primary)' }}
-              >
-                {line.label}
-              </td>
-              <td
-                className={`py-2.5 text-right font-mono ${line.is_subtotal ? 'font-bold' : ''}`}
-                style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
-              >
-                {fmtMoney(line.amount)}
-              </td>
-              <td className="py-2.5 text-right font-mono text-xs" style={{ color: 'var(--text-muted)' }}>
-                {line.percentage_of_revenue != null ? `${line.percentage_of_revenue}%` : '—'}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+              <th className="text-left py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                Particulars
+              </th>
+              <th className="text-right py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                Amount (₹)
+              </th>
+              <th className="text-right py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                % of Revenue
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {pnl.map((line) => (
+              <tr
+                key={line.label}
+                className={line.is_subtotal ? 'border-t-2' : 'border-b'}
+                style={{
+                  borderColor: line.is_subtotal ? 'var(--border-active)' : 'var(--border-subtle)',
+                }}
+              >
+                <td
+                  className={`py-2.5 whitespace-nowrap ${line.is_subtotal ? 'font-bold' : ''}`}
+                  style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-primary)' }}
+                >
+                  {line.label}
+                </td>
+                <td
+                  className={`py-2.5 text-right font-mono whitespace-nowrap ${line.is_subtotal ? 'font-bold' : ''}`}
+                  style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
+                >
+                  {fmtMoney(line.amount)}
+                </td>
+                <td className="py-2.5 text-right font-mono text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                  {line.percentage_of_revenue != null ? `${line.percentage_of_revenue}%` : '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Card>
   )
 }
@@ -90,7 +92,7 @@ function CategoryLedger({ rows }) {
                 </td>
                 <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(row.revenue)}</td>
                 <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(row.cost)}</td>
-                <td className="py-2.5 text-right font-mono" style={{ color: '#10b981' }}>{fmtMoney(row.profit)}</td>
+                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--accent-green)' }}>{fmtMoney(row.profit)}</td>
                 <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{row.margin_percentage}%</td>
               </tr>
             ))}
@@ -109,9 +111,9 @@ export default function PnLReportTable({ report }) {
   if (!report) return null
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-baseline justify-between flex-wrap gap-2">
-        <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+    <div className="space-y-5 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-2">
+        <h2 className="text-base sm:text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
           Financial Report — {report.period_label}
         </h2>
         {report.period_start && (

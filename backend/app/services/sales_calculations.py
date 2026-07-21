@@ -365,30 +365,3 @@ def run_full_analysis(df: pd.DataFrame, time_filter: str = "all") -> AnalyticsRe
     )
 
 
-def run_analysis_on_clean_df(df: pd.DataFrame, time_filter: str = "all") -> AnalyticsResponse:
-    if df.empty:
-        return AnalyticsResponse(
-            summary=SalesSummary(
-                revenue=MetricValue(value=0.0),
-                profit=MetricValue(value=0.0),
-                cost=MetricValue(value=0.0),
-                units_sold=MetricValue(value=0),
-                unique_items_sold=MetricValue(value=0),
-            ),
-            top_items=[],
-            daily_trend=[],
-            dead_stock=[],
-            categories=[],
-            errors=[],
-        )
-
-    df = _apply_time_filter(df, time_filter)
-
-    return AnalyticsResponse(
-        summary=compute_summary(df),
-        top_items=compute_top_items(df),
-        daily_trend=compute_daily_trend(df),
-        dead_stock=compute_dead_stock(df),
-        categories=compute_revenue_by_category(df),
-        errors=[],
-    )

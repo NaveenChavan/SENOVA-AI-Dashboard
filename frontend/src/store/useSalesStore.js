@@ -73,9 +73,10 @@ const useSalesStore = create((set) => ({
     set({ isLoading: true, error: null, data: null, validationMessage: 'Loading analytics...' })
 
     try {
-      const timestamp = new Date().getTime()
-      const url = `/api/analytics/${fileId}?time_filter=${timeFilter}&_=${timestamp}`
-      const response = await axios.get(url, {
+      // Use the shared `api` instance so requests get the correct baseURL
+      // (VITE_API_URL in production) AND the Firebase auth interceptor.
+      const response = await api.get(`/analytics/${fileId}`, {
+        params: { time_filter: timeFilter, _: Date.now() },
         signal,
         headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
       })
@@ -101,7 +102,7 @@ const useSalesStore = create((set) => ({
         validationMessage: '',
       }))
     } catch (err) {
-      if (axios.isCancel(err)) return
+      if (axios.isCancel(err) || err?.code === 'ERR_CANCELED') return
       const msg =
         err?.response?.data?.detail || 'Failed to load dashboard. Please retry.'
       set({ error: msg, isLoading: false, validationMessage: '' })

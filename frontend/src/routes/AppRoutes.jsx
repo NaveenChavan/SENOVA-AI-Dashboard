@@ -12,9 +12,10 @@ export default function AppRoutes() {
     <Suspense fallback={<Loader message="Loading page…" />}>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/upload" replace />} />
         <Route path="/upload" element={<AuthGuard><Upload /></AuthGuard>} />
         <Route path="/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
+        <Route path="*" element={<Navigate to="/upload" replace />} />
       </Routes>
     </Suspense>
   )

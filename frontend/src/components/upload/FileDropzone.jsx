@@ -27,6 +27,7 @@ function downloadTemplate() {
 export default function FileDropzone({ onFileSelected, disabled, progressMessage }) {
   const inputRef = useRef(null)
   const [dragging, setDragging] = useState(false)
+  const [fileError, setFileError] = useState('')
 
   const handleFile = useCallback(
     (file) => {
@@ -34,9 +35,10 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
       const allowed = ['.csv', '.xlsx']
       const ext = '.' + file.name.split('.').pop().toLowerCase()
       if (!allowed.includes(ext)) {
-        alert('Please upload a .csv or .xlsx file.')
+        setFileError('Unsupported file type. Please upload a .csv or .xlsx file.')
         return
       }
+      setFileError('')
       onFileSelected(file)
     },
     [onFileSelected],
@@ -64,7 +66,16 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onClick={() => !disabled && inputRef.current?.click()}
-        className={`card-gradient border-2 border-dashed rounded-xl p-6 sm:p-12 text-center cursor-pointer transition-all duration-200 ${
+        role="button"
+        tabIndex={0}
+        aria-label="Upload a CSV or Excel file"
+        onKeyDown={(e) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault()
+            inputRef.current?.click()
+          }
+        }}
+        className={`card-gradient border-2 border-dashed rounded-xl p-6 sm:p-12 text-center cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 ${
           dragging
             ? 'border-emerald-400 bg-emerald-400/5 shadow-lg shadow-emerald-500/10'
             : 'border-slate-600 hover:border-emerald-500/50 hover:bg-slate-800/50'
@@ -105,6 +116,12 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
           </div>
         )}
       </div>
+
+      {fileError && (
+        <p className="mt-3 text-sm text-red-400 text-center" role="alert">
+          {fileError}
+        </p>
+      )}
 
       <div className="mt-4 text-center">
         <button

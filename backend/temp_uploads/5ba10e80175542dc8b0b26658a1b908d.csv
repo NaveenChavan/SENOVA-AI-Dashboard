@@ -1,8 +1,0 @@
-Date,Category,Item,Quantity,Selling Price,Cost Price
-06-06-2026,Menswear,Normal T-Shirt,10,500,200
-06-06-2026,Womenswear,Negative Qty Kurti,-5,1000,500
-06-06-2026,Accessories,Zero Qty Belt,0,400,200
-07-06-2026,Footwear,Negative Sell Shoes,2,-1500,800
-07-06-2026,Menswear,Negative Cost Jacket,4,2000,-1000
-07-06-2026,Womenswear,Clearance Saree,5,1500,3000
-08-06-2026,Accessories,Normal Sunglasses,10,800,300

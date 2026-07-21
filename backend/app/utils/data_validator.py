@@ -177,27 +177,6 @@ def _validate_columns_exist(df: pd.DataFrame) -> None:
         )
 
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
-
-def _rename_columns(df: pd.DataFrame) -> pd.DataFrame:
-    renamed = {}
-    for col in df.columns:
-        cleaned = col.strip().lower()
-        renamed[col] = COLUMN_ALIAS_MAP.get(cleaned, col)
-    return df.rename(columns=renamed)
-
-
-def _validate_columns_exist(df: pd.DataFrame) -> None:
-    missing = EXPECTED_COLUMNS - set(df.columns)
-    if missing:
-        raise ValueError(
-            f"Missing required columns after normalisation: {', '.join(sorted(missing))}. "
-            f"Your file has: {', '.join(sorted(df.columns))}. "
-            f"Expected one of: {', '.join(sorted(EXPECTED_COLUMNS))}."
-        )
-
-
 # ── Public entry point ─────────────────────────────────────────────────────
 
 
@@ -248,7 +227,7 @@ def normalize_dataframe(df: pd.DataFrame, soft_fail: bool = False) -> tuple[pd.D
         # Retry with currency / comma symbols for values still NaN
         still_bad = num.isna() & df[col].notna() & (df[col].astype(str).str.strip() != "")
         if still_bad.any():
-            cleaned = df[col].astype(str).str.replace(r'[\$,€,£,]', "", regex=True).str.strip()
+            cleaned = df[col].astype(str).str.replace(r'[\$,€,£,₹,]', "", regex=True).str.strip()
             retry = pd.to_numeric(cleaned, errors="coerce")
             num[still_bad] = retry[still_bad]
         # ── inf / -inf → NaN so .astype(int) never chokes ──

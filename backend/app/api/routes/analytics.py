@@ -8,15 +8,18 @@ Routes
 - GET /process/{file_id}                    — reads from disk, returns AnalyticsResponse
 - GET /analytics/{file_id}?time_filter=...  — server-side date filter applied
   before aggregation so every widget reflects the selected range.
+
+Both routes require a valid Firebase ID token (see ``get_current_user``).
 """
 
 import pandas as pd
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import Literal
 
 from app.models.schemas import AnalyticsResponse
 from app.services.file_handler import read_to_dataframe
 from app.services.sales_calculations import run_full_analysis
+from app.utils.auth_verifier import get_current_user
 
 router = APIRouter()
 
@@ -35,7 +38,7 @@ def _load_dataframe(file_id: str) -> pd.DataFrame:
 
 
 @router.get("/{file_id}", response_model=AnalyticsResponse)
-def process_file(file_id: str):
+def process_file(file_id: str, user_email: str = Depends(get_current_user)):
     """
     Load the file from disk, validate, and analyse. Returns the full
     AnalyticsResponse payload that the React dashboard renders directly.
@@ -69,6 +72,7 @@ def get_analytics(
             "'month' = from the 1st of the max date's month."
         ),
     ),
+    user_email: str = Depends(get_current_user),
 ):
     """
     Same engine as ``/process/{file_id}`` but with a server-side date

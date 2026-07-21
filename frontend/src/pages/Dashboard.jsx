@@ -186,7 +186,7 @@ export default function Dashboard() {
         <meta name="description" content="Real-time AI retail analytics dashboard showing revenue, profit, top-selling items, dead stock analysis, and daily sales trends for your business." />
       </Helmet>
 
-      <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold" style={{color: 'var(--text-primary)'}}>
             Analytics Overview
@@ -196,18 +196,23 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 p-1 rounded-xl"
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div
+            role="group"
+            aria-label="Filter analytics by date range"
+            className="flex items-center gap-1 p-1 rounded-xl overflow-x-auto"
             style={{background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)'}}>
             {DATE_FILTERS.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setDateFilter(f.value)}
+                aria-pressed={dateFilter === f.value}
                 style={{
                   padding: '6px 14px',
                   borderRadius: 8,
                   fontSize: '0.8rem',
                   fontWeight: 500,
+                  whiteSpace: 'nowrap',
                   transition: 'all 0.2s',
                   background: dateFilter === f.value
                     ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
@@ -221,7 +226,12 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <button onClick={exportPDF} disabled={exporting} className="btn-primary flex items-center gap-2">
+          <button
+            onClick={exportPDF}
+            disabled={exporting}
+            aria-busy={exporting}
+            className="btn-primary flex items-center justify-center gap-2 whitespace-nowrap"
+          >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>

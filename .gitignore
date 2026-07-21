@@ -1,0 +1,25 @@
+# --- Backend (Python) ---
+backend/temp_uploads/*
+!backend/temp_uploads/.gitkeep
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+backend/.env
+backend/firebase-service-account.json
+backend/*.egg-info/
+backend/venv/
+backend/.venv/
+
+# --- Frontend (Node) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/*.log
+npm-debug.log*
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

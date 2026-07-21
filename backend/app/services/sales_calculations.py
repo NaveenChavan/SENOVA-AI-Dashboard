@@ -7,14 +7,20 @@ correct types.  No re-coercion needed.
 """
 
 from datetime import timedelta
+import math
 import pandas as pd
 
 from app.models.schemas import (
     AnalyticsResponse,
     CategoryBreakdown,
+    CategoryLedgerRow,
+    CAReportSummary,
     DailyTrend,
     DeadStockItem,
+    LedgerEntry,
+    LedgerPage,
     MetricValue,
+    PnLLineItem,
     RowError,
     SalesSummary,
     TopItem,
@@ -32,6 +38,8 @@ def _get_expected_range(df: pd.DataFrame, time_filter: str) -> tuple[pd.Timestam
     max_date = df["Date"].max()
     if time_filter == "all":
         return df["Date"].min(), max_date
+    if time_filter == "today":
+        return max_date.normalize(), max_date
     if time_filter == "30days":
         return max_date - timedelta(days=30), max_date
     if time_filter == "week":
@@ -78,6 +86,11 @@ def filter_by_time(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
     if pd.isna(max_date):
         return df.iloc[0:0]
 
+    if time_filter == "today":
+        day_start = max_date.normalize()
+        day_end = day_start + timedelta(days=1)
+        return df[(df["Date"] >= day_start) & (df["Date"] < day_end)].copy()
+
     if time_filter == "week":
         cutoff = max_date - timedelta(days=7)
         return df[df["Date"] >= cutoff].copy()
@@ -102,6 +115,14 @@ def _split_periods(df: pd.DataFrame, time_filter: str) -> tuple[pd.DataFrame, pd
     # CRITICAL FIX: "All Time" means the ENTIRE dataset. No previous period.
     if time_filter == "all":
         return df, df.iloc[0:0]
+
+    if time_filter == "today":
+        day_start = max_date.normalize()
+        day_end = day_start + timedelta(days=1)
+        prev_start = day_start - timedelta(days=1)
+        current = df[(df["Date"] >= day_start) & (df["Date"] < day_end)]
+        previous = df[(df["Date"] >= prev_start) & (df["Date"] < day_start)]
+        return current, previous
 
     if time_filter == "30days":
         curr_start = max_date - timedelta(days=30)
@@ -283,6 +304,32 @@ def compute_dead_stock(df: pd.DataFrame, threshold_qty: int = 5) -> list[DeadSto
         for _, row in merged.iterrows()
     ]
 
+def compute_data_date_range(df: pd.DataFrame) -> dict:
+    """
+    Return the actual min/max transaction date and the whole-day span
+    between them, for a normalised (already-validated) DataFrame.
+
+    Used right after upload so the frontend can disable date-filter
+    buttons that are wider than the data itself — e.g. a 4-day sample file
+    makes "Last 7 Days", "This Month", and "Last 30 Days" all identical to
+    "All Time", which looks broken if the UI doesn't explain why.
+    """
+    if df.empty or "Date" not in df.columns:
+        return {"min_date": None, "max_date": None, "span_days": 0}
+
+    min_date = df["Date"].min()
+    max_date = df["Date"].max()
+    if pd.isna(min_date) or pd.isna(max_date):
+        return {"min_date": None, "max_date": None, "span_days": 0}
+
+    span_days = (max_date.normalize() - min_date.normalize()).days + 1
+    return {
+        "min_date": str(min_date.date()),
+        "max_date": str(max_date.date()),
+        "span_days": int(span_days),
+    }
+
+
 def compute_revenue_by_category(df: pd.DataFrame) -> list[CategoryBreakdown]:
     """Aggregate revenue & quantity by category for the donut chart."""
     prepped = _prepare(df)
@@ -301,8 +348,134 @@ def compute_revenue_by_category(df: pd.DataFrame) -> list[CategoryBreakdown]:
         for _, row in grouped.iterrows()
     ]
 
+# ── CA-style (Chartered Accountant) reporting ───────────────────────────────
+
+def compute_pnl_report(df: pd.DataFrame, time_filter: str, period_label: str) -> CAReportSummary:
+    """
+    Build a Profit & Loss statement + category-wise ledger the way an
+    accountant presents them on paper: labelled line items with a running
+    subtotal/total, not just numbers scattered across chart widgets.
+
+    ``df`` must already be normalised AND time-filtered by the caller —
+    this function only aggregates, it doesn't slice by date itself.
+    """
+    if df.empty:
+        return CAReportSummary(
+            period_label=period_label,
+            period_start="",
+            period_end="",
+            pnl=[],
+            category_ledger=[],
+            total_transactions=0,
+        )
+
+    prepped = _prepare(df)
+    revenue = float(prepped["_row_revenue"].sum())
+    cost = float(prepped["_row_cost"].sum())
+    profit = revenue - cost
+
+    def _pct(amount: float) -> float | None:
+        if revenue == 0:
+            return None
+        return round((amount / revenue) * 100, 2)
+
+    # Standard P&L presentation: Revenue, then COGS as a deduction,
+    # then Gross Profit as the ruled-off subtotal, then margin as an
+    # informational line beneath it.
+    pnl = [
+        PnLLineItem(label="Gross Revenue", amount=round(revenue, 2), percentage_of_revenue=100.0 if revenue else None),
+        PnLLineItem(label="Cost of Goods Sold (COGS)", amount=round(cost, 2), percentage_of_revenue=_pct(cost)),
+        PnLLineItem(label="Gross Profit", amount=round(profit, 2), percentage_of_revenue=_pct(profit), is_subtotal=True),
+    ]
+
+    # Category-wise ledger — same shape a CA would use for a "sales by
+    # segment" schedule attached to the P&L.
+    grouped = (
+        prepped.groupby("Category", as_index=False)
+        .agg(
+            units_sold=("Quantity", "sum"),
+            revenue=("_row_revenue", "sum"),
+            cost=("_row_cost", "sum"),
+            profit=("_row_profit", "sum"),
+        )
+        .sort_values("revenue", ascending=False)
+    )
+
+    category_ledger = [
+        CategoryLedgerRow(
+            category=str(row["category"]) if "category" in row else str(row["Category"]),
+            units_sold=int(row["units_sold"]),
+            revenue=round(float(row["revenue"]), 2),
+            cost=round(float(row["cost"]), 2),
+            profit=round(float(row["profit"]), 2),
+            margin_percentage=round((row["profit"] / row["revenue"] * 100), 2) if row["revenue"] else 0.0,
+        )
+        for _, row in grouped.rename(columns={"Category": "category"}).iterrows()
+    ]
+
+    return CAReportSummary(
+        period_label=period_label,
+        period_start=str(df["Date"].min().date()),
+        period_end=str(df["Date"].max().date()),
+        pnl=pnl,
+        category_ledger=category_ledger,
+        total_transactions=len(df),
+    )
+
+
+def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage:
+    """
+    Slice ``df`` (already normalised, NOT necessarily time-filtered — the
+    ledger view lets the accountant browse every transaction) into a single
+    page of ``LedgerEntry`` rows, sorted chronologically like a real sales
+    register/day-book.
+
+    Never materialises the whole dataset into a JSON response at once —
+    files with tens of thousands of rows (verified with 50k-row test
+    files) would otherwise produce a multi-megabyte payload on every
+    request.
+    """
+    total_rows = len(df)
+    total_pages = max(1, math.ceil(total_rows / page_size)) if total_rows else 1
+    page = max(1, min(page, total_pages))
+
+    if total_rows == 0:
+        return LedgerPage(entries=[], page=page, page_size=page_size, total_rows=0, total_pages=1)
+
+    ordered = df.sort_values("Date", kind="stable").reset_index(drop=False)
+    start = (page - 1) * page_size
+    chunk = ordered.iloc[start : start + page_size]
+
+    entries = [
+        LedgerEntry(
+            row=int(r["index"]),
+            date=str(r["Date"].date()),
+            category=str(r["Category"]),
+            item=str(r["Item"]),
+            quantity=int(r["Quantity"]),
+            selling_price=round(float(r["Selling Price"]), 2),
+            cost_price=round(float(r["Cost Price"]), 2),
+            revenue=round(float(r["Quantity"]) * float(r["Selling Price"]), 2),
+            profit=round(
+                float(r["Quantity"]) * float(r["Selling Price"])
+                - float(r["Quantity"]) * float(r["Cost Price"]),
+                2,
+            ),
+        )
+        for _, r in chunk.iterrows()
+    ]
+
+    return LedgerPage(
+        entries=entries,
+        page=page,
+        page_size=page_size,
+        total_rows=total_rows,
+        total_pages=total_pages,
+    )
+
+
 # ── Orchestrator called by the route handler ───────────────────────────────
-def _apply_time_filter(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
+def apply_time_filter(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
     """
     Slice the DataFrame to the selected time window.
     Reference point = max date in the data (NOT system clock),
@@ -316,7 +489,11 @@ def _apply_time_filter(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
     if pd.isna(max_date):
         return df.iloc[0:0]
 
-    if time_filter == "week":
+    if time_filter == "today":
+        day_start = max_date.normalize()
+        day_end = day_start + timedelta(days=1)
+        return df[(dates >= day_start) & (dates < day_end)].copy()
+    elif time_filter == "week":
         cutoff = max_date - timedelta(days=7)
     elif time_filter == "month":
         cutoff = max_date.replace(day=1).normalize()
@@ -328,16 +505,22 @@ def _apply_time_filter(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
     return df[dates >= cutoff].copy()
 
 
-def run_full_analysis(df: pd.DataFrame, time_filter: str = "all") -> AnalyticsResponse:
+def run_full_analysis(
+    df: pd.DataFrame,
+    time_filter: str = "all",
+    column_mapping: dict[str, str] | None = None,
+) -> AnalyticsResponse:
     """
-    1. Normalise & validate raw DataFrame.
+    1. Normalise & validate raw DataFrame (using the user-confirmed column
+       mapping when available — see the /upload/{file_id}/confirm-mapping
+       flow — so we never silently re-guess a different mapping here).
     2. Apply time filter AFTER validation (so date column is clean).
     3. Run analytics on filtered rows only.
     """
-    df, error_dicts = normalize_dataframe(df)
+    df, error_dicts = normalize_dataframe(df, column_mapping=column_mapping)
     errors = [RowError(**e) for e in error_dicts]
 
-    df = _apply_time_filter(df, time_filter)
+    df = apply_time_filter(df, time_filter)
 
     if df.empty:
         return AnalyticsResponse(

@@ -150,20 +150,86 @@ def _normalize_col_name(col: str) -> str:
     return col.strip().lstrip("\ufeff").lower()
 
 
+def guess_canonical_column(raw_col: str) -> tuple[str | None, str]:
+    """
+    Best-guess a single raw column name to one of the 6 canonical fields.
+
+    Returns
+    -------
+    (canonical_name_or_None, confidence)
+        ``canonical_name_or_None`` is one of ``EXPECTED_COLUMNS``, or ``None``
+        if nothing matched (the column is likely unrelated, e.g. "Notes",
+        "Discount", "Store Location").
+        ``confidence`` is one of ``"exact"`` (alias-map hit — high
+        confidence), ``"fuzzy"`` (keyword substring match — needs human
+        confirmation), or ``"none"`` (no match at all).
+    """
+    cleaned = _normalize_col_name(raw_col)
+
+    if cleaned in COLUMN_ALIAS_MAP:
+        return COLUMN_ALIAS_MAP[cleaned], "exact"
+
+    for keyword, canonical in _FUZZY_KEYWORDS.items():
+        if keyword in cleaned:
+            return canonical, "fuzzy"
+
+    return None, "none"
+
+
+def detect_column_mapping(df: pd.DataFrame) -> list[dict]:
+    """
+    Build a best-guess mapping report for every column in the uploaded file,
+    WITHOUT renaming or mutating anything. This is what the frontend shows
+    the user in the "confirm your columns" screen before we run any
+    analysis — every shopkeeper's export format is different, so we never
+    assume our guess is correct without asking first.
+
+    Returns a list of dicts, one per raw column, in the file's original
+    column order::
+
+        [{"raw_column": "Qty.", "suggested_field": "Quantity", "confidence": "exact"}, ...]
+
+    ``suggested_field`` is ``None`` when we have no guess — the frontend
+    should render that as an empty/"Ignore this column" dropdown rather
+    than silently defaulting to something wrong.
+    """
+    report = []
+    for raw_col in df.columns:
+        canonical, confidence = guess_canonical_column(str(raw_col))
+        report.append({
+            "raw_column": str(raw_col),
+            "suggested_field": canonical,
+            "confidence": confidence,
+        })
+    return report
+
+
+def apply_column_mapping(df: pd.DataFrame, mapping: dict[str, str]) -> pd.DataFrame:
+    """
+    Rename columns using an EXPLICIT, user-confirmed mapping instead of the
+    automatic alias/fuzzy guesser. ``mapping`` is ``{raw_column: canonical_field}``
+    exactly as returned (and possibly corrected) by the frontend's column
+    mapping screen.
+
+    Columns not present in ``mapping`` are left untouched (and will simply
+    be ignored later since they won't match any of the 6 canonical names
+    the validator requires).
+    """
+    # Only rename columns the caller explicitly mapped; anything else
+    # passes through unchanged so we never silently guess again here.
+    rename = {raw: canonical for raw, canonical in mapping.items() if raw in df.columns}
+    return df.rename(columns=rename)
+
+
 def _rename_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Auto-detect renaming used when the caller has NOT confirmed a manual
+    mapping (e.g. quick preview, or a file whose headers exactly match our
+    aliases already). Kept as the fallback path — see ``apply_column_mapping``
+    for the explicit, user-confirmed path used by the main upload flow."""
     renamed = {}
     for col in df.columns:
-        cleaned = _normalize_col_name(col)
-        if cleaned in COLUMN_ALIAS_MAP:
-            renamed[col] = COLUMN_ALIAS_MAP[cleaned]
-            continue
-        # Fuzzy last-resort: first keyword in the column name wins.
-        for keyword, canonical in _FUZZY_KEYWORDS.items():
-            if keyword in cleaned:
-                renamed[col] = canonical
-                break
-        else:
-            renamed[col] = col
+        canonical, _confidence = guess_canonical_column(str(col))
+        renamed[col] = canonical if canonical else col
     return df.rename(columns=renamed)
 
 
@@ -180,16 +246,13 @@ def _validate_columns_exist(df: pd.DataFrame) -> None:
 # ── Public entry point ─────────────────────────────────────────────────────
 
 
-def normalize_dataframe(df: pd.DataFrame, soft_fail: bool = False) -> tuple[pd.DataFrame, list[dict]]:
+def normalize_dataframe(
+    df: pd.DataFrame,
+    soft_fail: bool = False,
+    column_mapping: dict[str, str] | None = None,
+) -> tuple[pd.DataFrame, list[dict]]:
     """
     Clean, type, and validate a raw DataFrame.
-
-    Returns
-    -------
-    (clean_valid_df, errors)
-        ``clean_valid_df`` contains only rows that passed **every** type check.
-        ``errors`` is a list of ``{"row": int, "column": str, "error": str}``
-        dicts describing every cell-level failure.
 
     Parameters
     ----------
@@ -198,6 +261,21 @@ def normalize_dataframe(df: pd.DataFrame, soft_fail: bool = False) -> tuple[pd.D
         Instead, every row is reported as an error and an empty valid_df
         is returned. Use this in upload flows so the endpoint always
         returns a structured response instead of an HTTP 500.
+    column_mapping : dict[str, str] | None
+        When provided, this EXPLICIT ``{raw_column: canonical_field}`` map
+        (confirmed by the user on the column-mapping screen) is used
+        instead of the automatic alias/fuzzy guesser. This is the primary
+        path for real uploads — every shop's export format differs, so we
+        rename using what the user actually confirmed rather than a guess.
+        When ``None``, falls back to automatic detection (used for quick
+        previews or programmatic/test calls).
+
+    Returns
+    -------
+    (clean_valid_df, errors)
+        ``clean_valid_df`` contains only rows that passed **every** type check.
+        ``errors`` is a list of ``{"row": int, "column": str, "error": str}``
+        dicts describing every cell-level failure.
 
     Raises
     ------
@@ -205,7 +283,7 @@ def normalize_dataframe(df: pd.DataFrame, soft_fail: bool = False) -> tuple[pd.D
         If any required column is entirely missing after the renaming step
         AND ``soft_fail`` is False.
     """
-    df = _rename_columns(df)
+    df = apply_column_mapping(df, column_mapping) if column_mapping else _rename_columns(df)
     try:
         _validate_columns_exist(df)
     except ValueError as e:

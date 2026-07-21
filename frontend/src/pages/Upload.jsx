@@ -3,23 +3,72 @@ import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import useSalesStore from '../store/useSalesStore'
 import FileDropzone from '../components/upload/FileDropzone'
+import ColumnMappingScreen from '../components/upload/ColumnMappingScreen'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
 
 export default function Upload() {
   const navigate = useNavigate()
-  const { uploadFile, isLoading, validationMessage, error, uploadErrors } = useSalesStore()
+  const {
+    uploadFile,
+    confirmMapping,
+    cancelMapping,
+    mappingPreview,
+    isLoading,
+    validationMessage,
+    error,
+    uploadErrors,
+  } = useSalesStore()
   const [uploadDone, setUploadDone] = useState(false)
 
   const handleFile = async (file) => {
+    setUploadDone(false)
     try {
-      const res = await uploadFile(file)
-      setUploadDone(true)
-      if (res.valid_count > 0) {
-        navigate(`/dashboard?fileId=${res.file_id}`)
-      }
+      // Step 1: upload the file — this only returns a column-mapping
+      // preview. We don't know if the data is "good" yet; that's decided
+      // after the user confirms their mapping below.
+      await uploadFile(file)
     } catch {
       // Error is already stored in Zustand.
     }
+  }
+
+  const handleConfirmMapping = async (mapping) => {
+    const fileId = useSalesStore.getState().fileId
+    try {
+      const res = await confirmMapping(fileId, mapping)
+      setUploadDone(true)
+      if (res.valid_count > 0) {
+        navigate(`/dashboard?fileId=${fileId}`)
+      }
+    } catch {
+      // Error is already stored in Zustand; stays on this page to show it.
+    }
+  }
+
+  // While the mapping screen is showing, hide the dropzone + intro copy —
+  // the mapping table is the full-width focus of the page at this step.
+  if (mappingPreview) {
+    return (
+      <section className="max-w-4xl mx-auto pt-4 sm:pt-8">
+        <Helmet>
+          <title>Confirm Columns — SENOVA AI Dashboard</title>
+        </Helmet>
+        <ColumnMappingScreen
+          preview={mappingPreview}
+          onConfirm={handleConfirmMapping}
+          onCancel={cancelMapping}
+          submitting={isLoading}
+        />
+        {error && (
+          <div className="mt-4 card-gradient border border-red-500/30 rounded-xl px-4 sm:px-5 py-3 flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        )}
+      </section>
+    )
   }
 
   return (
@@ -43,7 +92,8 @@ export default function Upload() {
           Upload Your Sales Data
         </h1>
         <p className="text-base max-w-lg mx-auto" style={{color: 'var(--text-secondary)'}}>
-          Drop your daily sales CSV or Excel file. SENOVA validates every row and
+          Drop your daily sales CSV or Excel file — any column layout works.
+          You'll confirm your columns next, then SENOVA validates every row and
           generates an instant retail intelligence dashboard.
         </p>
       </div>

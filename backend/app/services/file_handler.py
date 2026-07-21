@@ -12,9 +12,19 @@ whenever the user changes the date filter (see ``Dashboard.jsx``). Instead,
 a TTL sweep (``sweep_expired_uploads``) removes any file older than
 ``UPLOAD_TTL_MINUTES``. The sweep runs once at app startup and on a
 background interval (see ``app/main.py``).
+
+Column mapping persistence
+---------------------------
+Every shop's export format is different (see the column-mapping
+confirmation flow in ``api/routes/upload.py``), so once a user confirms
+how their columns map to our 6 canonical fields, that mapping is saved
+alongside the raw file as ``{file_id}.mapping.json``. Every later read of
+the same file (different date filters, the CA-style report, the PDF
+export, etc.) reuses the confirmed mapping instead of re-guessing.
 """
 
 import csv
+import json
 import time
 import uuid
 from pathlib import Path
@@ -55,6 +65,22 @@ def _resolve_path(file_id: str) -> Path:
     raise FileNotFoundError(f"No uploaded file found for id '{file_id}'.")
 
 
+def get_original_filename(file_id: str, fallback: str | None = None) -> str:
+    """
+    Public helper: best-effort original filename for a stored upload.
+
+    We don't persist the original filename separately from the file_id, so
+    this just returns the on-disk filename (``{file_id}{ext}``). It exists
+    mainly so response messages have *some* filename to show; callers that
+    already know the original name (e.g. right after upload, still in
+    memory) should prefer that instead of calling this.
+    """
+    try:
+        return _resolve_path(file_id).name
+    except FileNotFoundError:
+        return fallback or file_id
+
+
 def _sniff_delimiter(path: Path) -> str:
     """Detect CSV delimiter from a small sample. Falls back to comma."""
     try:
@@ -93,13 +119,43 @@ def read_to_dataframe(file_id: str) -> pd.DataFrame:
 
 
 def cleanup(file_id: str) -> None:
-    """Remove the uploaded file from disk. Called after processing is done."""
+    """Remove the uploaded file (and its saved column mapping, if any) from disk."""
     try:
         path = _resolve_path(file_id)
     except FileNotFoundError:
-        return
-    if path.exists():
-        path.unlink()
+        pass
+    else:
+        if path.exists():
+            path.unlink()
+
+    mapping_path = _mapping_path(file_id)
+    if mapping_path.exists():
+        mapping_path.unlink()
+
+
+def _mapping_path(file_id: str) -> Path:
+    """Sidecar JSON file storing the user-confirmed column mapping for a file."""
+    return _ensure_upload_dir() / f"{file_id}.mapping.json"
+
+
+def save_column_mapping(file_id: str, mapping: dict[str, str]) -> None:
+    """
+    Persist the user-confirmed ``{raw_column: canonical_field}`` mapping so
+    subsequent reads of this file (different date filters, PDF export,
+    detailed ledger, etc.) don't need the frontend to resend it every time.
+    """
+    _mapping_path(file_id).write_text(json.dumps(mapping), encoding="utf-8")
+
+
+def load_column_mapping(file_id: str) -> dict[str, str] | None:
+    """Return the previously confirmed column mapping, or None if never confirmed."""
+    path = _mapping_path(file_id)
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
 
 
 def sweep_expired_uploads() -> int:

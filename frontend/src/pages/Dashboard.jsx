@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, lazy } from "react";
+import { useEffect, useState, lazy } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import useSalesStore from "../store/useSalesStore";
+import api from "../services/api";
 import Loader from "../components/common/Loader";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import SummaryStats from "../components/dashboard/SummaryStats";
@@ -12,12 +13,33 @@ const TopItems = lazy(() => import("../components/dashboard/TopItems"));
 const CategoryPieChart = lazy(() => import("../components/charts/CategoryPieChart"));
 const LineChart = lazy(() => import("../components/charts/LineChart"));
 const DeadStockTable = lazy(() => import("../components/dashboard/DeadStockTable"));
+const PnLReportTable = lazy(() => import("../components/dashboard/PnLReportTable"));
+const TransactionLedgerTable = lazy(() => import("../components/dashboard/TransactionLedgerTable"));
 
 const DATE_FILTERS = [
-  { value: "all",     label: "All Time" },
-  { value: "30days",  label: "Last 30 Days" },
-  { value: "month",   label: "This Month" },
-  { value: "week",    label: "Last 7 Days" },
+  { value: "today",   label: "Today",        minSpanDays: 1 },
+  { value: "week",    label: "Last 7 Days",  minSpanDays: 8 },
+  { value: "30days",  label: "Last 30 Days", minSpanDays: 31 },
+  { value: "month",   label: "This Month",   minSpanDays: 8 },
+  { value: "all",     label: "All Time",     minSpanDays: 1 },
+];
+
+/**
+ * A filter is meaningless (shows the exact same rows as "All Time") when
+ * the data's actual span doesn't exceed the filter's window. Disabling it
+ * — rather than hiding it — keeps the UI predictable and lets a tooltip
+ * explain why, instead of the numbers just mysteriously matching another
+ * tab. "Today" and "All Time" always make sense, so they're never disabled.
+ */
+function isFilterMeaningful(filter, spanDays) {
+  if (filter.value === "today" || filter.value === "all") return true;
+  if (!spanDays) return true; // unknown span (e.g. old file, no date_range) — don't block anything
+  return spanDays >= filter.minSpanDays;
+}
+
+const VIEW_TABS = [
+  { value: "charts", label: "Charts" },
+  { value: "report", label: "Financial Report" },
 ];
 
 function LoadingSkeleton() {
@@ -53,10 +75,16 @@ export default function Dashboard() {
   const [searchParams] = useSearchParams();
   const fileId = searchParams.get("fileId");
 
-  const { data, isLoading, error, fetchAnalytics } = useSalesStore();
-  const reportRef = useRef(null);
+  const {
+    data, isLoading, error, fetchAnalytics,
+    caReport, caReportLoading, caReportError, fetchCAReport,
+    ledgerPage, ledgerLoading, fetchLedgerPage,
+    dateRange,
+  } = useSalesStore();
   const [exporting, setExporting] = useState(false);
-  const [dateFilter, setDateFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("30days");
+  const [activeTab, setActiveTab] = useState("charts");
+  const [ledgerPageNum, setLedgerPageNum] = useState(1);
 
   useEffect(() => {
     if (!fileId) return;
@@ -67,33 +95,58 @@ export default function Dashboard() {
     fetchAnalytics(fileId, dateFilter);
   }, [fileId, dateFilter, fetchAnalytics]);
 
+  // If the current filter becomes meaningless once we know the data's
+  // actual span (e.g. default "Last 30 Days" but the file only covers 4
+  // days), fall back to "All Time" automatically instead of leaving a
+  // disabled filter selected.
+  useEffect(() => {
+    if (!dateRange?.span_days) return;
+    const current = DATE_FILTERS.find((f) => f.value === dateFilter);
+    if (current && !isFilterMeaningful(current, dateRange.span_days)) {
+      setDateFilter("all");
+    }
+  }, [dateRange, dateFilter]);
+
+  // The Financial Report tab is fetched lazily, only once the user
+  // switches to it — no point loading P&L + ledger data on every visit
+  // to the Charts tab.
+  useEffect(() => {
+    if (!fileId || activeTab !== "report") return;
+    fetchCAReport(fileId, dateFilter);
+    setLedgerPageNum(1);
+    fetchLedgerPage(fileId, { timeFilter: dateFilter, page: 1, pageSize: 50 });
+  }, [fileId, dateFilter, activeTab, fetchCAReport, fetchLedgerPage]);
+
+  const handleLedgerPageChange = (page) => {
+    setLedgerPageNum(page);
+    fetchLedgerPage(fileId, { timeFilter: dateFilter, page, pageSize: 50 });
+  };
+
   const analyticsData = data;
 
   const isEmpty = data && data.summary && data.summary.revenue?.value === 0 && data.top_items?.length === 0
 
   const exportPDF = async () => {
-    if (!reportRef.current) return;
+    if (!fileId) return;
     setExporting(true);
     try {
-      const [html2canvasModule, jsPDFModule] = await Promise.all([
-        import("html2canvas"),
-        import("jspdf"),
-      ]);
-      const html2canvas = html2canvasModule.default;
-      const jsPDF = jsPDFModule.default;
-
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#050d1a",
+      // Backend generates a real, structured PDF (Platypus tables — a
+      // proper P&L statement, category ledger, top items, dead stock, and
+      // detailed transaction register) rather than a screenshot of the
+      // page. `api` attaches the Firebase auth token automatically.
+      const response = await api.get(`/analytics/${fileId}/report.pdf`, {
+        params: { time_filter: dateFilter },
+        responseType: "blob",
       });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const imgWidth = pageWidth - 20;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-      pdf.save("senova-report.pdf");
+
+      const blobUrl = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `senova-financial-report-${fileId.slice(0, 8)}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error("PDF export failed:", err);
     } finally {
@@ -202,28 +255,40 @@ export default function Dashboard() {
             aria-label="Filter analytics by date range"
             className="flex items-center gap-1 p-1 rounded-xl overflow-x-auto"
             style={{background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)'}}>
-            {DATE_FILTERS.map((f) => (
-              <button
-                key={f.value}
-                onClick={() => setDateFilter(f.value)}
-                aria-pressed={dateFilter === f.value}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 8,
-                  fontSize: '0.8rem',
-                  fontWeight: 500,
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.2s',
-                  background: dateFilter === f.value
-                    ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
-                    : 'transparent',
-                  color: dateFilter === f.value ? '#fff' : 'var(--text-secondary)',
-                  boxShadow: dateFilter === f.value ? '0 2px 8px rgba(56,189,248,0.3)' : 'none',
-                }}
-              >
-                {f.label}
-              </button>
-            ))}
+            {DATE_FILTERS.map((f) => {
+              const meaningful = isFilterMeaningful(f, dateRange?.span_days);
+              const disabled = !meaningful;
+              return (
+                <button
+                  key={f.value}
+                  onClick={() => !disabled && setDateFilter(f.value)}
+                  disabled={disabled}
+                  aria-pressed={dateFilter === f.value}
+                  title={
+                    disabled
+                      ? `Your data only spans ${dateRange?.span_days} day${dateRange?.span_days === 1 ? '' : 's'} — this filter would show the same results as "All Time".`
+                      : undefined
+                  }
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: 8,
+                    fontSize: '0.8rem',
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.2s',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    opacity: disabled ? 0.35 : 1,
+                    background: dateFilter === f.value
+                      ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)'
+                      : 'transparent',
+                    color: dateFilter === f.value ? '#fff' : 'var(--text-secondary)',
+                    boxShadow: dateFilter === f.value ? '0 2px 8px rgba(56,189,248,0.3)' : 'none',
+                  }}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
           </div>
 
           <button
@@ -241,50 +306,119 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {dateRange?.span_days > 0 && dateRange.span_days < 8 && (
+        <div
+          className="card-gradient rounded-xl border border-sky-500/30 px-4 sm:px-5 py-3 flex items-start gap-3"
+          role="note"
+        >
+          <svg className="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-sky-200 text-sm">
+            Your uploaded data covers only <strong>{dateRange.span_days} day{dateRange.span_days === 1 ? '' : 's'}</strong>{' '}
+            ({dateRange.min_date} to {dateRange.max_date}). Filters wider than that are disabled above since
+            they'd show identical results to "All Time" — this isn't a bug, there just isn't more data to compare yet.
+          </p>
+        </div>
+      )}
+
       {analyticsData?.errors?.length > 0 && (
         <ErrorBoundary>
           <RowErrorsBanner errors={analyticsData.errors} />
         </ErrorBoundary>
       )}
 
-      <div ref={reportRef} className="space-y-6 sm:space-y-8">
-        <SummaryStats key={dateFilter} summary={analyticsData.summary} />
+      <div
+        role="tablist"
+        aria-label="Dashboard view"
+        className="flex items-center gap-1 p-1 rounded-xl w-fit"
+        style={{ background: 'rgba(10,22,45,0.8)', border: '1px solid var(--border-subtle)' }}
+      >
+        {VIEW_TABS.map((t) => (
+          <button
+            key={t.value}
+            role="tab"
+            aria-selected={activeTab === t.value}
+            onClick={() => setActiveTab(t.value)}
+            style={{
+              padding: '8px 18px',
+              borderRadius: 8,
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              transition: 'all 0.2s',
+              background: activeTab === t.value ? 'linear-gradient(135deg, #0ea5e9, #38bdf8)' : 'transparent',
+              color: activeTab === t.value ? '#fff' : 'var(--text-secondary)',
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ErrorBoundary>
-            <TopItems items={analyticsData.top_items} />
-          </ErrorBoundary>
-          <Card title="Revenue by Category">
+      {activeTab === "charts" && (
+        <div className="space-y-6 sm:space-y-8">
+          <SummaryStats key={dateFilter} summary={analyticsData.summary} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ErrorBoundary>
-              {analyticsData.categories?.length > 0 ? (
-                <CategoryPieChart data={analyticsData.categories} />
+              <TopItems items={analyticsData.top_items} />
+            </ErrorBoundary>
+            <Card title="Revenue by Category">
+              <ErrorBoundary>
+                {analyticsData.categories?.length > 0 ? (
+                  <CategoryPieChart data={analyticsData.categories} />
+                ) : (
+                  <div className="flex items-center justify-center h-64 text-sm"
+                    style={{color:'var(--text-muted)'}}>
+                    No category data
+                  </div>
+                )}
+              </ErrorBoundary>
+            </Card>
+          </div>
+
+          <Card title="Daily Sales Trend">
+            <ErrorBoundary>
+              {analyticsData.daily_trend?.length > 0 ? (
+                <LineChart data={analyticsData.daily_trend} />
               ) : (
                 <div className="flex items-center justify-center h-64 text-sm"
                   style={{color:'var(--text-muted)'}}>
-                  No category data
+                  No trend data
                 </div>
               )}
             </ErrorBoundary>
           </Card>
-        </div>
 
-        <Card title="Daily Sales Trend">
           <ErrorBoundary>
-            {analyticsData.daily_trend?.length > 0 ? (
-              <LineChart data={analyticsData.daily_trend} />
+            <DeadStockTable items={analyticsData.dead_stock} />
+          </ErrorBoundary>
+        </div>
+      )}
+
+      {activeTab === "report" && (
+        <div className="space-y-6 sm:space-y-8">
+          {caReportError && (
+            <div className="card-gradient border border-red-500/30 rounded-xl px-4 py-3">
+              <p className="text-red-300 text-sm">{caReportError}</p>
+            </div>
+          )}
+          <ErrorBoundary>
+            {caReportLoading && !caReport ? (
+              <Loader message="Building financial report…" />
             ) : (
-              <div className="flex items-center justify-center h-64 text-sm"
-                style={{color:'var(--text-muted)'}}>
-                No trend data
-              </div>
+              <PnLReportTable report={caReport} />
             )}
           </ErrorBoundary>
-        </Card>
-
-        <ErrorBoundary>
-          <DeadStockTable items={analyticsData.dead_stock} />
-        </ErrorBoundary>
-      </div>
+          <ErrorBoundary>
+            <TransactionLedgerTable
+              ledgerPage={ledgerPage}
+              loading={ledgerLoading}
+              onPageChange={handleLedgerPageChange}
+            />
+          </ErrorBoundary>
+        </div>
+      )}
     </section>
   );
 }

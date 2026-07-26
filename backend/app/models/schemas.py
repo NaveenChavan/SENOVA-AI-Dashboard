@@ -205,7 +205,8 @@ class LedgerEntry(BaseModel):
     quantity: int
     selling_price: float
     cost_price: float
-    revenue: float = Field(..., description="quantity * selling_price")
+    discount: float = Field(0.0, description="Discount on this line (0 when the file has no discount column)")
+    revenue: float = Field(..., description="quantity * selling_price - discount (net, matches the P&L)")
     profit: float = Field(..., description="revenue - (quantity * cost_price)")
 
 
@@ -620,6 +621,16 @@ class ForecastResponse(BaseModel):
     accuracy_pct: float | None = Field(
         None, description="100 − MAPE from a 7-day holdout backtest (null when history is too short)"
     )
+    accuracy_basis: Literal["daily", "total"] | None = Field(
+        None,
+        description=(
+            "What the accuracy figure scores: 'daily' = average per-day error, "
+            "'total' = error on the held-out 7-day total (used when the shop only "
+            "trades some days, where per-day error is dominated by which days were open)."
+        ),
+    )
+    trading_days: int = Field(0, description="Days in the history that actually recorded a sale")
+    history_days: int = Field(0, description="Calendar days of history the model was fitted on")
     seasonality_applied: bool = False
     weekday_indices: dict[str, float] = Field(
         default_factory=dict, description="Weekday multipliers, 1.0 = an average day"

@@ -1,26 +1,27 @@
 import Card from '../common/Card'
+import Icon from '../common/Icon'
+import { formatNumber } from '../charts/chartFormat'
 
-function SeverityBadge({ days }) {
-  if (days > 30) {
-    return (
-      <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-        style={{background: 'rgba(239,68,68,0.12)', color: '#f87171'}}>
-        🔴 Critical
-      </span>
-    )
-  }
-  if (days > 14) {
-    return (
-      <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-        style={{background: 'rgba(234,179,8,0.12)', color: '#facc15'}}>
-        🟡 Warning
-      </span>
-    )
-  }
+/**
+ * Slow-moving / dead stock list.
+ *
+ * Status is a word plus an icon, never a coloured dot on its own — the earlier
+ * emoji traffic lights broke the "no emoji as icons" rule and rendered
+ * differently on every platform.
+ */
+
+function Status({ days }) {
+  const tone =
+    days > 30
+      ? { label: 'Critical', colour: 'var(--accent-red)', icon: 'alert' }
+      : days > 14
+        ? { label: 'Warning', colour: 'var(--accent-amber)', icon: 'info' }
+        : { label: 'Recent', colour: 'var(--accent-green)', icon: 'check' }
+
   return (
-    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-      style={{background: 'rgba(16,185,129,0.12)', color: '#10b981'}}>
-      🟢 Recent
+    <span className="inline-flex items-center gap-1 text-[12px] font-semibold" style={{ color: tone.colour }}>
+      <Icon name={tone.icon} className="w-3 h-3" strokeWidth={2.2} />
+      {tone.label}
     </span>
   )
 }
@@ -29,34 +30,29 @@ export default function DeadStockTable({ items }) {
   if (!items || items.length === 0) return null
 
   return (
-    <Card title="Dead Stock / Slow Movers">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
+    <Card title="Dead stock / slow movers" hint={`${items.length} item(s) flagged`}>
+      {/* Capped height + sticky header: a long list scrolls inside the card
+          instead of pushing the rest of the page down. */}
+      <div className="scroll-x" style={{ maxHeight: 'var(--chart-h)', overflowY: 'auto' }}>
+        <table className="table">
           <thead>
-            <tr className="border-b" style={{borderColor:'var(--border-subtle)'}}>
-              <th className="py-3 pr-4 font-medium uppercase tracking-wider text-xs"
-                style={{color:'var(--text-muted)'}}>Item</th>
-              <th className="py-3 pr-4 font-medium uppercase tracking-wider text-xs"
-                style={{color:'var(--text-muted)'}}>Total Units Sold</th>
-              <th className="py-3 pr-4 font-medium uppercase tracking-wider text-xs"
-                style={{color:'var(--text-muted)'}}>Days Since Last Sale</th>
-              <th className="py-3 font-medium uppercase tracking-wider text-xs"
-                style={{color:'var(--text-muted)'}}>Status</th>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Units sold</th>
+              <th scope="col">Idle days</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.name} className="border-b last:border-0 transition-colors"
-                style={{borderColor:'var(--border-subtle)'}}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(56,189,248,0.04)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-                <td className="py-3 pr-4 font-medium" style={{color:'var(--text-primary)'}}>{item.name}</td>
-                <td className="py-3 pr-4" style={{color:'var(--text-secondary)'}}>{item.total_quantity}</td>
-                <td className="py-3 pr-4" style={{color:'var(--text-secondary)'}}>
-                  {item.days_since_last_sale} days
-                </td>
-                <td className="py-3">
-                  <SeverityBadge days={item.days_since_last_sale} />
+              <tr key={item.name}>
+                <th scope="row" title={item.name}>
+                  {item.name}
+                </th>
+                <td className="font-mono">{formatNumber(item.total_quantity)}</td>
+                <td className="font-mono">{formatNumber(item.days_since_last_sale)}</td>
+                <td>
+                  <Status days={item.days_since_last_sale} />
                 </td>
               </tr>
             ))}

@@ -146,7 +146,7 @@ describe('ChartStudio', () => {
     expect(screen.getByLabelText('Measure to plot')).toBeTruthy()
     expect(screen.getByLabelText('Dimension to group by')).toBeTruthy()
     // The footer states the concentration fact in words.
-    expect(screen.getByText(/top 2 make 80% of it/i)).toBeTruthy()
+    expect(screen.getByText(/top 2 make 80%/i)).toBeTruthy()
   })
 
   it.each([

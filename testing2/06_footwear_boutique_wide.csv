@@ -1,0 +1,577 @@
+Bill Date,Invoice No,Style Name,Category,Brand,Size,Colour,Qty,Rate/Unit,Purchase Rate,Discount,GST Amount,Store,Payment Mode,Customer Name,Salesperson,Closing Stock,Remarks
+08-01-2026,FB/20001,Running Shoe,Sports,Nike,6,White,3,4299.00,2400.00,1289.70,1392.88,MG Road,UPI,Anita S,Vikram,17,exchange allowed within 7 days
+08-01-2026,FB/20002,Canvas Sneaker,Casual,Converse,10,White,2,2199.00,1100.00,0.00,527.76,Phoenix Mall,Wallet,Anita S,Vikram,9,exchange allowed within 7 days
+08-01-2026,FB/20003,Leather Formal,Formal,Bata,8,Black,2,2799.00,1450.00,279.90,638.17,Phoenix Mall,Cash,Corporate,Vikram,11,exchange allowed within 7 days
+08-01-2026,FB/20004,Kolhapuri Chappal,Ethnic,Local,9,Navy,2,899.00,380.00,179.80,194.18,Phoenix Mall,Wallet,Corporate,Neha,23,exchange allowed within 7 days
+08-01-2026,FB/20005,Flip Flop,Casual,Paragon,7,White,6,299.00,120.00,0.00,215.28,Station Road,UPI,Anita S,Ayesha,20,exchange allowed within 7 days
+08-01-2026,FB/20006,Heeled Sandal,Party,Metro,6,Brown,2,1999.00,980.00,399.80,431.78,MG Road,Cash,Walk-in,Ayesha,23,exchange allowed within 7 days
+10-01-2026,FB/20007,Running Shoe,Sports,Nike,8,Brown,4,4299.00,2400.00,2579.40,1753.99,Station Road,UPI,Walk-in,Vikram,6,exchange allowed within 7 days
+10-01-2026,FB/20008,Canvas Sneaker,Casual,Converse,8,Tan,3,2199.00,1100.00,659.70,712.48,Phoenix Mall,UPI,Rahul M,Neha,16,exchange allowed within 7 days
+10-01-2026,FB/20009,Leather Formal,Formal,Bata,9,Black,2,2799.00,1450.00,279.90,638.17,Station Road,EMI,Walk-in,Neha,0,exchange allowed within 7 days
+10-01-2026,FB/20010,Kolhapuri Chappal,Ethnic,Local,10,White,7,899.00,380.00,314.65,717.40,Station Road,Wallet,Anita S,Neha,22,exchange allowed within 7 days
+10-01-2026,FB/20011,Flip Flop,Casual,Paragon,8,Tan,8,299.00,120.00,0.00,287.04,Phoenix Mall,Cash,Priya K,Vikram,13,exchange allowed within 7 days
+10-01-2026,FB/20012,Heeled Sandal,Party,Metro,10,Black,3,1999.00,980.00,599.70,647.68,Phoenix Mall,Card,Priya K,Neha,11,exchange allowed within 7 days
+10-01-2026,FB/20013,Trekking Boot,Outdoor,Woodland,10,Navy,1,5499.00,3100.00,549.90,593.89,Station Road,Cash,Rahul M,Vikram,22,exchange allowed within 7 days
+14-01-2026,FB/20014,Running Shoe,Sports,Nike,6,Navy,1,4299.00,2400.00,214.95,490.09,Phoenix Mall,Card,Corporate,Ayesha,0,exchange allowed within 7 days
+14-01-2026,FB/20015,Canvas Sneaker,Casual,Converse,10,Brown,5,2199.00,1100.00,0.00,1319.40,Station Road,UPI,Anita S,Ayesha,8,exchange allowed within 7 days
+14-01-2026,FB/20016,Leather Formal,Formal,Bata,7,White,2,2799.00,1450.00,559.80,604.58,Phoenix Mall,EMI,Walk-in,Ayesha,19,exchange allowed within 7 days
+14-01-2026,FB/20017,Kolhapuri Chappal,Ethnic,Local,10,Brown,2,899.00,380.00,179.80,194.18,Station Road,EMI,Walk-in,Vikram,13,exchange allowed within 7 days
+14-01-2026,FB/20018,Flip Flop,Casual,Paragon,9,Navy,13,299.00,120.00,0.00,466.44,Station Road,Wallet,Corporate,Vikram,14,exchange allowed within 7 days
+14-01-2026,FB/20019,Heeled Sandal,Party,Metro,10,Navy,3,1999.00,980.00,599.70,647.68,MG Road,Cash,Corporate,Neha,24,exchange allowed within 7 days
+14-01-2026,FB/20020,Trekking Boot,Outdoor,Woodland,8,Tan,1,5499.00,3100.00,824.85,560.90,MG Road,EMI,Priya K,Ayesha,12,exchange allowed within 7 days
+17-01-2026,FB/20021,Running Shoe,Sports,Nike,8,Navy,3,4299.00,2400.00,1934.55,1315.49,Phoenix Mall,Cash,Corporate,Ayesha,22,exchange allowed within 7 days
+17-01-2026,FB/20022,Canvas Sneaker,Casual,Converse,6,White,4,2199.00,1100.00,0.00,1055.52,Station Road,UPI,Rahul M,Ayesha,2,exchange allowed within 7 days
+17-01-2026,FB/20023,Leather Formal,Formal,Bata,8,Navy,1,2799.00,1450.00,419.85,285.50,MG Road,Card,Priya K,Ayesha,10,exchange allowed within 7 days
+17-01-2026,FB/20024,Kolhapuri Chappal,Ethnic,Local,7,Brown,4,899.00,380.00,179.80,409.94,Phoenix Mall,UPI,Walk-in,Neha,12,exchange allowed within 7 days
+17-01-2026,FB/20025,Flip Flop,Casual,Paragon,6,White,7,299.00,120.00,209.30,226.04,MG Road,Cash,Rahul M,Neha,3,exchange allowed within 7 days
+17-01-2026,FB/20026,Heeled Sandal,Party,Metro,6,Tan,1,1999.00,980.00,199.90,215.89,MG Road,UPI,Rahul M,Neha,10,exchange allowed within 7 days
+17-01-2026,FB/20027,Trekking Boot,Outdoor,Woodland,6,White,2,5499.00,3100.00,549.90,1253.77,Station Road,EMI,Walk-in,Neha,7,exchange allowed within 7 days
+20-01-2026,FB/20028,Running Shoe,Sports,Nike,10,White,5,4299.00,2400.00,1074.75,2450.43,Station Road,Wallet,Priya K,Vikram,11,exchange allowed within 7 days
+20-01-2026,FB/20029,Canvas Sneaker,Casual,Converse,7,Brown,6,2199.00,1100.00,659.70,1504.12,MG Road,Wallet,Corporate,Vikram,13,exchange allowed within 7 days
+20-01-2026,FB/20030,Leather Formal,Formal,Bata,10,White,1,2799.00,1450.00,0.00,335.88,MG Road,UPI,Anita S,Neha,13,exchange allowed within 7 days
+20-01-2026,FB/20031,Kolhapuri Chappal,Ethnic,Local,9,Tan,2,899.00,380.00,0.00,215.76,Station Road,Cash,Walk-in,Ayesha,5,exchange allowed within 7 days
+20-01-2026,FB/20032,Flip Flop,Casual,Paragon,9,Navy,9,299.00,120.00,134.55,306.77,Phoenix Mall,UPI,Priya K,Neha,17,exchange allowed within 7 days
+20-01-2026,FB/20033,Heeled Sandal,Party,Metro,8,Black,1,1999.00,980.00,299.85,203.90,Station Road,Wallet,Corporate,Vikram,15,exchange allowed within 7 days
+20-01-2026,FB/20034,Trekking Boot,Outdoor,Woodland,6,White,1,5499.00,3100.00,274.95,626.89,Station Road,Cash,Priya K,Neha,11,exchange allowed within 7 days
+23-01-2026,FB/20035,Running Shoe,Sports,Nike,10,Brown,3,4299.00,2400.00,0.00,1547.64,MG Road,EMI,Walk-in,Vikram,4,exchange allowed within 7 days
+23-01-2026,FB/20036,Canvas Sneaker,Casual,Converse,6,White,4,2199.00,1100.00,879.60,949.97,Phoenix Mall,Card,Walk-in,Neha,19,exchange allowed within 7 days
+23-01-2026,FB/20037,Leather Formal,Formal,Bata,10,Brown,3,2799.00,1450.00,1259.55,856.49,MG Road,UPI,Rahul M,Neha,23,exchange allowed within 7 days
+23-01-2026,FB/20038,Kolhapuri Chappal,Ethnic,Local,7,White,3,899.00,380.00,134.85,307.46,Phoenix Mall,EMI,Walk-in,Vikram,8,exchange allowed within 7 days
+23-01-2026,FB/20039,Flip Flop,Casual,Paragon,9,Brown,9,299.00,120.00,403.65,274.48,MG Road,Cash,Anita S,Vikram,13,exchange allowed within 7 days
+23-01-2026,FB/20040,Heeled Sandal,Party,Metro,10,Tan,3,1999.00,980.00,899.55,611.69,Phoenix Mall,Card,Anita S,Neha,11,exchange allowed within 7 days
+23-01-2026,FB/20041,Trekking Boot,Outdoor,Woodland,6,White,1,5499.00,3100.00,549.90,593.89,MG Road,Card,Corporate,Neha,22,exchange allowed within 7 days
+26-01-2026,FB/20042,Running Shoe,Sports,Nike,6,White,4,4299.00,2400.00,859.80,1960.34,Phoenix Mall,Wallet,Anita S,Ayesha,2,exchange allowed within 7 days
+26-01-2026,FB/20043,Canvas Sneaker,Casual,Converse,9,Black,4,2199.00,1100.00,439.80,1002.74,Station Road,Cash,Walk-in,Neha,22,exchange allowed within 7 days
+26-01-2026,FB/20044,Leather Formal,Formal,Bata,9,Tan,3,2799.00,1450.00,419.85,957.26,Phoenix Mall,Card,Anita S,Neha,4,exchange allowed within 7 days
+26-01-2026,FB/20045,Kolhapuri Chappal,Ethnic,Local,9,Navy,5,899.00,380.00,449.50,485.46,Phoenix Mall,Wallet,Walk-in,Vikram,24,exchange allowed within 7 days
+26-01-2026,FB/20046,Flip Flop,Casual,Paragon,9,Tan,3,299.00,120.00,89.70,96.88,MG Road,Cash,Anita S,Neha,0,exchange allowed within 7 days
+26-01-2026,FB/20047,Heeled Sandal,Party,Metro,7,Navy,3,1999.00,980.00,0.00,719.64,MG Road,EMI,Rahul M,Neha,3,exchange allowed within 7 days
+26-01-2026,FB/20048,Trekking Boot,Outdoor,Woodland,8,Brown,1,5499.00,3100.00,0.00,659.88,MG Road,EMI,Anita S,Neha,1,exchange allowed within 7 days
+27-01-2026,FB/20049,Running Shoe,Sports,Nike,7,Navy,3,4299.00,2400.00,1289.70,1392.88,MG Road,Wallet,Anita S,Ayesha,2,exchange allowed within 7 days
+27-01-2026,FB/20050,Canvas Sneaker,Casual,Converse,6,Black,5,2199.00,1100.00,549.75,1253.43,MG Road,Wallet,Rahul M,Neha,2,exchange allowed within 7 days
+27-01-2026,FB/20051,Leather Formal,Formal,Bata,8,Tan,2,2799.00,1450.00,0.00,671.76,Station Road,UPI,Priya K,Neha,9,exchange allowed within 7 days
+27-01-2026,FB/20052,Kolhapuri Chappal,Ethnic,Local,8,Tan,2,899.00,380.00,269.70,183.40,MG Road,Cash,Rahul M,Vikram,16,exchange allowed within 7 days
+27-01-2026,FB/20053,Flip Flop,Casual,Paragon,6,Navy,6,299.00,120.00,89.70,204.52,MG Road,Card,Corporate,Ayesha,18,exchange allowed within 7 days
+27-01-2026,FB/20054,Heeled Sandal,Party,Metro,8,Tan,3,1999.00,980.00,299.85,683.66,Station Road,Wallet,Walk-in,Ayesha,15,exchange allowed within 7 days
+27-01-2026,FB/20055,Trekking Boot,Outdoor,Woodland,8,White,1,5499.00,3100.00,274.95,626.89,MG Road,Cash,Corporate,Vikram,20,exchange allowed within 7 days
+30-01-2026,FB/20056,Running Shoe,Sports,Nike,9,Tan,4,4299.00,2400.00,0.00,2063.52,Phoenix Mall,EMI,Rahul M,Ayesha,22,exchange allowed within 7 days
+30-01-2026,FB/20057,Canvas Sneaker,Casual,Converse,6,White,6,2199.00,1100.00,1979.10,1345.79,MG Road,Wallet,Rahul M,Vikram,2,exchange allowed within 7 days
+30-01-2026,FB/20058,Leather Formal,Formal,Bata,10,Brown,3,2799.00,1450.00,839.70,906.88,MG Road,UPI,Priya K,Vikram,3,exchange allowed within 7 days
+30-01-2026,FB/20059,Kolhapuri Chappal,Ethnic,Local,9,Brown,7,899.00,380.00,943.95,641.89,Station Road,UPI,Rahul M,Vikram,2,exchange allowed within 7 days
+30-01-2026,FB/20060,Flip Flop,Casual,Paragon,6,Black,4,299.00,120.00,59.80,136.34,Station Road,EMI,Corporate,Ayesha,13,exchange allowed within 7 days
+30-01-2026,FB/20061,Heeled Sandal,Party,Metro,6,White,3,1999.00,980.00,599.70,647.68,MG Road,UPI,Corporate,Vikram,24,exchange allowed within 7 days
+30-01-2026,FB/20062,Trekking Boot,Outdoor,Woodland,8,Tan,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,Card,Corporate,Neha,16,exchange allowed within 7 days
+02-02-2026,FB/20063,Running Shoe,Sports,Nike,8,Brown,3,4299.00,2400.00,644.85,1470.26,Phoenix Mall,UPI,Walk-in,Neha,0,exchange allowed within 7 days
+02-02-2026,FB/20064,Canvas Sneaker,Casual,Converse,6,Tan,6,2199.00,1100.00,0.00,1583.28,Phoenix Mall,Cash,Corporate,Vikram,9,exchange allowed within 7 days
+02-02-2026,FB/20065,Leather Formal,Formal,Bata,9,Navy,2,2799.00,1450.00,0.00,671.76,Phoenix Mall,Cash,Rahul M,Ayesha,23,exchange allowed within 7 days
+02-02-2026,FB/20066,Kolhapuri Chappal,Ethnic,Local,9,Black,3,899.00,380.00,269.70,291.28,Phoenix Mall,UPI,Walk-in,Ayesha,14,exchange allowed within 7 days
+02-02-2026,FB/20067,Flip Flop,Casual,Paragon,6,Tan,9,299.00,120.00,403.65,274.48,Phoenix Mall,Card,Rahul M,Ayesha,15,exchange allowed within 7 days
+02-02-2026,FB/20068,Heeled Sandal,Party,Metro,7,Brown,3,1999.00,980.00,299.85,683.66,Station Road,EMI,Rahul M,Vikram,24,exchange allowed within 7 days
+02-02-2026,FB/20069,Trekking Boot,Outdoor,Woodland,9,Navy,1,5499.00,3100.00,274.95,626.89,MG Road,Wallet,Anita S,Ayesha,5,exchange allowed within 7 days
+03-02-2026,FB/20070,Running Shoe,Sports,Nike,10,White,4,4299.00,2400.00,1719.60,1857.17,Station Road,Cash,Priya K,Ayesha,9,exchange allowed within 7 days
+03-02-2026,FB/20071,Canvas Sneaker,Casual,Converse,8,Brown,3,2199.00,1100.00,659.70,712.48,Station Road,Card,Corporate,Neha,7,exchange allowed within 7 days
+03-02-2026,FB/20072,Leather Formal,Formal,Bata,7,Tan,1,2799.00,1450.00,419.85,285.50,Phoenix Mall,Wallet,Priya K,Neha,19,exchange allowed within 7 days
+03-02-2026,FB/20073,Kolhapuri Chappal,Ethnic,Local,8,White,9,899.00,380.00,809.10,873.83,MG Road,Cash,Rahul M,Neha,11,exchange allowed within 7 days
+03-02-2026,FB/20074,Flip Flop,Casual,Paragon,10,Tan,6,299.00,120.00,89.70,204.52,MG Road,Cash,Walk-in,Ayesha,0,exchange allowed within 7 days
+03-02-2026,FB/20075,Heeled Sandal,Party,Metro,10,Navy,2,1999.00,980.00,399.80,431.78,Phoenix Mall,UPI,Anita S,Neha,18,exchange allowed within 7 days
+03-02-2026,FB/20076,Trekking Boot,Outdoor,Woodland,9,Brown,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,Cash,Rahul M,Vikram,12,exchange allowed within 7 days
+09-02-2026,FB/20077,Running Shoe,Sports,Nike,7,Black,3,4299.00,2400.00,1934.55,1315.49,Phoenix Mall,Card,Anita S,Vikram,23,exchange allowed within 7 days
+09-02-2026,FB/20078,Canvas Sneaker,Casual,Converse,7,Tan,4,2199.00,1100.00,879.60,949.97,Phoenix Mall,Card,Rahul M,Ayesha,4,exchange allowed within 7 days
+09-02-2026,FB/20079,Leather Formal,Formal,Bata,8,Black,2,2799.00,1450.00,839.70,571.00,Phoenix Mall,UPI,Priya K,Ayesha,7,exchange allowed within 7 days
+09-02-2026,FB/20080,Kolhapuri Chappal,Ethnic,Local,6,White,5,899.00,380.00,0.00,539.40,MG Road,Cash,Corporate,Vikram,19,exchange allowed within 7 days
+09-02-2026,FB/20081,Flip Flop,Casual,Paragon,10,Tan,14,299.00,120.00,209.30,477.20,MG Road,Wallet,Anita S,Ayesha,11,exchange allowed within 7 days
+09-02-2026,FB/20082,Heeled Sandal,Party,Metro,6,Navy,1,1999.00,980.00,99.95,227.89,MG Road,EMI,Priya K,Neha,11,exchange allowed within 7 days
+09-02-2026,FB/20083,Trekking Boot,Outdoor,Woodland,6,Brown,2,5499.00,3100.00,1099.80,1187.78,MG Road,EMI,Corporate,Neha,15,exchange allowed within 7 days
+10-02-2026,FB/20084,Running Shoe,Sports,Nike,10,Brown,1,4299.00,2400.00,644.85,438.50,Station Road,EMI,Walk-in,Neha,20,exchange allowed within 7 days
+10-02-2026,FB/20085,Canvas Sneaker,Casual,Converse,6,Black,2,2199.00,1100.00,0.00,527.76,MG Road,UPI,Walk-in,Vikram,7,exchange allowed within 7 days
+10-02-2026,FB/20086,Leather Formal,Formal,Bata,7,Black,1,2799.00,1450.00,0.00,335.88,MG Road,EMI,Anita S,Neha,2,exchange allowed within 7 days
+10-02-2026,FB/20087,Kolhapuri Chappal,Ethnic,Local,9,White,9,899.00,380.00,809.10,873.83,Station Road,Wallet,Rahul M,Vikram,12,exchange allowed within 7 days
+10-02-2026,FB/20088,Flip Flop,Casual,Paragon,6,White,11,299.00,120.00,164.45,374.95,Phoenix Mall,UPI,Walk-in,Ayesha,8,exchange allowed within 7 days
+10-02-2026,FB/20089,Heeled Sandal,Party,Metro,6,Tan,2,1999.00,980.00,599.70,407.80,Station Road,UPI,Walk-in,Neha,15,exchange allowed within 7 days
+10-02-2026,FB/20090,Trekking Boot,Outdoor,Woodland,8,Navy,1,5499.00,3100.00,274.95,626.89,Station Road,Cash,Walk-in,Vikram,19,exchange allowed within 7 days
+11-02-2026,FB/20091,Running Shoe,Sports,Nike,10,Navy,4,4299.00,2400.00,2579.40,1753.99,Phoenix Mall,Wallet,Priya K,Vikram,18,exchange allowed within 7 days
+11-02-2026,FB/20092,Canvas Sneaker,Casual,Converse,6,Black,5,2199.00,1100.00,0.00,1319.40,Phoenix Mall,Wallet,Priya K,Vikram,10,exchange allowed within 7 days
+11-02-2026,FB/20093,Leather Formal,Formal,Bata,8,Navy,1,2799.00,1450.00,279.90,302.29,Phoenix Mall,EMI,Corporate,Neha,19,exchange allowed within 7 days
+11-02-2026,FB/20094,Kolhapuri Chappal,Ethnic,Local,8,Brown,5,899.00,380.00,224.75,512.43,MG Road,Card,Corporate,Ayesha,6,exchange allowed within 7 days
+11-02-2026,FB/20095,Flip Flop,Casual,Paragon,7,Brown,12,299.00,120.00,358.80,387.50,Phoenix Mall,Card,Walk-in,Vikram,19,exchange allowed within 7 days
+11-02-2026,FB/20096,Heeled Sandal,Party,Metro,8,Tan,1,1999.00,980.00,0.00,239.88,MG Road,Cash,Anita S,Vikram,7,exchange allowed within 7 days
+11-02-2026,FB/20097,Trekking Boot,Outdoor,Woodland,9,Brown,1,5499.00,3100.00,549.90,593.89,Station Road,EMI,Priya K,Vikram,23,exchange allowed within 7 days
+14-02-2026,FB/20098,Running Shoe,Sports,Nike,9,Brown,2,4299.00,2400.00,1289.70,877.00,Phoenix Mall,EMI,Anita S,Vikram,9,exchange allowed within 7 days
+14-02-2026,FB/20099,Canvas Sneaker,Casual,Converse,6,Brown,2,2199.00,1100.00,659.70,448.60,MG Road,UPI,Corporate,Ayesha,13,exchange allowed within 7 days
+14-02-2026,FB/20100,Leather Formal,Formal,Bata,8,Brown,2,2799.00,1450.00,279.90,638.17,Station Road,Wallet,Walk-in,Vikram,20,exchange allowed within 7 days
+14-02-2026,FB/20101,Kolhapuri Chappal,Ethnic,Local,7,Brown,5,899.00,380.00,449.50,485.46,Phoenix Mall,EMI,Rahul M,Neha,11,exchange allowed within 7 days
+14-02-2026,FB/20102,Flip Flop,Casual,Paragon,6,Brown,3,299.00,120.00,89.70,96.88,Station Road,Card,Priya K,Ayesha,5,exchange allowed within 7 days
+14-02-2026,FB/20103,Heeled Sandal,Party,Metro,8,Brown,2,1999.00,980.00,0.00,479.76,Station Road,Cash,Anita S,Ayesha,13,exchange allowed within 7 days
+14-02-2026,FB/20104,Trekking Boot,Outdoor,Woodland,10,Brown,1,5499.00,3100.00,549.90,593.89,Station Road,UPI,Rahul M,Vikram,17,exchange allowed within 7 days
+15-02-2026,FB/20105,Running Shoe,Sports,Nike,6,Navy,4,4299.00,2400.00,859.80,1960.34,Phoenix Mall,Card,Anita S,Vikram,10,exchange allowed within 7 days
+15-02-2026,FB/20106,Canvas Sneaker,Casual,Converse,8,Navy,5,2199.00,1100.00,549.75,1253.43,Phoenix Mall,Cash,Corporate,Neha,19,exchange allowed within 7 days
+15-02-2026,FB/20107,Leather Formal,Formal,Bata,9,Black,2,2799.00,1450.00,279.90,638.17,MG Road,UPI,Walk-in,Vikram,12,exchange allowed within 7 days
+15-02-2026,FB/20108,Kolhapuri Chappal,Ethnic,Local,8,White,6,899.00,380.00,269.70,614.92,Phoenix Mall,EMI,Corporate,Neha,2,exchange allowed within 7 days
+15-02-2026,FB/20109,Flip Flop,Casual,Paragon,8,Navy,3,299.00,120.00,134.55,91.49,MG Road,Card,Anita S,Vikram,3,exchange allowed within 7 days
+15-02-2026,FB/20110,Heeled Sandal,Party,Metro,7,Tan,2,1999.00,980.00,0.00,479.76,Phoenix Mall,Wallet,Rahul M,Vikram,23,exchange allowed within 7 days
+15-02-2026,FB/20111,Trekking Boot,Outdoor,Woodland,9,White,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,EMI,Rahul M,Neha,22,exchange allowed within 7 days
+21-02-2026,FB/20112,Running Shoe,Sports,Nike,8,Brown,1,4299.00,2400.00,644.85,438.50,MG Road,Card,Walk-in,Vikram,2,exchange allowed within 7 days
+21-02-2026,FB/20113,Canvas Sneaker,Casual,Converse,6,White,2,2199.00,1100.00,0.00,527.76,MG Road,UPI,Priya K,Ayesha,13,exchange allowed within 7 days
+21-02-2026,FB/20114,Leather Formal,Formal,Bata,8,Brown,3,2799.00,1450.00,0.00,1007.64,Station Road,UPI,Rahul M,Vikram,24,exchange allowed within 7 days
+21-02-2026,FB/20115,Kolhapuri Chappal,Ethnic,Local,6,Navy,6,899.00,380.00,0.00,647.28,MG Road,Card,Priya K,Vikram,5,exchange allowed within 7 days
+21-02-2026,FB/20116,Flip Flop,Casual,Paragon,6,Navy,11,299.00,120.00,164.45,374.95,Phoenix Mall,Card,Priya K,Vikram,4,exchange allowed within 7 days
+21-02-2026,FB/20117,Heeled Sandal,Party,Metro,6,Black,1,1999.00,980.00,199.90,215.89,MG Road,Wallet,Rahul M,Neha,24,exchange allowed within 7 days
+21-02-2026,FB/20118,Trekking Boot,Outdoor,Woodland,6,Navy,1,5499.00,3100.00,274.95,626.89,MG Road,Card,Anita S,Neha,15,exchange allowed within 7 days
+22-02-2026,FB/20119,Running Shoe,Sports,Nike,6,Tan,2,4299.00,2400.00,859.80,928.58,Phoenix Mall,Card,Rahul M,Ayesha,20,exchange allowed within 7 days
+22-02-2026,FB/20120,Canvas Sneaker,Casual,Converse,10,Brown,7,2199.00,1100.00,2308.95,1570.09,Phoenix Mall,EMI,Corporate,Ayesha,4,exchange allowed within 7 days
+22-02-2026,FB/20121,Leather Formal,Formal,Bata,10,White,3,2799.00,1450.00,0.00,1007.64,Phoenix Mall,Wallet,Anita S,Vikram,0,exchange allowed within 7 days
+22-02-2026,FB/20122,Kolhapuri Chappal,Ethnic,Local,9,Navy,8,899.00,380.00,0.00,863.04,Station Road,Cash,Anita S,Ayesha,13,exchange allowed within 7 days
+22-02-2026,FB/20123,Flip Flop,Casual,Paragon,10,Brown,7,299.00,120.00,104.65,238.60,MG Road,Wallet,Rahul M,Neha,7,exchange allowed within 7 days
+22-02-2026,FB/20124,Heeled Sandal,Party,Metro,6,Black,1,1999.00,980.00,199.90,215.89,MG Road,UPI,Priya K,Neha,5,exchange allowed within 7 days
+22-02-2026,FB/20125,Trekking Boot,Outdoor,Woodland,6,Navy,2,5499.00,3100.00,1099.80,1187.78,MG Road,Cash,Corporate,Vikram,6,exchange allowed within 7 days
+23-02-2026,FB/20126,Running Shoe,Sports,Nike,6,Tan,2,4299.00,2400.00,0.00,1031.76,Station Road,UPI,Anita S,Ayesha,6,exchange allowed within 7 days
+23-02-2026,FB/20127,Canvas Sneaker,Casual,Converse,6,Tan,4,2199.00,1100.00,439.80,1002.74,MG Road,UPI,Anita S,Neha,1,exchange allowed within 7 days
+23-02-2026,FB/20128,Leather Formal,Formal,Bata,6,Tan,1,2799.00,1450.00,0.00,335.88,MG Road,Cash,Walk-in,Ayesha,20,exchange allowed within 7 days
+23-02-2026,FB/20129,Kolhapuri Chappal,Ethnic,Local,7,Navy,6,899.00,380.00,0.00,647.28,Phoenix Mall,Card,Priya K,Vikram,14,exchange allowed within 7 days
+23-02-2026,FB/20130,Flip Flop,Casual,Paragon,7,Brown,14,299.00,120.00,418.60,452.09,Phoenix Mall,Wallet,Priya K,Vikram,16,exchange allowed within 7 days
+23-02-2026,FB/20131,Heeled Sandal,Party,Metro,10,Brown,1,1999.00,980.00,199.90,215.89,Phoenix Mall,Cash,Anita S,Vikram,15,exchange allowed within 7 days
+23-02-2026,FB/20132,Trekking Boot,Outdoor,Woodland,10,Black,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,Cash,Anita S,Neha,5,exchange allowed within 7 days
+25-02-2026,FB/20133,Running Shoe,Sports,Nike,6,Brown,4,4299.00,2400.00,859.80,1960.34,Phoenix Mall,Wallet,Priya K,Vikram,23,exchange allowed within 7 days
+25-02-2026,FB/20134,Canvas Sneaker,Casual,Converse,6,Tan,2,2199.00,1100.00,659.70,448.60,Station Road,Cash,Walk-in,Neha,23,exchange allowed within 7 days
+25-02-2026,FB/20135,Leather Formal,Formal,Bata,10,Tan,4,2799.00,1450.00,1679.40,1141.99,Phoenix Mall,Cash,Priya K,Ayesha,18,exchange allowed within 7 days
+25-02-2026,FB/20136,Kolhapuri Chappal,Ethnic,Local,8,Brown,6,899.00,380.00,539.40,582.55,Station Road,EMI,Corporate,Vikram,15,exchange allowed within 7 days
+25-02-2026,FB/20137,Flip Flop,Casual,Paragon,9,Navy,12,299.00,120.00,538.20,365.98,Station Road,EMI,Priya K,Ayesha,2,exchange allowed within 7 days
+25-02-2026,FB/20138,Heeled Sandal,Party,Metro,6,White,1,1999.00,980.00,199.90,215.89,Phoenix Mall,Wallet,Priya K,Vikram,15,exchange allowed within 7 days
+25-02-2026,FB/20139,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,549.90,593.89,Station Road,EMI,Rahul M,Vikram,19,exchange allowed within 7 days
+27-02-2026,FB/20140,Running Shoe,Sports,Nike,10,Tan,5,4299.00,2400.00,0.00,2579.40,MG Road,UPI,Rahul M,Neha,12,exchange allowed within 7 days
+27-02-2026,FB/20141,Canvas Sneaker,Casual,Converse,10,Brown,3,2199.00,1100.00,659.70,712.48,Station Road,Wallet,Priya K,Vikram,24,exchange allowed within 7 days
+27-02-2026,FB/20142,Leather Formal,Formal,Bata,10,White,1,2799.00,1450.00,0.00,335.88,MG Road,EMI,Anita S,Ayesha,8,exchange allowed within 7 days
+27-02-2026,FB/20143,Kolhapuri Chappal,Ethnic,Local,10,Black,5,899.00,380.00,674.25,458.49,Phoenix Mall,Wallet,Priya K,Vikram,13,exchange allowed within 7 days
+27-02-2026,FB/20144,Flip Flop,Casual,Paragon,10,White,4,299.00,120.00,119.60,129.17,MG Road,Card,Corporate,Ayesha,22,exchange allowed within 7 days
+27-02-2026,FB/20145,Heeled Sandal,Party,Metro,8,Black,3,1999.00,980.00,899.55,611.69,MG Road,UPI,Walk-in,Vikram,13,exchange allowed within 7 days
+02-03-2026,FB/20146,Running Shoe,Sports,Nike,10,Tan,1,4299.00,2400.00,429.90,464.29,MG Road,EMI,Anita S,Ayesha,0,exchange allowed within 7 days
+02-03-2026,FB/20147,Canvas Sneaker,Casual,Converse,7,Black,4,2199.00,1100.00,439.80,1002.74,Phoenix Mall,Wallet,Rahul M,Vikram,20,exchange allowed within 7 days
+02-03-2026,FB/20148,Leather Formal,Formal,Bata,6,Tan,3,2799.00,1450.00,839.70,906.88,Station Road,Cash,Rahul M,Vikram,18,exchange allowed within 7 days
+02-03-2026,FB/20149,Kolhapuri Chappal,Ethnic,Local,8,Tan,4,899.00,380.00,359.60,388.37,Station Road,EMI,Corporate,Vikram,17,exchange allowed within 7 days
+02-03-2026,FB/20150,Flip Flop,Casual,Paragon,9,White,8,299.00,120.00,358.80,243.98,Phoenix Mall,Cash,Anita S,Neha,17,exchange allowed within 7 days
+02-03-2026,FB/20151,Heeled Sandal,Party,Metro,6,Black,1,1999.00,980.00,299.85,203.90,Phoenix Mall,EMI,Corporate,Neha,23,exchange allowed within 7 days
+02-03-2026,FB/20152,Trekking Boot,Outdoor,Woodland,10,Tan,1,5499.00,3100.00,0.00,659.88,Station Road,Cash,Anita S,Vikram,8,exchange allowed within 7 days
+04-03-2026,FB/20153,Running Shoe,Sports,Nike,10,White,2,4299.00,2400.00,429.90,980.17,Station Road,Card,Rahul M,Vikram,24,exchange allowed within 7 days
+04-03-2026,FB/20154,Canvas Sneaker,Casual,Converse,7,Navy,2,2199.00,1100.00,219.90,501.37,MG Road,EMI,Rahul M,Neha,23,exchange allowed within 7 days
+04-03-2026,FB/20155,Leather Formal,Formal,Bata,9,White,3,2799.00,1450.00,839.70,906.88,Phoenix Mall,UPI,Walk-in,Ayesha,23,exchange allowed within 7 days
+04-03-2026,FB/20156,Kolhapuri Chappal,Ethnic,Local,8,Tan,3,899.00,380.00,134.85,307.46,Station Road,Card,Corporate,Ayesha,17,exchange allowed within 7 days
+04-03-2026,FB/20157,Flip Flop,Casual,Paragon,10,Navy,4,299.00,120.00,179.40,121.99,MG Road,Wallet,Corporate,Neha,22,exchange allowed within 7 days
+04-03-2026,FB/20158,Heeled Sandal,Party,Metro,6,Black,2,1999.00,980.00,399.80,431.78,MG Road,Card,Corporate,Neha,24,exchange allowed within 7 days
+04-03-2026,FB/20159,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,549.90,593.89,MG Road,EMI,Corporate,Neha,8,exchange allowed within 7 days
+06-03-2026,FB/20160,Running Shoe,Sports,Nike,6,Brown,1,4299.00,2400.00,0.00,515.88,Phoenix Mall,Cash,Anita S,Vikram,17,exchange allowed within 7 days
+06-03-2026,FB/20161,Canvas Sneaker,Casual,Converse,6,Brown,6,2199.00,1100.00,1319.40,1424.95,MG Road,Wallet,Anita S,Neha,0,exchange allowed within 7 days
+06-03-2026,FB/20162,Leather Formal,Formal,Bata,8,Brown,3,2799.00,1450.00,419.85,957.26,Station Road,UPI,Anita S,Vikram,21,exchange allowed within 7 days
+06-03-2026,FB/20163,Kolhapuri Chappal,Ethnic,Local,7,White,3,899.00,380.00,269.70,291.28,MG Road,EMI,Corporate,Neha,6,exchange allowed within 7 days
+06-03-2026,FB/20164,Flip Flop,Casual,Paragon,7,Navy,5,299.00,120.00,0.00,179.40,MG Road,Card,Anita S,Neha,2,exchange allowed within 7 days
+06-03-2026,FB/20165,Heeled Sandal,Party,Metro,7,Black,1,1999.00,980.00,0.00,239.88,Phoenix Mall,Cash,Rahul M,Ayesha,10,exchange allowed within 7 days
+06-03-2026,FB/20166,Trekking Boot,Outdoor,Woodland,7,White,1,5499.00,3100.00,274.95,626.89,Station Road,Card,Corporate,Vikram,5,exchange allowed within 7 days
+08-03-2026,FB/20167,Running Shoe,Sports,Nike,7,Navy,3,4299.00,2400.00,1934.55,1315.49,MG Road,Card,Corporate,Neha,4,exchange allowed within 7 days
+08-03-2026,FB/20168,Canvas Sneaker,Casual,Converse,10,Tan,5,2199.00,1100.00,1649.25,1121.49,Station Road,Card,Rahul M,Neha,22,exchange allowed within 7 days
+08-03-2026,FB/20169,Leather Formal,Formal,Bata,7,Brown,2,2799.00,1450.00,559.80,604.58,Phoenix Mall,Cash,Priya K,Neha,13,exchange allowed within 7 days
+08-03-2026,FB/20170,Kolhapuri Chappal,Ethnic,Local,10,Brown,2,899.00,380.00,179.80,194.18,Station Road,Cash,Priya K,Vikram,5,exchange allowed within 7 days
+08-03-2026,FB/20171,Flip Flop,Casual,Paragon,7,Brown,11,299.00,120.00,493.35,335.48,MG Road,EMI,Walk-in,Ayesha,10,exchange allowed within 7 days
+08-03-2026,FB/20172,Heeled Sandal,Party,Metro,6,Brown,3,1999.00,980.00,299.85,683.66,MG Road,Cash,Priya K,Ayesha,2,exchange allowed within 7 days
+08-03-2026,FB/20173,Trekking Boot,Outdoor,Woodland,6,Navy,1,5499.00,3100.00,824.85,560.90,MG Road,EMI,Walk-in,Vikram,11,exchange allowed within 7 days
+09-03-2026,FB/20174,Running Shoe,Sports,Nike,7,Navy,2,4299.00,2400.00,429.90,980.17,MG Road,UPI,Priya K,Ayesha,20,exchange allowed within 7 days
+09-03-2026,FB/20175,Canvas Sneaker,Casual,Converse,6,Black,4,2199.00,1100.00,1319.40,897.19,Phoenix Mall,Wallet,Rahul M,Vikram,3,exchange allowed within 7 days
+09-03-2026,FB/20176,Leather Formal,Formal,Bata,8,Navy,1,2799.00,1450.00,0.00,335.88,Station Road,Cash,Anita S,Neha,2,exchange allowed within 7 days
+09-03-2026,FB/20177,Kolhapuri Chappal,Ethnic,Local,8,Tan,7,899.00,380.00,943.95,641.89,MG Road,UPI,Anita S,Ayesha,24,exchange allowed within 7 days
+09-03-2026,FB/20178,Flip Flop,Casual,Paragon,10,Black,13,299.00,120.00,388.70,419.80,Station Road,Card,Priya K,Ayesha,21,exchange allowed within 7 days
+09-03-2026,FB/20179,Heeled Sandal,Party,Metro,8,Brown,2,1999.00,980.00,599.70,407.80,Phoenix Mall,UPI,Anita S,Ayesha,12,exchange allowed within 7 days
+15-03-2026,FB/20180,Running Shoe,Sports,Nike,9,Tan,2,4299.00,2400.00,0.00,1031.76,MG Road,UPI,Priya K,Vikram,1,exchange allowed within 7 days
+15-03-2026,FB/20181,Canvas Sneaker,Casual,Converse,8,Navy,7,2199.00,1100.00,2308.95,1570.09,Phoenix Mall,Cash,Rahul M,Neha,15,exchange allowed within 7 days
+15-03-2026,FB/20182,Leather Formal,Formal,Bata,8,Brown,2,2799.00,1450.00,559.80,604.58,Phoenix Mall,EMI,Walk-in,Ayesha,11,exchange allowed within 7 days
+15-03-2026,FB/20183,Kolhapuri Chappal,Ethnic,Local,6,Navy,6,899.00,380.00,539.40,582.55,Phoenix Mall,EMI,Priya K,Ayesha,0,exchange allowed within 7 days
+15-03-2026,FB/20184,Flip Flop,Casual,Paragon,7,Tan,8,299.00,120.00,0.00,287.04,Station Road,Wallet,Walk-in,Neha,17,exchange allowed within 7 days
+15-03-2026,FB/20185,Heeled Sandal,Party,Metro,10,Black,1,1999.00,980.00,0.00,239.88,MG Road,UPI,Corporate,Vikram,14,exchange allowed within 7 days
+15-03-2026,FB/20186,Trekking Boot,Outdoor,Woodland,10,Navy,1,5499.00,3100.00,549.90,593.89,Station Road,EMI,Priya K,Ayesha,18,exchange allowed within 7 days
+16-03-2026,FB/20187,Running Shoe,Sports,Nike,6,Brown,3,4299.00,2400.00,1934.55,1315.49,MG Road,Wallet,Priya K,Ayesha,5,exchange allowed within 7 days
+16-03-2026,FB/20188,Canvas Sneaker,Casual,Converse,9,Black,2,2199.00,1100.00,439.80,474.98,Phoenix Mall,EMI,Corporate,Ayesha,4,exchange allowed within 7 days
+16-03-2026,FB/20189,Leather Formal,Formal,Bata,9,Black,2,2799.00,1450.00,279.90,638.17,Phoenix Mall,EMI,Priya K,Neha,14,exchange allowed within 7 days
+16-03-2026,FB/20190,Kolhapuri Chappal,Ethnic,Local,10,Brown,9,899.00,380.00,0.00,970.92,MG Road,EMI,Rahul M,Vikram,16,exchange allowed within 7 days
+16-03-2026,FB/20191,Flip Flop,Casual,Paragon,7,White,14,299.00,120.00,627.90,426.97,Phoenix Mall,Cash,Rahul M,Vikram,7,exchange allowed within 7 days
+16-03-2026,FB/20192,Heeled Sandal,Party,Metro,9,Black,4,1999.00,980.00,799.60,863.57,MG Road,UPI,Rahul M,Neha,24,exchange allowed within 7 days
+16-03-2026,FB/20193,Trekking Boot,Outdoor,Woodland,8,Navy,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,Cash,Rahul M,Neha,12,exchange allowed within 7 days
+19-03-2026,FB/20194,Running Shoe,Sports,Nike,9,White,5,4299.00,2400.00,3224.25,2192.49,MG Road,Wallet,Priya K,Vikram,12,exchange allowed within 7 days
+19-03-2026,FB/20195,Canvas Sneaker,Casual,Converse,6,Black,6,2199.00,1100.00,659.70,1504.12,MG Road,Wallet,Rahul M,Ayesha,0,exchange allowed within 7 days
+19-03-2026,FB/20196,Leather Formal,Formal,Bata,8,Brown,1,2799.00,1450.00,0.00,335.88,MG Road,Card,Rahul M,Vikram,11,exchange allowed within 7 days
+19-03-2026,FB/20197,Kolhapuri Chappal,Ethnic,Local,9,White,8,899.00,380.00,1078.80,733.58,Phoenix Mall,Wallet,Rahul M,Vikram,15,exchange allowed within 7 days
+19-03-2026,FB/20198,Flip Flop,Casual,Paragon,9,Black,13,299.00,120.00,388.70,419.80,Phoenix Mall,Card,Rahul M,Neha,1,exchange allowed within 7 days
+19-03-2026,FB/20199,Heeled Sandal,Party,Metro,6,Tan,3,1999.00,980.00,0.00,719.64,Phoenix Mall,Card,Rahul M,Vikram,4,exchange allowed within 7 days
+19-03-2026,FB/20200,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,549.90,593.89,MG Road,Card,Priya K,Neha,13,exchange allowed within 7 days
+22-03-2026,FB/20201,Running Shoe,Sports,Nike,8,Brown,2,4299.00,2400.00,859.80,928.58,MG Road,EMI,Walk-in,Neha,0,exchange allowed within 7 days
+22-03-2026,FB/20202,Canvas Sneaker,Casual,Converse,7,Brown,6,2199.00,1100.00,659.70,1504.12,Phoenix Mall,Cash,Anita S,Ayesha,24,exchange allowed within 7 days
+22-03-2026,FB/20203,Leather Formal,Formal,Bata,7,Brown,1,2799.00,1450.00,0.00,335.88,Station Road,UPI,Priya K,Vikram,21,exchange allowed within 7 days
+22-03-2026,FB/20204,Kolhapuri Chappal,Ethnic,Local,10,White,7,899.00,380.00,0.00,755.16,Phoenix Mall,EMI,Priya K,Vikram,10,exchange allowed within 7 days
+22-03-2026,FB/20205,Flip Flop,Casual,Paragon,9,Tan,10,299.00,120.00,448.50,304.98,Station Road,UPI,Priya K,Vikram,4,exchange allowed within 7 days
+22-03-2026,FB/20206,Heeled Sandal,Party,Metro,7,White,1,1999.00,980.00,99.95,227.89,MG Road,Card,Priya K,Neha,21,exchange allowed within 7 days
+22-03-2026,FB/20207,Trekking Boot,Outdoor,Woodland,10,Brown,1,5499.00,3100.00,824.85,560.90,Station Road,Cash,Anita S,Ayesha,6,exchange allowed within 7 days
+23-03-2026,FB/20208,Running Shoe,Sports,Nike,10,Brown,5,4299.00,2400.00,3224.25,2192.49,MG Road,Cash,Corporate,Neha,21,exchange allowed within 7 days
+23-03-2026,FB/20209,Canvas Sneaker,Casual,Converse,9,Tan,2,2199.00,1100.00,219.90,501.37,Phoenix Mall,Wallet,Corporate,Neha,22,exchange allowed within 7 days
+23-03-2026,FB/20210,Leather Formal,Formal,Bata,6,Tan,1,2799.00,1450.00,0.00,335.88,Phoenix Mall,UPI,Priya K,Ayesha,15,exchange allowed within 7 days
+23-03-2026,FB/20211,Kolhapuri Chappal,Ethnic,Local,6,Tan,6,899.00,380.00,539.40,582.55,MG Road,Card,Rahul M,Neha,6,exchange allowed within 7 days
+23-03-2026,FB/20212,Flip Flop,Casual,Paragon,7,Black,7,299.00,120.00,209.30,226.04,MG Road,EMI,Walk-in,Vikram,5,exchange allowed within 7 days
+23-03-2026,FB/20213,Heeled Sandal,Party,Metro,8,Black,3,1999.00,980.00,899.55,611.69,Phoenix Mall,Cash,Corporate,Ayesha,1,exchange allowed within 7 days
+24-03-2026,FB/20214,Running Shoe,Sports,Nike,10,Brown,2,4299.00,2400.00,0.00,1031.76,Station Road,Card,Rahul M,Neha,19,exchange allowed within 7 days
+24-03-2026,FB/20215,Canvas Sneaker,Casual,Converse,9,Brown,5,2199.00,1100.00,549.75,1253.43,MG Road,UPI,Priya K,Neha,10,exchange allowed within 7 days
+24-03-2026,FB/20216,Leather Formal,Formal,Bata,6,White,3,2799.00,1450.00,0.00,1007.64,Phoenix Mall,EMI,Walk-in,Neha,17,exchange allowed within 7 days
+24-03-2026,FB/20217,Kolhapuri Chappal,Ethnic,Local,8,Navy,4,899.00,380.00,0.00,431.52,Phoenix Mall,Card,Corporate,Ayesha,5,exchange allowed within 7 days
+24-03-2026,FB/20218,Flip Flop,Casual,Paragon,8,White,9,299.00,120.00,403.65,274.48,Phoenix Mall,Cash,Priya K,Vikram,0,exchange allowed within 7 days
+24-03-2026,FB/20219,Heeled Sandal,Party,Metro,7,Black,1,1999.00,980.00,99.95,227.89,MG Road,EMI,Corporate,Neha,4,exchange allowed within 7 days
+24-03-2026,FB/20220,Trekking Boot,Outdoor,Woodland,7,Black,2,5499.00,3100.00,1649.70,1121.80,MG Road,Cash,Walk-in,Vikram,3,exchange allowed within 7 days
+25-03-2026,FB/20221,Running Shoe,Sports,Nike,6,Brown,4,4299.00,2400.00,0.00,2063.52,MG Road,Wallet,Anita S,Neha,3,exchange allowed within 7 days
+25-03-2026,FB/20222,Canvas Sneaker,Casual,Converse,7,Tan,7,2199.00,1100.00,1539.30,1662.44,Phoenix Mall,EMI,Priya K,Vikram,5,exchange allowed within 7 days
+25-03-2026,FB/20223,Leather Formal,Formal,Bata,7,White,3,2799.00,1450.00,0.00,1007.64,MG Road,Wallet,Corporate,Ayesha,4,exchange allowed within 7 days
+25-03-2026,FB/20224,Kolhapuri Chappal,Ethnic,Local,8,White,7,899.00,380.00,314.65,717.40,MG Road,Card,Anita S,Neha,3,exchange allowed within 7 days
+25-03-2026,FB/20225,Flip Flop,Casual,Paragon,10,White,9,299.00,120.00,0.00,322.92,MG Road,EMI,Walk-in,Ayesha,7,exchange allowed within 7 days
+25-03-2026,FB/20226,Heeled Sandal,Party,Metro,9,White,3,1999.00,980.00,599.70,647.68,MG Road,UPI,Priya K,Ayesha,15,exchange allowed within 7 days
+29-03-2026,FB/20227,Running Shoe,Sports,Nike,8,Black,3,4299.00,2400.00,644.85,1470.26,Phoenix Mall,Cash,Anita S,Neha,13,exchange allowed within 7 days
+29-03-2026,FB/20228,Canvas Sneaker,Casual,Converse,9,Tan,4,2199.00,1100.00,879.60,949.97,MG Road,Card,Rahul M,Neha,13,exchange allowed within 7 days
+29-03-2026,FB/20229,Leather Formal,Formal,Bata,6,Black,3,2799.00,1450.00,419.85,957.26,MG Road,EMI,Anita S,Vikram,9,exchange allowed within 7 days
+29-03-2026,FB/20230,Kolhapuri Chappal,Ethnic,Local,6,Black,8,899.00,380.00,359.60,819.89,MG Road,UPI,Rahul M,Vikram,17,exchange allowed within 7 days
+29-03-2026,FB/20231,Flip Flop,Casual,Paragon,7,White,5,299.00,120.00,224.25,152.49,MG Road,UPI,Walk-in,Neha,21,exchange allowed within 7 days
+29-03-2026,FB/20232,Heeled Sandal,Party,Metro,6,Tan,2,1999.00,980.00,399.80,431.78,Station Road,Cash,Priya K,Vikram,9,exchange allowed within 7 days
+30-03-2026,FB/20233,Running Shoe,Sports,Nike,6,Black,4,4299.00,2400.00,0.00,2063.52,Station Road,Wallet,Walk-in,Neha,7,exchange allowed within 7 days
+30-03-2026,FB/20234,Canvas Sneaker,Casual,Converse,6,Tan,5,2199.00,1100.00,0.00,1319.40,MG Road,EMI,Corporate,Vikram,18,exchange allowed within 7 days
+30-03-2026,FB/20235,Leather Formal,Formal,Bata,6,Black,1,2799.00,1450.00,139.95,319.09,Phoenix Mall,UPI,Walk-in,Neha,5,exchange allowed within 7 days
+30-03-2026,FB/20236,Kolhapuri Chappal,Ethnic,Local,8,Navy,2,899.00,380.00,179.80,194.18,Station Road,Card,Walk-in,Neha,7,exchange allowed within 7 days
+30-03-2026,FB/20237,Flip Flop,Casual,Paragon,9,White,12,299.00,120.00,0.00,430.56,MG Road,Cash,Walk-in,Ayesha,24,exchange allowed within 7 days
+30-03-2026,FB/20238,Heeled Sandal,Party,Metro,7,White,1,1999.00,980.00,199.90,215.89,Phoenix Mall,Card,Walk-in,Neha,24,exchange allowed within 7 days
+30-03-2026,FB/20239,Trekking Boot,Outdoor,Woodland,9,Navy,1,5499.00,3100.00,824.85,560.90,Phoenix Mall,Cash,Rahul M,Neha,5,exchange allowed within 7 days
+02-04-2026,FB/20240,Running Shoe,Sports,Nike,6,Black,3,4299.00,2400.00,1934.55,1315.49,Station Road,Wallet,Walk-in,Ayesha,3,exchange allowed within 7 days
+02-04-2026,FB/20241,Canvas Sneaker,Casual,Converse,10,Navy,6,2199.00,1100.00,1979.10,1345.79,MG Road,EMI,Walk-in,Vikram,13,exchange allowed within 7 days
+02-04-2026,FB/20242,Leather Formal,Formal,Bata,6,Brown,1,2799.00,1450.00,0.00,335.88,Station Road,Card,Rahul M,Vikram,9,exchange allowed within 7 days
+02-04-2026,FB/20243,Kolhapuri Chappal,Ethnic,Local,6,Brown,7,899.00,380.00,314.65,717.40,MG Road,Wallet,Walk-in,Ayesha,15,exchange allowed within 7 days
+02-04-2026,FB/20244,Flip Flop,Casual,Paragon,6,White,13,299.00,120.00,0.00,466.44,Phoenix Mall,UPI,Anita S,Ayesha,24,exchange allowed within 7 days
+02-04-2026,FB/20245,Heeled Sandal,Party,Metro,8,White,1,1999.00,980.00,299.85,203.90,MG Road,UPI,Corporate,Vikram,5,exchange allowed within 7 days
+02-04-2026,FB/20246,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,549.90,593.89,MG Road,Wallet,Corporate,Vikram,10,exchange allowed within 7 days
+05-04-2026,FB/20247,Running Shoe,Sports,Nike,8,Navy,2,4299.00,2400.00,1289.70,877.00,MG Road,Card,Rahul M,Neha,2,exchange allowed within 7 days
+05-04-2026,FB/20248,Canvas Sneaker,Casual,Converse,8,Tan,7,2199.00,1100.00,2308.95,1570.09,MG Road,Cash,Walk-in,Neha,18,exchange allowed within 7 days
+05-04-2026,FB/20249,Leather Formal,Formal,Bata,10,Navy,3,2799.00,1450.00,839.70,906.88,Station Road,EMI,Anita S,Vikram,24,exchange allowed within 7 days
+05-04-2026,FB/20250,Kolhapuri Chappal,Ethnic,Local,9,Tan,3,899.00,380.00,269.70,291.28,Phoenix Mall,Cash,Rahul M,Ayesha,14,exchange allowed within 7 days
+05-04-2026,FB/20251,Flip Flop,Casual,Paragon,7,Black,4,299.00,120.00,0.00,143.52,MG Road,Cash,Walk-in,Vikram,9,exchange allowed within 7 days
+05-04-2026,FB/20252,Heeled Sandal,Party,Metro,7,Navy,2,1999.00,980.00,599.70,407.80,MG Road,Wallet,Priya K,Neha,19,exchange allowed within 7 days
+05-04-2026,FB/20253,Trekking Boot,Outdoor,Woodland,10,Tan,1,5499.00,3100.00,824.85,560.90,Phoenix Mall,UPI,Corporate,Neha,13,exchange allowed within 7 days
+06-04-2026,FB/20254,Running Shoe,Sports,Nike,6,Tan,3,4299.00,2400.00,1289.70,1392.88,Station Road,EMI,Corporate,Neha,15,exchange allowed within 7 days
+06-04-2026,FB/20255,Canvas Sneaker,Casual,Converse,6,Black,4,2199.00,1100.00,0.00,1055.52,Phoenix Mall,Wallet,Walk-in,Neha,18,exchange allowed within 7 days
+06-04-2026,FB/20256,Leather Formal,Formal,Bata,9,Tan,3,2799.00,1450.00,1259.55,856.49,Phoenix Mall,Cash,Walk-in,Vikram,0,exchange allowed within 7 days
+06-04-2026,FB/20257,Kolhapuri Chappal,Ethnic,Local,8,Navy,9,899.00,380.00,404.55,922.37,Station Road,EMI,Rahul M,Ayesha,22,exchange allowed within 7 days
+06-04-2026,FB/20258,Flip Flop,Casual,Paragon,7,Brown,13,299.00,120.00,583.05,396.47,MG Road,UPI,Rahul M,Vikram,12,exchange allowed within 7 days
+06-04-2026,FB/20259,Heeled Sandal,Party,Metro,7,Navy,4,1999.00,980.00,399.80,911.54,Station Road,UPI,Corporate,Ayesha,2,exchange allowed within 7 days
+06-04-2026,FB/20260,Trekking Boot,Outdoor,Woodland,7,Brown,2,5499.00,3100.00,0.00,1319.76,MG Road,UPI,Walk-in,Neha,19,exchange allowed within 7 days
+07-04-2026,FB/20261,Running Shoe,Sports,Nike,10,Black,2,4299.00,2400.00,0.00,1031.76,Station Road,Card,Walk-in,Ayesha,9,exchange allowed within 7 days
+07-04-2026,FB/20262,Canvas Sneaker,Casual,Converse,10,Black,6,2199.00,1100.00,1979.10,1345.79,MG Road,Card,Priya K,Vikram,10,exchange allowed within 7 days
+07-04-2026,FB/20263,Leather Formal,Formal,Bata,7,Navy,3,2799.00,1450.00,419.85,957.26,MG Road,EMI,Walk-in,Neha,23,exchange allowed within 7 days
+07-04-2026,FB/20264,Kolhapuri Chappal,Ethnic,Local,9,Black,9,899.00,380.00,1213.65,825.28,Station Road,UPI,Priya K,Ayesha,12,exchange allowed within 7 days
+07-04-2026,FB/20265,Flip Flop,Casual,Paragon,10,White,3,299.00,120.00,89.70,96.88,MG Road,UPI,Rahul M,Ayesha,4,exchange allowed within 7 days
+07-04-2026,FB/20266,Heeled Sandal,Party,Metro,9,Navy,2,1999.00,980.00,199.90,455.77,Phoenix Mall,EMI,Anita S,Neha,1,exchange allowed within 7 days
+07-04-2026,FB/20267,Trekking Boot,Outdoor,Woodland,10,White,1,5499.00,3100.00,274.95,626.89,MG Road,EMI,Anita S,Ayesha,3,exchange allowed within 7 days
+08-04-2026,FB/20268,Running Shoe,Sports,Nike,9,Tan,5,4299.00,2400.00,0.00,2579.40,Station Road,EMI,Corporate,Vikram,3,exchange allowed within 7 days
+08-04-2026,FB/20269,Canvas Sneaker,Casual,Converse,7,Navy,2,2199.00,1100.00,219.90,501.37,MG Road,UPI,Rahul M,Ayesha,4,exchange allowed within 7 days
+08-04-2026,FB/20270,Leather Formal,Formal,Bata,9,Brown,3,2799.00,1450.00,419.85,957.26,Station Road,UPI,Walk-in,Neha,20,exchange allowed within 7 days
+08-04-2026,FB/20271,Kolhapuri Chappal,Ethnic,Local,6,Navy,7,899.00,380.00,0.00,755.16,Station Road,UPI,Corporate,Vikram,2,exchange allowed within 7 days
+08-04-2026,FB/20272,Flip Flop,Casual,Paragon,9,Black,14,299.00,120.00,627.90,426.97,Station Road,Card,Anita S,Vikram,4,exchange allowed within 7 days
+08-04-2026,FB/20273,Heeled Sandal,Party,Metro,7,Black,2,1999.00,980.00,399.80,431.78,Phoenix Mall,Card,Rahul M,Ayesha,2,exchange allowed within 7 days
+08-04-2026,FB/20274,Trekking Boot,Outdoor,Woodland,6,Navy,1,5499.00,3100.00,274.95,626.89,MG Road,UPI,Rahul M,Vikram,16,exchange allowed within 7 days
+09-04-2026,FB/20275,Running Shoe,Sports,Nike,7,Tan,4,4299.00,2400.00,2579.40,1753.99,Station Road,Wallet,Rahul M,Vikram,5,exchange allowed within 7 days
+09-04-2026,FB/20276,Canvas Sneaker,Casual,Converse,10,White,7,2199.00,1100.00,2308.95,1570.09,MG Road,Cash,Priya K,Vikram,6,exchange allowed within 7 days
+09-04-2026,FB/20277,Leather Formal,Formal,Bata,7,Brown,1,2799.00,1450.00,419.85,285.50,MG Road,UPI,Anita S,Ayesha,5,exchange allowed within 7 days
+09-04-2026,FB/20278,Kolhapuri Chappal,Ethnic,Local,6,Navy,9,899.00,380.00,404.55,922.37,MG Road,UPI,Rahul M,Ayesha,11,exchange allowed within 7 days
+09-04-2026,FB/20279,Flip Flop,Casual,Paragon,7,Brown,10,299.00,120.00,0.00,358.80,Phoenix Mall,UPI,Walk-in,Vikram,15,exchange allowed within 7 days
+09-04-2026,FB/20280,Heeled Sandal,Party,Metro,8,Tan,3,1999.00,980.00,899.55,611.69,Phoenix Mall,Wallet,Anita S,Vikram,21,exchange allowed within 7 days
+09-04-2026,FB/20281,Trekking Boot,Outdoor,Woodland,9,White,2,5499.00,3100.00,0.00,1319.76,MG Road,UPI,Anita S,Ayesha,23,exchange allowed within 7 days
+10-04-2026,FB/20282,Running Shoe,Sports,Nike,6,Tan,3,4299.00,2400.00,644.85,1470.26,Station Road,UPI,Anita S,Neha,20,exchange allowed within 7 days
+10-04-2026,FB/20283,Canvas Sneaker,Casual,Converse,7,Navy,3,2199.00,1100.00,0.00,791.64,Station Road,Wallet,Walk-in,Ayesha,21,exchange allowed within 7 days
+10-04-2026,FB/20284,Leather Formal,Formal,Bata,9,Brown,3,2799.00,1450.00,419.85,957.26,MG Road,EMI,Rahul M,Vikram,21,exchange allowed within 7 days
+10-04-2026,FB/20285,Kolhapuri Chappal,Ethnic,Local,6,Tan,8,899.00,380.00,719.20,776.74,MG Road,Wallet,Priya K,Ayesha,22,exchange allowed within 7 days
+10-04-2026,FB/20286,Flip Flop,Casual,Paragon,9,White,4,299.00,120.00,59.80,136.34,MG Road,EMI,Rahul M,Ayesha,22,exchange allowed within 7 days
+10-04-2026,FB/20287,Heeled Sandal,Party,Metro,9,White,2,1999.00,980.00,599.70,407.80,MG Road,Wallet,Corporate,Vikram,8,exchange allowed within 7 days
+10-04-2026,FB/20288,Trekking Boot,Outdoor,Woodland,7,Brown,1,5499.00,3100.00,549.90,593.89,Phoenix Mall,Cash,Rahul M,Vikram,21,exchange allowed within 7 days
+11-04-2026,FB/20289,Running Shoe,Sports,Nike,6,Brown,5,4299.00,2400.00,1074.75,2450.43,Phoenix Mall,UPI,Rahul M,Neha,3,exchange allowed within 7 days
+11-04-2026,FB/20290,Canvas Sneaker,Casual,Converse,8,Tan,6,2199.00,1100.00,659.70,1504.12,Station Road,EMI,Corporate,Ayesha,17,exchange allowed within 7 days
+11-04-2026,FB/20291,Leather Formal,Formal,Bata,9,Navy,1,2799.00,1450.00,419.85,285.50,Station Road,Card,Walk-in,Vikram,1,exchange allowed within 7 days
+11-04-2026,FB/20292,Kolhapuri Chappal,Ethnic,Local,7,White,4,899.00,380.00,539.40,366.79,Phoenix Mall,Card,Anita S,Ayesha,8,exchange allowed within 7 days
+11-04-2026,FB/20293,Flip Flop,Casual,Paragon,8,White,6,299.00,120.00,0.00,215.28,Station Road,Cash,Anita S,Ayesha,10,exchange allowed within 7 days
+11-04-2026,FB/20294,Heeled Sandal,Party,Metro,9,Tan,4,1999.00,980.00,399.80,911.54,Station Road,Wallet,Corporate,Vikram,3,exchange allowed within 7 days
+11-04-2026,FB/20295,Trekking Boot,Outdoor,Woodland,6,Brown,1,5499.00,3100.00,549.90,593.89,Phoenix Mall,UPI,Anita S,Neha,23,exchange allowed within 7 days
+12-04-2026,FB/20296,Running Shoe,Sports,Nike,9,Brown,2,4299.00,2400.00,1289.70,877.00,MG Road,Cash,Anita S,Neha,10,exchange allowed within 7 days
+12-04-2026,FB/20297,Canvas Sneaker,Casual,Converse,7,Navy,6,2199.00,1100.00,1319.40,1424.95,MG Road,Cash,Priya K,Vikram,7,exchange allowed within 7 days
+12-04-2026,FB/20298,Leather Formal,Formal,Bata,8,White,3,2799.00,1450.00,0.00,1007.64,Station Road,Card,Rahul M,Ayesha,21,exchange allowed within 7 days
+12-04-2026,FB/20299,Kolhapuri Chappal,Ethnic,Local,6,Brown,2,899.00,380.00,89.90,204.97,Phoenix Mall,EMI,Anita S,Ayesha,6,exchange allowed within 7 days
+12-04-2026,FB/20300,Flip Flop,Casual,Paragon,7,Black,7,299.00,120.00,209.30,226.04,Phoenix Mall,UPI,Priya K,Ayesha,24,exchange allowed within 7 days
+12-04-2026,FB/20301,Heeled Sandal,Party,Metro,7,Black,3,1999.00,980.00,599.70,647.68,Station Road,Wallet,Priya K,Vikram,20,exchange allowed within 7 days
+12-04-2026,FB/20302,Trekking Boot,Outdoor,Woodland,6,Tan,1,5499.00,3100.00,824.85,560.90,Station Road,Card,Walk-in,Vikram,7,exchange allowed within 7 days
+13-04-2026,FB/20303,Running Shoe,Sports,Nike,8,Tan,1,4299.00,2400.00,214.95,490.09,Station Road,EMI,Corporate,Ayesha,0,exchange allowed within 7 days
+13-04-2026,FB/20304,Canvas Sneaker,Casual,Converse,9,White,2,2199.00,1100.00,219.90,501.37,MG Road,Cash,Corporate,Vikram,12,exchange allowed within 7 days
+13-04-2026,FB/20305,Leather Formal,Formal,Bata,7,Tan,2,2799.00,1450.00,559.80,604.58,Station Road,UPI,Priya K,Vikram,14,exchange allowed within 7 days
+13-04-2026,FB/20306,Kolhapuri Chappal,Ethnic,Local,6,White,4,899.00,380.00,0.00,431.52,Station Road,Card,Rahul M,Ayesha,1,exchange allowed within 7 days
+13-04-2026,FB/20307,Flip Flop,Casual,Paragon,9,White,14,299.00,120.00,418.60,452.09,Phoenix Mall,Cash,Corporate,Vikram,14,exchange allowed within 7 days
+13-04-2026,FB/20308,Heeled Sandal,Party,Metro,6,Navy,3,1999.00,980.00,599.70,647.68,MG Road,Cash,Rahul M,Neha,15,exchange allowed within 7 days
+13-04-2026,FB/20309,Trekking Boot,Outdoor,Woodland,8,Navy,2,5499.00,3100.00,549.90,1253.77,MG Road,EMI,Walk-in,Neha,10,exchange allowed within 7 days
+15-04-2026,FB/20310,Running Shoe,Sports,Nike,9,Black,2,4299.00,2400.00,859.80,928.58,Phoenix Mall,EMI,Corporate,Neha,22,exchange allowed within 7 days
+15-04-2026,FB/20311,Canvas Sneaker,Casual,Converse,8,Tan,3,2199.00,1100.00,329.85,752.06,MG Road,Cash,Anita S,Neha,22,exchange allowed within 7 days
+15-04-2026,FB/20312,Leather Formal,Formal,Bata,10,Tan,2,2799.00,1450.00,279.90,638.17,Phoenix Mall,Card,Corporate,Vikram,7,exchange allowed within 7 days
+15-04-2026,FB/20313,Kolhapuri Chappal,Ethnic,Local,6,Tan,4,899.00,380.00,359.60,388.37,MG Road,EMI,Rahul M,Vikram,16,exchange allowed within 7 days
+15-04-2026,FB/20314,Flip Flop,Casual,Paragon,7,Brown,4,299.00,120.00,119.60,129.17,MG Road,Cash,Rahul M,Neha,24,exchange allowed within 7 days
+15-04-2026,FB/20315,Heeled Sandal,Party,Metro,7,Navy,1,1999.00,980.00,299.85,203.90,Phoenix Mall,UPI,Rahul M,Vikram,15,exchange allowed within 7 days
+15-04-2026,FB/20316,Trekking Boot,Outdoor,Woodland,6,Black,1,5499.00,3100.00,824.85,560.90,MG Road,Card,Priya K,Neha,7,exchange allowed within 7 days
+17-04-2026,FB/20317,Running Shoe,Sports,Nike,9,Tan,4,4299.00,2400.00,1719.60,1857.17,MG Road,Card,Corporate,Vikram,5,exchange allowed within 7 days
+17-04-2026,FB/20318,Canvas Sneaker,Casual,Converse,7,Navy,5,2199.00,1100.00,1099.50,1187.46,MG Road,Cash,Rahul M,Ayesha,10,exchange allowed within 7 days
+17-04-2026,FB/20319,Leather Formal,Formal,Bata,7,Brown,2,2799.00,1450.00,839.70,571.00,MG Road,Cash,Rahul M,Neha,11,exchange allowed within 7 days
+17-04-2026,FB/20320,Kolhapuri Chappal,Ethnic,Local,8,Tan,4,899.00,380.00,179.80,409.94,Station Road,Card,Rahul M,Neha,3,exchange allowed within 7 days
+17-04-2026,FB/20321,Flip Flop,Casual,Paragon,7,Navy,7,299.00,120.00,104.65,238.60,MG Road,UPI,Priya K,Ayesha,22,exchange allowed within 7 days
+17-04-2026,FB/20322,Heeled Sandal,Party,Metro,6,Brown,3,1999.00,980.00,299.85,683.66,Station Road,UPI,Priya K,Ayesha,21,exchange allowed within 7 days
+17-04-2026,FB/20323,Trekking Boot,Outdoor,Woodland,9,White,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,Wallet,Rahul M,Vikram,23,exchange allowed within 7 days
+18-04-2026,FB/20324,Running Shoe,Sports,Nike,6,White,5,4299.00,2400.00,3224.25,2192.49,Phoenix Mall,UPI,Anita S,Ayesha,15,exchange allowed within 7 days
+18-04-2026,FB/20325,Canvas Sneaker,Casual,Converse,9,Tan,5,2199.00,1100.00,0.00,1319.40,MG Road,EMI,Walk-in,Neha,0,exchange allowed within 7 days
+18-04-2026,FB/20326,Leather Formal,Formal,Bata,6,Navy,2,2799.00,1450.00,0.00,671.76,Station Road,Cash,Rahul M,Ayesha,13,exchange allowed within 7 days
+18-04-2026,FB/20327,Kolhapuri Chappal,Ethnic,Local,7,Brown,2,899.00,380.00,89.90,204.97,Phoenix Mall,UPI,Rahul M,Ayesha,4,exchange allowed within 7 days
+18-04-2026,FB/20328,Flip Flop,Casual,Paragon,6,Navy,11,299.00,120.00,328.90,355.21,Station Road,Cash,Anita S,Vikram,22,exchange allowed within 7 days
+18-04-2026,FB/20329,Heeled Sandal,Party,Metro,10,Brown,3,1999.00,980.00,899.55,611.69,Station Road,Card,Walk-in,Ayesha,8,exchange allowed within 7 days
+18-04-2026,FB/20330,Trekking Boot,Outdoor,Woodland,10,Tan,1,5499.00,3100.00,0.00,659.88,MG Road,Card,Corporate,Ayesha,6,exchange allowed within 7 days
+19-04-2026,FB/20331,Running Shoe,Sports,Nike,8,Navy,2,4299.00,2400.00,859.80,928.58,Station Road,Wallet,Corporate,Ayesha,14,exchange allowed within 7 days
+19-04-2026,FB/20332,Canvas Sneaker,Casual,Converse,6,Black,4,2199.00,1100.00,439.80,1002.74,Station Road,Cash,Anita S,Vikram,19,exchange allowed within 7 days
+19-04-2026,FB/20333,Leather Formal,Formal,Bata,9,Tan,1,2799.00,1450.00,139.95,319.09,MG Road,EMI,Rahul M,Vikram,3,exchange allowed within 7 days
+19-04-2026,FB/20334,Kolhapuri Chappal,Ethnic,Local,6,Navy,2,899.00,380.00,89.90,204.97,Phoenix Mall,UPI,Rahul M,Vikram,19,exchange allowed within 7 days
+19-04-2026,FB/20335,Flip Flop,Casual,Paragon,7,Navy,11,299.00,120.00,328.90,355.21,Phoenix Mall,EMI,Priya K,Ayesha,16,exchange allowed within 7 days
+19-04-2026,FB/20336,Heeled Sandal,Party,Metro,10,Brown,2,1999.00,980.00,399.80,431.78,Station Road,Wallet,Rahul M,Vikram,8,exchange allowed within 7 days
+19-04-2026,FB/20337,Trekking Boot,Outdoor,Woodland,7,White,1,5499.00,3100.00,549.90,593.89,Station Road,Card,Corporate,Neha,5,exchange allowed within 7 days
+21-04-2026,FB/20338,Running Shoe,Sports,Nike,9,Tan,3,4299.00,2400.00,1934.55,1315.49,Station Road,Wallet,Corporate,Neha,19,exchange allowed within 7 days
+21-04-2026,FB/20339,Canvas Sneaker,Casual,Converse,8,Navy,7,2199.00,1100.00,1539.30,1662.44,Phoenix Mall,Card,Rahul M,Neha,19,exchange allowed within 7 days
+21-04-2026,FB/20340,Leather Formal,Formal,Bata,10,Brown,3,2799.00,1450.00,1259.55,856.49,Station Road,Wallet,Rahul M,Ayesha,15,exchange allowed within 7 days
+21-04-2026,FB/20341,Kolhapuri Chappal,Ethnic,Local,6,Tan,6,899.00,380.00,269.70,614.92,MG Road,Card,Walk-in,Ayesha,16,exchange allowed within 7 days
+21-04-2026,FB/20342,Flip Flop,Casual,Paragon,8,Navy,11,299.00,120.00,328.90,355.21,MG Road,UPI,Rahul M,Vikram,9,exchange allowed within 7 days
+21-04-2026,FB/20343,Heeled Sandal,Party,Metro,8,Black,2,1999.00,980.00,0.00,479.76,Station Road,UPI,Rahul M,Vikram,1,exchange allowed within 7 days
+21-04-2026,FB/20344,Trekking Boot,Outdoor,Woodland,9,Navy,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,EMI,Corporate,Ayesha,12,exchange allowed within 7 days
+30-04-2026,FB/20345,Running Shoe,Sports,Nike,10,Tan,2,4299.00,2400.00,859.80,928.58,Phoenix Mall,UPI,Anita S,Neha,2,exchange allowed within 7 days
+30-04-2026,FB/20346,Canvas Sneaker,Casual,Converse,6,Black,5,2199.00,1100.00,0.00,1319.40,MG Road,Wallet,Anita S,Vikram,6,exchange allowed within 7 days
+30-04-2026,FB/20347,Leather Formal,Formal,Bata,9,White,3,2799.00,1450.00,839.70,906.88,Station Road,EMI,Walk-in,Vikram,0,exchange allowed within 7 days
+30-04-2026,FB/20348,Kolhapuri Chappal,Ethnic,Local,9,White,6,899.00,380.00,539.40,582.55,Station Road,EMI,Rahul M,Neha,8,exchange allowed within 7 days
+30-04-2026,FB/20349,Flip Flop,Casual,Paragon,9,Black,14,299.00,120.00,627.90,426.97,Phoenix Mall,Cash,Corporate,Ayesha,1,exchange allowed within 7 days
+30-04-2026,FB/20350,Heeled Sandal,Party,Metro,9,Navy,3,1999.00,980.00,599.70,647.68,Station Road,Card,Corporate,Vikram,6,exchange allowed within 7 days
+30-04-2026,FB/20351,Trekking Boot,Outdoor,Woodland,6,Navy,1,5499.00,3100.00,824.85,560.90,Phoenix Mall,UPI,Walk-in,Vikram,7,exchange allowed within 7 days
+01-05-2026,FB/20352,Running Shoe,Sports,Nike,7,Tan,4,4299.00,2400.00,0.00,2063.52,Station Road,Cash,Anita S,Vikram,0,exchange allowed within 7 days
+01-05-2026,FB/20353,Canvas Sneaker,Casual,Converse,9,White,3,2199.00,1100.00,0.00,791.64,Phoenix Mall,EMI,Priya K,Neha,21,exchange allowed within 7 days
+01-05-2026,FB/20354,Leather Formal,Formal,Bata,8,Brown,1,2799.00,1450.00,0.00,335.88,Station Road,EMI,Corporate,Vikram,10,exchange allowed within 7 days
+01-05-2026,FB/20355,Kolhapuri Chappal,Ethnic,Local,10,Tan,3,899.00,380.00,134.85,307.46,Station Road,UPI,Priya K,Ayesha,4,exchange allowed within 7 days
+01-05-2026,FB/20356,Flip Flop,Casual,Paragon,7,Brown,14,299.00,120.00,627.90,426.97,Phoenix Mall,Card,Rahul M,Ayesha,17,exchange allowed within 7 days
+01-05-2026,FB/20357,Heeled Sandal,Party,Metro,9,Navy,3,1999.00,980.00,299.85,683.66,Phoenix Mall,EMI,Rahul M,Neha,12,exchange allowed within 7 days
+01-05-2026,FB/20358,Trekking Boot,Outdoor,Woodland,9,White,1,5499.00,3100.00,549.90,593.89,MG Road,Card,Priya K,Vikram,9,exchange allowed within 7 days
+04-05-2026,FB/20359,Running Shoe,Sports,Nike,8,Navy,2,4299.00,2400.00,859.80,928.58,Station Road,UPI,Walk-in,Ayesha,22,exchange allowed within 7 days
+04-05-2026,FB/20360,Canvas Sneaker,Casual,Converse,10,Brown,3,2199.00,1100.00,989.55,672.89,Phoenix Mall,Card,Walk-in,Vikram,22,exchange allowed within 7 days
+04-05-2026,FB/20361,Leather Formal,Formal,Bata,6,Black,1,2799.00,1450.00,279.90,302.29,MG Road,Wallet,Corporate,Ayesha,23,exchange allowed within 7 days
+04-05-2026,FB/20362,Kolhapuri Chappal,Ethnic,Local,10,White,2,899.00,380.00,269.70,183.40,Phoenix Mall,Card,Walk-in,Neha,11,exchange allowed within 7 days
+04-05-2026,FB/20363,Flip Flop,Casual,Paragon,6,Navy,3,299.00,120.00,44.85,102.26,MG Road,EMI,Rahul M,Vikram,15,exchange allowed within 7 days
+04-05-2026,FB/20364,Heeled Sandal,Party,Metro,7,Tan,1,1999.00,980.00,0.00,239.88,Phoenix Mall,UPI,Rahul M,Neha,8,exchange allowed within 7 days
+04-05-2026,FB/20365,Trekking Boot,Outdoor,Woodland,9,Navy,1,5499.00,3100.00,549.90,593.89,MG Road,EMI,Walk-in,Vikram,8,exchange allowed within 7 days
+08-05-2026,FB/20366,Running Shoe,Sports,Nike,10,Tan,2,4299.00,2400.00,1289.70,877.00,Station Road,EMI,Priya K,Vikram,14,exchange allowed within 7 days
+08-05-2026,FB/20367,Canvas Sneaker,Casual,Converse,10,White,3,2199.00,1100.00,0.00,791.64,Station Road,Cash,Rahul M,Neha,2,exchange allowed within 7 days
+08-05-2026,FB/20368,Leather Formal,Formal,Bata,9,Tan,3,2799.00,1450.00,0.00,1007.64,Phoenix Mall,Wallet,Rahul M,Neha,15,exchange allowed within 7 days
+08-05-2026,FB/20369,Kolhapuri Chappal,Ethnic,Local,10,White,6,899.00,380.00,539.40,582.55,MG Road,Cash,Priya K,Neha,24,exchange allowed within 7 days
+08-05-2026,FB/20370,Flip Flop,Casual,Paragon,7,White,9,299.00,120.00,0.00,322.92,Station Road,Card,Priya K,Neha,2,exchange allowed within 7 days
+08-05-2026,FB/20371,Heeled Sandal,Party,Metro,7,Black,3,1999.00,980.00,899.55,611.69,Station Road,Card,Walk-in,Vikram,15,exchange allowed within 7 days
+08-05-2026,FB/20372,Trekking Boot,Outdoor,Woodland,6,Tan,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,EMI,Anita S,Neha,9,exchange allowed within 7 days
+10-05-2026,FB/20373,Running Shoe,Sports,Nike,6,Navy,4,4299.00,2400.00,1719.60,1857.17,MG Road,EMI,Rahul M,Neha,0,exchange allowed within 7 days
+10-05-2026,FB/20374,Canvas Sneaker,Casual,Converse,8,White,2,2199.00,1100.00,439.80,474.98,Station Road,EMI,Priya K,Ayesha,5,exchange allowed within 7 days
+10-05-2026,FB/20375,Leather Formal,Formal,Bata,9,Brown,2,2799.00,1450.00,839.70,571.00,Phoenix Mall,Cash,Anita S,Neha,9,exchange allowed within 7 days
+10-05-2026,FB/20376,Kolhapuri Chappal,Ethnic,Local,8,Tan,7,899.00,380.00,0.00,755.16,Station Road,Card,Rahul M,Ayesha,6,exchange allowed within 7 days
+10-05-2026,FB/20377,Flip Flop,Casual,Paragon,9,Navy,3,299.00,120.00,89.70,96.88,MG Road,Wallet,Rahul M,Vikram,9,exchange allowed within 7 days
+10-05-2026,FB/20378,Heeled Sandal,Party,Metro,7,White,3,1999.00,980.00,899.55,611.69,MG Road,Cash,Rahul M,Vikram,22,exchange allowed within 7 days
+11-05-2026,FB/20379,Running Shoe,Sports,Nike,10,Navy,3,4299.00,2400.00,1934.55,1315.49,MG Road,Cash,Walk-in,Neha,16,exchange allowed within 7 days
+11-05-2026,FB/20380,Canvas Sneaker,Casual,Converse,8,Brown,4,2199.00,1100.00,0.00,1055.52,Station Road,Wallet,Walk-in,Neha,16,exchange allowed within 7 days
+11-05-2026,FB/20381,Leather Formal,Formal,Bata,7,White,3,2799.00,1450.00,1259.55,856.49,Station Road,UPI,Rahul M,Vikram,12,exchange allowed within 7 days
+11-05-2026,FB/20382,Kolhapuri Chappal,Ethnic,Local,9,White,2,899.00,380.00,89.90,204.97,Station Road,EMI,Rahul M,Neha,20,exchange allowed within 7 days
+11-05-2026,FB/20383,Flip Flop,Casual,Paragon,9,Tan,14,299.00,120.00,627.90,426.97,MG Road,Card,Anita S,Vikram,0,exchange allowed within 7 days
+11-05-2026,FB/20384,Heeled Sandal,Party,Metro,10,Tan,1,1999.00,980.00,199.90,215.89,Station Road,EMI,Walk-in,Ayesha,13,exchange allowed within 7 days
+11-05-2026,FB/20385,Trekking Boot,Outdoor,Woodland,10,Brown,1,5499.00,3100.00,0.00,659.88,Phoenix Mall,EMI,Anita S,Ayesha,9,exchange allowed within 7 days
+13-05-2026,FB/20386,Running Shoe,Sports,Nike,10,Brown,2,4299.00,2400.00,859.80,928.58,MG Road,Cash,Corporate,Ayesha,15,exchange allowed within 7 days
+13-05-2026,FB/20387,Canvas Sneaker,Casual,Converse,6,Tan,7,2199.00,1100.00,0.00,1847.16,Phoenix Mall,UPI,Anita S,Vikram,13,exchange allowed within 7 days
+13-05-2026,FB/20388,Leather Formal,Formal,Bata,8,Navy,3,2799.00,1450.00,1259.55,856.49,Station Road,Wallet,Walk-in,Ayesha,4,exchange allowed within 7 days
+13-05-2026,FB/20389,Kolhapuri Chappal,Ethnic,Local,6,White,5,899.00,380.00,449.50,485.46,MG Road,Card,Corporate,Vikram,9,exchange allowed within 7 days
+13-05-2026,FB/20390,Flip Flop,Casual,Paragon,6,Navy,13,299.00,120.00,583.05,396.47,Station Road,Wallet,Anita S,Ayesha,8,exchange allowed within 7 days
+13-05-2026,FB/20391,Heeled Sandal,Party,Metro,7,Tan,2,1999.00,980.00,199.90,455.77,Station Road,Card,Walk-in,Ayesha,13,exchange allowed within 7 days
+13-05-2026,FB/20392,Trekking Boot,Outdoor,Woodland,8,White,1,5499.00,3100.00,824.85,560.90,Phoenix Mall,Card,Priya K,Neha,6,exchange allowed within 7 days
+15-05-2026,FB/20393,Running Shoe,Sports,Nike,8,White,1,4299.00,2400.00,429.90,464.29,MG Road,UPI,Priya K,Ayesha,7,exchange allowed within 7 days
+15-05-2026,FB/20394,Canvas Sneaker,Casual,Converse,9,White,5,2199.00,1100.00,1649.25,1121.49,Phoenix Mall,Cash,Priya K,Neha,21,exchange allowed within 7 days
+15-05-2026,FB/20395,Leather Formal,Formal,Bata,6,Brown,3,2799.00,1450.00,1259.55,856.49,MG Road,Card,Anita S,Vikram,14,exchange allowed within 7 days
+15-05-2026,FB/20396,Kolhapuri Chappal,Ethnic,Local,9,Tan,4,899.00,380.00,179.80,409.94,Station Road,Wallet,Rahul M,Vikram,15,exchange allowed within 7 days
+15-05-2026,FB/20397,Flip Flop,Casual,Paragon,9,Black,12,299.00,120.00,358.80,387.50,MG Road,Card,Anita S,Ayesha,23,exchange allowed within 7 days
+15-05-2026,FB/20398,Heeled Sandal,Party,Metro,6,Black,3,1999.00,980.00,299.85,683.66,MG Road,UPI,Walk-in,Neha,6,exchange allowed within 7 days
+18-05-2026,FB/20399,Running Shoe,Sports,Nike,6,White,2,4299.00,2400.00,0.00,1031.76,Station Road,Card,Corporate,Vikram,10,exchange allowed within 7 days
+18-05-2026,FB/20400,Canvas Sneaker,Casual,Converse,8,Brown,5,2199.00,1100.00,549.75,1253.43,MG Road,Cash,Priya K,Vikram,24,exchange allowed within 7 days
+18-05-2026,FB/20401,Leather Formal,Formal,Bata,7,Tan,3,2799.00,1450.00,1259.55,856.49,Station Road,Cash,Rahul M,Vikram,2,exchange allowed within 7 days
+18-05-2026,FB/20402,Kolhapuri Chappal,Ethnic,Local,6,Brown,4,899.00,380.00,0.00,431.52,Station Road,UPI,Priya K,Ayesha,15,exchange allowed within 7 days
+18-05-2026,FB/20403,Flip Flop,Casual,Paragon,8,Tan,8,299.00,120.00,0.00,287.04,Phoenix Mall,UPI,Rahul M,Vikram,2,exchange allowed within 7 days
+18-05-2026,FB/20404,Heeled Sandal,Party,Metro,10,Navy,2,1999.00,980.00,399.80,431.78,Station Road,EMI,Corporate,Ayesha,14,exchange allowed within 7 days
+18-05-2026,FB/20405,Trekking Boot,Outdoor,Woodland,10,Tan,2,5499.00,3100.00,1099.80,1187.78,Station Road,Card,Anita S,Neha,16,exchange allowed within 7 days
+25-05-2026,FB/20406,Running Shoe,Sports,Nike,7,White,3,4299.00,2400.00,1289.70,1392.88,Station Road,Wallet,Walk-in,Neha,4,exchange allowed within 7 days
+25-05-2026,FB/20407,Canvas Sneaker,Casual,Converse,7,Tan,7,2199.00,1100.00,0.00,1847.16,Station Road,Card,Anita S,Ayesha,13,exchange allowed within 7 days
+25-05-2026,FB/20408,Leather Formal,Formal,Bata,8,Brown,3,2799.00,1450.00,419.85,957.26,Phoenix Mall,Wallet,Priya K,Ayesha,11,exchange allowed within 7 days
+25-05-2026,FB/20409,Kolhapuri Chappal,Ethnic,Local,7,Tan,2,899.00,380.00,179.80,194.18,MG Road,Cash,Priya K,Ayesha,10,exchange allowed within 7 days
+25-05-2026,FB/20410,Flip Flop,Casual,Paragon,9,Brown,6,299.00,120.00,269.10,182.99,Station Road,Cash,Corporate,Vikram,20,exchange allowed within 7 days
+25-05-2026,FB/20411,Heeled Sandal,Party,Metro,7,Brown,3,1999.00,980.00,0.00,719.64,Phoenix Mall,Cash,Priya K,Ayesha,3,exchange allowed within 7 days
+25-05-2026,FB/20412,Trekking Boot,Outdoor,Woodland,9,Tan,2,5499.00,3100.00,1099.80,1187.78,Phoenix Mall,UPI,Anita S,Ayesha,22,exchange allowed within 7 days
+26-05-2026,FB/20413,Running Shoe,Sports,Nike,9,Navy,2,4299.00,2400.00,0.00,1031.76,Station Road,Card,Walk-in,Vikram,23,exchange allowed within 7 days
+26-05-2026,FB/20414,Canvas Sneaker,Casual,Converse,9,Brown,2,2199.00,1100.00,439.80,474.98,Station Road,EMI,Priya K,Ayesha,19,exchange allowed within 7 days
+26-05-2026,FB/20415,Leather Formal,Formal,Bata,10,Brown,2,2799.00,1450.00,0.00,671.76,Station Road,Cash,Rahul M,Vikram,4,exchange allowed within 7 days
+26-05-2026,FB/20416,Kolhapuri Chappal,Ethnic,Local,7,Tan,2,899.00,380.00,89.90,204.97,Station Road,Card,Walk-in,Vikram,20,exchange allowed within 7 days
+26-05-2026,FB/20417,Flip Flop,Casual,Paragon,9,Navy,9,299.00,120.00,269.10,290.63,Phoenix Mall,UPI,Corporate,Vikram,5,exchange allowed within 7 days
+26-05-2026,FB/20418,Heeled Sandal,Party,Metro,7,White,3,1999.00,980.00,0.00,719.64,Station Road,Cash,Walk-in,Neha,14,exchange allowed within 7 days
+26-05-2026,FB/20419,Trekking Boot,Outdoor,Woodland,9,Black,1,5499.00,3100.00,824.85,560.90,MG Road,EMI,Priya K,Vikram,4,exchange allowed within 7 days
+28-05-2026,FB/20420,Running Shoe,Sports,Nike,7,Navy,4,4299.00,2400.00,0.00,2063.52,MG Road,EMI,Rahul M,Neha,0,exchange allowed within 7 days
+28-05-2026,FB/20421,Canvas Sneaker,Casual,Converse,7,Navy,4,2199.00,1100.00,879.60,949.97,MG Road,Wallet,Corporate,Neha,21,exchange allowed within 7 days
+28-05-2026,FB/20422,Leather Formal,Formal,Bata,10,White,2,2799.00,1450.00,839.70,571.00,MG Road,Cash,Priya K,Ayesha,6,exchange allowed within 7 days
+28-05-2026,FB/20423,Kolhapuri Chappal,Ethnic,Local,8,Brown,2,899.00,380.00,89.90,204.97,Station Road,Wallet,Rahul M,Vikram,0,exchange allowed within 7 days
+28-05-2026,FB/20424,Flip Flop,Casual,Paragon,7,Navy,12,299.00,120.00,538.20,365.98,Station Road,Card,Walk-in,Vikram,24,exchange allowed within 7 days
+28-05-2026,FB/20425,Heeled Sandal,Party,Metro,10,Tan,3,1999.00,980.00,599.70,647.68,Station Road,UPI,Corporate,Neha,19,exchange allowed within 7 days
+28-05-2026,FB/20426,Trekking Boot,Outdoor,Woodland,7,Navy,2,5499.00,3100.00,1099.80,1187.78,MG Road,Wallet,Walk-in,Neha,1,exchange allowed within 7 days
+03-06-2026,FB/20427,Running Shoe,Sports,Nike,10,Black,3,4299.00,2400.00,644.85,1470.26,Phoenix Mall,Cash,Anita S,Neha,22,exchange allowed within 7 days
+03-06-2026,FB/20428,Canvas Sneaker,Casual,Converse,7,Tan,4,2199.00,1100.00,879.60,949.97,Phoenix Mall,Card,Anita S,Neha,1,exchange allowed within 7 days
+03-06-2026,FB/20429,Leather Formal,Formal,Bata,9,White,2,2799.00,1450.00,279.90,638.17,Phoenix Mall,UPI,Priya K,Ayesha,15,exchange allowed within 7 days
+03-06-2026,FB/20430,Kolhapuri Chappal,Ethnic,Local,10,Navy,3,899.00,380.00,269.70,291.28,Station Road,EMI,Corporate,Ayesha,4,exchange allowed within 7 days
+03-06-2026,FB/20431,Flip Flop,Casual,Paragon,7,White,11,299.00,120.00,493.35,335.48,Phoenix Mall,Cash,Anita S,Neha,17,exchange allowed within 7 days
+03-06-2026,FB/20432,Heeled Sandal,Party,Metro,10,White,2,1999.00,980.00,399.80,431.78,Station Road,UPI,Priya K,Neha,16,exchange allowed within 7 days
+03-06-2026,FB/20433,Trekking Boot,Outdoor,Woodland,9,Navy,1,5499.00,3100.00,824.85,560.90,MG Road,Card,Rahul M,Ayesha,17,exchange allowed within 7 days
+10-06-2026,FB/20434,Running Shoe,Sports,Nike,10,White,5,4299.00,2400.00,1074.75,2450.43,MG Road,UPI,Priya K,Vikram,12,exchange allowed within 7 days
+10-06-2026,FB/20435,Canvas Sneaker,Casual,Converse,9,White,2,2199.00,1100.00,219.90,501.37,MG Road,Cash,Anita S,Ayesha,4,exchange allowed within 7 days
+10-06-2026,FB/20436,Leather Formal,Formal,Bata,7,White,1,2799.00,1450.00,419.85,285.50,MG Road,UPI,Corporate,Vikram,16,exchange allowed within 7 days
+10-06-2026,FB/20437,Kolhapuri Chappal,Ethnic,Local,9,Navy,3,899.00,380.00,134.85,307.46,Station Road,EMI,Priya K,Vikram,7,exchange allowed within 7 days
+10-06-2026,FB/20438,Flip Flop,Casual,Paragon,9,Navy,8,299.00,120.00,358.80,243.98,MG Road,Cash,Priya K,Vikram,22,exchange allowed within 7 days
+10-06-2026,FB/20439,Heeled Sandal,Party,Metro,6,Brown,2,1999.00,980.00,599.70,407.80,Phoenix Mall,UPI,Rahul M,Vikram,23,exchange allowed within 7 days
+10-06-2026,FB/20440,Trekking Boot,Outdoor,Woodland,10,Navy,1,5499.00,3100.00,824.85,560.90,Station Road,Wallet,Walk-in,Ayesha,6,exchange allowed within 7 days
+13-06-2026,FB/20441,Running Shoe,Sports,Nike,6,Navy,2,4299.00,2400.00,859.80,928.58,Phoenix Mall,Cash,Rahul M,Neha,12,exchange allowed within 7 days
+13-06-2026,FB/20442,Canvas Sneaker,Casual,Converse,6,Tan,1,2199.00,1100.00,219.90,237.49,Station Road,UPI,Walk-in,Ayesha,15,exchange allowed within 7 days
+13-06-2026,FB/20443,Leather Formal,Formal,Bata,6,Brown,2,2799.00,1450.00,839.70,571.00,MG Road,Wallet,Walk-in,Ayesha,5,exchange allowed within 7 days
+13-06-2026,FB/20444,Kolhapuri Chappal,Ethnic,Local,10,Black,7,899.00,380.00,0.00,755.16,Phoenix Mall,Card,Rahul M,Ayesha,18,exchange allowed within 7 days
+13-06-2026,FB/20445,Flip Flop,Casual,Paragon,7,Navy,14,299.00,120.00,418.60,452.09,Phoenix Mall,Card,Corporate,Neha,17,exchange allowed within 7 days
+13-06-2026,FB/20446,Heeled Sandal,Party,Metro,7,White,2,1999.00,980.00,599.70,407.80,Station Road,Cash,Rahul M,Ayesha,22,exchange allowed within 7 days
+13-06-2026,FB/20447,Trekking Boot,Outdoor,Woodland,6,Tan,2,5499.00,3100.00,1649.70,1121.80,Station Road,Card,Priya K,Vikram,9,exchange allowed within 7 days
+14-06-2026,FB/20448,Running Shoe,Sports,Nike,8,Navy,4,4299.00,2400.00,0.00,2063.52,Station Road,EMI,Priya K,Vikram,20,exchange allowed within 7 days
+14-06-2026,FB/20449,Canvas Sneaker,Casual,Converse,7,Brown,6,2199.00,1100.00,0.00,1583.28,MG Road,Wallet,Anita S,Vikram,12,exchange allowed within 7 days
+14-06-2026,FB/20450,Leather Formal,Formal,Bata,8,Black,2,2799.00,1450.00,559.80,604.58,Station Road,Wallet,Rahul M,Ayesha,18,exchange allowed within 7 days
+14-06-2026,FB/20451,Kolhapuri Chappal,Ethnic,Local,10,White,7,899.00,380.00,314.65,717.40,Station Road,Wallet,Walk-in,Neha,22,exchange allowed within 7 days
+14-06-2026,FB/20452,Flip Flop,Casual,Paragon,9,Brown,4,299.00,120.00,59.80,136.34,Station Road,Card,Rahul M,Neha,22,exchange allowed within 7 days
+14-06-2026,FB/20453,Heeled Sandal,Party,Metro,8,Tan,3,1999.00,980.00,599.70,647.68,Station Road,UPI,Rahul M,Neha,9,exchange allowed within 7 days
+14-06-2026,FB/20454,Trekking Boot,Outdoor,Woodland,9,White,2,5499.00,3100.00,0.00,1319.76,Phoenix Mall,Wallet,Walk-in,Vikram,15,exchange allowed within 7 days
+18-06-2026,FB/20455,Running Shoe,Sports,Nike,10,Brown,5,4299.00,2400.00,1074.75,2450.43,Phoenix Mall,EMI,Corporate,Neha,6,exchange allowed within 7 days
+18-06-2026,FB/20456,Canvas Sneaker,Casual,Converse,8,White,3,2199.00,1100.00,659.70,712.48,Station Road,Cash,Anita S,Neha,13,exchange allowed within 7 days
+18-06-2026,FB/20457,Leather Formal,Formal,Bata,10,Navy,3,2799.00,1450.00,839.70,906.88,Station Road,Cash,Priya K,Ayesha,9,exchange allowed within 7 days
+18-06-2026,FB/20458,Kolhapuri Chappal,Ethnic,Local,10,Navy,2,899.00,380.00,0.00,215.76,Phoenix Mall,Wallet,Anita S,Neha,0,exchange allowed within 7 days
+18-06-2026,FB/20459,Flip Flop,Casual,Paragon,7,Tan,9,299.00,120.00,134.55,306.77,MG Road,Wallet,Rahul M,Vikram,11,exchange allowed within 7 days
+18-06-2026,FB/20460,Heeled Sandal,Party,Metro,7,Brown,3,1999.00,980.00,599.70,647.68,Station Road,EMI,Corporate,Ayesha,3,exchange allowed within 7 days
+18-06-2026,FB/20461,Trekking Boot,Outdoor,Woodland,6,Navy,2,5499.00,3100.00,1099.80,1187.78,Phoenix Mall,UPI,Corporate,Vikram,13,exchange allowed within 7 days
+22-06-2026,FB/20462,Running Shoe,Sports,Nike,6,White,1,4299.00,2400.00,644.85,438.50,MG Road,Wallet,Corporate,Vikram,20,exchange allowed within 7 days
+22-06-2026,FB/20463,Canvas Sneaker,Casual,Converse,9,White,6,2199.00,1100.00,1979.10,1345.79,Phoenix Mall,UPI,Rahul M,Vikram,19,exchange allowed within 7 days
+22-06-2026,FB/20464,Leather Formal,Formal,Bata,6,Navy,3,2799.00,1450.00,1259.55,856.49,Station Road,Wallet,Rahul M,Neha,1,exchange allowed within 7 days
+22-06-2026,FB/20465,Kolhapuri Chappal,Ethnic,Local,10,Tan,3,899.00,380.00,404.55,275.09,MG Road,Cash,Walk-in,Ayesha,17,exchange allowed within 7 days
+22-06-2026,FB/20466,Flip Flop,Casual,Paragon,8,White,14,299.00,120.00,0.00,502.32,MG Road,Wallet,Corporate,Ayesha,21,exchange allowed within 7 days
+22-06-2026,FB/20467,Heeled Sandal,Party,Metro,6,Navy,1,1999.00,980.00,99.95,227.89,MG Road,Cash,Corporate,Neha,19,exchange allowed within 7 days
+22-06-2026,FB/20468,Trekking Boot,Outdoor,Woodland,8,White,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,Cash,Corporate,Neha,5,exchange allowed within 7 days
+23-06-2026,FB/20469,Running Shoe,Sports,Nike,6,Black,3,4299.00,2400.00,644.85,1470.26,Station Road,EMI,Priya K,Vikram,14,exchange allowed within 7 days
+23-06-2026,FB/20470,Canvas Sneaker,Casual,Converse,7,Brown,5,2199.00,1100.00,549.75,1253.43,Phoenix Mall,Cash,Priya K,Ayesha,6,exchange allowed within 7 days
+23-06-2026,FB/20471,Leather Formal,Formal,Bata,9,White,1,2799.00,1450.00,419.85,285.50,Phoenix Mall,UPI,Anita S,Vikram,9,exchange allowed within 7 days
+23-06-2026,FB/20472,Kolhapuri Chappal,Ethnic,Local,6,White,8,899.00,380.00,359.60,819.89,Phoenix Mall,Wallet,Walk-in,Ayesha,6,exchange allowed within 7 days
+23-06-2026,FB/20473,Flip Flop,Casual,Paragon,9,Tan,8,299.00,120.00,239.20,258.34,Phoenix Mall,Wallet,Priya K,Neha,13,exchange allowed within 7 days
+23-06-2026,FB/20474,Heeled Sandal,Party,Metro,10,Navy,2,1999.00,980.00,599.70,407.80,Phoenix Mall,Card,Walk-in,Neha,6,exchange allowed within 7 days
+23-06-2026,FB/20475,Trekking Boot,Outdoor,Woodland,8,Brown,2,5499.00,3100.00,1099.80,1187.78,Phoenix Mall,UPI,Corporate,Neha,9,exchange allowed within 7 days
+28-06-2026,FB/20476,Running Shoe,Sports,Nike,10,Navy,5,4299.00,2400.00,2149.50,2321.46,Phoenix Mall,Card,Priya K,Vikram,17,exchange allowed within 7 days
+28-06-2026,FB/20477,Canvas Sneaker,Casual,Converse,10,White,4,2199.00,1100.00,0.00,1055.52,Station Road,UPI,Rahul M,Vikram,16,exchange allowed within 7 days
+28-06-2026,FB/20478,Leather Formal,Formal,Bata,9,Navy,1,2799.00,1450.00,139.95,319.09,MG Road,UPI,Corporate,Neha,5,exchange allowed within 7 days
+28-06-2026,FB/20479,Kolhapuri Chappal,Ethnic,Local,9,Brown,8,899.00,380.00,719.20,776.74,Station Road,Wallet,Rahul M,Ayesha,14,exchange allowed within 7 days
+28-06-2026,FB/20480,Flip Flop,Casual,Paragon,8,Tan,5,299.00,120.00,74.75,170.43,Station Road,Card,Rahul M,Vikram,16,exchange allowed within 7 days
+28-06-2026,FB/20481,Heeled Sandal,Party,Metro,7,Brown,1,1999.00,980.00,199.90,215.89,Station Road,Cash,Walk-in,Ayesha,3,exchange allowed within 7 days
+28-06-2026,FB/20482,Trekking Boot,Outdoor,Woodland,7,Tan,2,5499.00,3100.00,0.00,1319.76,Station Road,Card,Corporate,Vikram,13,exchange allowed within 7 days
+04-07-2026,FB/20483,Running Shoe,Sports,Nike,9,Brown,2,4299.00,2400.00,0.00,1031.76,Phoenix Mall,Wallet,Rahul M,Neha,21,exchange allowed within 7 days
+04-07-2026,FB/20484,Canvas Sneaker,Casual,Converse,7,Navy,5,2199.00,1100.00,0.00,1319.40,Station Road,EMI,Walk-in,Neha,21,exchange allowed within 7 days
+04-07-2026,FB/20485,Leather Formal,Formal,Bata,6,White,1,2799.00,1450.00,419.85,285.50,Station Road,Cash,Anita S,Neha,1,exchange allowed within 7 days
+04-07-2026,FB/20486,Kolhapuri Chappal,Ethnic,Local,9,White,3,899.00,380.00,404.55,275.09,Phoenix Mall,Wallet,Priya K,Neha,5,exchange allowed within 7 days
+04-07-2026,FB/20487,Flip Flop,Casual,Paragon,9,Black,10,299.00,120.00,299.00,322.92,Station Road,Card,Priya K,Vikram,23,exchange allowed within 7 days
+04-07-2026,FB/20488,Heeled Sandal,Party,Metro,8,Black,1,1999.00,980.00,299.85,203.90,Station Road,Cash,Corporate,Vikram,7,exchange allowed within 7 days
+05-07-2026,FB/20489,Running Shoe,Sports,Nike,7,White,5,4299.00,2400.00,3224.25,2192.49,MG Road,UPI,Priya K,Neha,14,exchange allowed within 7 days
+05-07-2026,FB/20490,Canvas Sneaker,Casual,Converse,9,Tan,2,2199.00,1100.00,219.90,501.37,Station Road,Wallet,Anita S,Ayesha,8,exchange allowed within 7 days
+05-07-2026,FB/20491,Leather Formal,Formal,Bata,9,Tan,3,2799.00,1450.00,419.85,957.26,Phoenix Mall,UPI,Rahul M,Vikram,12,exchange allowed within 7 days
+05-07-2026,FB/20492,Kolhapuri Chappal,Ethnic,Local,9,White,5,899.00,380.00,449.50,485.46,MG Road,UPI,Corporate,Vikram,19,exchange allowed within 7 days
+05-07-2026,FB/20493,Flip Flop,Casual,Paragon,9,Black,13,299.00,120.00,583.05,396.47,Phoenix Mall,EMI,Priya K,Vikram,12,exchange allowed within 7 days
+05-07-2026,FB/20494,Heeled Sandal,Party,Metro,7,White,2,1999.00,980.00,199.90,455.77,Phoenix Mall,Card,Priya K,Vikram,15,exchange allowed within 7 days
+07-07-2026,FB/20495,Running Shoe,Sports,Nike,7,Black,2,4299.00,2400.00,1289.70,877.00,Phoenix Mall,Cash,Priya K,Neha,14,exchange allowed within 7 days
+07-07-2026,FB/20496,Canvas Sneaker,Casual,Converse,10,Navy,6,2199.00,1100.00,0.00,1583.28,Phoenix Mall,Cash,Anita S,Neha,1,exchange allowed within 7 days
+07-07-2026,FB/20497,Leather Formal,Formal,Bata,9,Brown,1,2799.00,1450.00,0.00,335.88,Phoenix Mall,Cash,Priya K,Vikram,20,exchange allowed within 7 days
+07-07-2026,FB/20498,Kolhapuri Chappal,Ethnic,Local,8,White,9,899.00,380.00,809.10,873.83,MG Road,UPI,Walk-in,Vikram,9,exchange allowed within 7 days
+07-07-2026,FB/20499,Flip Flop,Casual,Paragon,8,White,6,299.00,120.00,0.00,215.28,Phoenix Mall,Cash,Anita S,Vikram,16,exchange allowed within 7 days
+07-07-2026,FB/20500,Heeled Sandal,Party,Metro,7,Brown,1,1999.00,980.00,299.85,203.90,MG Road,EMI,Walk-in,Vikram,8,exchange allowed within 7 days
+07-07-2026,FB/20501,Trekking Boot,Outdoor,Woodland,10,Navy,1,5499.00,3100.00,549.90,593.89,Phoenix Mall,EMI,Anita S,Vikram,22,exchange allowed within 7 days
+08-07-2026,FB/20502,Running Shoe,Sports,Nike,7,White,3,4299.00,2400.00,1934.55,1315.49,Phoenix Mall,EMI,Rahul M,Ayesha,5,exchange allowed within 7 days
+08-07-2026,FB/20503,Canvas Sneaker,Casual,Converse,10,Navy,6,2199.00,1100.00,1979.10,1345.79,Phoenix Mall,Cash,Walk-in,Vikram,7,exchange allowed within 7 days
+08-07-2026,FB/20504,Leather Formal,Formal,Bata,10,White,1,2799.00,1450.00,419.85,285.50,Phoenix Mall,Card,Rahul M,Vikram,21,exchange allowed within 7 days
+08-07-2026,FB/20505,Kolhapuri Chappal,Ethnic,Local,8,Navy,6,899.00,380.00,809.10,550.19,Phoenix Mall,Card,Walk-in,Neha,20,exchange allowed within 7 days
+08-07-2026,FB/20506,Flip Flop,Casual,Paragon,10,Navy,7,299.00,120.00,209.30,226.04,Phoenix Mall,Cash,Rahul M,Ayesha,16,exchange allowed within 7 days
+08-07-2026,FB/20507,Heeled Sandal,Party,Metro,9,White,1,1999.00,980.00,299.85,203.90,Station Road,Cash,Walk-in,Ayesha,23,exchange allowed within 7 days
+08-07-2026,FB/20508,Trekking Boot,Outdoor,Woodland,7,Black,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,Card,Anita S,Neha,13,exchange allowed within 7 days
+09-07-2026,FB/20509,Running Shoe,Sports,Nike,7,Tan,2,4299.00,2400.00,0.00,1031.76,Phoenix Mall,Wallet,Corporate,Ayesha,23,exchange allowed within 7 days
+09-07-2026,FB/20510,Canvas Sneaker,Casual,Converse,10,Brown,4,2199.00,1100.00,439.80,1002.74,MG Road,Cash,Anita S,Neha,9,exchange allowed within 7 days
+09-07-2026,FB/20511,Leather Formal,Formal,Bata,8,Black,2,2799.00,1450.00,279.90,638.17,MG Road,UPI,Anita S,Neha,22,exchange allowed within 7 days
+09-07-2026,FB/20512,Kolhapuri Chappal,Ethnic,Local,6,Navy,6,899.00,380.00,809.10,550.19,MG Road,EMI,Corporate,Neha,22,exchange allowed within 7 days
+09-07-2026,FB/20513,Flip Flop,Casual,Paragon,7,Black,10,299.00,120.00,0.00,358.80,Station Road,Card,Corporate,Vikram,9,exchange allowed within 7 days
+09-07-2026,FB/20514,Heeled Sandal,Party,Metro,9,White,1,1999.00,980.00,0.00,239.88,Phoenix Mall,EMI,Walk-in,Ayesha,10,exchange allowed within 7 days
+09-07-2026,FB/20515,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,274.95,626.89,MG Road,Wallet,Corporate,Neha,9,exchange allowed within 7 days
+10-07-2026,FB/20516,Running Shoe,Sports,Nike,8,Brown,4,4299.00,2400.00,2579.40,1753.99,MG Road,EMI,Corporate,Ayesha,22,exchange allowed within 7 days
+10-07-2026,FB/20517,Canvas Sneaker,Casual,Converse,10,Navy,3,2199.00,1100.00,989.55,672.89,Phoenix Mall,EMI,Rahul M,Ayesha,22,exchange allowed within 7 days
+10-07-2026,FB/20518,Leather Formal,Formal,Bata,7,Brown,1,2799.00,1450.00,279.90,302.29,MG Road,Card,Priya K,Neha,10,exchange allowed within 7 days
+10-07-2026,FB/20519,Kolhapuri Chappal,Ethnic,Local,7,Tan,9,899.00,380.00,404.55,922.37,Station Road,Wallet,Priya K,Neha,18,exchange allowed within 7 days
+10-07-2026,FB/20520,Flip Flop,Casual,Paragon,6,White,12,299.00,120.00,0.00,430.56,Station Road,EMI,Corporate,Vikram,15,exchange allowed within 7 days
+10-07-2026,FB/20521,Heeled Sandal,Party,Metro,8,White,1,1999.00,980.00,299.85,203.90,Phoenix Mall,EMI,Priya K,Vikram,18,exchange allowed within 7 days
+11-07-2026,FB/20522,Running Shoe,Sports,Nike,9,Brown,4,4299.00,2400.00,2579.40,1753.99,Phoenix Mall,Wallet,Corporate,Vikram,15,exchange allowed within 7 days
+11-07-2026,FB/20523,Canvas Sneaker,Casual,Converse,8,Tan,2,2199.00,1100.00,0.00,527.76,MG Road,EMI,Walk-in,Vikram,5,exchange allowed within 7 days
+11-07-2026,FB/20524,Leather Formal,Formal,Bata,10,Navy,2,2799.00,1450.00,0.00,671.76,MG Road,EMI,Walk-in,Ayesha,3,exchange allowed within 7 days
+11-07-2026,FB/20525,Kolhapuri Chappal,Ethnic,Local,6,Brown,4,899.00,380.00,359.60,388.37,Station Road,EMI,Corporate,Ayesha,23,exchange allowed within 7 days
+11-07-2026,FB/20526,Flip Flop,Casual,Paragon,6,Navy,9,299.00,120.00,403.65,274.48,Station Road,Wallet,Priya K,Ayesha,4,exchange allowed within 7 days
+11-07-2026,FB/20527,Heeled Sandal,Party,Metro,8,White,2,1999.00,980.00,0.00,479.76,Phoenix Mall,UPI,Rahul M,Ayesha,17,exchange allowed within 7 days
+11-07-2026,FB/20528,Trekking Boot,Outdoor,Woodland,10,Brown,1,5499.00,3100.00,0.00,659.88,MG Road,UPI,Rahul M,Neha,11,exchange allowed within 7 days
+12-07-2026,FB/20529,Running Shoe,Sports,Nike,8,Brown,2,4299.00,2400.00,0.00,1031.76,Station Road,EMI,Corporate,Vikram,4,exchange allowed within 7 days
+12-07-2026,FB/20530,Canvas Sneaker,Casual,Converse,7,Tan,4,2199.00,1100.00,1319.40,897.19,MG Road,Cash,Corporate,Neha,21,exchange allowed within 7 days
+12-07-2026,FB/20531,Leather Formal,Formal,Bata,10,Navy,2,2799.00,1450.00,559.80,604.58,Phoenix Mall,Cash,Corporate,Neha,17,exchange allowed within 7 days
+12-07-2026,FB/20532,Kolhapuri Chappal,Ethnic,Local,10,Black,2,899.00,380.00,0.00,215.76,Phoenix Mall,Cash,Rahul M,Vikram,16,exchange allowed within 7 days
+12-07-2026,FB/20533,Flip Flop,Casual,Paragon,8,Brown,8,299.00,120.00,358.80,243.98,Station Road,UPI,Rahul M,Ayesha,10,exchange allowed within 7 days
+12-07-2026,FB/20534,Heeled Sandal,Party,Metro,9,Navy,3,1999.00,980.00,599.70,647.68,Station Road,UPI,Priya K,Neha,2,exchange allowed within 7 days
+13-07-2026,FB/20535,Running Shoe,Sports,Nike,6,Black,4,4299.00,2400.00,2579.40,1753.99,Phoenix Mall,Wallet,Anita S,Ayesha,21,exchange allowed within 7 days
+13-07-2026,FB/20536,Canvas Sneaker,Casual,Converse,7,Black,2,2199.00,1100.00,439.80,474.98,MG Road,Wallet,Anita S,Vikram,10,exchange allowed within 7 days
+13-07-2026,FB/20537,Leather Formal,Formal,Bata,9,Black,1,2799.00,1450.00,139.95,319.09,Station Road,UPI,Priya K,Ayesha,17,exchange allowed within 7 days
+13-07-2026,FB/20538,Kolhapuri Chappal,Ethnic,Local,9,Navy,3,899.00,380.00,0.00,323.64,Station Road,Wallet,Anita S,Ayesha,10,exchange allowed within 7 days
+13-07-2026,FB/20539,Flip Flop,Casual,Paragon,8,Brown,8,299.00,120.00,239.20,258.34,Station Road,Card,Walk-in,Neha,13,exchange allowed within 7 days
+13-07-2026,FB/20540,Heeled Sandal,Party,Metro,9,White,3,1999.00,980.00,899.55,611.69,Station Road,EMI,Walk-in,Neha,3,exchange allowed within 7 days
+13-07-2026,FB/20541,Trekking Boot,Outdoor,Woodland,10,Black,1,5499.00,3100.00,274.95,626.89,MG Road,EMI,Walk-in,Vikram,16,exchange allowed within 7 days
+14-07-2026,FB/20542,Running Shoe,Sports,Nike,8,Navy,3,4299.00,2400.00,1934.55,1315.49,Phoenix Mall,Card,Priya K,Vikram,14,exchange allowed within 7 days
+14-07-2026,FB/20543,Canvas Sneaker,Casual,Converse,7,White,7,2199.00,1100.00,2308.95,1570.09,Phoenix Mall,UPI,Corporate,Neha,2,exchange allowed within 7 days
+14-07-2026,FB/20544,Leather Formal,Formal,Bata,9,Black,3,2799.00,1450.00,1259.55,856.49,MG Road,Card,Anita S,Neha,20,exchange allowed within 7 days
+14-07-2026,FB/20545,Kolhapuri Chappal,Ethnic,Local,7,Brown,8,899.00,380.00,719.20,776.74,Station Road,Cash,Priya K,Neha,23,exchange allowed within 7 days
+14-07-2026,FB/20546,Flip Flop,Casual,Paragon,8,Black,14,299.00,120.00,418.60,452.09,Phoenix Mall,EMI,Rahul M,Neha,21,exchange allowed within 7 days
+14-07-2026,FB/20547,Heeled Sandal,Party,Metro,10,Black,1,1999.00,980.00,299.85,203.90,MG Road,Wallet,Anita S,Vikram,11,exchange allowed within 7 days
+14-07-2026,FB/20548,Trekking Boot,Outdoor,Woodland,7,Tan,1,5499.00,3100.00,0.00,659.88,Station Road,EMI,Rahul M,Neha,2,exchange allowed within 7 days
+18-07-2026,FB/20549,Running Shoe,Sports,Nike,8,Black,1,4299.00,2400.00,214.95,490.09,Station Road,EMI,Priya K,Neha,6,exchange allowed within 7 days
+18-07-2026,FB/20550,Canvas Sneaker,Casual,Converse,10,Black,4,2199.00,1100.00,439.80,1002.74,MG Road,UPI,Rahul M,Ayesha,3,exchange allowed within 7 days
+18-07-2026,FB/20551,Leather Formal,Formal,Bata,6,Brown,3,2799.00,1450.00,0.00,1007.64,MG Road,EMI,Corporate,Ayesha,20,exchange allowed within 7 days
+18-07-2026,FB/20552,Kolhapuri Chappal,Ethnic,Local,10,White,2,899.00,380.00,89.90,204.97,Station Road,UPI,Anita S,Vikram,12,exchange allowed within 7 days
+18-07-2026,FB/20553,Flip Flop,Casual,Paragon,6,White,6,299.00,120.00,89.70,204.52,Phoenix Mall,Card,Rahul M,Ayesha,5,exchange allowed within 7 days
+18-07-2026,FB/20554,Heeled Sandal,Party,Metro,10,White,2,1999.00,980.00,399.80,431.78,MG Road,EMI,Priya K,Vikram,18,exchange allowed within 7 days
+18-07-2026,FB/20555,Trekking Boot,Outdoor,Woodland,7,Brown,2,5499.00,3100.00,0.00,1319.76,Phoenix Mall,Cash,Priya K,Ayesha,1,exchange allowed within 7 days
+21-07-2026,FB/20556,Running Shoe,Sports,Nike,7,White,4,4299.00,2400.00,2579.40,1753.99,Phoenix Mall,Wallet,Rahul M,Vikram,23,exchange allowed within 7 days
+21-07-2026,FB/20557,Canvas Sneaker,Casual,Converse,6,White,4,2199.00,1100.00,879.60,949.97,MG Road,UPI,Rahul M,Neha,16,exchange allowed within 7 days
+21-07-2026,FB/20558,Leather Formal,Formal,Bata,10,White,2,2799.00,1450.00,839.70,571.00,Station Road,EMI,Corporate,Vikram,1,exchange allowed within 7 days
+21-07-2026,FB/20559,Kolhapuri Chappal,Ethnic,Local,9,Tan,3,899.00,380.00,0.00,323.64,Station Road,UPI,Corporate,Ayesha,16,exchange allowed within 7 days
+21-07-2026,FB/20560,Flip Flop,Casual,Paragon,9,White,8,299.00,120.00,239.20,258.34,MG Road,Wallet,Corporate,Ayesha,17,exchange allowed within 7 days
+21-07-2026,FB/20561,Heeled Sandal,Party,Metro,6,Black,3,1999.00,980.00,299.85,683.66,MG Road,UPI,Rahul M,Neha,0,exchange allowed within 7 days
+21-07-2026,FB/20562,Trekking Boot,Outdoor,Woodland,10,White,1,5499.00,3100.00,274.95,626.89,Phoenix Mall,Cash,Corporate,Vikram,8,exchange allowed within 7 days
+23-07-2026,FB/20563,Running Shoe,Sports,Nike,6,White,5,4299.00,2400.00,2149.50,2321.46,MG Road,UPI,Priya K,Ayesha,13,exchange allowed within 7 days
+23-07-2026,FB/20564,Canvas Sneaker,Casual,Converse,10,Black,3,2199.00,1100.00,989.55,672.89,Station Road,Cash,Corporate,Ayesha,0,exchange allowed within 7 days
+23-07-2026,FB/20565,Leather Formal,Formal,Bata,7,Navy,1,2799.00,1450.00,419.85,285.50,MG Road,EMI,Priya K,Vikram,1,exchange allowed within 7 days
+23-07-2026,FB/20566,Kolhapuri Chappal,Ethnic,Local,6,White,5,899.00,380.00,224.75,512.43,Station Road,UPI,Priya K,Ayesha,12,exchange allowed within 7 days
+23-07-2026,FB/20567,Flip Flop,Casual,Paragon,7,White,8,299.00,120.00,239.20,258.34,MG Road,Wallet,Corporate,Ayesha,13,exchange allowed within 7 days
+23-07-2026,FB/20568,Heeled Sandal,Party,Metro,8,Tan,2,1999.00,980.00,399.80,431.78,MG Road,EMI,Rahul M,Ayesha,14,exchange allowed within 7 days
+23-07-2026,FB/20569,Trekking Boot,Outdoor,Woodland,8,Brown,2,5499.00,3100.00,0.00,1319.76,Phoenix Mall,UPI,Rahul M,Vikram,10,exchange allowed within 7 days
+24-07-2026,FB/20570,Running Shoe,Sports,Nike,8,Tan,3,4299.00,2400.00,1934.55,1315.49,Phoenix Mall,Cash,Walk-in,Neha,24,exchange allowed within 7 days
+24-07-2026,FB/20571,Canvas Sneaker,Casual,Converse,8,Tan,2,2199.00,1100.00,439.80,474.98,MG Road,Wallet,Walk-in,Ayesha,22,exchange allowed within 7 days
+24-07-2026,FB/20572,Leather Formal,Formal,Bata,7,White,1,2799.00,1450.00,419.85,285.50,Phoenix Mall,Card,Corporate,Neha,2,exchange allowed within 7 days
+24-07-2026,FB/20573,Kolhapuri Chappal,Ethnic,Local,8,Tan,6,899.00,380.00,809.10,550.19,MG Road,UPI,Corporate,Ayesha,15,exchange allowed within 7 days
+24-07-2026,FB/20574,Flip Flop,Casual,Paragon,6,Brown,10,299.00,120.00,448.50,304.98,Phoenix Mall,EMI,Walk-in,Vikram,16,exchange allowed within 7 days
+24-07-2026,FB/20575,Heeled Sandal,Party,Metro,6,Navy,1,1999.00,980.00,99.95,227.89,Phoenix Mall,Cash,Anita S,Neha,16,exchange allowed within 7 days
+24-07-2026,FB/20576,Trekking Boot,Outdoor,Woodland,9,Tan,1,5499.00,3100.00,549.90,593.89,MG Road,Cash,Walk-in,Vikram,24,exchange allowed within 7 days

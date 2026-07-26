@@ -9,6 +9,9 @@ rules, and how it was verified.
   5 (filters + drill-down), an 8-view chart engine, expanded column-keyword
   mapping, and two security fixes.
 - **New runtime dependencies:** none. Only dev/test tooling was added.
+- **Companion document:** the later UI/UX rebuild and accuracy audit (design
+  tokens, density switch, command palette, and four numerical bugs found and
+  fixed) live in **[`UI_ACCURACY_PASS.md`](./UI_ACCURACY_PASS.md)**.
 
 ---
 
@@ -44,7 +47,7 @@ rules, and how it was verified.
 | Drill-down | none | click any bar/slice/tile/row → the transactions behind it |
 | Mapped columns | 6 required | 6 required + 12 optional (4 measures, 8 dimensions) |
 | Ownership check | **missing (IDOR)** | enforced on every read, 404 on mismatch |
-| Tests | none | 132 backend + 27 frontend |
+| Tests | none | 132 backend + 27 frontend for the feature work (the later passes took the repo to 177 + 55) |
 
 Everything is computed in-house with Pandas/NumPy. No language model, no
 third-party analytics service — sales data never leaves the backend, and no
@@ -487,24 +490,26 @@ Installed with `uipro init --ai kiro --force` →
 `.kiro/steering/ui-ux-pro-max/`. Resolved for this project as a
 **Data-Dense Dashboard** (navy `#1E40AF` + amber `#F59E0B` accents).
 
-What it actually changed:
+What it changed in the feature work:
 
-- SVG icons only; the emoji empty state was replaced.
-- Visible `:focus-visible` rings app-wide; `prefers-reduced-motion` honoured;
-  chart animations switched off so filter changes are instant (and so anomaly
-  markers aren't delayed behind a sweep).
+- SVG icons only — no emoji as icons.
+- Visible `:focus-visible` rings; `prefers-reduced-motion` honoured; chart
+  animations off, so filter changes are instant and anomaly markers aren't
+  delayed behind a sweep.
 - Severity, trend and ABC class conveyed by text/icon **and** colour, never
   colour alone.
-- Donut capped at 6 slices; treemap tiles get white 2–3px borders; bubbles at
-  0.7 opacity so overlaps show density; heatmap ships a numeric legend.
-- Table alternative for scatter / treemap / heatmap.
-- Every table wrapped in `overflow-x-auto`; every empty state offers the action
-  that fixes it; skeletons reserve real layout height so nothing jumps.
-- Deep-linkable view state; keyboard-navigable tabs; drill-down dialog with
+- Donut capped at 6 slices; treemap tiles get white borders; bubbles at 0.7
+  opacity so overlaps show density; the heatmap ships a numeric legend.
+- A table alternative for scatter / treemap / heatmap.
+- Every table scrolls horizontally instead of breaking the layout; every empty
+  state offers the action that fixes it; skeletons reserve real layout height.
+- Deep-linkable view state, keyboard-navigable tabs, and a drill-down dialog with
   focus management and Escape-to-close.
-- 44px minimum touch targets on controls; responsive at 375 / 768 / 1024 / 1440.
 
----
+> The full design-token system (spacing/height/chart-height tokens, typography
+> scale, density switch, command palette, sticky toolbar, currency formatting
+> rule) landed in a later pass and is documented separately in
+> **[`UI_ACCURACY_PASS.md`](./UI_ACCURACY_PASS.md)**.
 
 ## 13. Tuning constants
 
@@ -561,12 +566,12 @@ All thresholds are named module-level constants — change them in one place.
 ### Commands
 
 ```bash
-# Backend — 132 tests
+# Backend
 cd backend
 pip install -r requirements.txt -r requirements-dev.txt
 pytest
 
-# Frontend — 27 tests + production build
+# Frontend — component tests + production build
 cd frontend
 npm install
 npm test
@@ -575,13 +580,18 @@ npm run build
 
 ### Results
 
+Counts below are for the whole repository as it stands (the later UI/accuracy
+pass added the audit, layout and interaction suites — see
+[`UI_ACCURACY_PASS.md`](./UI_ACCURACY_PASS.md) §13–14).
+
 | Suite | Command | Result |
 |-------|---------|--------|
-| Backend | `py -3 -m pytest` | **132 passed** |
-| Frontend | `npm test` | **27 passed** (2 files) |
+| Backend | `py -3 -m pytest` | **177 passed** |
+| Frontend | `npm test` | **55 passed** (4 files) |
 | Build | `npm run build` | **succeeds** |
+| Lint | `python -m pyflakes app` | **clean** |
 
-### Backend test files
+### Backend test files (feature suites)
 
 | File | Tests | Covers |
 |------|-------|--------|
@@ -592,7 +602,7 @@ npm run build
 | `test_inventory_and_forecast.py` | 14 | Velocity reconciles with units ÷ window, ABC partitions the catalogue, ageing flags the idle item, priority ranks movers above idle stock, stock-aware cover/capital are real, demand mode never guesses, forecast refuses short history, horizon length and band ordering, totals matching the plotted days, seasonality + accuracy present, horizon cap |
 | `test_api.py` | 45 | Full upload → confirm → analyse flow; **IDOR blocked on 6 routes with an indistinguishable 404**; malformed/traversal ids rejected; 409 before mapping; 422 for unknown dimensions, oversized filters, `top_n`/`page_size`/`horizon` out of range, and incomplete custom ranges; filters actually reduce revenue; trend arrows have a previous period; every dimension and every measure renders; heatmap/insights/inventory/forecast/ledger/report; discount lines in the P&L; the PDF really starts with `%PDF`; classic GETs still work; empty filter result returns a zeroed payload; **no `NaN` or `Infinity` in any response body** |
 
-### Frontend test files
+### Frontend test files (feature suites)
 
 | File | Tests | Covers |
 |------|-------|--------|
@@ -606,11 +616,17 @@ real Recharts treemap prop bug during development.
 
 ### Independent audit
 
-A separate reviewer agent re-checked the code (not the docstrings) against
-every claim above and ran both suites. All five claim areas verified; the only
-findings were cosmetic — a duplicated tooltip in the legacy bar chart and an
-orphaned `__pycache__` entry from a previously deleted module. Both were fixed
-and all three commands re-run green.
+A separate reviewer agent re-checked the code (not the docstrings) against every
+claim above and ran both suites. All five claim areas verified; the only findings
+were cosmetic — a duplicated tooltip in the legacy bar chart and an orphaned
+`__pycache__` entry from a previously deleted module. Both were fixed and all
+three commands re-run green.
+
+> A later pass re-derived every published number independently and fixed four
+> accuracy bugs (sparse-shop anomaly baseline, the register ignoring discounts,
+> the forecast accuracy basis, and ABC classification of a single-item shop). See
+> **[`UI_ACCURACY_PASS.md`](./UI_ACCURACY_PASS.md)** §11 for the details and
+> §13–14 for the tests that now guard them.
 
 ---
 

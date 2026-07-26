@@ -16,7 +16,7 @@ import { formatByMeasure } from './chartFormat'
 export default function HeatmapGrid({ data }) {
   if (!data?.cells?.length) {
     return (
-      <p className="text-sm py-12 text-center" style={{ color: 'var(--text-muted)' }}>
+      <p className="chart-box flex items-center justify-center text-xs text-center" style={{ color: 'var(--text-muted)' }}>
         Not enough dated rows to build a weekday pattern yet.
       </p>
     )
@@ -48,7 +48,7 @@ export default function HeatmapGrid({ data }) {
                 <th
                   key={column}
                   scope="col"
-                  className="text-[10px] font-medium pb-1"
+                  className="text-[11px] font-medium pb-1"
                   style={{ color: 'var(--text-muted)', minWidth: 34 }}
                   title={columnDates?.[index] ? `Week beginning ${columnDates[index]}` : column}
                 >
@@ -62,7 +62,7 @@ export default function HeatmapGrid({ data }) {
               <tr key={row}>
                 <th
                   scope="row"
-                  className="text-[11px] font-medium pr-2 text-right"
+                  className="text-[12px] font-medium pr-2 text-right"
                   style={{ color: 'var(--text-secondary)' }}
                 >
                   {row}

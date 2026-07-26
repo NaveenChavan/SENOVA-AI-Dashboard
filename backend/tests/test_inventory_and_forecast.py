@@ -53,6 +53,24 @@ def test_abc_classification_covers_every_item(normalized):
     assert a_bucket.revenue_share_pct <= 100.0
     assert {item.abc_class for item in result.items} <= {"A", "B", "C"}
 
+    # The biggest earner is always class A, whatever its share.
+    top_earner = max(result.items, key=lambda item: item.revenue)
+    assert top_earner.abc_class == "A"
+
+
+def test_a_single_item_shop_is_class_a_not_the_long_tail(normalized):
+    """
+    One item holding 100% of revenue is the business, not the tail. Testing the
+    cumulative share *after* inclusion (1.0 > 0.80) used to label it "C".
+    """
+    one_item = normalized[normalized["Item"] == "Cotton Kurta"].copy()
+    result = compute_inventory_intelligence(one_item, top_n=10)
+
+    assert len(result.items) == 1
+    assert result.items[0].abc_class == "A"
+    assert result.abc_buckets[0].item_count == 1
+    assert result.abc_buckets[0].revenue_share_pct == pytest.approx(100.0, abs=0.01)
+
 
 def test_ageing_buckets_flag_the_idle_item(normalized):
     """The item that stopped selling 75 days ago must land in 'Dead'."""

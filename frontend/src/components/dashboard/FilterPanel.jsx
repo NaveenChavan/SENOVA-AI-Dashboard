@@ -3,17 +3,17 @@ import { useState } from 'react'
 import Icon from '../common/Icon'
 
 /**
- * Feature 5a — the filter panel.
+ * Feature 5a — the filter bar.
  *
- * Filters are applied **server-side before aggregation**, so every widget on the
- * page (KPIs, charts, insights, inventory, P&L, ledger and the PDF) reflects the
- * same slice. That's why the panel only offers dimensions the uploaded file
- * actually contains — the list comes from ``GET /analytics/{id}/dimensions``.
+ * Collapsed it is a single 42px row: a Filters button, the active filters as
+ * removable chips, and a Clear all link. Expanded it reveals the custom date
+ * range and one chip group per dimension the uploaded file actually contains
+ * (the list comes from `GET /analytics/{id}/dimensions`).
  *
- * "No filtering" is listed as an anti-pattern for data-dense dashboards, and the
- * cure has to be discoverable: active filters are shown as removable chips, and
- * the whole state is mirrored into the URL by the page so a filtered view can be
- * shared or reloaded.
+ * Filters are applied server-side before aggregation, so every widget on the
+ * page reflects the same slice. "No filtering" is an explicit anti-pattern for
+ * data-dense dashboards — and the cure has to be discoverable, which is why the
+ * active state is always visible as chips rather than hidden behind a panel.
  */
 export default function FilterPanel({
   dimensions = [],
@@ -49,25 +49,16 @@ export default function FilterPanel({
   }
 
   return (
-    <section
-      className="card p-3 sm:p-4"
-      aria-label="Filters"
-      style={{ transition: 'box-shadow 200ms ease' }}
-    >
-      <div className="flex flex-wrap items-center gap-2">
+    <section className="card" aria-label="Filters">
+      <div className="flex items-center gap-1.5 flex-wrap px-[var(--card-pad)]" style={{ minHeight: 42, paddingTop: 5, paddingBottom: 5 }}>
         <button
           type="button"
           onClick={() => setOpen((previous) => !previous)}
           aria-expanded={open}
-          className="flex items-center gap-2 text-sm font-medium rounded-lg px-3 cursor-pointer transition-colors"
-          style={{
-            minHeight: 40,
-            border: '1px solid var(--border-subtle)',
-            background: open ? 'var(--accent-blue-glow)' : 'var(--bg-input)',
-            color: open ? 'var(--accent-blue)' : 'var(--text-secondary)',
-          }}
+          className="btn"
+          style={open ? { borderColor: 'var(--accent-blue)', color: 'var(--accent-blue)' } : undefined}
         >
-          <Icon name="filter" className="w-4 h-4" />
+          <Icon name="filter" className="w-3.5 h-3.5" />
           Filters
           {activeCount > 0 && (
             <span
@@ -87,33 +78,21 @@ export default function FilterPanel({
               key={key}
               type="button"
               onClick={() => removeDimension(key)}
-              className="flex items-center gap-1.5 text-xs rounded-full px-3 cursor-pointer transition-colors"
-              style={{
-                minHeight: 32,
-                background: 'var(--accent-blue-glow)',
-                color: 'var(--accent-blue)',
-                border: '1px solid var(--border-active)',
-              }}
+              className="chip chip--active"
               aria-label={`Remove ${dimension?.label ?? key} filter`}
             >
-              <span className="font-medium">{dimension?.label ?? key}:</span>
-              <span>{values.length === 1 ? values[0] : `${values.length} selected`}</span>
+              <span className="font-semibold">{dimension?.label ?? key}:</span>
+              <span className="truncate" style={{ maxWidth: 140 }}>
+                {values.length === 1 ? values[0] : `${values.length} selected`}
+              </span>
               <Icon name="close" className="w-3 h-3" />
             </button>
           )
         })}
 
         {hasCustomRange && (
-          <span
-            className="flex items-center gap-1.5 text-xs rounded-full px-3"
-            style={{
-              minHeight: 32,
-              background: 'var(--bg-input)',
-              color: 'var(--text-secondary)',
-              border: '1px solid var(--border-subtle)',
-            }}
-          >
-            <Icon name="calendar" className="w-3.5 h-3.5" />
+          <span className="chip chip--static">
+            <Icon name="calendar" className="w-3 h-3" />
             {customRange.start} → {customRange.end}
           </span>
         )}
@@ -122,7 +101,7 @@ export default function FilterPanel({
           <button
             type="button"
             onClick={onClear}
-            className="text-xs underline underline-offset-2 cursor-pointer ml-auto"
+            className="text-[12px] underline underline-offset-2 cursor-pointer ml-auto"
             style={{ color: 'var(--text-muted)' }}
           >
             Clear all
@@ -131,87 +110,77 @@ export default function FilterPanel({
       </div>
 
       {open && (
-        <div className="mt-4 pt-4 space-y-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+        <div
+          className="px-[var(--card-pad)] py-3 space-y-3"
+          style={{ borderTop: '1px solid var(--border-subtle)' }}
+        >
           {/* Custom date range — the presets can't express "1st to 15th". */}
           <fieldset>
-            <legend className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>
-              Custom date range
-            </legend>
-            <div className="flex flex-wrap items-end gap-3">
-              <label className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                <span className="block mb-1">From</span>
+            <legend className="panel-title mb-1.5">Custom date range</legend>
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-1.5 text-[12px]" style={{ color: 'var(--text-muted)' }}>
+                From
                 <input
                   type="date"
-                  className="filter-select cursor-pointer"
                   value={customRange?.start ?? ''}
                   min={dateRange?.min_date ?? undefined}
                   max={dateRange?.max_date ?? undefined}
-                  onChange={(event) =>
-                    onCustomRangeChange?.({ ...customRange, start: event.target.value })
-                  }
+                  onChange={(event) => onCustomRangeChange?.({ ...customRange, start: event.target.value })}
                 />
               </label>
-              <label className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                <span className="block mb-1">To</span>
+              <label className="flex items-center gap-1.5 text-[12px]" style={{ color: 'var(--text-muted)' }}>
+                To
                 <input
                   type="date"
-                  className="filter-select cursor-pointer"
                   value={customRange?.end ?? ''}
                   min={customRange?.start ?? dateRange?.min_date ?? undefined}
                   max={dateRange?.max_date ?? undefined}
-                  onChange={(event) =>
-                    onCustomRangeChange?.({ ...customRange, end: event.target.value })
-                  }
+                  onChange={(event) => onCustomRangeChange?.({ ...customRange, end: event.target.value })}
                 />
               </label>
               {dateRange?.min_date && (
-                <p className="text-[11px] pb-2" style={{ color: 'var(--text-muted)' }}>
+                <span className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
                   Data available {dateRange.min_date} → {dateRange.max_date}
-                </p>
+                </span>
               )}
             </div>
           </fieldset>
 
-          {/* One group per available dimension. */}
+          {/* One chip group per available dimension. */}
           {dimensions.length === 0 ? (
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
               No filterable columns detected in this file.
             </p>
           ) : (
-            dimensions.map((dimension) => (
-              <fieldset key={dimension.key}>
-                <legend className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>
-                  {dimension.label}
-                  {dimension.truncated && (
-                    <span className="ml-2 font-normal normal-case" style={{ color: 'var(--text-muted)' }}>
-                      (showing first {dimension.values.length})
-                    </span>
-                  )}
-                </legend>
-                <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
-                  {dimension.values.map((value) => {
-                    const selected = (filters[dimension.key] ?? []).includes(value)
-                    return (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+              {dimensions.map((dimension) => (
+                <fieldset key={dimension.key} className="min-w-0">
+                  <legend className="panel-title mb-1.5">
+                    {dimension.label}
+                    {dimension.truncated && (
+                      <span className="font-normal normal-case" style={{ color: 'var(--text-muted)' }}>
+                        {' '}(first {dimension.values.length})
+                      </span>
+                    )}
+                  </legend>
+                  {/* Capped height: a dimension with 200 values must not turn
+                      the filter panel into a full-page list. */}
+                  <div className="flex flex-wrap gap-1 overflow-y-auto" style={{ maxHeight: 96 }}>
+                    {dimension.values.map((value) => (
                       <button
                         key={value}
                         type="button"
                         onClick={() => toggleValue(dimension.key, value)}
-                        aria-pressed={selected}
-                        className="text-xs rounded-full px-3 cursor-pointer transition-colors"
-                        style={{
-                          minHeight: 32,
-                          background: selected ? 'var(--accent-blue)' : 'var(--bg-input)',
-                          color: selected ? 'var(--text-on-accent)' : 'var(--text-secondary)',
-                          border: `1px solid ${selected ? 'var(--accent-blue)' : 'var(--border-subtle)'}`,
-                        }}
+                        aria-pressed={(filters[dimension.key] ?? []).includes(value)}
+                        className="chip"
                       >
                         {value}
                       </button>
-                    )
-                  })}
-                </div>
-              </fieldset>
-            ))
+                    ))}
+                  </div>
+                </fieldset>
+              ))}
+            </div>
           )}
         </div>
       )}

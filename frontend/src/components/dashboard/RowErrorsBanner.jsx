@@ -1,80 +1,82 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
+
+import Icon from '../common/Icon'
+
+/**
+ * Collapsed banner for row-level validation errors.
+ *
+ * Collapsed by default and only one line tall, because "partial success" is
+ * information, not a blocker — the dashboard below it is still valid. Expanding
+ * groups the failures by column so a repeated mistake (a whole date column in
+ * the wrong format) reads as one problem rather than fifty.
+ */
 
 const MAX_VISIBLE = 10
 
 export default function RowErrorsBanner({ errors }) {
   const [expanded, setExpanded] = useState(false)
 
-  if (!errors || errors.length === 0) return null
-
-  const total = errors.length
-  const sliced = useMemo(() => errors.slice(0, MAX_VISIBLE), [errors])
-  const remainder = total - MAX_VISIBLE
-
+  const total = errors?.length ?? 0
+  const visible = useMemo(() => (errors ?? []).slice(0, MAX_VISIBLE), [errors])
   const grouped = useMemo(() => {
     const map = {}
-    for (const e of sliced) {
-      const key = e.column
-      if (!map[key]) map[key] = []
-      map[key].push(e)
+    for (const error of visible) {
+      if (!map[error.column]) map[error.column] = []
+      map[error.column].push(error)
     }
     return map
-  }, [sliced])
+  }, [visible])
+
+  if (!total) return null
+  const remainder = total - MAX_VISIBLE
 
   return (
-    <div className="card-gradient rounded-xl overflow-hidden" style={{ border: '1px solid rgba(245,158,11,0.3)' }}>
+    <div className="card" style={{ borderColor: 'color-mix(in srgb, var(--accent-amber) 40%, transparent)' }}>
       <button
         type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 text-left transition-colors min-h-[52px]"
-        style={{ background: 'transparent' }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(245,158,11,0.06)')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+        onClick={() => setExpanded((open) => !open)}
+        aria-expanded={expanded}
+        className="w-full flex items-center gap-2 px-[var(--card-pad)] text-left cursor-pointer"
+        style={{ minHeight: 42 }}
       >
-        <div className="flex items-center gap-3">
-          <svg className="w-5 h-5 shrink-0" style={{ color: 'var(--accent-amber)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <p className="text-sm font-semibold" style={{ color: 'var(--accent-amber)' }}>
-              {total} row{total > 1 ? 's' : ''} with validation {total > 1 ? 'errors' : 'error'}
-            </p>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              Partial success &mdash; showing analytics computed from valid rows only.
-            </p>
-          </div>
-        </div>
-        <svg
-          className="w-4 h-4 shrink-0 transition-transform"
-          style={{ color: 'var(--text-muted)', transform: expanded ? 'rotate(180deg)' : 'none' }}
-          fill="none" stroke="currentColor" viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <Icon name="info" className="w-4 h-4 shrink-0" style={{ color: 'var(--accent-amber)' }} />
+        <span className="text-xs font-semibold" style={{ color: 'var(--accent-amber)' }}>
+          {total} row{total > 1 ? 's' : ''} skipped
+        </span>
+        <span className="text-[12px] truncate" style={{ color: 'var(--text-muted)' }}>
+          — analytics below are computed from the valid rows only
+        </span>
+        <Icon
+          name="close"
+          className="w-3.5 h-3.5 ml-auto shrink-0"
+          style={{
+            color: 'var(--text-muted)',
+            transform: expanded ? 'rotate(0deg)' : 'rotate(45deg)',
+          }}
+        />
       </button>
 
       {expanded && (
-        <div className="px-4 sm:px-5 pb-4" style={{ borderTop: '1px solid rgba(245,158,11,0.2)' }}>
-          {Object.entries(grouped).map(([column, colErrors]) => (
-            <div key={column} className="mt-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>
-                {column}
-              </h4>
-              <div className="space-y-1">
-                {colErrors.map((err, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm">
-                    <span className="font-mono text-xs mt-0.5 shrink-0 w-8" style={{ color: 'var(--text-muted)' }}>
-                      R{err.row}
+        <div className="px-[var(--card-pad)] pb-3 space-y-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+          {Object.entries(grouped).map(([column, columnErrors]) => (
+            <div key={column} className="pt-2">
+              <p className="panel-title mb-1">{column}</p>
+              <ul className="space-y-0.5">
+                {columnErrors.map((error, index) => (
+                  <li key={index} className="flex items-start gap-2 text-[12px]">
+                    <span className="font-mono shrink-0" style={{ color: 'var(--text-muted)', width: 34 }}>
+                      R{error.row}
                     </span>
-                    <span style={{ color: 'var(--text-secondary)' }}>{err.error}</span>
-                  </div>
+                    <span style={{ color: 'var(--text-secondary)' }}>{error.error}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
+
           {remainder > 0 && (
-            <p className="mt-3 text-xs italic" style={{ color: 'var(--text-muted)' }}>
-              ... and {remainder} more formatting error{remainder > 1 ? 's' : ''}.
+            <p className="text-[12px] italic pt-1" style={{ color: 'var(--text-muted)' }}>
+              …and {remainder} more.
             </p>
           )}
         </div>

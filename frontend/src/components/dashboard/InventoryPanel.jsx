@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
+import Card from '../common/Card'
 import Icon from '../common/Icon'
-import { formatCurrency, formatNumber, formatPercent } from '../charts/chartFormat'
+import { formatCurrency, formatCurrencyCompact, formatNumber, formatPercent } from '../charts/chartFormat'
 
 /**
  * Feature 3 — inventory & reorder intelligence.
@@ -12,14 +13,14 @@ import { formatCurrency, formatNumber, formatPercent } from '../charts/chartForm
  * - **Stock-aware mode** (a stock column was mapped): the same plus real
  *   days-of-cover, reorder alerts and capital locked per item.
  *
- * When stock is unknown the stock columns are simply absent and a note explains
- * how to unlock them — showing a guessed "days of cover" would be worse than
- * showing none.
+ * When stock is unknown those columns are simply absent and a one-line note
+ * explains how to unlock them — a guessed days-of-cover would be worse than
+ * none, because it would drive a purchase from a number nobody measured.
+ *
+ * Layout: four summary tiles on one row, ageing counts on the next, then the
+ * table scrolling inside a capped height so the page length stays predictable.
  */
 
-const ABC_HELP = 'A = the items making your first 80% of revenue, B = the next 15%, C = the long tail.'
-
-/** Sort options, phrased as the question the shop owner is asking. */
 const SORTS = [
   { value: 'reorder_priority', label: 'Reorder priority' },
   { value: 'velocity_per_day', label: 'Fastest moving' },
@@ -34,21 +35,30 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
 
   if (loading && !inventory) {
     return (
-      <div className="card p-4 sm:p-6 animate-pulse">
-        <div className="h-4 w-40 rounded mb-6" style={{ background: 'var(--bg-skeleton)' }} />
-        <div className="h-64 rounded" style={{ background: 'var(--bg-skeleton)', opacity: 0.5 }} />
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--gap)]">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="stat-tile" style={{ height: 76 }}>
+              <div className="skeleton h-2 w-20 mb-2.5" />
+              <div className="skeleton h-4 w-16" />
+            </div>
+          ))}
+        </div>
+        <div className="card card-pad">
+          <div className="skeleton h-40 w-full" />
+        </div>
       </div>
     )
   }
 
   if (!inventory?.items?.length) {
     return (
-      <div className="card p-8 text-center">
-        <Icon name="box" className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-        <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+      <div className="card card-pad text-center py-10">
+        <Icon name="box" className="w-7 h-7 mx-auto mb-2.5" style={{ color: 'var(--text-muted)' }} />
+        <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
           No stock movement in this period
         </p>
-        <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+        <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
           {inventory?.note ?? 'Widen the date range or clear a filter to see item-level demand.'}
         </p>
       </div>
@@ -65,170 +75,139 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
 
   // Per-item demand projections come from the forecast endpoint; joining them
   // here turns "what sells fast" into "how many to buy".
-  const expectedUnits = new Map(
-    (forecast?.item_forecasts ?? []).map((entry) => [entry.item, entry.expected_units]),
-  )
+  const expectedUnits = new Map((forecast?.item_forecasts ?? []).map((entry) => [entry.item, entry.expected_units]))
 
   return (
-    <section className="space-y-4 sm:space-y-6" aria-label="Inventory intelligence">
-      {/* ── ABC + capital tiles ──────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+    <section className="space-y-3 sm:space-y-4" aria-label="Inventory intelligence">
+      {/* ── ABC + capital tiles ────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--gap)]">
         {inventory.abc_buckets.map((bucket) => (
           <div key={bucket.label} className="stat-tile">
-            <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-[11px] uppercase tracking-wider font-semibold mb-1 truncate" style={{ color: 'var(--text-muted)' }}>
               {bucket.label}
             </p>
-            <p className="text-xl font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
-              {formatNumber(bucket.item_count)} <span className="text-xs font-normal">items</span>
+            <p className="text-base font-bold font-mono leading-none" style={{ color: 'var(--text-primary)' }}>
+              {formatNumber(bucket.item_count)}
+              <span className="text-[12px] font-normal"> items</span>
             </p>
-            <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
-              {formatCurrency(bucket.revenue)} · {formatPercent(bucket.revenue_share_pct, 0)} of revenue
+            <p className="text-[12px] mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
+              {formatCurrencyCompact(bucket.revenue)} · {formatPercent(bucket.revenue_share_pct, 0)} of revenue
             </p>
           </div>
         ))}
 
         <div className="stat-tile">
-          <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
-            {inventory.stock_aware ? 'Capital locked in stock' : 'Reorder candidates'}
+          <p className="text-[11px] uppercase tracking-wider font-semibold mb-1 truncate" style={{ color: 'var(--text-muted)' }}>
+            {inventory.stock_aware ? 'Capital in stock' : 'Reorder candidates'}
           </p>
-          <p className="text-xl font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+          <p className="text-base font-bold font-mono leading-none" style={{ color: 'var(--text-primary)' }}>
             {inventory.stock_aware
-              ? formatCurrency(inventory.total_capital_locked)
+              ? formatCurrencyCompact(inventory.total_capital_locked)
               : formatNumber(inventory.items.filter((item) => item.reorder_priority >= 50).length)}
           </p>
-          <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-[12px] mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
             {inventory.stock_aware
-              ? `${formatNumber(inventory.reorder_count)} item(s) below ${formatNumber(7)} days of cover`
+              ? `${formatNumber(inventory.reorder_count)} below 7 days cover`
               : `Priority 50+ over ${inventory.window_days} day(s)`}
           </p>
         </div>
       </div>
 
-      {/* ── Ageing buckets ──────────────────────────────────────────── */}
+      {/* ── Ageing buckets ─────────────────────────────────────────────── */}
       {inventory.ageing_buckets.length > 0 && (
-        <div className="card p-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Stock ageing — how long since each item last sold
-          </h3>
+        <Card title="Stock ageing" hint="Days since each item last sold">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {inventory.ageing_buckets.map((bucket) => (
-              <div key={bucket.label}>
-                <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+              <div key={bucket.label} className="min-w-0">
+                <p className="text-[12px] truncate" style={{ color: 'var(--text-muted)' }}>
                   {bucket.label}
                 </p>
-                <p className="text-lg font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+                <p className="text-base font-bold font-mono leading-tight" style={{ color: 'var(--text-primary)' }}>
                   {formatNumber(bucket.item_count)}
                 </p>
-                <p className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>
-                  {formatCurrency(bucket.revenue)}
+                <p className="text-[12px]" style={{ color: 'var(--text-secondary)' }}>
+                  {formatCurrencyCompact(bucket.revenue)}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
-      {/* ── Reorder table ───────────────────────────────────────────── */}
-      <div className="card p-4 sm:p-5">
-        <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
-          <div>
-            <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-              Reorder priority
-            </h3>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }} title={ABC_HELP}>
-              Blend of sales speed, trend and recency over {inventory.window_days} day(s)
-            </p>
-          </div>
-
-          <label className="text-xs">
-            <span className="sr-only">Sort items by</span>
-            <select
-              className="filter-select cursor-pointer"
-              value={sortKey}
-              onChange={(event) => setSortKey(event.target.value)}
-              aria-label="Sort items by"
-            >
-              {SORTS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        {!inventory.stock_aware && inventory.note && (
-          <p
-            className="text-xs mb-3 px-3 py-2 rounded-lg flex items-start gap-2"
-            style={{ background: 'var(--bg-input)', color: 'var(--text-secondary)' }}
-            role="note"
+      {/* ── Reorder table ──────────────────────────────────────────────── */}
+      <Card
+        title="Reorder priority"
+        hint={`Sales speed, trend and recency over ${inventory.window_days} day(s)`}
+        action={
+          <select
+            className="filter-select"
+            value={sortKey}
+            onChange={(event) => setSortKey(event.target.value)}
+            aria-label="Sort items by"
           >
-            <Icon name="info" className="w-4 h-4 shrink-0 mt-0.5" style={{ color: 'var(--accent-blue)' }} />
+            {SORTS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        }
+      >
+        {!inventory.stock_aware && inventory.note && (
+          <p className="note mb-2.5" data-tone="info" role="note">
+            <Icon name="info" className="w-4 h-4 shrink-0 mt-px" style={{ color: 'var(--accent-blue)' }} />
             <span>{inventory.note}</span>
           </p>
         )}
 
-        <div className="overflow-x-auto -mx-1 px-1">
-          <table className="w-full text-sm border-collapse">
-            <caption className="sr-only">
-              Items ranked by {sort.label.toLowerCase()}, with velocity, class, ageing and reorder priority
-            </caption>
+        <div className="scroll-x" style={{ maxHeight: 440, overflowY: 'auto' }}>
+          <table className="table">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-strong)' }}>
-                <Th align="left">Item</Th>
-                <Th title={ABC_HELP}>Class</Th>
-                <Th>Units</Th>
-                <Th title="Units sold per calendar day in this period">Per day</Th>
-                <Th title="Late-period speed vs early-period speed">Trend</Th>
-                <Th>Idle days</Th>
-                {inventory.stock_aware && <Th>Stock</Th>}
-                {inventory.stock_aware && <Th title="Stock ÷ daily sales speed">Cover</Th>}
-                <Th title="Expected units over the forecast horizon">Next period</Th>
-                <Th>Priority</Th>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col" title="A = first 80% of revenue, B = next 15%, C = the tail">Class</th>
+                <th scope="col">Units</th>
+                <th scope="col" title="Units sold per calendar day">Per day</th>
+                <th scope="col" title="Late-period speed vs early-period speed">Trend</th>
+                <th scope="col">Idle</th>
+                {inventory.stock_aware && <th scope="col">Stock</th>}
+                {inventory.stock_aware && <th scope="col" title="Stock ÷ daily sales speed">Cover</th>}
+                <th scope="col" title="Expected units over the forecast horizon">Next</th>
+                <th scope="col">Priority</th>
               </tr>
             </thead>
             <tbody>
               {visible.map((item) => (
-                <tr
-                  key={item.item}
-                  className="transition-colors"
-                  style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                  onMouseEnter={(event) => {
-                    event.currentTarget.style.background = 'var(--bg-card-hover)'
-                  }}
-                  onMouseLeave={(event) => {
-                    event.currentTarget.style.background = 'transparent'
-                  }}
-                >
-                  <th scope="row" className="text-left py-2 pr-3 font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {item.item}
-                    <span className="block text-[11px] font-normal" style={{ color: 'var(--text-muted)' }}>
-                      {item.category} · {formatCurrency(item.revenue)} · {formatPercent(item.margin_pct)} margin
+                <tr key={item.item}>
+                  <th scope="row">
+                    <span className="block truncate" style={{ maxWidth: 200 }} title={item.item}>
+                      {item.item}
+                    </span>
+                    <span className="block text-[11px] font-normal truncate" style={{ color: 'var(--text-muted)', maxWidth: 200 }}>
+                      {item.category} · {formatCurrency(item.revenue)} · {formatPercent(item.margin_pct)}
                     </span>
                   </th>
-                  <Td>
+                  <td>
                     <ClassBadge value={item.abc_class} />
-                  </Td>
-                  <Td mono>{formatNumber(item.units_sold)}</Td>
-                  <Td mono>{item.velocity_per_day.toFixed(2)}</Td>
-                  <Td>
+                  </td>
+                  <td className="font-mono">{formatNumber(item.units_sold)}</td>
+                  <td className="font-mono">{item.velocity_per_day.toFixed(2)}</td>
+                  <td>
                     <TrendBadge factor={item.trend_factor} />
-                  </Td>
-                  <Td mono>{formatNumber(item.days_since_last_sale)}</Td>
-                  {inventory.stock_aware && <Td mono>{formatNumber(item.stock_on_hand)}</Td>}
+                  </td>
+                  <td className="font-mono">{formatNumber(item.days_since_last_sale)}d</td>
+                  {inventory.stock_aware && <td className="font-mono">{formatNumber(item.stock_on_hand)}</td>}
                   {inventory.stock_aware && (
-                    <Td mono>
-                      <span style={{ color: item.reorder_flag ? 'var(--accent-red)' : 'var(--text-secondary)' }}>
-                        {item.days_of_cover == null ? '—' : `${item.days_of_cover.toFixed(1)}d`}
-                      </span>
-                    </Td>
+                    <td className="font-mono" style={{ color: item.reorder_flag ? 'var(--accent-red)' : undefined }}>
+                      {item.days_of_cover == null ? '—' : `${item.days_of_cover.toFixed(1)}d`}
+                    </td>
                   )}
-                  <Td mono>
+                  <td className="font-mono">
                     {expectedUnits.has(item.item) ? formatNumber(expectedUnits.get(item.item), 0) : '—'}
-                  </Td>
-                  <Td>
+                  </td>
+                  <td>
                     <PriorityBar value={item.reorder_priority} />
-                  </Td>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -239,51 +218,23 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
           <button
             type="button"
             onClick={() => setShowAll((previous) => !previous)}
-            className="text-xs font-medium mt-3 cursor-pointer underline underline-offset-2"
+            className="text-[12px] font-medium mt-2 cursor-pointer underline underline-offset-2"
             style={{ color: 'var(--accent-blue)' }}
           >
             {showAll ? 'Show top 12 only' : `Show all ${sorted.length} items`}
           </button>
         )}
-      </div>
+      </Card>
     </section>
   )
 }
 
-function Th({ children, align = 'right', title }) {
-  return (
-    <th
-      scope="col"
-      title={title}
-      className={`py-2 px-2 font-semibold whitespace-nowrap text-${align}`}
-      style={{ color: 'var(--text-secondary)' }}
-    >
-      {children}
-    </th>
-  )
-}
-
-function Td({ children, mono = false }) {
-  return (
-    <td
-      className={`text-right py-2 px-2 whitespace-nowrap ${mono ? 'font-mono' : ''}`}
-      style={{ color: 'var(--text-secondary)' }}
-    >
-      {children}
-    </td>
-  )
-}
-
-/** A/B/C class as a labelled badge — the letter plus colour, never colour alone. */
+/** A/B/C class as a letter badge — the letter carries the meaning, not the colour. */
 function ClassBadge({ value }) {
-  const colours = {
-    A: 'var(--accent-green)',
-    B: 'var(--accent-blue)',
-    C: 'var(--text-muted)',
-  }
+  const colours = { A: 'var(--accent-green)', B: 'var(--accent-blue)', C: 'var(--text-muted)' }
   return (
     <span
-      className="inline-block text-[11px] font-bold rounded px-1.5 py-0.5"
+      className="inline-block text-[11px] font-bold rounded px-1"
       style={{ color: colours[value], border: `1px solid ${colours[value]}` }}
     >
       {value}
@@ -291,15 +242,15 @@ function ClassBadge({ value }) {
   )
 }
 
-/** Trend factor as an arrow + word, so the direction reads without colour. */
+/** Trend factor as an arrow + number, so direction reads without colour. */
 function TrendBadge({ factor }) {
   const rising = factor > 1.15
   const falling = factor < 0.85
   const colour = rising ? 'var(--accent-green)' : falling ? 'var(--accent-red)' : 'var(--text-muted)'
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: colour }}>
-      <Icon name={falling ? 'trendDown' : 'trendUp'} className="w-3.5 h-3.5" />
+    <span className="inline-flex items-center gap-0.5 text-[12px] font-mono" style={{ color: colour }}>
+      <Icon name={falling ? 'trendDown' : 'trendUp'} className="w-3 h-3" strokeWidth={2.2} />
       {factor.toFixed(2)}×
     </span>
   )
@@ -308,18 +259,18 @@ function TrendBadge({ factor }) {
 /** Priority as a bar plus its number — the bar alone would be unreadable. */
 function PriorityBar({ value }) {
   return (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex items-center gap-1.5">
       <span
         aria-hidden="true"
         className="inline-block rounded-full"
-        style={{ width: 44, height: 5, background: 'var(--bg-skeleton)' }}
+        style={{ width: 36, height: 4, background: 'var(--bg-skeleton)' }}
       >
         <span
           className="block h-full rounded-full"
           style={{ width: `${Math.min(value, 100)}%`, background: 'var(--accent-blue)' }}
         />
       </span>
-      <span className="font-mono text-xs" style={{ color: 'var(--text-primary)' }}>
+      <span className="font-mono text-[12px]" style={{ color: 'var(--text-primary)' }}>
         {value.toFixed(0)}
       </span>
     </span>

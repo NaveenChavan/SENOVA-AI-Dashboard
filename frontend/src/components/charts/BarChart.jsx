@@ -20,7 +20,7 @@ export default function BarChart({ data, dataKey = 'revenue', color, valueFormat
   const barColor = color || theme.accentGreen
 
   return (
-    <div className="h-56 sm:h-64 md:h-[280px] w-full">
+    <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
         <ReBar data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={theme.borderStrong} strokeOpacity={0.3} />

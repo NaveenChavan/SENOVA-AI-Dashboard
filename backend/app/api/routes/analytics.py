@@ -223,7 +223,7 @@ def get_ca_report(
 ):
     """CA-style P&L + category ledger for one preset window."""
     current, _previous, window = _slice(file_id, user, AnalysisQuery(time_filter=time_filter))
-    return compute_pnl_report(current, time_filter, window.label)
+    return compute_pnl_report(current, window.label)
 
 
 @analytics_router.get("/{file_id}/ledger", response_model=LedgerPage)
@@ -323,7 +323,7 @@ def post_forecast(file_id: str, query: ForecastQuery, user: str = Depends(get_cu
 def post_ca_report(file_id: str, query: AnalysisQuery, user: str = Depends(get_current_user)):
     """CA-style P&L + category ledger for a filtered slice."""
     current, _previous, window = _slice(file_id, user, query)
-    return compute_pnl_report(current, query.time_filter, window.label)
+    return compute_pnl_report(current, window.label)
 
 
 @analytics_router.post("/{file_id}/ledger", response_model=LedgerPage)
@@ -356,7 +356,7 @@ def _render_pdf(file_id: str, user: str, query: AnalysisQuery) -> Response:
     current, previous, window = _slice(file_id, user, query)
 
     analytics = _build_analytics(current, previous, window, _row_errors(file_id, user))
-    ca_report = compute_pnl_report(current, query.time_filter, window.label)
+    ca_report = compute_pnl_report(current, window.label)
     ledger_page = build_ledger_page(current, page=1, page_size=MAX_LEDGER_ROWS_IN_PDF)
     insights = compute_insights(current, previous, period_label=window.label)
     inventory = compute_inventory_intelligence(current, top_n=15)

@@ -1,27 +1,28 @@
 import Icon from '../common/Icon'
-import { formatCurrency } from '../charts/chartFormat'
+import { formatCurrency, formatCurrencyCompact } from '../charts/chartFormat'
 
 /**
- * Feature 2 — the forecast summary strip that sits above the trend chart.
+ * Feature 2 — the forecast strip above the trend chart.
  *
- * Deliberate choices:
- * - the **range** is given as much prominence as the point estimate, because a
- *   single number implies a certainty the model doesn't have;
- * - the backtested accuracy (100 − MAPE over a 7-day holdout) is shown as a
- *   badge, so the user can judge how much to trust the line;
+ * One row, one card height, four facts: expected revenue, the likely range, the
+ * trend, and how accurate the model was on a holdout. Deliberate choices:
+ *
+ * - the **range** gets equal billing with the point estimate, because a single
+ *   number implies certainty the model doesn't have;
+ * - the backtested accuracy (100 − MAPE over a 7-day holdout) is stated, so the
+ *   user can judge how much to trust the line;
  * - when history is too short the component renders the server's refusal
  *   verbatim instead of an empty chart or a fabricated projection.
  */
 
-/** Horizon options the backend supports (capped at 90 days server-side). */
 export const HORIZONS = [7, 14, 30]
 
 export default function ForecastSummary({ forecast, loading, horizon, onHorizonChange }) {
   if (loading && !forecast) {
     return (
-      <div className="card p-4 animate-pulse" style={{ minHeight: 88 }}>
-        <div className="h-3 w-32 rounded mb-3" style={{ background: 'var(--bg-skeleton)' }} />
-        <div className="h-5 w-48 rounded" style={{ background: 'var(--bg-skeleton)' }} />
+      <div className="card card-pad" style={{ height: 64 }}>
+        <div className="skeleton h-2.5 w-28 mb-2.5" />
+        <div className="skeleton h-3.5 w-40" />
       </div>
     )
   }
@@ -31,17 +32,13 @@ export default function ForecastSummary({ forecast, loading, horizon, onHorizonC
   // Honest refusal path: not enough history to project.
   if (!forecast.available) {
     return (
-      <div className="card p-4 flex items-start gap-3">
-        <Icon name="clock" className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--text-muted)' }} />
-        <div>
-          <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-            Forecast not available yet
-          </p>
-          <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
-            {forecast.reason}
-          </p>
-        </div>
-      </div>
+      <p className="note" role="note">
+        <Icon name="clock" className="w-4 h-4 shrink-0 mt-px" style={{ color: 'var(--text-muted)' }} />
+        <span>
+          <strong style={{ color: 'var(--text-primary)' }}>Forecast not available yet. </strong>
+          {forecast.reason}
+        </span>
+      </p>
     )
   }
 
@@ -53,91 +50,102 @@ export default function ForecastSummary({ forecast, loading, horizon, onHorizonC
         : { icon: 'refresh', colour: 'var(--text-muted)', word: 'Flat' }
 
   return (
-    <div className="card p-4 flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
-      <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-        <div>
-          <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-            Expected revenue · next {forecast.horizon_days} days
-          </p>
-          <p className="text-xl font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
-            {formatCurrency(forecast.expected_revenue)}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            Likely between {formatCurrency(forecast.expected_revenue_lower)} and{' '}
-            {formatCurrency(forecast.expected_revenue_upper)}
-          </p>
+    <div className="card card-pad flex flex-wrap items-center gap-x-6 gap-y-3 justify-between">
+      <Fact label={`Expected · next ${forecast.horizon_days}d`}>
+        <span className="text-base font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+          {formatCurrencyCompact(forecast.expected_revenue)}
+        </span>
+        <span className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+          {formatCurrency(forecast.expected_revenue)}
+        </span>
+      </Fact>
+
+      <Fact label="Likely range (80%)">
+        <span className="text-xs font-semibold font-mono" style={{ color: 'var(--text-secondary)' }}>
+          {formatCurrencyCompact(forecast.expected_revenue_lower)} –{' '}
+          {formatCurrencyCompact(forecast.expected_revenue_upper)}
+        </span>
+      </Fact>
+
+      <Fact label="Trend">
+        <span className="text-xs font-semibold inline-flex items-center gap-1" style={{ color: direction.colour }}>
+          <Icon name={direction.icon} className="w-3.5 h-3.5" />
+          {direction.word}
+        </span>
+        <span className="text-[12px] font-mono" style={{ color: 'var(--text-muted)' }}>
+          {formatCurrency(forecast.trend_per_day)}/day
+        </span>
+      </Fact>
+
+      <Fact label="Model check">
+        {forecast.accuracy_pct != null ? (
+          <span className="text-xs font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
+            {forecast.accuracy_pct}% accurate
+          </span>
+        ) : (
+          <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>
+            Not tested
+          </span>
+        )}
+        {/* What the figure scores matters as much as the figure: on a shop that
+            trades some days, per-day error is dominated by which days were open,
+            so the backtest scores the 7-day total instead. */}
+        <span className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+          {forecast.accuracy_pct == null
+            ? 'needs 3+ weeks'
+            : forecast.accuracy_basis === 'total'
+              ? 'on the last 7-day total'
+              : 'per day, last 7 days'}
+        </span>
+      </Fact>
+
+      {forecast.trading_days > 0 && forecast.trading_days < forecast.history_days && (
+        <Fact label="Trading days">
+          <span className="text-xs font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
+            {forecast.trading_days} / {forecast.history_days}
+          </span>
+          <span className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+            days had sales
+          </span>
+        </Fact>
+      )}
+
+      <div className="flex flex-col items-start lg:items-end gap-1.5">
+        <div className="seg" role="group" aria-label="Forecast horizon">
+          {HORIZONS.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className="seg__btn"
+              onClick={() => onHorizonChange?.(option)}
+              aria-pressed={horizon === option}
+            >
+              {option}d
+            </button>
+          ))}
         </div>
 
-        <div>
-          <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-            Trend
-          </p>
-          <p className="text-sm font-semibold flex items-center gap-1.5" style={{ color: direction.colour }}>
-            <Icon name={direction.icon} className="w-4 h-4" />
-            {direction.word}
-          </p>
-          <p className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>
-            {formatCurrency(forecast.trend_per_day)} / day
-          </p>
-        </div>
-
-        <div>
-          <p className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-            Model check
-          </p>
-          {forecast.accuracy_pct != null ? (
-            <p className="text-sm font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
-              {forecast.accuracy_pct}% accurate
-            </p>
-          ) : (
-            <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>
-              Not tested
-            </p>
-          )}
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            {forecast.accuracy_pct != null
-              ? 'measured on the last 7 days'
-              : 'needs 3+ weeks of history'}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-col items-start lg:items-end gap-2">
-        <div
-          role="group"
-          aria-label="Forecast horizon"
-          className="flex items-center gap-1 p-1 rounded-xl"
-          style={{ background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}
-        >
-          {HORIZONS.map((option) => {
-            const active = horizon === option
-            return (
-              <button
-                key={option}
-                type="button"
-                onClick={() => onHorizonChange?.(option)}
-                aria-pressed={active}
-                className="text-xs font-medium rounded-lg cursor-pointer transition-colors"
-                style={{
-                  padding: '8px 12px',
-                  minHeight: 36,
-                  background: active
-                    ? 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))'
-                    : 'transparent',
-                  color: active ? 'var(--text-on-accent)' : 'var(--text-secondary)',
-                }}
-              >
-                {option}d
-              </button>
-            )
-          })}
-        </div>
-        {!forecast.seasonality_applied && forecast.reason && (
-          <p className="text-[11px] max-w-xs lg:text-right" style={{ color: 'var(--text-muted)' }}>
+        {/* Any caveat the model itself reported — short history, or a shop that
+            only trades some days. Shown, not hidden: it changes how the numbers
+            above should be read. */}
+        {forecast.reason && (
+          <p className="text-[12px] max-w-sm lg:text-right" style={{ color: 'var(--text-muted)' }}>
             {forecast.reason}
           </p>
         )}
       </div>
+    </div>
+  )
+}
+
+/** One labelled fact in the strip — label above, value(s) below, tight. */
+function Fact({ label, children }) {
+  return (
+    <div className="min-w-0">
+      <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>
+        {label}
+      </p>
+      <div className="flex flex-col leading-tight">{children}</div>
     </div>
   )
 }

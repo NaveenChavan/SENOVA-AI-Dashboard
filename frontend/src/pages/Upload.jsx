@@ -1,11 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+
 import useSalesStore from '../store/useSalesStore'
 import FileDropzone from '../components/upload/FileDropzone'
 import ColumnMappingScreen from '../components/upload/ColumnMappingScreen'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
+import Icon from '../components/common/Icon'
 
+/**
+ * Upload page — two steps in one route.
+ *
+ * Step 1 is a compact hero plus the dropzone, sized to fit a phone screen
+ * without scrolling. Step 2 replaces the whole page with the column-mapping
+ * table, because confirming the mapping is the only task at that point.
+ */
 export default function Upload() {
   const navigate = useNavigate()
   const {
@@ -23,110 +32,99 @@ export default function Upload() {
   const handleFile = async (file) => {
     setUploadDone(false)
     try {
-      // Step 1: upload the file — this only returns a column-mapping
-      // preview. We don't know if the data is "good" yet; that's decided
-      // after the user confirms their mapping below.
+      // Step 1 only returns a column-mapping preview; whether the data is
+      // usable is decided after the user confirms the mapping.
       await uploadFile(file)
     } catch {
-      // Error is already stored in Zustand.
+      // Error already stored in the store.
     }
   }
 
   const handleConfirmMapping = async (mapping) => {
     const fileId = useSalesStore.getState().fileId
     try {
-      const res = await confirmMapping(fileId, mapping)
+      const response = await confirmMapping(fileId, mapping)
       setUploadDone(true)
-      if (res.valid_count > 0) {
-        navigate(`/dashboard?fileId=${fileId}`)
-      }
+      if (response.valid_count > 0) navigate(`/dashboard?fileId=${fileId}`)
     } catch {
-      // Error is already stored in Zustand; stays on this page to show it.
+      // Error already stored; stay on this page to show it.
     }
   }
 
-  // While the mapping screen is showing, hide the dropzone + intro copy —
-  // the mapping table is the full-width focus of the page at this step.
+  // ── Step 2: mapping confirmation ─────────────────────────────────────
   if (mappingPreview) {
     return (
-      <section className="max-w-4xl mx-auto pt-4 sm:pt-8">
+      <section className="mx-auto w-full" style={{ maxWidth: 900 }}>
         <Helmet>
           <title>Confirm Columns — SENOVA AI Dashboard</title>
         </Helmet>
+
         <ColumnMappingScreen
           preview={mappingPreview}
           onConfirm={handleConfirmMapping}
           onCancel={cancelMapping}
           submitting={isLoading}
         />
+
         {error && (
-          <div className="mt-4 card-gradient rounded-xl px-4 sm:px-5 py-3 flex items-start gap-3" style={{ border: '1px solid rgba(239,68,68,0.3)' }}>
-            <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--accent-red)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-sm" style={{ color: 'var(--accent-red)' }}>{error}</p>
-          </div>
+          <p className="note mt-3" data-tone="danger" role="alert">
+            <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />
+            <span>{error}</span>
+          </p>
         )}
       </section>
     )
   }
 
+  // ── Step 1: choose a file ────────────────────────────────────────────
   return (
-    <section className="max-w-2xl mx-auto pt-4 sm:pt-8 px-0">
+    <section className="mx-auto w-full" style={{ maxWidth: 560 }}>
       <Helmet>
-        <title>Upload Data — SENOVA AI Dashboard | Retail & MSME Analytics</title>
-        <meta name="description" content="Upload your CSV or Excel sales data to generate AI-powered retail analytics, category breakdowns, dead stock reports, and daily sales trends." />
+        <title>Upload Data — SENOVA AI Dashboard | Retail &amp; MSME Analytics</title>
+        <meta
+          name="description"
+          content="Upload your CSV or Excel sales data to generate AI-powered retail analytics, forecasts, reorder priorities and a CA-style financial report."
+        />
       </Helmet>
 
-      <div className="text-center mb-8 sm:mb-12">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6"
+      <div className="text-center mb-4">
+        <span
+          className="inline-flex items-center gap-1.5 rounded-full text-[12px] font-semibold mb-3 px-2.5"
           style={{
+            height: 24,
             background: 'var(--accent-blue-glow)',
+            color: 'var(--accent-blue)',
             border: '1px solid var(--border-subtle)',
-            color: 'var(--accent-blue)'
-          }}>
-          <span className="w-1.5 h-1.5 rounded-full inline-block animate-pulse" style={{ background: 'var(--accent-blue)' }} />
-          AI-Powered Analytics Engine
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3" style={{color: 'var(--text-primary)'}}>
-          Upload Your Sales Data
-        </h1>
-        <p className="text-sm sm:text-base max-w-lg mx-auto" style={{color: 'var(--text-secondary)'}}>
-          Drop your daily sales CSV or Excel file — any column layout works.
-          You'll confirm your columns next, then SENOVA validates every row and
-          generates an instant retail intelligence dashboard.
+          }}
+        >
+          <Icon name="spark" className="w-3 h-3" />
+          Computed analytics engine
+        </span>
+
+        <h1 className="text-xl mb-1.5">Upload your sales data</h1>
+        <p className="text-xs mx-auto" style={{ color: 'var(--text-secondary)', maxWidth: 420 }}>
+          Drop your daily sales CSV or Excel file — any column layout works. You'll confirm your columns next, then
+          SENOVA validates every row and builds the dashboard.
         </p>
       </div>
 
-      <FileDropzone
-        onFileSelected={handleFile}
-        disabled={isLoading}
-        progressMessage={validationMessage}
-      />
+      <FileDropzone onFileSelected={handleFile} disabled={isLoading} progressMessage={validationMessage} />
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-3 space-y-2">
         {error && (
-          <div className="card-gradient rounded-xl px-4 sm:px-5 py-3 flex items-start gap-3" style={{ border: '1px solid rgba(239,68,68,0.3)' }}>
-            <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--accent-red)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-sm" style={{ color: 'var(--accent-red)' }}>{error}</p>
-          </div>
+          <p className="note" data-tone="danger" role="alert">
+            <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />
+            <span>{error}</span>
+          </p>
         )}
 
-        {uploadDone && !isLoading && uploadErrors.length > 0 && (
-          <RowErrorsBanner errors={uploadErrors} />
-        )}
+        {uploadDone && !isLoading && uploadErrors.length > 0 && <RowErrorsBanner errors={uploadErrors} />}
 
         {uploadDone && !isLoading && uploadErrors.length === 0 && !error && (
-          <div className="card-gradient rounded-xl px-4 sm:px-5 py-3 flex items-center gap-3" style={{ border: '1px solid rgba(5,150,105,0.3)' }}>
-            <svg className="w-5 h-5 shrink-0" style={{ color: 'var(--accent-green)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <p className="text-sm font-medium" style={{ color: 'var(--accent-green)' }}>
-              All rows validated successfully. Redirecting to dashboard...
-            </p>
-          </div>
+          <p className="note" data-tone="success">
+            <Icon name="check" className="w-4 h-4 shrink-0 mt-px" />
+            <span>All rows validated. Opening your dashboard…</span>
+          </p>
         )}
       </div>
     </section>

@@ -1,72 +1,29 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+
 import { signInWithGoogle } from '../services/firebase'
-import useThemeStore from '../store/useThemeStore'
+import Icon from '../components/common/Icon'
+
+/**
+ * Sign-in page — a two-column split on desktop, a single centred card on mobile.
+ *
+ * Both halves are sized so the whole page fits in one viewport at 768px height
+ * upward: the brand column carries three short benefit lines (no scrolling
+ * story), and the card is a fixed 320px column. Colours come from the theme
+ * tokens, so the page follows the same white-first look as the dashboard.
+ */
 
 const FEATURES = [
-  {
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M9 17V7m3 10v-4m3 4v-7m3-4v11M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
-    ),
-    title: 'Instant analytics',
-    desc: 'Revenue, profit & margin the moment you upload a file.',
-  },
-  {
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    ),
-    title: 'Row-level validation',
-    desc: 'Every row checked — bad data flagged, never silently dropped.',
-  },
-  {
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M13 10V3L4 14h7v7l9-11h-7z" />
-    ),
-    title: 'Dead stock detection',
-    desc: 'Spot slow-moving inventory before it ties up your capital.',
-  },
+  { icon: 'spark', title: 'Automated findings', desc: 'Anomalies, movers and margin leaks, written in plain language.' },
+  { icon: 'chart', title: 'Forecast & reorder', desc: 'Revenue projection with accuracy, plus what to buy first.' },
+  { icon: 'check', title: 'Row-level validation', desc: 'Every row checked — bad data flagged, never silently dropped.' },
 ]
 
 export default function Login() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const isDark = useThemeStore((s) => s.theme === 'dark')
-
-  // Left panel uses forced colors (not CSS vars) because its background
-  // switches per theme — dark navy in dark mode, light blue-gray in
-  // light mode — so reading global vars would produce invisible text.
-  const panel = isDark
-    ? {
-        bg: 'linear-gradient(160deg, #071427 0%, #050d1a 60%, #030712 100%)',
-        glow1: 'radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%)',
-        glow2: 'radial-gradient(circle, rgba(16,185,129,0.12), transparent 70%)',
-        brandColor: '#38bdf8',
-        titleColor: '#f0f6ff',
-        textColor: '#c8ddf0',
-        mutedColor: '#7a9cc4',
-        iconBg: 'rgba(56,189,248,0.1)',
-        iconBorder: 'rgba(56,189,248,0.2)',
-        iconColor: '#38bdf8',
-        borderRight: '1px solid rgba(56,189,248,0.12)',
-      }
-    : {
-        bg: 'linear-gradient(160deg, #e0ecf7 0%, #eef3fa 60%, #f4f7fb 100%)',
-        glow1: 'radial-gradient(circle, rgba(3,105,161,0.08), transparent 70%)',
-        glow2: 'radial-gradient(circle, rgba(4,120,87,0.06), transparent 70%)',
-        brandColor: '#0369a1',
-        titleColor: '#0f172a',
-        textColor: '#334155',
-        mutedColor: '#475569',
-        iconBg: 'rgba(3,105,161,0.08)',
-        iconBorder: 'rgba(3,105,161,0.15)',
-        iconColor: '#0369a1',
-        borderRight: '1px solid rgba(15,23,42,0.1)',
-      }
 
   const handleGoogleSignIn = async () => {
     setError('')
@@ -80,130 +37,90 @@ export default function Login() {
         return
       }
       console.error('[Login] Google sign-in failed:', err)
-      const friendly =
+      setError(
         err?.code === 'auth/network-request-failed'
           ? 'Network error. Check your connection and try again.'
           : err?.code === 'auth/popup-blocked'
             ? 'Popup was blocked by your browser. Allow popups for this site and retry.'
-            : 'Sign-in failed. Please try again.'
-      setError(friendly)
+            : 'Sign-in failed. Please try again.',
+      )
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen w-full flex" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-dvh w-full flex" style={{ background: 'var(--bg-primary)' }}>
       <Helmet>
         <title>Sign in — SENOVA Digital Lab</title>
         <meta name="description" content="Sign in to SENOVA to access AI-powered retail sales analytics." />
       </Helmet>
 
-      {/* Left panel — brand story, hidden on small screens */}
+      {/* ── Brand column (desktop only) ─────────────────────────────────── */}
       <div
-        className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden"
-        style={{
-          background: panel.bg,
-          borderRight: panel.borderRight,
-        }}
+        className="hidden lg:flex lg:w-1/2 flex-col justify-between p-10"
+        style={{ background: 'var(--bg-card)', borderRight: '1px solid var(--border-subtle)' }}
       >
-        <div
-          aria-hidden="true"
-          className="absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: panel.glow1 }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-3xl"
-          style={{ background: panel.glow2 }}
-        />
-
-        <div className="relative z-10 flex items-center gap-3">
-          <img
-            src="/assets/logo.jpeg"
-            alt="SENOVA"
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-xl object-cover"
-            style={{ boxShadow: `0 0 20px ${isDark ? 'rgba(56,189,248,0.35)' : 'rgba(3,105,161,0.2)'}` }}
-          />
-          <span className="text-xl font-bold" style={{ color: panel.brandColor }}>
-            SENOVA <span className="font-light" style={{ color: panel.titleColor }}>Digital Lab</span>
+        <div className="flex items-center gap-2">
+          <img src="/assets/logo.jpeg" alt="SENOVA" width={30} height={30} className="w-[30px] h-[30px] rounded-lg object-cover" />
+          <span className="text-sm font-bold" style={{ color: 'var(--accent-blue)' }}>
+            SENOVA <span className="font-light" style={{ color: 'var(--text-primary)' }}>Digital Lab</span>
           </span>
         </div>
 
-        <div className="relative z-10 max-w-md">
-          <h1 className="text-4xl font-bold leading-tight mb-4" style={{ color: panel.titleColor }}>
+        <div className="max-w-md">
+          <h1 className="text-3xl leading-tight mb-3">
             Retail intelligence,
             <br />
-            <span style={{ color: panel.brandColor }}>zero spreadsheets.</span>
+            <span style={{ color: 'var(--accent-blue)' }}>zero spreadsheets.</span>
           </h1>
-          <p className="text-base mb-10" style={{ color: panel.textColor }}>
-            Upload your daily sales file and get an AI-generated dashboard —
-            revenue, margins, top movers, and dead stock — in seconds.
+          <p className="text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
+            Upload your daily sales file and get a computed dashboard — findings, forecast, reorder priorities and a
+            CA-style report — in seconds.
           </p>
 
-          <ul className="space-y-5">
-            {FEATURES.map((f) => (
-              <li key={f.title} className="flex items-start gap-4">
-                <div
-                  className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                  style={{ background: panel.iconBg, border: `1px solid ${panel.iconBorder}` }}
+          <ul className="space-y-3.5">
+            {FEATURES.map((feature) => (
+              <li key={feature.title} className="flex items-start gap-2.5">
+                <span
+                  className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
+                  style={{ background: 'var(--accent-blue-glow)' }}
                 >
-                  <svg className="w-5 h-5" style={{ color: panel.iconColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {f.icon}
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: panel.titleColor }}>{f.title}</p>
-                  <p className="text-sm mt-0.5" style={{ color: panel.mutedColor }}>{f.desc}</p>
-                </div>
+                  <Icon name={feature.icon} className="w-3.5 h-3.5" style={{ color: 'var(--accent-blue)' }} />
+                </span>
+                <span>
+                  <span className="block text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    {feature.title}
+                  </span>
+                  <span className="block text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    {feature.desc}
+                  </span>
+                </span>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative z-10 text-xs" style={{ color: panel.mutedColor }}>
+        <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
           &copy; {new Date().getFullYear()} SENOVA Digital Lab. All rights reserved.
         </p>
       </div>
 
-      {/* Right panel — sign-in card */}
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 py-12 relative">
-        <div
-          aria-hidden="true"
-          className="lg:hidden absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 55%)',
-          }}
-        />
-
-        <div className="relative z-10 w-full max-w-sm">
+      {/* ── Sign-in column ──────────────────────────────────────────────── */}
+      <div className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="w-full" style={{ maxWidth: 320 }}>
           {/* Mobile-only brand mark */}
-          <div className="lg:hidden flex items-center justify-center gap-3 mb-10">
-            <img
-              src="/assets/logo.jpeg"
-              alt="SENOVA"
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-xl object-cover"
-              style={{ boxShadow: '0 0 20px var(--accent-blue-glow)' }}
-            />
-            <span className="text-xl font-bold" style={{ color: 'var(--accent-blue)' }}>
+          <div className="lg:hidden flex items-center justify-center gap-2 mb-6">
+            <img src="/assets/logo.jpeg" alt="SENOVA" width={32} height={32} className="w-8 h-8 rounded-lg object-cover" />
+            <span className="text-sm font-bold" style={{ color: 'var(--accent-blue)' }}>
               SENOVA <span className="font-light" style={{ color: 'var(--text-primary)' }}>Digital Lab</span>
             </span>
           </div>
 
-          <div
-            className="rounded-2xl p-8 sm:p-10"
-            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', backdropFilter: 'blur(12px)' }}
-          >
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                Welcome back
-              </h2>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <div className="card" style={{ padding: 24 }}>
+            <div className="text-center mb-5">
+              <h2 className="mb-1">Welcome back</h2>
+              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
                 Sign in to access your sales dashboard
               </p>
             </div>
@@ -212,18 +129,12 @@ export default function Login() {
               onClick={handleGoogleSignIn}
               disabled={loading}
               aria-busy={loading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-sky-400/50"
-              style={{
-                background: 'var(--bg-input)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
-              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.borderColor = 'var(--border-active)' }}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-subtle)')}
+              className="btn w-full"
+              style={{ height: 40 }}
             >
               {loading ? (
                 <>
-                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
@@ -231,7 +142,7 @@ export default function Login() {
                 </>
               ) : (
                 <>
-                  <svg width="18" height="18" viewBox="0 0 24 24">
+                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -243,28 +154,22 @@ export default function Login() {
             </button>
 
             {error && (
-              <div
-                role="alert"
-                className="mt-4 flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm"
-                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: 'var(--accent-red)' }}
-              >
-                <svg className="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+              <p role="alert" className="note mt-3" data-tone="danger">
+                <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />
                 <span>{error}</span>
-              </div>
+              </p>
             )}
 
-            <div className="mt-8 pt-6 flex items-center justify-center gap-2 text-xs" style={{ borderTop: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 10-8 0v4h8z" />
-              </svg>
+            <p
+              className="mt-5 pt-3.5 flex items-center justify-center gap-1.5 text-[12px]"
+              style={{ borderTop: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}
+            >
+              <Icon name="check" className="w-3 h-3" />
               Secured by Firebase Authentication
-            </div>
+            </p>
           </div>
 
-          <p className="text-center text-xs mt-6" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-center text-[12px] mt-3" style={{ color: 'var(--text-muted)' }}>
             By continuing, you agree to SENOVA's Terms of Service and Privacy Policy.
           </p>
         </div>

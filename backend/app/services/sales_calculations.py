@@ -3,15 +3,23 @@ Core analytics engine — pure Pandas transformations.
 
 Every public function receives a DataFrame that has already passed through
 ``normalize_dataframe()``, so columns are guaranteed to exist and have the
-correct types.  No re-coercion needed.
+correct types. No re-coercion needed.
+
+Single code path, on purpose
+---------------------------
+There used to be a second, preset-based set of helpers here (``compute_summary``
+by ``time_filter``, ``apply_time_filter``, ``run_full_analysis``). It was dead
+once the shared query layer landed, and keeping it around is exactly how the
+register ended up reporting gross revenue while the P&L reported net. Slicing
+now happens in one place (``query_engine.build_slice``) and every function below
+takes the already-sliced frame.
 """
 
-from datetime import timedelta
 import math
+
 import pandas as pd
 
 from app.models.schemas import (
-    AnalyticsResponse,
     CategoryBreakdown,
     CategoryLedgerRow,
     CAReportSummary,
@@ -21,33 +29,11 @@ from app.models.schemas import (
     LedgerPage,
     MetricValue,
     PnLLineItem,
-    RowError,
     SalesSummary,
     TopItem,
 )
-from app.utils.data_validator import normalize_dataframe
 
 # ── Public helpers called by the route handler ─────────────────────────────
-
-def _get_expected_range(df: pd.DataFrame, time_filter: str) -> tuple[pd.Timestamp, pd.Timestamp]:
-    """Return (start, end) calendar range for zero-filling sparklines / trend.
-
-    For ``"all"`` it returns the data's actual min/max; for all other filters
-    it aligns to the calendar window the user expects to see.
-    """
-    max_date = df["Date"].max()
-    if time_filter == "all":
-        return df["Date"].min(), max_date
-    if time_filter == "today":
-        return max_date.normalize(), max_date
-    if time_filter == "30days":
-        return max_date - timedelta(days=30), max_date
-    if time_filter == "week":
-        return max_date - timedelta(days=7), max_date
-    if time_filter == "month":
-        return max_date.replace(day=1).normalize(), max_date
-    return df["Date"].min(), max_date
-
 
 def _zero_fill_daily(
     daily_agg: pd.DataFrame,
@@ -94,95 +80,7 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     out["_row_tax"] = out["Tax"].fillna(0.0) if "Tax" in out.columns else 0.0
     return out
 
-# ── Time-filter helpers ────────────────────────────────────────────────────
-
-def filter_by_time(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
-    """Slice ``df`` to rows whose ``Date`` falls within the requested window."""
-    if time_filter == "all" or df.empty:
-        return df
-
-    max_date = df["Date"].max()
-    if pd.isna(max_date):
-        return df.iloc[0:0]
-
-    if time_filter == "today":
-        day_start = max_date.normalize()
-        day_end = day_start + timedelta(days=1)
-        return df[(df["Date"] >= day_start) & (df["Date"] < day_end)].copy()
-
-    if time_filter == "week":
-        cutoff = max_date - timedelta(days=7)
-        return df[df["Date"] >= cutoff].copy()
-
-    if time_filter == "30days":
-        cutoff = max_date - timedelta(days=30)
-        return df[df["Date"] >= cutoff].copy()
-
-    if time_filter == "month":
-        cutoff = max_date.replace(day=1).normalize()
-        return df[df["Date"] >= cutoff].copy()
-
-    return df
-
-def _split_periods(df: pd.DataFrame, time_filter: str) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Split the full DataFrame into *current* and *previous* periods."""
-    if df.empty:
-        return df, df
-
-    max_date = df["Date"].max()
-
-    # CRITICAL FIX: "All Time" means the ENTIRE dataset. No previous period.
-    if time_filter == "all":
-        return df, df.iloc[0:0]
-
-    if time_filter == "today":
-        day_start = max_date.normalize()
-        day_end = day_start + timedelta(days=1)
-        prev_start = day_start - timedelta(days=1)
-        current = df[(df["Date"] >= day_start) & (df["Date"] < day_end)]
-        previous = df[(df["Date"] >= prev_start) & (df["Date"] < day_start)]
-        return current, previous
-
-    if time_filter == "30days":
-        curr_start = max_date - timedelta(days=30)
-        prev_end = curr_start
-        prev_start = prev_end - timedelta(days=30)
-        current = df[df["Date"] >= curr_start]
-        previous = df[(df["Date"] >= prev_start) & (df["Date"] < prev_end)]
-        return current, previous
-
-    if time_filter == "week":
-        curr_start = max_date - timedelta(days=7)
-        prev_end = curr_start
-        prev_start = prev_end - timedelta(days=7)
-        current = df[df["Date"] >= curr_start]
-        previous = df[(df["Date"] >= prev_start) & (df["Date"] < prev_end)]
-        return current, previous
-
-    if time_filter == "month":
-        curr_start = max_date.replace(day=1).normalize()
-        prev_end = curr_start
-        prev_start = (prev_end - timedelta(days=1)).replace(day=1).normalize()
-        current = df[df["Date"] >= curr_start]
-        previous = df[(df["Date"] >= prev_start) & (df["Date"] < prev_end)]
-        return current, previous
-
-    return df, df.iloc[0:0]
-
 # ── KPI computation ────────────────────────────────────────────────────────
-
-def compute_summary(df: pd.DataFrame, time_filter: str = "all") -> SalesSummary:
-    """
-    Aggregate top-level KPIs for a preset window.
-
-    Takes the **whole** normalised frame (not a pre-filtered one) because the
-    trend arrows need the previous period for comparison — slicing first
-    would throw that period away and make every trend read 0%.
-    """
-    current, previous = _split_periods(df, time_filter)
-    spark_start, spark_end = _get_expected_range(df, time_filter)
-    return compute_summary_between(current, previous, spark_start, spark_end)
-
 
 def compute_summary_between(
     current: pd.DataFrame,
@@ -296,34 +194,6 @@ def compute_top_items(df: pd.DataFrame, top_n: int = 5) -> list[TopItem]:
         for _, row in grouped.iterrows()
     ]
 
-def compute_daily_trend(df: pd.DataFrame, time_filter: str = "all") -> list[DailyTrend]:
-    """Aggregate revenue & profit by date for the line chart.
-
-    Zero-fills missing calendar days so the chart area always reflects the
-    selected window (7 days for week, current month for month, etc.).
-    """
-    if df.empty:
-        return []
-
-    prepped = _prepare(df)
-    daily = (
-        prepped.assign(_day=prepped["Date"].dt.date)
-        .groupby("_day", as_index=False)
-        .agg(revenue=("_row_revenue", "sum"), profit=("_row_profit", "sum"))
-        .sort_values("_day")
-    )
-    start, end = _get_expected_range(df, time_filter)
-    daily_filled = _zero_fill_daily(daily, start, end).rename(columns={"_day": "Date"})
-
-    return [
-        DailyTrend(
-            date=str(row["Date"]),
-            revenue=round(float(row["revenue"]), 2),
-            profit=round(float(row["profit"]), 2),
-        )
-        for _, row in daily_filled.iterrows()
-    ]
-
 def compute_daily_trend_between(df: pd.DataFrame, start, end) -> list[DailyTrend]:
     """
     Daily revenue & profit for an explicit window, zero-filled day by day.
@@ -429,7 +299,7 @@ def compute_revenue_by_category(df: pd.DataFrame) -> list[CategoryBreakdown]:
 
 # ── CA-style (Chartered Accountant) reporting ───────────────────────────────
 
-def compute_pnl_report(df: pd.DataFrame, time_filter: str, period_label: str) -> CAReportSummary:
+def compute_pnl_report(df: pd.DataFrame, period_label: str) -> CAReportSummary:
     """
     Build a Profit & Loss statement + category-wise ledger the way an
     accountant presents them on paper: labelled line items with a running
@@ -537,6 +407,12 @@ def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage
     page of ``LedgerEntry`` rows, sorted chronologically like a real sales
     register/day-book.
 
+    The per-row money uses the **same derived columns as every other view**
+    (``_prepare``), so revenue here is net of any mapped discount and the page
+    totals reconcile with the KPI cards and the P&L. Computing
+    ``quantity × price`` locally would quietly re-introduce the gross figure and
+    make the register disagree with the statement above it.
+
     Never materialises the whole dataset into a JSON response at once —
     files with tens of thousands of rows (verified with 50k-row test
     files) would otherwise produce a multi-megabyte payload on every
@@ -549,7 +425,8 @@ def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage
     if total_rows == 0:
         return LedgerPage(entries=[], page=page, page_size=page_size, total_rows=0, total_pages=1)
 
-    ordered = df.sort_values("Date", kind="stable").reset_index(drop=False)
+    prepped = _prepare(df)
+    ordered = prepped.sort_values("Date", kind="stable").reset_index(drop=False)
     start = (page - 1) * page_size
     chunk = ordered.iloc[start : start + page_size]
 
@@ -562,12 +439,9 @@ def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage
             quantity=int(r["Quantity"]),
             selling_price=round(float(r["Selling Price"]), 2),
             cost_price=round(float(r["Cost Price"]), 2),
-            revenue=round(float(r["Quantity"]) * float(r["Selling Price"]), 2),
-            profit=round(
-                float(r["Quantity"]) * float(r["Selling Price"])
-                - float(r["Quantity"]) * float(r["Cost Price"]),
-                2,
-            ),
+            discount=round(float(r["_row_discount"]), 2),
+            revenue=round(float(r["_row_revenue"]), 2),
+            profit=round(float(r["_row_profit"]), 2),
         )
         for _, r in chunk.iterrows()
     ]
@@ -579,83 +453,3 @@ def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage
         total_rows=total_rows,
         total_pages=total_pages,
     )
-
-
-# ── Orchestrator called by the route handler ───────────────────────────────
-def apply_time_filter(df: pd.DataFrame, time_filter: str) -> pd.DataFrame:
-    """
-    Slice the DataFrame to the selected time window.
-    Reference point = max date in the data (NOT system clock),
-    so older CSV uploads still give correct 'Last 7 Days' / 'This Month' slices.
-    """
-    if time_filter == "all" or df.empty:
-        return df
-
-    dates = pd.to_datetime(df["Date"], errors="coerce")
-    max_date = dates.max()
-    if pd.isna(max_date):
-        return df.iloc[0:0]
-
-    if time_filter == "today":
-        day_start = max_date.normalize()
-        day_end = day_start + timedelta(days=1)
-        return df[(dates >= day_start) & (dates < day_end)].copy()
-    elif time_filter == "week":
-        cutoff = max_date - timedelta(days=7)
-    elif time_filter == "month":
-        cutoff = max_date.replace(day=1).normalize()
-    elif time_filter == "30days":
-        cutoff = max_date - timedelta(days=30)
-    else:
-        return df
-
-    return df[dates >= cutoff].copy()
-
-
-def run_full_analysis(
-    df: pd.DataFrame,
-    time_filter: str = "all",
-    column_mapping: dict[str, str] | None = None,
-) -> AnalyticsResponse:
-    """
-    Legacy single-shot pipeline used by the classic GET endpoints:
-
-    1. Normalise & validate the raw frame using the user-confirmed column
-       mapping (never re-guessing it here — see the confirm-mapping flow).
-    2. Compute the KPI block from the *unfiltered* frame so the trend
-       arrows have a previous period to compare against.
-    3. Compute every other widget from the time-filtered rows only.
-    """
-    df, error_dicts = normalize_dataframe(df, column_mapping=column_mapping)
-    errors = [RowError(**e) for e in error_dicts]
-
-    # Keep the full frame for the period-over-period KPI split, then slice.
-    unfiltered = df
-    df = apply_time_filter(df, time_filter)
-
-    if df.empty:
-        return AnalyticsResponse(
-            summary=SalesSummary(
-                revenue=MetricValue(value=0.0),
-                profit=MetricValue(value=0.0),
-                cost=MetricValue(value=0.0),
-                units_sold=MetricValue(value=0),
-                unique_items_sold=MetricValue(value=0),
-            ),
-            top_items=[],
-            daily_trend=[],
-            dead_stock=[],
-            categories=[],
-            errors=errors,
-        )
-
-    return AnalyticsResponse(
-        summary=compute_summary(unfiltered, time_filter),
-        top_items=compute_top_items(df),
-        daily_trend=compute_daily_trend(df, time_filter),
-        dead_stock=compute_dead_stock(df),
-        categories=compute_revenue_by_category(df),
-        errors=errors,
-    )
-
-

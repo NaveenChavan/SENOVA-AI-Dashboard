@@ -1,0 +1,1051 @@
+Bill No,Bill Date,Item Name,Item Group,HSN Code,Billed Qty,Taxable Value,Discount,GST Amount,Purchase Rate,Customer
+INV-4001,01/02/2026,Toor Dal 1kg,Pulses,HSN1041,10,"₹ 1,490.00",₹ 0.00,₹ 74.50,118.00,Counter Sale
+INV-4002,01/02/2026,Basmati Rice 5kg,Grains,HSN1042,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4003,01/02/2026,Sunflower Oil 1L,Edible Oil,HSN1043,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4004,01/02/2026,Amul Butter 500g,Dairy,HSN1044,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4005,01/02/2026,Tata Salt 1kg,Staples,HSN1045,16,₹ 448.00,₹ 0.00,₹ 80.64,22.00,Counter Sale
+INV-4006,01/02/2026,Detergent 1kg,Household,HSN1046,4,₹ 528.20,₹ 27.80,₹ 95.08,96.00,Counter Sale
+INV-4007,01/02/2026,Biscuits Pack,Snacks,HSN1047,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4008,02/02/2026,Toor Dal 1kg,Pulses,HSN1048,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4009,02/02/2026,Basmati Rice 5kg,Grains,HSN1049,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4010,02/02/2026,Sunflower Oil 1L,Edible Oil,HSN1050,10,"₹ 1,650.00",₹ 0.00,₹ 297.00,128.00,Counter Sale
+INV-4011,02/02/2026,Amul Butter 500g,Dairy,HSN1051,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4012,02/02/2026,Tata Salt 1kg,Staples,HSN1052,14,₹ 392.00,₹ 0.00,₹ 70.56,22.00,Counter Sale
+INV-4013,02/02/2026,Detergent 1kg,Household,HSN1053,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4014,02/02/2026,Biscuits Pack,Snacks,HSN1054,6,₹ 646.80,₹ 13.20,₹ 116.42,75.00,Counter Sale
+INV-4015,03/02/2026,Toor Dal 1kg,Pulses,HSN1055,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4016,03/02/2026,Basmati Rice 5kg,Grains,HSN1056,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4017,03/02/2026,Sunflower Oil 1L,Edible Oil,HSN1057,4,₹ 646.80,₹ 13.20,₹ 116.42,128.00,Counter Sale
+INV-4018,03/02/2026,Amul Butter 500g,Dairy,HSN1058,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4019,03/02/2026,Tata Salt 1kg,Staples,HSN1059,16,₹ 425.60,₹ 22.40,₹ 76.61,22.00,Counter Sale
+INV-4020,03/02/2026,Detergent 1kg,Household,HSN1060,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4021,03/02/2026,Biscuits Pack,Snacks,HSN1061,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-4022,04/02/2026,Toor Dal 1kg,Pulses,HSN1062,7,₹ 990.85,₹ 52.15,₹ 49.54,118.00,Counter Sale
+INV-4023,04/02/2026,Basmati Rice 5kg,Grains,HSN1063,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4024,04/02/2026,Sunflower Oil 1L,Edible Oil,HSN1064,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-4025,04/02/2026,Amul Butter 500g,Dairy,HSN1065,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4026,04/02/2026,Tata Salt 1kg,Staples,HSN1066,8,₹ 219.52,₹ 4.48,₹ 39.51,22.00,Counter Sale
+INV-4027,04/02/2026,Detergent 1kg,Household,HSN1067,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4028,04/02/2026,Biscuits Pack,Snacks,HSN1068,4,₹ 440.00,₹ 0.00,₹ 79.20,75.00,Counter Sale
+INV-4029,05/02/2026,Toor Dal 1kg,Pulses,HSN1069,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4030,05/02/2026,Basmati Rice 5kg,Grains,HSN1070,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4031,05/02/2026,Sunflower Oil 1L,Edible Oil,HSN1071,4,₹ 627.00,₹ 33.00,₹ 112.86,128.00,Counter Sale
+INV-4032,05/02/2026,Amul Butter 500g,Dairy,HSN1072,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4033,05/02/2026,Tata Salt 1kg,Staples,HSN1073,17,₹ 476.00,₹ 0.00,₹ 85.68,22.00,Counter Sale
+INV-4034,05/02/2026,Detergent 1kg,Household,HSN1074,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4035,05/02/2026,Biscuits Pack,Snacks,HSN1075,7,₹ 731.50,₹ 38.50,₹ 131.67,75.00,Counter Sale
+INV-4036,06/02/2026,Toor Dal 1kg,Pulses,HSN1076,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4037,06/02/2026,Basmati Rice 5kg,Grains,HSN1077,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4038,06/02/2026,Sunflower Oil 1L,Edible Oil,HSN1078,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4039,06/02/2026,Amul Butter 500g,Dairy,HSN1079,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4040,06/02/2026,Tata Salt 1kg,Staples,HSN1080,21,₹ 576.24,₹ 11.76,₹ 103.72,22.00,Counter Sale
+INV-4041,06/02/2026,Detergent 1kg,Household,HSN1081,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4042,06/02/2026,Biscuits Pack,Snacks,HSN1082,7,₹ 770.00,₹ 0.00,₹ 138.60,75.00,Counter Sale
+INV-4043,07/02/2026,Toor Dal 1kg,Pulses,HSN1083,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4044,07/02/2026,Basmati Rice 5kg,Grains,HSN1084,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4045,07/02/2026,Sunflower Oil 1L,Edible Oil,HSN1085,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-4046,07/02/2026,Amul Butter 500g,Dairy,HSN1086,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4047,07/02/2026,Tata Salt 1kg,Staples,HSN1087,10,₹ 280.00,₹ 0.00,₹ 50.40,22.00,Counter Sale
+INV-4048,07/02/2026,Detergent 1kg,Household,HSN1088,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4049,07/02/2026,Biscuits Pack,Snacks,HSN1089,16,"₹ 1,760.00",₹ 0.00,₹ 316.80,75.00,Counter Sale
+INV-4050,08/02/2026,Toor Dal 1kg,Pulses,HSN1000,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4051,08/02/2026,Basmati Rice 5kg,Grains,HSN1001,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4052,08/02/2026,Sunflower Oil 1L,Edible Oil,HSN1002,8,"₹ 1,293.60",₹ 26.40,₹ 232.85,128.00,Counter Sale
+INV-4053,08/02/2026,Amul Butter 500g,Dairy,HSN1003,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4054,08/02/2026,Tata Salt 1kg,Staples,HSN1004,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4055,08/02/2026,Detergent 1kg,Household,HSN1005,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4056,08/02/2026,Biscuits Pack,Snacks,HSN1006,6,₹ 646.80,₹ 13.20,₹ 116.42,75.00,Counter Sale
+INV-4057,09/02/2026,Toor Dal 1kg,Pulses,HSN1007,15,"₹ 2,190.30",₹ 44.70,₹ 109.52,118.00,Counter Sale
+INV-4058,09/02/2026,Basmati Rice 5kg,Grains,HSN1008,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-4059,09/02/2026,Sunflower Oil 1L,Edible Oil,HSN1009,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4060,09/02/2026,Amul Butter 500g,Dairy,HSN1010,3,₹ 812.25,₹ 42.75,₹ 40.61,245.00,Counter Sale
+INV-4061,09/02/2026,Tata Salt 1kg,Staples,HSN1011,8,₹ 212.80,₹ 11.20,₹ 38.30,22.00,Counter Sale
+INV-4062,09/02/2026,Detergent 1kg,Household,HSN1012,2,₹ 278.00,₹ 0.00,₹ 50.04,96.00,Counter Sale
+INV-4063,09/02/2026,Biscuits Pack,Snacks,HSN1013,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4064,10/02/2026,Toor Dal 1kg,Pulses,HSN1014,17,"₹ 2,533.00",₹ 0.00,₹ 126.65,118.00,Counter Sale
+INV-4065,10/02/2026,Basmati Rice 5kg,Grains,HSN1015,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4066,10/02/2026,Sunflower Oil 1L,Edible Oil,HSN1016,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4067,10/02/2026,Amul Butter 500g,Dairy,HSN1017,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4068,10/02/2026,Tata Salt 1kg,Staples,HSN1018,15,₹ 399.00,₹ 21.00,₹ 71.82,22.00,Counter Sale
+INV-4069,10/02/2026,Detergent 1kg,Household,HSN1019,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4070,10/02/2026,Biscuits Pack,Snacks,HSN1020,15,"₹ 1,650.00",₹ 0.00,₹ 297.00,75.00,Counter Sale
+INV-4071,11/02/2026,Toor Dal 1kg,Pulses,HSN1021,8,"₹ 1,192.00",₹ 0.00,₹ 59.60,118.00,Counter Sale
+INV-4072,11/02/2026,Basmati Rice 5kg,Grains,HSN1022,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4073,11/02/2026,Sunflower Oil 1L,Edible Oil,HSN1023,13,"₹ 2,102.10",₹ 42.90,₹ 378.38,128.00,Counter Sale
+INV-4074,11/02/2026,Amul Butter 500g,Dairy,HSN1024,8,"₹ 2,234.40",₹ 45.60,₹ 111.72,245.00,Counter Sale
+INV-4075,11/02/2026,Tata Salt 1kg,Staples,HSN1025,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4076,11/02/2026,Detergent 1kg,Household,HSN1026,4,₹ 544.88,₹ 11.12,₹ 98.08,96.00,Counter Sale
+INV-4077,11/02/2026,Biscuits Pack,Snacks,HSN1027,13,"₹ 1,358.50",₹ 71.50,₹ 244.53,75.00,Counter Sale
+INV-4078,12/02/2026,Toor Dal 1kg,Pulses,HSN1028,17,"₹ 2,406.35",₹ 126.65,₹ 120.32,118.00,Counter Sale
+INV-4079,12/02/2026,Basmati Rice 5kg,Grains,HSN1029,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4080,12/02/2026,Sunflower Oil 1L,Edible Oil,HSN1030,8,"₹ 1,254.00",₹ 66.00,₹ 225.72,128.00,Counter Sale
+INV-4081,12/02/2026,Amul Butter 500g,Dairy,HSN1031,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4082,12/02/2026,Tata Salt 1kg,Staples,HSN1032,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4083,12/02/2026,Detergent 1kg,Household,HSN1033,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4084,12/02/2026,Biscuits Pack,Snacks,HSN1034,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4085,13/02/2026,Toor Dal 1kg,Pulses,HSN1035,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4086,13/02/2026,Basmati Rice 5kg,Grains,HSN1036,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4087,13/02/2026,Sunflower Oil 1L,Edible Oil,HSN1037,7,"₹ 1,097.25",₹ 57.75,₹ 197.50,128.00,Counter Sale
+INV-4088,13/02/2026,Amul Butter 500g,Dairy,HSN1038,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4089,13/02/2026,Tata Salt 1kg,Staples,HSN1039,12,₹ 329.28,₹ 6.72,₹ 59.27,22.00,Counter Sale
+INV-4090,13/02/2026,Detergent 1kg,Household,HSN1040,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4091,13/02/2026,Biscuits Pack,Snacks,HSN1041,10,"₹ 1,078.00",₹ 22.00,₹ 194.04,75.00,Counter Sale
+INV-4092,14/02/2026,Toor Dal 1kg,Pulses,HSN1042,8,"₹ 1,132.40",₹ 59.60,₹ 56.62,118.00,Counter Sale
+INV-4093,14/02/2026,Basmati Rice 5kg,Grains,HSN1043,6,"₹ 3,414.30",₹ 179.70,₹ 170.72,460.00,Counter Sale
+INV-4094,14/02/2026,Sunflower Oil 1L,Edible Oil,HSN1044,12,"₹ 1,881.00",₹ 99.00,₹ 338.58,128.00,Counter Sale
+INV-4095,14/02/2026,Amul Butter 500g,Dairy,HSN1045,8,"₹ 2,234.40",₹ 45.60,₹ 111.72,245.00,Counter Sale
+INV-4096,14/02/2026,Tata Salt 1kg,Staples,HSN1046,24,₹ 672.00,₹ 0.00,₹ 120.96,22.00,Counter Sale
+INV-4097,14/02/2026,Detergent 1kg,Household,HSN1047,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4098,14/02/2026,Biscuits Pack,Snacks,HSN1048,8,₹ 836.00,₹ 44.00,₹ 150.48,75.00,Counter Sale
+INV-4099,15/02/2026,Toor Dal 1kg,Pulses,HSN1049,9,"₹ 1,341.00",₹ 0.00,₹ 67.05,118.00,Counter Sale
+INV-4100,15/02/2026,Basmati Rice 5kg,Grains,HSN1050,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4101,15/02/2026,Sunflower Oil 1L,Edible Oil,HSN1051,4,₹ 627.00,₹ 33.00,₹ 112.86,128.00,Counter Sale
+INV-4102,15/02/2026,Amul Butter 500g,Dairy,HSN1052,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4103,15/02/2026,Tata Salt 1kg,Staples,HSN1053,18,₹ 493.92,₹ 10.08,₹ 88.91,22.00,Counter Sale
+INV-4104,15/02/2026,Detergent 1kg,Household,HSN1054,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4105,15/02/2026,Biscuits Pack,Snacks,HSN1055,14,"₹ 1,540.00",₹ 0.00,₹ 277.20,75.00,Counter Sale
+INV-4106,16/02/2026,Toor Dal 1kg,Pulses,HSN1056,8,"₹ 1,132.40",₹ 59.60,₹ 56.62,118.00,Counter Sale
+INV-4107,16/02/2026,Basmati Rice 5kg,Grains,HSN1057,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4108,16/02/2026,Sunflower Oil 1L,Edible Oil,HSN1058,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4109,16/02/2026,Amul Butter 500g,Dairy,HSN1059,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4110,16/02/2026,Tata Salt 1kg,Staples,HSN1060,22,₹ 585.20,₹ 30.80,₹ 105.34,22.00,Counter Sale
+INV-4111,16/02/2026,Detergent 1kg,Household,HSN1061,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4112,16/02/2026,Biscuits Pack,Snacks,HSN1062,15,"₹ 1,567.50",₹ 82.50,₹ 282.15,75.00,Counter Sale
+INV-4113,17/02/2026,Toor Dal 1kg,Pulses,HSN1063,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4114,17/02/2026,Basmati Rice 5kg,Grains,HSN1064,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4115,17/02/2026,Sunflower Oil 1L,Edible Oil,HSN1065,6,₹ 970.20,₹ 19.80,₹ 174.64,128.00,Counter Sale
+INV-4116,17/02/2026,Amul Butter 500g,Dairy,HSN1066,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4117,17/02/2026,Tata Salt 1kg,Staples,HSN1067,9,₹ 252.00,₹ 0.00,₹ 45.36,22.00,Counter Sale
+INV-4118,17/02/2026,Detergent 1kg,Household,HSN1068,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4119,17/02/2026,Biscuits Pack,Snacks,HSN1069,6,₹ 627.00,₹ 33.00,₹ 112.86,75.00,Counter Sale
+INV-4120,18/02/2026,Toor Dal 1kg,Pulses,HSN1070,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4121,18/02/2026,Basmati Rice 5kg,Grains,HSN1071,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4122,18/02/2026,Sunflower Oil 1L,Edible Oil,HSN1072,12,"₹ 1,940.40",₹ 39.60,₹ 349.27,128.00,Counter Sale
+INV-4123,18/02/2026,Amul Butter 500g,Dairy,HSN1073,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4124,18/02/2026,Tata Salt 1kg,Staples,HSN1074,22,₹ 616.00,₹ 0.00,₹ 110.88,22.00,Counter Sale
+INV-4125,18/02/2026,Detergent 1kg,Household,HSN1075,8,"₹ 1,056.40",₹ 55.60,₹ 190.15,96.00,Counter Sale
+INV-4126,18/02/2026,Biscuits Pack,Snacks,HSN1076,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-4127,19/02/2026,Toor Dal 1kg,Pulses,HSN1077,17,"₹ 2,406.35",₹ 126.65,₹ 120.32,118.00,Counter Sale
+INV-4128,19/02/2026,Basmati Rice 5kg,Grains,HSN1078,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4129,19/02/2026,Sunflower Oil 1L,Edible Oil,HSN1079,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4130,19/02/2026,Amul Butter 500g,Dairy,HSN1080,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4131,19/02/2026,Tata Salt 1kg,Staples,HSN1081,16,₹ 448.00,₹ 0.00,₹ 80.64,22.00,Counter Sale
+INV-4132,19/02/2026,Detergent 1kg,Household,HSN1082,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4133,19/02/2026,Biscuits Pack,Snacks,HSN1083,9,₹ 990.00,₹ 0.00,₹ 178.20,75.00,Counter Sale
+INV-4134,20/02/2026,Toor Dal 1kg,Pulses,HSN1084,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4135,20/02/2026,Basmati Rice 5kg,Grains,HSN1085,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4136,20/02/2026,Sunflower Oil 1L,Edible Oil,HSN1086,14,"₹ 2,194.50",₹ 115.50,₹ 395.01,128.00,Counter Sale
+INV-4137,20/02/2026,Amul Butter 500g,Dairy,HSN1087,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4138,20/02/2026,Tata Salt 1kg,Staples,HSN1088,10,₹ 280.00,₹ 0.00,₹ 50.40,22.00,Counter Sale
+INV-4139,20/02/2026,Detergent 1kg,Household,HSN1089,7,₹ 924.35,₹ 48.65,₹ 166.38,96.00,Counter Sale
+INV-4140,20/02/2026,Biscuits Pack,Snacks,HSN1000,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4141,21/02/2026,Toor Dal 1kg,Pulses,HSN1001,19,"₹ 2,831.00",₹ 0.00,₹ 141.55,118.00,Counter Sale
+INV-4142,21/02/2026,Basmati Rice 5kg,Grains,HSN1002,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4143,21/02/2026,Sunflower Oil 1L,Edible Oil,HSN1003,9,"₹ 1,410.75",₹ 74.25,₹ 253.94,128.00,Counter Sale
+INV-4144,21/02/2026,Amul Butter 500g,Dairy,HSN1004,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4145,21/02/2026,Tata Salt 1kg,Staples,HSN1005,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4146,21/02/2026,Detergent 1kg,Household,HSN1006,7,₹ 953.54,₹ 19.46,₹ 171.64,96.00,Counter Sale
+INV-4147,21/02/2026,Biscuits Pack,Snacks,HSN1007,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-4148,22/02/2026,Toor Dal 1kg,Pulses,HSN1008,6,₹ 849.30,₹ 44.70,₹ 42.46,118.00,Counter Sale
+INV-4149,22/02/2026,Basmati Rice 5kg,Grains,HSN1009,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4150,22/02/2026,Sunflower Oil 1L,Edible Oil,HSN1010,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4151,22/02/2026,Amul Butter 500g,Dairy,HSN1011,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4152,22/02/2026,Tata Salt 1kg,Staples,HSN1012,17,₹ 476.00,₹ 0.00,₹ 85.68,22.00,Counter Sale
+INV-4153,22/02/2026,Detergent 1kg,Household,HSN1013,7,₹ 924.35,₹ 48.65,₹ 166.38,96.00,Counter Sale
+INV-4154,22/02/2026,Biscuits Pack,Snacks,HSN1014,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4155,23/02/2026,Toor Dal 1kg,Pulses,HSN1015,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4156,23/02/2026,Basmati Rice 5kg,Grains,HSN1016,5,"₹ 2,845.25",₹ 149.75,₹ 142.26,460.00,Counter Sale
+INV-4157,23/02/2026,Sunflower Oil 1L,Edible Oil,HSN1017,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4158,23/02/2026,Amul Butter 500g,Dairy,HSN1018,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4159,23/02/2026,Tata Salt 1kg,Staples,HSN1019,17,₹ 466.48,₹ 9.52,₹ 83.97,22.00,Counter Sale
+INV-4160,23/02/2026,Detergent 1kg,Household,HSN1020,3,₹ 408.66,₹ 8.34,₹ 73.56,96.00,Counter Sale
+INV-4161,23/02/2026,Biscuits Pack,Snacks,HSN1021,16,"₹ 1,724.80",₹ 35.20,₹ 310.46,75.00,Counter Sale
+INV-4162,24/02/2026,Toor Dal 1kg,Pulses,HSN1022,7,"₹ 1,022.14",₹ 20.86,₹ 51.11,118.00,Counter Sale
+INV-4163,24/02/2026,Basmati Rice 5kg,Grains,HSN1023,6,"₹ 3,414.30",₹ 179.70,₹ 170.72,460.00,Counter Sale
+INV-4164,24/02/2026,Sunflower Oil 1L,Edible Oil,HSN1024,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-4165,24/02/2026,Amul Butter 500g,Dairy,HSN1025,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4166,24/02/2026,Tata Salt 1kg,Staples,HSN1026,15,₹ 411.60,₹ 8.40,₹ 74.09,22.00,Counter Sale
+INV-4167,24/02/2026,Detergent 1kg,Household,HSN1027,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4168,24/02/2026,Biscuits Pack,Snacks,HSN1028,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4169,25/02/2026,Toor Dal 1kg,Pulses,HSN1029,18,"₹ 2,682.00",₹ 0.00,₹ 134.10,118.00,Counter Sale
+INV-4170,25/02/2026,Basmati Rice 5kg,Grains,HSN1030,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4171,25/02/2026,Sunflower Oil 1L,Edible Oil,HSN1031,5,₹ 808.50,₹ 16.50,₹ 145.53,128.00,Counter Sale
+INV-4172,25/02/2026,Amul Butter 500g,Dairy,HSN1032,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4173,25/02/2026,Tata Salt 1kg,Staples,HSN1033,19,₹ 521.36,₹ 10.64,₹ 93.84,22.00,Counter Sale
+INV-4174,25/02/2026,Detergent 1kg,Household,HSN1034,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4175,25/02/2026,Biscuits Pack,Snacks,HSN1035,10,"₹ 1,078.00",₹ 22.00,₹ 194.04,75.00,Counter Sale
+INV-4176,26/02/2026,Toor Dal 1kg,Pulses,HSN1036,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4177,26/02/2026,Basmati Rice 5kg,Grains,HSN1037,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4178,26/02/2026,Sunflower Oil 1L,Edible Oil,HSN1038,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4179,26/02/2026,Amul Butter 500g,Dairy,HSN1039,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4180,26/02/2026,Tata Salt 1kg,Staples,HSN1040,20,₹ 560.00,₹ 0.00,₹ 100.80,22.00,Counter Sale
+INV-4181,26/02/2026,Detergent 1kg,Household,HSN1041,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4182,26/02/2026,Biscuits Pack,Snacks,HSN1042,15,"₹ 1,617.00",₹ 33.00,₹ 291.06,75.00,Counter Sale
+INV-4183,27/02/2026,Toor Dal 1kg,Pulses,HSN1043,6,₹ 894.00,₹ 0.00,₹ 44.70,118.00,Counter Sale
+INV-4184,27/02/2026,Basmati Rice 5kg,Grains,HSN1044,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4185,27/02/2026,Sunflower Oil 1L,Edible Oil,HSN1045,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4186,27/02/2026,Amul Butter 500g,Dairy,HSN1046,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4187,27/02/2026,Tata Salt 1kg,Staples,HSN1047,13,₹ 345.80,₹ 18.20,₹ 62.24,22.00,Counter Sale
+INV-4188,27/02/2026,Detergent 1kg,Household,HSN1048,5,₹ 681.10,₹ 13.90,₹ 122.60,96.00,Counter Sale
+INV-4189,27/02/2026,Biscuits Pack,Snacks,HSN1049,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4190,28/02/2026,Toor Dal 1kg,Pulses,HSN1050,17,"₹ 2,482.34",₹ 50.66,₹ 124.12,118.00,Counter Sale
+INV-4191,28/02/2026,Basmati Rice 5kg,Grains,HSN1051,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4192,28/02/2026,Sunflower Oil 1L,Edible Oil,HSN1052,13,"₹ 2,037.75",₹ 107.25,₹ 366.79,128.00,Counter Sale
+INV-4193,28/02/2026,Amul Butter 500g,Dairy,HSN1053,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4194,28/02/2026,Tata Salt 1kg,Staples,HSN1054,16,₹ 448.00,₹ 0.00,₹ 80.64,22.00,Counter Sale
+INV-4195,28/02/2026,Detergent 1kg,Household,HSN1055,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4196,28/02/2026,Biscuits Pack,Snacks,HSN1056,16,"₹ 1,760.00",₹ 0.00,₹ 316.80,75.00,Counter Sale
+INV-4197,01/03/2026,Toor Dal 1kg,Pulses,HSN1057,14,"₹ 1,981.70",₹ 104.30,₹ 99.08,118.00,Counter Sale
+INV-4198,01/03/2026,Basmati Rice 5kg,Grains,HSN1058,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4199,01/03/2026,Sunflower Oil 1L,Edible Oil,HSN1059,13,"₹ 2,037.75",₹ 107.25,₹ 366.79,128.00,Counter Sale
+INV-4200,01/03/2026,Amul Butter 500g,Dairy,HSN1060,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4201,01/03/2026,Tata Salt 1kg,Staples,HSN1061,10,₹ 274.40,₹ 5.60,₹ 49.39,22.00,Counter Sale
+INV-4202,01/03/2026,Detergent 1kg,Household,HSN1062,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4203,01/03/2026,Biscuits Pack,Snacks,HSN1063,9,₹ 940.50,₹ 49.50,₹ 169.29,75.00,Counter Sale
+INV-4204,02/03/2026,Toor Dal 1kg,Pulses,HSN1064,7,"₹ 1,043.00",₹ 0.00,₹ 52.15,118.00,Counter Sale
+INV-4205,02/03/2026,Basmati Rice 5kg,Grains,HSN1065,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4206,02/03/2026,Sunflower Oil 1L,Edible Oil,HSN1066,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4207,02/03/2026,Amul Butter 500g,Dairy,HSN1067,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4208,02/03/2026,Tata Salt 1kg,Staples,HSN1068,20,₹ 548.80,₹ 11.20,₹ 98.78,22.00,Counter Sale
+INV-4209,02/03/2026,Detergent 1kg,Household,HSN1069,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4210,02/03/2026,Biscuits Pack,Snacks,HSN1070,6,₹ 627.00,₹ 33.00,₹ 112.86,75.00,Counter Sale
+INV-4211,03/03/2026,Toor Dal 1kg,Pulses,HSN1071,6,₹ 849.30,₹ 44.70,₹ 42.46,118.00,Counter Sale
+INV-4212,03/03/2026,Basmati Rice 5kg,Grains,HSN1072,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4213,03/03/2026,Sunflower Oil 1L,Edible Oil,HSN1073,14,"₹ 2,194.50",₹ 115.50,₹ 395.01,128.00,Counter Sale
+INV-4214,03/03/2026,Amul Butter 500g,Dairy,HSN1074,5,"₹ 1,353.75",₹ 71.25,₹ 67.69,245.00,Counter Sale
+INV-4215,03/03/2026,Tata Salt 1kg,Staples,HSN1075,14,₹ 384.16,₹ 7.84,₹ 69.15,22.00,Counter Sale
+INV-4216,03/03/2026,Detergent 1kg,Household,HSN1076,4,₹ 528.20,₹ 27.80,₹ 95.08,96.00,Counter Sale
+INV-4217,03/03/2026,Biscuits Pack,Snacks,HSN1077,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4218,04/03/2026,Toor Dal 1kg,Pulses,HSN1078,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4219,04/03/2026,Basmati Rice 5kg,Grains,HSN1079,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4220,04/03/2026,Sunflower Oil 1L,Edible Oil,HSN1080,8,"₹ 1,320.00",₹ 0.00,₹ 237.60,128.00,Counter Sale
+INV-4221,04/03/2026,Amul Butter 500g,Dairy,HSN1081,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4222,04/03/2026,Tata Salt 1kg,Staples,HSN1082,19,₹ 521.36,₹ 10.64,₹ 93.84,22.00,Counter Sale
+INV-4223,04/03/2026,Detergent 1kg,Household,HSN1083,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4224,04/03/2026,Biscuits Pack,Snacks,HSN1084,12,"₹ 1,293.60",₹ 26.40,₹ 232.85,75.00,Counter Sale
+INV-4225,05/03/2026,Toor Dal 1kg,Pulses,HSN1085,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4226,05/03/2026,Basmati Rice 5kg,Grains,HSN1086,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4227,05/03/2026,Sunflower Oil 1L,Edible Oil,HSN1087,9,"₹ 1,410.75",₹ 74.25,₹ 253.94,128.00,Counter Sale
+INV-4228,05/03/2026,Amul Butter 500g,Dairy,HSN1088,3,₹ 837.90,₹ 17.10,₹ 41.90,245.00,Counter Sale
+INV-4229,05/03/2026,Tata Salt 1kg,Staples,HSN1089,7,₹ 196.00,₹ 0.00,₹ 35.28,22.00,Counter Sale
+INV-4230,05/03/2026,Detergent 1kg,Household,HSN1000,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4231,05/03/2026,Biscuits Pack,Snacks,HSN1001,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4232,06/03/2026,Toor Dal 1kg,Pulses,HSN1002,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4233,06/03/2026,Basmati Rice 5kg,Grains,HSN1003,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4234,06/03/2026,Sunflower Oil 1L,Edible Oil,HSN1004,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4235,06/03/2026,Amul Butter 500g,Dairy,HSN1005,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4236,06/03/2026,Tata Salt 1kg,Staples,HSN1006,13,₹ 345.80,₹ 18.20,₹ 62.24,22.00,Counter Sale
+INV-4237,06/03/2026,Detergent 1kg,Household,HSN1007,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4238,06/03/2026,Biscuits Pack,Snacks,HSN1008,17,"₹ 1,776.50",₹ 93.50,₹ 319.77,75.00,Counter Sale
+INV-4239,07/03/2026,Toor Dal 1kg,Pulses,HSN1009,9,"₹ 1,341.00",₹ 0.00,₹ 67.05,118.00,Counter Sale
+INV-4240,07/03/2026,Basmati Rice 5kg,Grains,HSN1010,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4241,07/03/2026,Sunflower Oil 1L,Edible Oil,HSN1011,8,"₹ 1,293.60",₹ 26.40,₹ 232.85,128.00,Counter Sale
+INV-4242,07/03/2026,Amul Butter 500g,Dairy,HSN1012,5,"₹ 1,353.75",₹ 71.25,₹ 67.69,245.00,Counter Sale
+INV-4243,07/03/2026,Tata Salt 1kg,Staples,HSN1013,14,₹ 372.40,₹ 19.60,₹ 67.03,22.00,Counter Sale
+INV-4244,07/03/2026,Detergent 1kg,Household,HSN1014,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4245,07/03/2026,Biscuits Pack,Snacks,HSN1015,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4246,08/03/2026,Toor Dal 1kg,Pulses,HSN1016,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4247,08/03/2026,Basmati Rice 5kg,Grains,HSN1017,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4248,08/03/2026,Sunflower Oil 1L,Edible Oil,HSN1018,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4249,08/03/2026,Amul Butter 500g,Dairy,HSN1019,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4250,08/03/2026,Tata Salt 1kg,Staples,HSN1020,22,₹ 616.00,₹ 0.00,₹ 110.88,22.00,Counter Sale
+INV-4251,08/03/2026,Detergent 1kg,Household,HSN1021,9,"₹ 1,225.98",₹ 25.02,₹ 220.68,96.00,Counter Sale
+INV-4252,08/03/2026,Biscuits Pack,Snacks,HSN1022,8,₹ 862.40,₹ 17.60,₹ 155.23,75.00,Counter Sale
+INV-4253,09/03/2026,Toor Dal 1kg,Pulses,HSN1023,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4254,09/03/2026,Basmati Rice 5kg,Grains,HSN1024,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4255,09/03/2026,Sunflower Oil 1L,Edible Oil,HSN1025,4,₹ 627.00,₹ 33.00,₹ 112.86,128.00,Counter Sale
+INV-4256,09/03/2026,Amul Butter 500g,Dairy,HSN1026,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4257,09/03/2026,Tata Salt 1kg,Staples,HSN1027,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4258,09/03/2026,Detergent 1kg,Household,HSN1028,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4259,09/03/2026,Biscuits Pack,Snacks,HSN1029,5,₹ 550.00,₹ 0.00,₹ 99.00,75.00,Counter Sale
+INV-4260,10/03/2026,Toor Dal 1kg,Pulses,HSN1030,17,"₹ 2,533.00",₹ 0.00,₹ 126.65,118.00,Counter Sale
+INV-4261,10/03/2026,Basmati Rice 5kg,Grains,HSN1031,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4262,10/03/2026,Sunflower Oil 1L,Edible Oil,HSN1032,12,"₹ 1,940.40",₹ 39.60,₹ 349.27,128.00,Counter Sale
+INV-4263,10/03/2026,Amul Butter 500g,Dairy,HSN1033,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4264,10/03/2026,Tata Salt 1kg,Staples,HSN1034,9,₹ 246.96,₹ 5.04,₹ 44.45,22.00,Counter Sale
+INV-4265,10/03/2026,Detergent 1kg,Household,HSN1035,5,₹ 681.10,₹ 13.90,₹ 122.60,96.00,Counter Sale
+INV-4266,10/03/2026,Biscuits Pack,Snacks,HSN1036,11,"₹ 1,185.80",₹ 24.20,₹ 213.44,75.00,Counter Sale
+INV-4267,11/03/2026,Toor Dal 1kg,Pulses,HSN1037,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4268,11/03/2026,Basmati Rice 5kg,Grains,HSN1038,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4269,11/03/2026,Sunflower Oil 1L,Edible Oil,HSN1039,10,"₹ 1,617.00",₹ 33.00,₹ 291.06,128.00,Counter Sale
+INV-4270,11/03/2026,Amul Butter 500g,Dairy,HSN1040,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4271,11/03/2026,Tata Salt 1kg,Staples,HSN1041,14,₹ 384.16,₹ 7.84,₹ 69.15,22.00,Counter Sale
+INV-4272,11/03/2026,Detergent 1kg,Household,HSN1042,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4273,11/03/2026,Biscuits Pack,Snacks,HSN1043,8,₹ 836.00,₹ 44.00,₹ 150.48,75.00,Counter Sale
+INV-4274,12/03/2026,Toor Dal 1kg,Pulses,HSN1044,17,"₹ 2,482.34",₹ 50.66,₹ 124.12,118.00,Counter Sale
+INV-4275,12/03/2026,Basmati Rice 5kg,Grains,HSN1045,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4276,12/03/2026,Sunflower Oil 1L,Edible Oil,HSN1046,4,₹ 660.00,₹ 0.00,₹ 118.80,128.00,Counter Sale
+INV-4277,12/03/2026,Amul Butter 500g,Dairy,HSN1047,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4278,12/03/2026,Tata Salt 1kg,Staples,HSN1048,23,₹ 611.80,₹ 32.20,₹ 110.12,22.00,Counter Sale
+INV-4279,12/03/2026,Detergent 1kg,Household,HSN1049,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4280,12/03/2026,Biscuits Pack,Snacks,HSN1050,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4281,13/03/2026,Toor Dal 1kg,Pulses,HSN1051,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4282,13/03/2026,Basmati Rice 5kg,Grains,HSN1052,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4283,13/03/2026,Sunflower Oil 1L,Edible Oil,HSN1053,5,₹ 808.50,₹ 16.50,₹ 145.53,128.00,Counter Sale
+INV-4284,13/03/2026,Amul Butter 500g,Dairy,HSN1054,7,"₹ 1,895.25",₹ 99.75,₹ 94.76,245.00,Counter Sale
+INV-4285,13/03/2026,Tata Salt 1kg,Staples,HSN1055,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4286,13/03/2026,Detergent 1kg,Household,HSN1056,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4287,13/03/2026,Biscuits Pack,Snacks,HSN1057,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4288,14/03/2026,Toor Dal 1kg,Pulses,HSN1058,6,₹ 876.12,₹ 17.88,₹ 43.81,118.00,Counter Sale
+INV-4289,14/03/2026,Basmati Rice 5kg,Grains,HSN1059,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4290,14/03/2026,Sunflower Oil 1L,Edible Oil,HSN1060,6,₹ 940.50,₹ 49.50,₹ 169.29,128.00,Counter Sale
+INV-4291,14/03/2026,Amul Butter 500g,Dairy,HSN1061,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4292,14/03/2026,Tata Salt 1kg,Staples,HSN1062,21,₹ 576.24,₹ 11.76,₹ 103.72,22.00,Counter Sale
+INV-4293,14/03/2026,Detergent 1kg,Household,HSN1063,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4294,14/03/2026,Biscuits Pack,Snacks,HSN1064,9,₹ 990.00,₹ 0.00,₹ 178.20,75.00,Counter Sale
+INV-4295,15/03/2026,Toor Dal 1kg,Pulses,HSN1065,10,"₹ 1,415.50",₹ 74.50,₹ 70.78,118.00,Counter Sale
+INV-4296,15/03/2026,Basmati Rice 5kg,Grains,HSN1066,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4297,15/03/2026,Sunflower Oil 1L,Edible Oil,HSN1067,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4298,15/03/2026,Amul Butter 500g,Dairy,HSN1068,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4299,15/03/2026,Tata Salt 1kg,Staples,HSN1069,18,₹ 478.80,₹ 25.20,₹ 86.18,22.00,Counter Sale
+INV-4300,15/03/2026,Detergent 1kg,Household,HSN1070,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4301,15/03/2026,Biscuits Pack,Snacks,HSN1071,14,"₹ 1,540.00",₹ 0.00,₹ 277.20,75.00,Counter Sale
+INV-4302,16/03/2026,Toor Dal 1kg,Pulses,HSN1072,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4303,16/03/2026,Basmati Rice 5kg,Grains,HSN1073,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4304,16/03/2026,Sunflower Oil 1L,Edible Oil,HSN1074,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-4305,16/03/2026,Amul Butter 500g,Dairy,HSN1075,2,₹ 541.50,₹ 28.50,₹ 27.08,245.00,Counter Sale
+INV-4306,16/03/2026,Tata Salt 1kg,Staples,HSN1076,6,₹ 159.60,₹ 8.40,₹ 28.73,22.00,Counter Sale
+INV-4307,16/03/2026,Detergent 1kg,Household,HSN1077,7,₹ 953.54,₹ 19.46,₹ 171.64,96.00,Counter Sale
+INV-4308,16/03/2026,Biscuits Pack,Snacks,HSN1078,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-4309,17/03/2026,Toor Dal 1kg,Pulses,HSN1079,14,"₹ 2,044.28",₹ 41.72,₹ 102.21,118.00,Counter Sale
+INV-4310,17/03/2026,Basmati Rice 5kg,Grains,HSN1080,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4311,17/03/2026,Sunflower Oil 1L,Edible Oil,HSN1081,8,"₹ 1,293.60",₹ 26.40,₹ 232.85,128.00,Counter Sale
+INV-4312,17/03/2026,Amul Butter 500g,Dairy,HSN1082,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4313,17/03/2026,Tata Salt 1kg,Staples,HSN1083,20,₹ 548.80,₹ 11.20,₹ 98.78,22.00,Counter Sale
+INV-4314,17/03/2026,Detergent 1kg,Household,HSN1084,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4315,17/03/2026,Biscuits Pack,Snacks,HSN1085,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4316,18/03/2026,Toor Dal 1kg,Pulses,HSN1086,5,₹ 730.10,₹ 14.90,₹ 36.51,118.00,Counter Sale
+INV-4317,18/03/2026,Basmati Rice 5kg,Grains,HSN1087,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4318,18/03/2026,Sunflower Oil 1L,Edible Oil,HSN1088,12,"₹ 1,881.00",₹ 99.00,₹ 338.58,128.00,Counter Sale
+INV-4319,18/03/2026,Amul Butter 500g,Dairy,HSN1089,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4320,18/03/2026,Tata Salt 1kg,Staples,HSN1000,13,₹ 356.72,₹ 7.28,₹ 64.21,22.00,Counter Sale
+INV-4321,18/03/2026,Detergent 1kg,Household,HSN1001,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4322,18/03/2026,Biscuits Pack,Snacks,HSN1002,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-4323,19/03/2026,Toor Dal 1kg,Pulses,HSN1003,19,"₹ 2,831.00",₹ 0.00,₹ 141.55,118.00,Counter Sale
+INV-4324,19/03/2026,Basmati Rice 5kg,Grains,HSN1004,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4325,19/03/2026,Sunflower Oil 1L,Edible Oil,HSN1005,13,"₹ 2,102.10",₹ 42.90,₹ 378.38,128.00,Counter Sale
+INV-4326,19/03/2026,Amul Butter 500g,Dairy,HSN1006,2,₹ 541.50,₹ 28.50,₹ 27.08,245.00,Counter Sale
+INV-4327,19/03/2026,Tata Salt 1kg,Staples,HSN1007,16,₹ 439.04,₹ 8.96,₹ 79.03,22.00,Counter Sale
+INV-4328,19/03/2026,Detergent 1kg,Household,HSN1008,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4329,19/03/2026,Biscuits Pack,Snacks,HSN1009,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4330,20/03/2026,Toor Dal 1kg,Pulses,HSN1010,9,"₹ 1,314.18",₹ 26.82,₹ 65.71,118.00,Counter Sale
+INV-4331,20/03/2026,Basmati Rice 5kg,Grains,HSN1011,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-4332,20/03/2026,Sunflower Oil 1L,Edible Oil,HSN1012,10,"₹ 1,650.00",₹ 0.00,₹ 297.00,128.00,Counter Sale
+INV-4333,20/03/2026,Amul Butter 500g,Dairy,HSN1013,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4334,20/03/2026,Tata Salt 1kg,Staples,HSN1014,19,₹ 521.36,₹ 10.64,₹ 93.84,22.00,Counter Sale
+INV-4335,20/03/2026,Detergent 1kg,Household,HSN1015,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4336,20/03/2026,Biscuits Pack,Snacks,HSN1016,15,"₹ 1,650.00",₹ 0.00,₹ 297.00,75.00,Counter Sale
+INV-4337,21/03/2026,Toor Dal 1kg,Pulses,HSN1017,17,"₹ 2,406.35",₹ 126.65,₹ 120.32,118.00,Counter Sale
+INV-4338,21/03/2026,Basmati Rice 5kg,Grains,HSN1018,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4339,21/03/2026,Sunflower Oil 1L,Edible Oil,HSN1019,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4340,21/03/2026,Amul Butter 500g,Dairy,HSN1020,3,₹ 837.90,₹ 17.10,₹ 41.90,245.00,Counter Sale
+INV-4341,21/03/2026,Tata Salt 1kg,Staples,HSN1021,10,₹ 280.00,₹ 0.00,₹ 50.40,22.00,Counter Sale
+INV-4342,21/03/2026,Detergent 1kg,Household,HSN1022,3,₹ 408.66,₹ 8.34,₹ 73.56,96.00,Counter Sale
+INV-4343,21/03/2026,Biscuits Pack,Snacks,HSN1023,17,"₹ 1,832.60",₹ 37.40,₹ 329.87,75.00,Counter Sale
+INV-4344,22/03/2026,Toor Dal 1kg,Pulses,HSN1024,18,"₹ 2,628.36",₹ 53.64,₹ 131.42,118.00,Counter Sale
+INV-4345,22/03/2026,Basmati Rice 5kg,Grains,HSN1025,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4346,22/03/2026,Sunflower Oil 1L,Edible Oil,HSN1026,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4347,22/03/2026,Amul Butter 500g,Dairy,HSN1027,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4348,22/03/2026,Tata Salt 1kg,Staples,HSN1028,20,₹ 560.00,₹ 0.00,₹ 100.80,22.00,Counter Sale
+INV-4349,22/03/2026,Detergent 1kg,Household,HSN1029,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4350,22/03/2026,Biscuits Pack,Snacks,HSN1030,7,₹ 731.50,₹ 38.50,₹ 131.67,75.00,Counter Sale
+INV-4351,23/03/2026,Toor Dal 1kg,Pulses,HSN1031,9,"₹ 1,273.95",₹ 67.05,₹ 63.70,118.00,Counter Sale
+INV-4352,23/03/2026,Basmati Rice 5kg,Grains,HSN1032,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4353,23/03/2026,Sunflower Oil 1L,Edible Oil,HSN1033,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4354,23/03/2026,Amul Butter 500g,Dairy,HSN1034,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4355,23/03/2026,Tata Salt 1kg,Staples,HSN1035,8,₹ 212.80,₹ 11.20,₹ 38.30,22.00,Counter Sale
+INV-4356,23/03/2026,Detergent 1kg,Household,HSN1036,7,₹ 924.35,₹ 48.65,₹ 166.38,96.00,Counter Sale
+INV-4357,23/03/2026,Biscuits Pack,Snacks,HSN1037,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4358,24/03/2026,Toor Dal 1kg,Pulses,HSN1038,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4359,24/03/2026,Basmati Rice 5kg,Grains,HSN1039,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4360,24/03/2026,Sunflower Oil 1L,Edible Oil,HSN1040,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4361,24/03/2026,Amul Butter 500g,Dairy,HSN1041,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4362,24/03/2026,Tata Salt 1kg,Staples,HSN1042,21,₹ 588.00,₹ 0.00,₹ 105.84,22.00,Counter Sale
+INV-4363,24/03/2026,Detergent 1kg,Household,HSN1043,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4364,24/03/2026,Biscuits Pack,Snacks,HSN1044,15,"₹ 1,617.00",₹ 33.00,₹ 291.06,75.00,Counter Sale
+INV-4365,25/03/2026,Toor Dal 1kg,Pulses,HSN1045,8,"₹ 1,192.00",₹ 0.00,₹ 59.60,118.00,Counter Sale
+INV-4366,25/03/2026,Basmati Rice 5kg,Grains,HSN1046,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4367,25/03/2026,Sunflower Oil 1L,Edible Oil,HSN1047,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4368,25/03/2026,Amul Butter 500g,Dairy,HSN1048,2,₹ 558.60,₹ 11.40,₹ 27.93,245.00,Counter Sale
+INV-4369,25/03/2026,Tata Salt 1kg,Staples,HSN1049,9,₹ 252.00,₹ 0.00,₹ 45.36,22.00,Counter Sale
+INV-4370,25/03/2026,Detergent 1kg,Household,HSN1050,4,₹ 544.88,₹ 11.12,₹ 98.08,96.00,Counter Sale
+INV-4371,25/03/2026,Biscuits Pack,Snacks,HSN1051,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4372,26/03/2026,Toor Dal 1kg,Pulses,HSN1052,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4373,26/03/2026,Basmati Rice 5kg,Grains,HSN1053,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4374,26/03/2026,Sunflower Oil 1L,Edible Oil,HSN1054,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4375,26/03/2026,Amul Butter 500g,Dairy,HSN1055,3,₹ 812.25,₹ 42.75,₹ 40.61,245.00,Counter Sale
+INV-4376,26/03/2026,Tata Salt 1kg,Staples,HSN1056,17,₹ 476.00,₹ 0.00,₹ 85.68,22.00,Counter Sale
+INV-4377,26/03/2026,Detergent 1kg,Household,HSN1057,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4378,26/03/2026,Biscuits Pack,Snacks,HSN1058,14,"₹ 1,509.20",₹ 30.80,₹ 271.66,75.00,Counter Sale
+INV-4379,27/03/2026,Toor Dal 1kg,Pulses,HSN1059,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4380,27/03/2026,Basmati Rice 5kg,Grains,HSN1060,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4381,27/03/2026,Sunflower Oil 1L,Edible Oil,HSN1061,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-4382,27/03/2026,Amul Butter 500g,Dairy,HSN1062,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4383,27/03/2026,Tata Salt 1kg,Staples,HSN1063,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4384,27/03/2026,Detergent 1kg,Household,HSN1064,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4385,27/03/2026,Biscuits Pack,Snacks,HSN1065,16,"₹ 1,760.00",₹ 0.00,₹ 316.80,75.00,Counter Sale
+INV-4386,28/03/2026,Toor Dal 1kg,Pulses,HSN1066,14,"₹ 2,044.28",₹ 41.72,₹ 102.21,118.00,Counter Sale
+INV-4387,28/03/2026,Basmati Rice 5kg,Grains,HSN1067,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4388,28/03/2026,Sunflower Oil 1L,Edible Oil,HSN1068,7,"₹ 1,131.90",₹ 23.10,₹ 203.74,128.00,Counter Sale
+INV-4389,28/03/2026,Amul Butter 500g,Dairy,HSN1069,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4390,28/03/2026,Tata Salt 1kg,Staples,HSN1070,10,₹ 280.00,₹ 0.00,₹ 50.40,22.00,Counter Sale
+INV-4391,28/03/2026,Detergent 1kg,Household,HSN1071,4,₹ 544.88,₹ 11.12,₹ 98.08,96.00,Counter Sale
+INV-4392,28/03/2026,Biscuits Pack,Snacks,HSN1072,6,₹ 646.80,₹ 13.20,₹ 116.42,75.00,Counter Sale
+INV-4393,29/03/2026,Toor Dal 1kg,Pulses,HSN1073,7,₹ 990.85,₹ 52.15,₹ 49.54,118.00,Counter Sale
+INV-4394,29/03/2026,Basmati Rice 5kg,Grains,HSN1074,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4395,29/03/2026,Sunflower Oil 1L,Edible Oil,HSN1075,12,"₹ 1,940.40",₹ 39.60,₹ 349.27,128.00,Counter Sale
+INV-4396,29/03/2026,Amul Butter 500g,Dairy,HSN1076,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4397,29/03/2026,Tata Salt 1kg,Staples,HSN1077,19,₹ 505.40,₹ 26.60,₹ 90.97,22.00,Counter Sale
+INV-4398,29/03/2026,Detergent 1kg,Household,HSN1078,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4399,29/03/2026,Biscuits Pack,Snacks,HSN1079,14,"₹ 1,540.00",₹ 0.00,₹ 277.20,75.00,Counter Sale
+INV-4400,30/03/2026,Toor Dal 1kg,Pulses,HSN1080,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4401,30/03/2026,Basmati Rice 5kg,Grains,HSN1081,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4402,30/03/2026,Sunflower Oil 1L,Edible Oil,HSN1082,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4403,30/03/2026,Amul Butter 500g,Dairy,HSN1083,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4404,30/03/2026,Tata Salt 1kg,Staples,HSN1084,17,₹ 476.00,₹ 0.00,₹ 85.68,22.00,Counter Sale
+INV-4405,30/03/2026,Detergent 1kg,Household,HSN1085,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4406,30/03/2026,Biscuits Pack,Snacks,HSN1086,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4407,31/03/2026,Toor Dal 1kg,Pulses,HSN1087,8,"₹ 1,168.16",₹ 23.84,₹ 58.41,118.00,Counter Sale
+INV-4408,31/03/2026,Basmati Rice 5kg,Grains,HSN1088,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4409,31/03/2026,Sunflower Oil 1L,Edible Oil,HSN1089,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4410,31/03/2026,Amul Butter 500g,Dairy,HSN1000,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4411,31/03/2026,Tata Salt 1kg,Staples,HSN1001,16,₹ 425.60,₹ 22.40,₹ 76.61,22.00,Counter Sale
+INV-4412,31/03/2026,Detergent 1kg,Household,HSN1002,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4413,31/03/2026,Biscuits Pack,Snacks,HSN1003,12,"₹ 1,320.00",₹ 0.00,₹ 237.60,75.00,Counter Sale
+INV-4414,01/04/2026,Toor Dal 1kg,Pulses,HSN1004,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4415,01/04/2026,Basmati Rice 5kg,Grains,HSN1005,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4416,01/04/2026,Sunflower Oil 1L,Edible Oil,HSN1006,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-4417,01/04/2026,Amul Butter 500g,Dairy,HSN1007,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4418,01/04/2026,Tata Salt 1kg,Staples,HSN1008,22,₹ 616.00,₹ 0.00,₹ 110.88,22.00,Counter Sale
+INV-4419,01/04/2026,Detergent 1kg,Household,HSN1009,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4420,01/04/2026,Biscuits Pack,Snacks,HSN1010,9,₹ 990.00,₹ 0.00,₹ 178.20,75.00,Counter Sale
+INV-4421,02/04/2026,Toor Dal 1kg,Pulses,HSN1011,9,"₹ 1,273.95",₹ 67.05,₹ 63.70,118.00,Counter Sale
+INV-4422,02/04/2026,Basmati Rice 5kg,Grains,HSN1012,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4423,02/04/2026,Sunflower Oil 1L,Edible Oil,HSN1013,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4424,02/04/2026,Amul Butter 500g,Dairy,HSN1014,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4425,02/04/2026,Tata Salt 1kg,Staples,HSN1015,22,₹ 616.00,₹ 0.00,₹ 110.88,22.00,Counter Sale
+INV-4426,02/04/2026,Detergent 1kg,Household,HSN1016,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4427,02/04/2026,Biscuits Pack,Snacks,HSN1017,16,"₹ 1,724.80",₹ 35.20,₹ 310.46,75.00,Counter Sale
+INV-4428,03/04/2026,Toor Dal 1kg,Pulses,HSN1018,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4429,03/04/2026,Basmati Rice 5kg,Grains,HSN1019,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4430,03/04/2026,Sunflower Oil 1L,Edible Oil,HSN1020,12,"₹ 1,980.00",₹ 0.00,₹ 356.40,128.00,Counter Sale
+INV-4431,03/04/2026,Amul Butter 500g,Dairy,HSN1021,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4432,03/04/2026,Tata Salt 1kg,Staples,HSN1022,17,₹ 452.20,₹ 23.80,₹ 81.40,22.00,Counter Sale
+INV-4433,03/04/2026,Detergent 1kg,Household,HSN1023,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4434,03/04/2026,Biscuits Pack,Snacks,HSN1024,9,₹ 990.00,₹ 0.00,₹ 178.20,75.00,Counter Sale
+INV-4435,04/04/2026,Toor Dal 1kg,Pulses,HSN1025,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4436,04/04/2026,Basmati Rice 5kg,Grains,HSN1026,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4437,04/04/2026,Sunflower Oil 1L,Edible Oil,HSN1027,14,"₹ 2,263.80",₹ 46.20,₹ 407.48,128.00,Counter Sale
+INV-4438,04/04/2026,Amul Butter 500g,Dairy,HSN1028,5,"₹ 1,353.75",₹ 71.25,₹ 67.69,245.00,Counter Sale
+INV-4439,04/04/2026,Tata Salt 1kg,Staples,HSN1029,23,₹ 611.80,₹ 32.20,₹ 110.12,22.00,Counter Sale
+INV-4440,04/04/2026,Detergent 1kg,Household,HSN1030,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4441,04/04/2026,Biscuits Pack,Snacks,HSN1031,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4442,05/04/2026,Toor Dal 1kg,Pulses,HSN1032,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4443,05/04/2026,Basmati Rice 5kg,Grains,HSN1033,5,"₹ 2,845.25",₹ 149.75,₹ 142.26,460.00,Counter Sale
+INV-4444,05/04/2026,Sunflower Oil 1L,Edible Oil,HSN1034,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4445,05/04/2026,Amul Butter 500g,Dairy,HSN1035,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4446,05/04/2026,Tata Salt 1kg,Staples,HSN1036,8,₹ 224.00,₹ 0.00,₹ 40.32,22.00,Counter Sale
+INV-4447,05/04/2026,Detergent 1kg,Household,HSN1037,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4448,05/04/2026,Biscuits Pack,Snacks,HSN1038,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4449,06/04/2026,Toor Dal 1kg,Pulses,HSN1039,5,₹ 730.10,₹ 14.90,₹ 36.51,118.00,Counter Sale
+INV-4450,06/04/2026,Basmati Rice 5kg,Grains,HSN1040,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4451,06/04/2026,Sunflower Oil 1L,Edible Oil,HSN1041,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4452,06/04/2026,Amul Butter 500g,Dairy,HSN1042,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4453,06/04/2026,Tata Salt 1kg,Staples,HSN1043,22,₹ 585.20,₹ 30.80,₹ 105.34,22.00,Counter Sale
+INV-4454,06/04/2026,Detergent 1kg,Household,HSN1044,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4455,06/04/2026,Biscuits Pack,Snacks,HSN1045,10,"₹ 1,045.00",₹ 55.00,₹ 188.10,75.00,Counter Sale
+INV-4456,07/04/2026,Toor Dal 1kg,Pulses,HSN1046,5,₹ 730.10,₹ 14.90,₹ 36.51,118.00,Counter Sale
+INV-4457,07/04/2026,Basmati Rice 5kg,Grains,HSN1047,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4458,07/04/2026,Sunflower Oil 1L,Edible Oil,HSN1048,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4459,07/04/2026,Amul Butter 500g,Dairy,HSN1049,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4460,07/04/2026,Tata Salt 1kg,Staples,HSN1050,17,₹ 476.00,₹ 0.00,₹ 85.68,22.00,Counter Sale
+INV-4461,07/04/2026,Detergent 1kg,Household,HSN1051,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4462,07/04/2026,Biscuits Pack,Snacks,HSN1052,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4463,08/04/2026,Toor Dal 1kg,Pulses,HSN1053,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4464,08/04/2026,Basmati Rice 5kg,Grains,HSN1054,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4465,08/04/2026,Sunflower Oil 1L,Edible Oil,HSN1055,9,"₹ 1,410.75",₹ 74.25,₹ 253.94,128.00,Counter Sale
+INV-4466,08/04/2026,Amul Butter 500g,Dairy,HSN1056,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4467,08/04/2026,Tata Salt 1kg,Staples,HSN1057,22,₹ 603.68,₹ 12.32,₹ 108.66,22.00,Counter Sale
+INV-4468,08/04/2026,Detergent 1kg,Household,HSN1058,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4469,08/04/2026,Biscuits Pack,Snacks,HSN1059,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4470,09/04/2026,Toor Dal 1kg,Pulses,HSN1060,7,"₹ 1,022.14",₹ 20.86,₹ 51.11,118.00,Counter Sale
+INV-4471,09/04/2026,Basmati Rice 5kg,Grains,HSN1061,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4472,09/04/2026,Sunflower Oil 1L,Edible Oil,HSN1062,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4473,09/04/2026,Amul Butter 500g,Dairy,HSN1063,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4474,09/04/2026,Tata Salt 1kg,Staples,HSN1064,15,₹ 411.60,₹ 8.40,₹ 74.09,22.00,Counter Sale
+INV-4475,09/04/2026,Detergent 1kg,Household,HSN1065,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4476,09/04/2026,Biscuits Pack,Snacks,HSN1066,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4477,10/04/2026,Toor Dal 1kg,Pulses,HSN1067,15,"₹ 2,190.30",₹ 44.70,₹ 109.52,118.00,Counter Sale
+INV-4478,10/04/2026,Basmati Rice 5kg,Grains,HSN1068,5,"₹ 2,845.25",₹ 149.75,₹ 142.26,460.00,Counter Sale
+INV-4479,10/04/2026,Sunflower Oil 1L,Edible Oil,HSN1069,8,"₹ 1,254.00",₹ 66.00,₹ 225.72,128.00,Counter Sale
+INV-4480,10/04/2026,Amul Butter 500g,Dairy,HSN1070,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4481,10/04/2026,Tata Salt 1kg,Staples,HSN1071,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4482,10/04/2026,Detergent 1kg,Household,HSN1072,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4483,10/04/2026,Biscuits Pack,Snacks,HSN1073,17,"₹ 1,776.50",₹ 93.50,₹ 319.77,75.00,Counter Sale
+INV-4484,11/04/2026,Toor Dal 1kg,Pulses,HSN1074,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4485,11/04/2026,Basmati Rice 5kg,Grains,HSN1075,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4486,11/04/2026,Sunflower Oil 1L,Edible Oil,HSN1076,10,"₹ 1,650.00",₹ 0.00,₹ 297.00,128.00,Counter Sale
+INV-4487,11/04/2026,Amul Butter 500g,Dairy,HSN1077,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4488,11/04/2026,Tata Salt 1kg,Staples,HSN1078,18,₹ 493.92,₹ 10.08,₹ 88.91,22.00,Counter Sale
+INV-4489,11/04/2026,Detergent 1kg,Household,HSN1079,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4490,11/04/2026,Biscuits Pack,Snacks,HSN1080,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4491,12/04/2026,Toor Dal 1kg,Pulses,HSN1081,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4492,12/04/2026,Basmati Rice 5kg,Grains,HSN1082,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4493,12/04/2026,Sunflower Oil 1L,Edible Oil,HSN1083,10,"₹ 1,650.00",₹ 0.00,₹ 297.00,128.00,Counter Sale
+INV-4494,12/04/2026,Amul Butter 500g,Dairy,HSN1084,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4495,12/04/2026,Tata Salt 1kg,Staples,HSN1085,14,₹ 392.00,₹ 0.00,₹ 70.56,22.00,Counter Sale
+INV-4496,12/04/2026,Detergent 1kg,Household,HSN1086,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4497,12/04/2026,Biscuits Pack,Snacks,HSN1087,14,"₹ 1,509.20",₹ 30.80,₹ 271.66,75.00,Counter Sale
+INV-4498,13/04/2026,Toor Dal 1kg,Pulses,HSN1088,19,"₹ 2,689.45",₹ 141.55,₹ 134.47,118.00,Counter Sale
+INV-4499,13/04/2026,Basmati Rice 5kg,Grains,HSN1089,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4500,13/04/2026,Sunflower Oil 1L,Edible Oil,HSN1000,4,₹ 660.00,₹ 0.00,₹ 118.80,128.00,Counter Sale
+INV-4501,13/04/2026,Amul Butter 500g,Dairy,HSN1001,8,"₹ 2,166.00",₹ 114.00,₹ 108.30,245.00,Counter Sale
+INV-4502,13/04/2026,Tata Salt 1kg,Staples,HSN1002,6,₹ 168.00,₹ 0.00,₹ 30.24,22.00,Counter Sale
+INV-4503,13/04/2026,Detergent 1kg,Household,HSN1003,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4504,13/04/2026,Biscuits Pack,Snacks,HSN1004,6,₹ 646.80,₹ 13.20,₹ 116.42,75.00,Counter Sale
+INV-4505,14/04/2026,Toor Dal 1kg,Pulses,HSN1005,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4506,14/04/2026,Basmati Rice 5kg,Grains,HSN1006,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4507,14/04/2026,Sunflower Oil 1L,Edible Oil,HSN1007,10,"₹ 1,617.00",₹ 33.00,₹ 291.06,128.00,Counter Sale
+INV-4508,14/04/2026,Amul Butter 500g,Dairy,HSN1008,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4509,14/04/2026,Tata Salt 1kg,Staples,HSN1009,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4510,14/04/2026,Detergent 1kg,Household,HSN1010,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4511,14/04/2026,Biscuits Pack,Snacks,HSN1011,15,"₹ 1,617.00",₹ 33.00,₹ 291.06,75.00,Counter Sale
+INV-4512,15/04/2026,Toor Dal 1kg,Pulses,HSN1012,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4513,15/04/2026,Basmati Rice 5kg,Grains,HSN1013,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4514,15/04/2026,Sunflower Oil 1L,Edible Oil,HSN1014,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4515,15/04/2026,Amul Butter 500g,Dairy,HSN1015,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4516,15/04/2026,Tata Salt 1kg,Staples,HSN1016,21,₹ 576.24,₹ 11.76,₹ 103.72,22.00,Counter Sale
+INV-4517,15/04/2026,Detergent 1kg,Household,HSN1017,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4518,15/04/2026,Biscuits Pack,Snacks,HSN1018,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4519,16/04/2026,Toor Dal 1kg,Pulses,HSN1019,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4520,16/04/2026,Basmati Rice 5kg,Grains,HSN1020,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-4521,16/04/2026,Sunflower Oil 1L,Edible Oil,HSN1021,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4522,16/04/2026,Amul Butter 500g,Dairy,HSN1022,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4523,16/04/2026,Tata Salt 1kg,Staples,HSN1023,21,₹ 588.00,₹ 0.00,₹ 105.84,22.00,Counter Sale
+INV-4524,16/04/2026,Detergent 1kg,Household,HSN1024,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4525,16/04/2026,Biscuits Pack,Snacks,HSN1025,6,₹ 627.00,₹ 33.00,₹ 112.86,75.00,Counter Sale
+INV-4526,17/04/2026,Toor Dal 1kg,Pulses,HSN1026,6,₹ 894.00,₹ 0.00,₹ 44.70,118.00,Counter Sale
+INV-4527,17/04/2026,Basmati Rice 5kg,Grains,HSN1027,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4528,17/04/2026,Sunflower Oil 1L,Edible Oil,HSN1028,4,₹ 660.00,₹ 0.00,₹ 118.80,128.00,Counter Sale
+INV-4529,17/04/2026,Amul Butter 500g,Dairy,HSN1029,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4530,17/04/2026,Tata Salt 1kg,Staples,HSN1030,19,₹ 521.36,₹ 10.64,₹ 93.84,22.00,Counter Sale
+INV-4531,17/04/2026,Detergent 1kg,Household,HSN1031,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4532,17/04/2026,Biscuits Pack,Snacks,HSN1032,18,"₹ 1,980.00",₹ 0.00,₹ 356.40,75.00,Counter Sale
+INV-4533,18/04/2026,Toor Dal 1kg,Pulses,HSN1033,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4534,18/04/2026,Basmati Rice 5kg,Grains,HSN1034,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4535,18/04/2026,Sunflower Oil 1L,Edible Oil,HSN1035,14,"₹ 2,194.50",₹ 115.50,₹ 395.01,128.00,Counter Sale
+INV-4536,18/04/2026,Amul Butter 500g,Dairy,HSN1036,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4537,18/04/2026,Tata Salt 1kg,Staples,HSN1037,17,₹ 452.20,₹ 23.80,₹ 81.40,22.00,Counter Sale
+INV-4538,18/04/2026,Detergent 1kg,Household,HSN1038,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4539,18/04/2026,Biscuits Pack,Snacks,HSN1039,6,₹ 646.80,₹ 13.20,₹ 116.42,75.00,Counter Sale
+INV-4540,19/04/2026,Toor Dal 1kg,Pulses,HSN1040,11,"₹ 1,557.05",₹ 81.95,₹ 77.85,118.00,Counter Sale
+INV-4541,19/04/2026,Basmati Rice 5kg,Grains,HSN1041,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4542,19/04/2026,Sunflower Oil 1L,Edible Oil,HSN1042,11,"₹ 1,778.70",₹ 36.30,₹ 320.17,128.00,Counter Sale
+INV-4543,19/04/2026,Amul Butter 500g,Dairy,HSN1043,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4544,19/04/2026,Tata Salt 1kg,Staples,HSN1044,11,₹ 301.84,₹ 6.16,₹ 54.33,22.00,Counter Sale
+INV-4545,19/04/2026,Detergent 1kg,Household,HSN1045,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4546,19/04/2026,Biscuits Pack,Snacks,HSN1046,10,"₹ 1,045.00",₹ 55.00,₹ 188.10,75.00,Counter Sale
+INV-4547,20/04/2026,Toor Dal 1kg,Pulses,HSN1047,8,"₹ 1,192.00",₹ 0.00,₹ 59.60,118.00,Counter Sale
+INV-4548,20/04/2026,Basmati Rice 5kg,Grains,HSN1048,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4549,20/04/2026,Sunflower Oil 1L,Edible Oil,HSN1049,12,"₹ 1,940.40",₹ 39.60,₹ 349.27,128.00,Counter Sale
+INV-4550,20/04/2026,Amul Butter 500g,Dairy,HSN1050,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4551,20/04/2026,Tata Salt 1kg,Staples,HSN1051,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-4552,20/04/2026,Detergent 1kg,Household,HSN1052,3,₹ 396.15,₹ 20.85,₹ 71.31,96.00,Counter Sale
+INV-4553,20/04/2026,Biscuits Pack,Snacks,HSN1053,16,"₹ 1,760.00",₹ 0.00,₹ 316.80,75.00,Counter Sale
+INV-4554,21/04/2026,Toor Dal 1kg,Pulses,HSN1054,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4555,21/04/2026,Basmati Rice 5kg,Grains,HSN1055,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4556,21/04/2026,Sunflower Oil 1L,Edible Oil,HSN1056,4,₹ 660.00,₹ 0.00,₹ 118.80,128.00,Counter Sale
+INV-4557,21/04/2026,Amul Butter 500g,Dairy,HSN1057,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4558,21/04/2026,Tata Salt 1kg,Staples,HSN1058,22,₹ 585.20,₹ 30.80,₹ 105.34,22.00,Counter Sale
+INV-4559,21/04/2026,Detergent 1kg,Household,HSN1059,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4560,21/04/2026,Biscuits Pack,Snacks,HSN1060,5,₹ 550.00,₹ 0.00,₹ 99.00,75.00,Counter Sale
+INV-4561,22/04/2026,Toor Dal 1kg,Pulses,HSN1061,7,₹ 990.85,₹ 52.15,₹ 49.54,118.00,Counter Sale
+INV-4562,22/04/2026,Basmati Rice 5kg,Grains,HSN1062,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4563,22/04/2026,Sunflower Oil 1L,Edible Oil,HSN1063,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4564,22/04/2026,Amul Butter 500g,Dairy,HSN1064,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4565,22/04/2026,Tata Salt 1kg,Staples,HSN1065,10,₹ 266.00,₹ 14.00,₹ 47.88,22.00,Counter Sale
+INV-4566,22/04/2026,Detergent 1kg,Household,HSN1066,3,₹ 408.66,₹ 8.34,₹ 73.56,96.00,Counter Sale
+INV-4567,22/04/2026,Biscuits Pack,Snacks,HSN1067,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4568,23/04/2026,Toor Dal 1kg,Pulses,HSN1068,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4569,23/04/2026,Basmati Rice 5kg,Grains,HSN1069,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4570,23/04/2026,Sunflower Oil 1L,Edible Oil,HSN1070,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4571,23/04/2026,Amul Butter 500g,Dairy,HSN1071,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4572,23/04/2026,Tata Salt 1kg,Staples,HSN1072,24,₹ 638.40,₹ 33.60,₹ 114.91,22.00,Counter Sale
+INV-4573,23/04/2026,Detergent 1kg,Household,HSN1073,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4574,23/04/2026,Biscuits Pack,Snacks,HSN1074,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4575,24/04/2026,Toor Dal 1kg,Pulses,HSN1075,6,₹ 894.00,₹ 0.00,₹ 44.70,118.00,Counter Sale
+INV-4576,24/04/2026,Basmati Rice 5kg,Grains,HSN1076,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4577,24/04/2026,Sunflower Oil 1L,Edible Oil,HSN1077,8,"₹ 1,320.00",₹ 0.00,₹ 237.60,128.00,Counter Sale
+INV-4578,24/04/2026,Amul Butter 500g,Dairy,HSN1078,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4579,24/04/2026,Tata Salt 1kg,Staples,HSN1079,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4580,24/04/2026,Detergent 1kg,Household,HSN1080,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4581,24/04/2026,Biscuits Pack,Snacks,HSN1081,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4582,25/04/2026,Toor Dal 1kg,Pulses,HSN1082,17,"₹ 2,482.34",₹ 50.66,₹ 124.12,118.00,Counter Sale
+INV-4583,25/04/2026,Basmati Rice 5kg,Grains,HSN1083,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4584,25/04/2026,Sunflower Oil 1L,Edible Oil,HSN1084,5,₹ 783.75,₹ 41.25,₹ 141.07,128.00,Counter Sale
+INV-4585,25/04/2026,Amul Butter 500g,Dairy,HSN1085,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4586,25/04/2026,Tata Salt 1kg,Staples,HSN1086,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4587,25/04/2026,Detergent 1kg,Household,HSN1087,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4588,25/04/2026,Biscuits Pack,Snacks,HSN1088,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4589,26/04/2026,Toor Dal 1kg,Pulses,HSN1089,11,"₹ 1,557.05",₹ 81.95,₹ 77.85,118.00,Counter Sale
+INV-4590,26/04/2026,Basmati Rice 5kg,Grains,HSN1000,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4591,26/04/2026,Sunflower Oil 1L,Edible Oil,HSN1001,6,₹ 970.20,₹ 19.80,₹ 174.64,128.00,Counter Sale
+INV-4592,26/04/2026,Amul Butter 500g,Dairy,HSN1002,5,"₹ 1,353.75",₹ 71.25,₹ 67.69,245.00,Counter Sale
+INV-4593,26/04/2026,Tata Salt 1kg,Staples,HSN1003,14,₹ 392.00,₹ 0.00,₹ 70.56,22.00,Counter Sale
+INV-4594,26/04/2026,Detergent 1kg,Household,HSN1004,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4595,26/04/2026,Biscuits Pack,Snacks,HSN1005,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4596,27/04/2026,Toor Dal 1kg,Pulses,HSN1006,10,"₹ 1,490.00",₹ 0.00,₹ 74.50,118.00,Counter Sale
+INV-4597,27/04/2026,Basmati Rice 5kg,Grains,HSN1007,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4598,27/04/2026,Sunflower Oil 1L,Edible Oil,HSN1008,6,₹ 970.20,₹ 19.80,₹ 174.64,128.00,Counter Sale
+INV-4599,27/04/2026,Amul Butter 500g,Dairy,HSN1009,4,"₹ 1,083.00",₹ 57.00,₹ 54.15,245.00,Counter Sale
+INV-4600,27/04/2026,Tata Salt 1kg,Staples,HSN1010,18,₹ 493.92,₹ 10.08,₹ 88.91,22.00,Counter Sale
+INV-4601,27/04/2026,Detergent 1kg,Household,HSN1011,10,"₹ 1,390.00",₹ 0.00,₹ 250.20,96.00,Counter Sale
+INV-4602,27/04/2026,Biscuits Pack,Snacks,HSN1012,8,₹ 862.40,₹ 17.60,₹ 155.23,75.00,Counter Sale
+INV-4603,28/04/2026,Toor Dal 1kg,Pulses,HSN1013,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4604,28/04/2026,Basmati Rice 5kg,Grains,HSN1014,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4605,28/04/2026,Sunflower Oil 1L,Edible Oil,HSN1015,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4606,28/04/2026,Amul Butter 500g,Dairy,HSN1016,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4607,28/04/2026,Tata Salt 1kg,Staples,HSN1017,16,₹ 448.00,₹ 0.00,₹ 80.64,22.00,Counter Sale
+INV-4608,28/04/2026,Detergent 1kg,Household,HSN1018,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4609,28/04/2026,Biscuits Pack,Snacks,HSN1019,17,"₹ 1,776.50",₹ 93.50,₹ 319.77,75.00,Counter Sale
+INV-4610,29/04/2026,Toor Dal 1kg,Pulses,HSN1020,9,"₹ 1,341.00",₹ 0.00,₹ 67.05,118.00,Counter Sale
+INV-4611,29/04/2026,Basmati Rice 5kg,Grains,HSN1021,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4612,29/04/2026,Sunflower Oil 1L,Edible Oil,HSN1022,11,"₹ 1,778.70",₹ 36.30,₹ 320.17,128.00,Counter Sale
+INV-4613,29/04/2026,Amul Butter 500g,Dairy,HSN1023,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4614,29/04/2026,Tata Salt 1kg,Staples,HSN1024,8,₹ 219.52,₹ 4.48,₹ 39.51,22.00,Counter Sale
+INV-4615,29/04/2026,Detergent 1kg,Household,HSN1025,7,₹ 924.35,₹ 48.65,₹ 166.38,96.00,Counter Sale
+INV-4616,29/04/2026,Biscuits Pack,Snacks,HSN1026,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4617,30/04/2026,Toor Dal 1kg,Pulses,HSN1027,15,"₹ 2,123.25",₹ 111.75,₹ 106.16,118.00,Counter Sale
+INV-4618,30/04/2026,Basmati Rice 5kg,Grains,HSN1028,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4619,30/04/2026,Sunflower Oil 1L,Edible Oil,HSN1029,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-4620,30/04/2026,Amul Butter 500g,Dairy,HSN1030,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4621,30/04/2026,Tata Salt 1kg,Staples,HSN1031,14,₹ 372.40,₹ 19.60,₹ 67.03,22.00,Counter Sale
+INV-4622,30/04/2026,Detergent 1kg,Household,HSN1032,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4623,30/04/2026,Biscuits Pack,Snacks,HSN1033,4,₹ 440.00,₹ 0.00,₹ 79.20,75.00,Counter Sale
+INV-4624,01/05/2026,Toor Dal 1kg,Pulses,HSN1034,6,₹ 849.30,₹ 44.70,₹ 42.46,118.00,Counter Sale
+INV-4625,01/05/2026,Basmati Rice 5kg,Grains,HSN1035,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4626,01/05/2026,Sunflower Oil 1L,Edible Oil,HSN1036,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4627,01/05/2026,Amul Butter 500g,Dairy,HSN1037,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4628,01/05/2026,Tata Salt 1kg,Staples,HSN1038,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4629,01/05/2026,Detergent 1kg,Household,HSN1039,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4630,01/05/2026,Biscuits Pack,Snacks,HSN1040,5,₹ 550.00,₹ 0.00,₹ 99.00,75.00,Counter Sale
+INV-4631,02/05/2026,Toor Dal 1kg,Pulses,HSN1041,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4632,02/05/2026,Basmati Rice 5kg,Grains,HSN1042,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4633,02/05/2026,Sunflower Oil 1L,Edible Oil,HSN1043,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4634,02/05/2026,Amul Butter 500g,Dairy,HSN1044,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4635,02/05/2026,Tata Salt 1kg,Staples,HSN1045,17,₹ 452.20,₹ 23.80,₹ 81.40,22.00,Counter Sale
+INV-4636,02/05/2026,Detergent 1kg,Household,HSN1046,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4637,02/05/2026,Biscuits Pack,Snacks,HSN1047,8,₹ 836.00,₹ 44.00,₹ 150.48,75.00,Counter Sale
+INV-4638,03/05/2026,Toor Dal 1kg,Pulses,HSN1048,8,"₹ 1,168.16",₹ 23.84,₹ 58.41,118.00,Counter Sale
+INV-4639,03/05/2026,Basmati Rice 5kg,Grains,HSN1049,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4640,03/05/2026,Sunflower Oil 1L,Edible Oil,HSN1050,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4641,03/05/2026,Amul Butter 500g,Dairy,HSN1051,4,"₹ 1,083.00",₹ 57.00,₹ 54.15,245.00,Counter Sale
+INV-4642,03/05/2026,Tata Salt 1kg,Staples,HSN1052,11,₹ 301.84,₹ 6.16,₹ 54.33,22.00,Counter Sale
+INV-4643,03/05/2026,Detergent 1kg,Household,HSN1053,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4644,03/05/2026,Biscuits Pack,Snacks,HSN1054,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4645,04/05/2026,Toor Dal 1kg,Pulses,HSN1055,6,₹ 849.30,₹ 44.70,₹ 42.46,118.00,Counter Sale
+INV-4646,04/05/2026,Basmati Rice 5kg,Grains,HSN1056,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4647,04/05/2026,Sunflower Oil 1L,Edible Oil,HSN1057,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4648,04/05/2026,Amul Butter 500g,Dairy,HSN1058,4,"₹ 1,083.00",₹ 57.00,₹ 54.15,245.00,Counter Sale
+INV-4649,04/05/2026,Tata Salt 1kg,Staples,HSN1059,17,₹ 452.20,₹ 23.80,₹ 81.40,22.00,Counter Sale
+INV-4650,04/05/2026,Detergent 1kg,Household,HSN1060,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4651,04/05/2026,Biscuits Pack,Snacks,HSN1061,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4652,05/05/2026,Toor Dal 1kg,Pulses,HSN1062,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4653,05/05/2026,Basmati Rice 5kg,Grains,HSN1063,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4654,05/05/2026,Sunflower Oil 1L,Edible Oil,HSN1064,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4655,05/05/2026,Amul Butter 500g,Dairy,HSN1065,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4656,05/05/2026,Tata Salt 1kg,Staples,HSN1066,15,₹ 420.00,₹ 0.00,₹ 75.60,22.00,Counter Sale
+INV-4657,05/05/2026,Detergent 1kg,Household,HSN1067,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4658,05/05/2026,Biscuits Pack,Snacks,HSN1068,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4659,06/05/2026,Toor Dal 1kg,Pulses,HSN1069,6,₹ 876.12,₹ 17.88,₹ 43.81,118.00,Counter Sale
+INV-4660,06/05/2026,Basmati Rice 5kg,Grains,HSN1070,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4661,06/05/2026,Sunflower Oil 1L,Edible Oil,HSN1071,6,₹ 940.50,₹ 49.50,₹ 169.29,128.00,Counter Sale
+INV-4662,06/05/2026,Amul Butter 500g,Dairy,HSN1072,8,"₹ 2,166.00",₹ 114.00,₹ 108.30,245.00,Counter Sale
+INV-4663,06/05/2026,Tata Salt 1kg,Staples,HSN1073,7,₹ 196.00,₹ 0.00,₹ 35.28,22.00,Counter Sale
+INV-4664,06/05/2026,Detergent 1kg,Household,HSN1074,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4665,06/05/2026,Biscuits Pack,Snacks,HSN1075,11,"₹ 1,185.80",₹ 24.20,₹ 213.44,75.00,Counter Sale
+INV-4666,07/05/2026,Toor Dal 1kg,Pulses,HSN1076,14,"₹ 2,044.28",₹ 41.72,₹ 102.21,118.00,Counter Sale
+INV-4667,07/05/2026,Basmati Rice 5kg,Grains,HSN1077,5,"₹ 2,845.25",₹ 149.75,₹ 142.26,460.00,Counter Sale
+INV-4668,07/05/2026,Sunflower Oil 1L,Edible Oil,HSN1078,8,"₹ 1,320.00",₹ 0.00,₹ 237.60,128.00,Counter Sale
+INV-4669,07/05/2026,Amul Butter 500g,Dairy,HSN1079,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4670,07/05/2026,Tata Salt 1kg,Staples,HSN1080,14,₹ 392.00,₹ 0.00,₹ 70.56,22.00,Counter Sale
+INV-4671,07/05/2026,Detergent 1kg,Household,HSN1081,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4672,07/05/2026,Biscuits Pack,Snacks,HSN1082,8,₹ 836.00,₹ 44.00,₹ 150.48,75.00,Counter Sale
+INV-4673,08/05/2026,Toor Dal 1kg,Pulses,HSN1083,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4674,08/05/2026,Basmati Rice 5kg,Grains,HSN1084,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4675,08/05/2026,Sunflower Oil 1L,Edible Oil,HSN1085,8,"₹ 1,293.60",₹ 26.40,₹ 232.85,128.00,Counter Sale
+INV-4676,08/05/2026,Amul Butter 500g,Dairy,HSN1086,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4677,08/05/2026,Tata Salt 1kg,Staples,HSN1087,15,₹ 411.60,₹ 8.40,₹ 74.09,22.00,Counter Sale
+INV-4678,08/05/2026,Detergent 1kg,Household,HSN1088,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4679,08/05/2026,Biscuits Pack,Snacks,HSN1089,7,₹ 754.60,₹ 15.40,₹ 135.83,75.00,Counter Sale
+INV-4680,09/05/2026,Toor Dal 1kg,Pulses,HSN1000,18,"₹ 2,547.90",₹ 134.10,₹ 127.40,118.00,Counter Sale
+INV-4681,09/05/2026,Basmati Rice 5kg,Grains,HSN1001,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4682,09/05/2026,Sunflower Oil 1L,Edible Oil,HSN1002,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-4683,09/05/2026,Amul Butter 500g,Dairy,HSN1003,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4684,09/05/2026,Tata Salt 1kg,Staples,HSN1004,18,₹ 504.00,₹ 0.00,₹ 90.72,22.00,Counter Sale
+INV-4685,09/05/2026,Detergent 1kg,Household,HSN1005,8,"₹ 1,089.76",₹ 22.24,₹ 196.16,96.00,Counter Sale
+INV-4686,09/05/2026,Biscuits Pack,Snacks,HSN1006,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4687,10/05/2026,Toor Dal 1kg,Pulses,HSN1007,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4688,10/05/2026,Basmati Rice 5kg,Grains,HSN1008,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4689,10/05/2026,Sunflower Oil 1L,Edible Oil,HSN1009,14,"₹ 2,194.50",₹ 115.50,₹ 395.01,128.00,Counter Sale
+INV-4690,10/05/2026,Amul Butter 500g,Dairy,HSN1010,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4691,10/05/2026,Tata Salt 1kg,Staples,HSN1011,10,₹ 280.00,₹ 0.00,₹ 50.40,22.00,Counter Sale
+INV-4692,10/05/2026,Detergent 1kg,Household,HSN1012,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4693,10/05/2026,Biscuits Pack,Snacks,HSN1013,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4694,11/05/2026,Toor Dal 1kg,Pulses,HSN1014,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4695,11/05/2026,Basmati Rice 5kg,Grains,HSN1015,3,"₹ 1,761.06",₹ 35.94,₹ 88.05,460.00,Counter Sale
+INV-4696,11/05/2026,Sunflower Oil 1L,Edible Oil,HSN1016,4,₹ 627.00,₹ 33.00,₹ 112.86,128.00,Counter Sale
+INV-4697,11/05/2026,Amul Butter 500g,Dairy,HSN1017,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4698,11/05/2026,Tata Salt 1kg,Staples,HSN1018,8,₹ 212.80,₹ 11.20,₹ 38.30,22.00,Counter Sale
+INV-4699,11/05/2026,Detergent 1kg,Household,HSN1019,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4700,11/05/2026,Biscuits Pack,Snacks,HSN1020,12,"₹ 1,254.00",₹ 66.00,₹ 225.72,75.00,Counter Sale
+INV-4701,12/05/2026,Toor Dal 1kg,Pulses,HSN1021,11,"₹ 1,557.05",₹ 81.95,₹ 77.85,118.00,Counter Sale
+INV-4702,12/05/2026,Basmati Rice 5kg,Grains,HSN1022,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4703,12/05/2026,Sunflower Oil 1L,Edible Oil,HSN1023,10,"₹ 1,650.00",₹ 0.00,₹ 297.00,128.00,Counter Sale
+INV-4704,12/05/2026,Amul Butter 500g,Dairy,HSN1024,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4705,12/05/2026,Tata Salt 1kg,Staples,HSN1025,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4706,12/05/2026,Detergent 1kg,Household,HSN1026,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4707,12/05/2026,Biscuits Pack,Snacks,HSN1027,12,"₹ 1,320.00",₹ 0.00,₹ 237.60,75.00,Counter Sale
+INV-4708,13/05/2026,Toor Dal 1kg,Pulses,HSN1028,9,"₹ 1,273.95",₹ 67.05,₹ 63.70,118.00,Counter Sale
+INV-4709,13/05/2026,Basmati Rice 5kg,Grains,HSN1029,6,"₹ 3,594.00",₹ 0.00,₹ 179.70,460.00,Counter Sale
+INV-4710,13/05/2026,Sunflower Oil 1L,Edible Oil,HSN1030,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4711,13/05/2026,Amul Butter 500g,Dairy,HSN1031,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4712,13/05/2026,Tata Salt 1kg,Staples,HSN1032,23,₹ 631.12,₹ 12.88,₹ 113.60,22.00,Counter Sale
+INV-4713,13/05/2026,Detergent 1kg,Household,HSN1033,9,"₹ 1,225.98",₹ 25.02,₹ 220.68,96.00,Counter Sale
+INV-4714,13/05/2026,Biscuits Pack,Snacks,HSN1034,17,"₹ 1,832.60",₹ 37.40,₹ 329.87,75.00,Counter Sale
+INV-4715,14/05/2026,Toor Dal 1kg,Pulses,HSN1035,6,₹ 894.00,₹ 0.00,₹ 44.70,118.00,Counter Sale
+INV-4716,14/05/2026,Basmati Rice 5kg,Grains,HSN1036,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4717,14/05/2026,Sunflower Oil 1L,Edible Oil,HSN1037,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-4718,14/05/2026,Amul Butter 500g,Dairy,HSN1038,3,₹ 812.25,₹ 42.75,₹ 40.61,245.00,Counter Sale
+INV-4719,14/05/2026,Tata Salt 1kg,Staples,HSN1039,6,₹ 159.60,₹ 8.40,₹ 28.73,22.00,Counter Sale
+INV-4720,14/05/2026,Detergent 1kg,Household,HSN1040,5,₹ 681.10,₹ 13.90,₹ 122.60,96.00,Counter Sale
+INV-4721,14/05/2026,Biscuits Pack,Snacks,HSN1041,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4722,15/05/2026,Toor Dal 1kg,Pulses,HSN1042,18,"₹ 2,682.00",₹ 0.00,₹ 134.10,118.00,Counter Sale
+INV-4723,15/05/2026,Basmati Rice 5kg,Grains,HSN1043,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4724,15/05/2026,Sunflower Oil 1L,Edible Oil,HSN1044,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4725,15/05/2026,Amul Butter 500g,Dairy,HSN1045,7,"₹ 1,895.25",₹ 99.75,₹ 94.76,245.00,Counter Sale
+INV-4726,15/05/2026,Tata Salt 1kg,Staples,HSN1046,22,₹ 616.00,₹ 0.00,₹ 110.88,22.00,Counter Sale
+INV-4727,15/05/2026,Detergent 1kg,Household,HSN1047,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-4728,15/05/2026,Biscuits Pack,Snacks,HSN1048,16,"₹ 1,760.00",₹ 0.00,₹ 316.80,75.00,Counter Sale
+INV-4729,16/05/2026,Toor Dal 1kg,Pulses,HSN1049,6,₹ 849.30,₹ 44.70,₹ 42.46,118.00,Counter Sale
+INV-4730,16/05/2026,Basmati Rice 5kg,Grains,HSN1050,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4731,16/05/2026,Sunflower Oil 1L,Edible Oil,HSN1051,12,"₹ 1,881.00",₹ 99.00,₹ 338.58,128.00,Counter Sale
+INV-4732,16/05/2026,Amul Butter 500g,Dairy,HSN1052,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4733,16/05/2026,Tata Salt 1kg,Staples,HSN1053,13,₹ 356.72,₹ 7.28,₹ 64.21,22.00,Counter Sale
+INV-4734,16/05/2026,Detergent 1kg,Household,HSN1054,9,"₹ 1,225.98",₹ 25.02,₹ 220.68,96.00,Counter Sale
+INV-4735,16/05/2026,Biscuits Pack,Snacks,HSN1055,15,"₹ 1,617.00",₹ 33.00,₹ 291.06,75.00,Counter Sale
+INV-4736,17/05/2026,Toor Dal 1kg,Pulses,HSN1056,8,"₹ 1,168.16",₹ 23.84,₹ 58.41,118.00,Counter Sale
+INV-4737,17/05/2026,Basmati Rice 5kg,Grains,HSN1057,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4738,17/05/2026,Sunflower Oil 1L,Edible Oil,HSN1058,11,"₹ 1,778.70",₹ 36.30,₹ 320.17,128.00,Counter Sale
+INV-4739,17/05/2026,Amul Butter 500g,Dairy,HSN1059,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4740,17/05/2026,Tata Salt 1kg,Staples,HSN1060,21,₹ 588.00,₹ 0.00,₹ 105.84,22.00,Counter Sale
+INV-4741,17/05/2026,Detergent 1kg,Household,HSN1061,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4742,17/05/2026,Biscuits Pack,Snacks,HSN1062,10,"₹ 1,045.00",₹ 55.00,₹ 188.10,75.00,Counter Sale
+INV-4743,18/05/2026,Toor Dal 1kg,Pulses,HSN1063,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4744,18/05/2026,Basmati Rice 5kg,Grains,HSN1064,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4745,18/05/2026,Sunflower Oil 1L,Edible Oil,HSN1065,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-4746,18/05/2026,Amul Butter 500g,Dairy,HSN1066,3,₹ 837.90,₹ 17.10,₹ 41.90,245.00,Counter Sale
+INV-4747,18/05/2026,Tata Salt 1kg,Staples,HSN1067,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-4748,18/05/2026,Detergent 1kg,Household,HSN1068,7,₹ 953.54,₹ 19.46,₹ 171.64,96.00,Counter Sale
+INV-4749,18/05/2026,Biscuits Pack,Snacks,HSN1069,13,"₹ 1,430.00",₹ 0.00,₹ 257.40,75.00,Counter Sale
+INV-4750,19/05/2026,Toor Dal 1kg,Pulses,HSN1070,7,"₹ 1,043.00",₹ 0.00,₹ 52.15,118.00,Counter Sale
+INV-4751,19/05/2026,Basmati Rice 5kg,Grains,HSN1071,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4752,19/05/2026,Sunflower Oil 1L,Edible Oil,HSN1072,7,"₹ 1,097.25",₹ 57.75,₹ 197.50,128.00,Counter Sale
+INV-4753,19/05/2026,Amul Butter 500g,Dairy,HSN1073,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4754,19/05/2026,Tata Salt 1kg,Staples,HSN1074,9,₹ 246.96,₹ 5.04,₹ 44.45,22.00,Counter Sale
+INV-4755,19/05/2026,Detergent 1kg,Household,HSN1075,9,"₹ 1,225.98",₹ 25.02,₹ 220.68,96.00,Counter Sale
+INV-4756,19/05/2026,Biscuits Pack,Snacks,HSN1076,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4757,20/05/2026,Toor Dal 1kg,Pulses,HSN1077,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4758,20/05/2026,Basmati Rice 5kg,Grains,HSN1078,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-4759,20/05/2026,Sunflower Oil 1L,Edible Oil,HSN1079,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4760,20/05/2026,Amul Butter 500g,Dairy,HSN1080,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4761,20/05/2026,Tata Salt 1kg,Staples,HSN1081,20,₹ 532.00,₹ 28.00,₹ 95.76,22.00,Counter Sale
+INV-4762,20/05/2026,Detergent 1kg,Household,HSN1082,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4763,20/05/2026,Biscuits Pack,Snacks,HSN1083,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4764,21/05/2026,Toor Dal 1kg,Pulses,HSN1084,10,"₹ 1,460.20",₹ 29.80,₹ 73.01,118.00,Counter Sale
+INV-4765,21/05/2026,Basmati Rice 5kg,Grains,HSN1085,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4766,21/05/2026,Sunflower Oil 1L,Edible Oil,HSN1086,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4767,21/05/2026,Amul Butter 500g,Dairy,HSN1087,4,"₹ 1,117.20",₹ 22.80,₹ 55.86,245.00,Counter Sale
+INV-4768,21/05/2026,Tata Salt 1kg,Staples,HSN1088,18,₹ 493.92,₹ 10.08,₹ 88.91,22.00,Counter Sale
+INV-4769,21/05/2026,Detergent 1kg,Household,HSN1089,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4770,21/05/2026,Biscuits Pack,Snacks,HSN1000,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4771,22/05/2026,Toor Dal 1kg,Pulses,HSN1001,8,"₹ 1,192.00",₹ 0.00,₹ 59.60,118.00,Counter Sale
+INV-4772,22/05/2026,Basmati Rice 5kg,Grains,HSN1002,6,"₹ 3,414.30",₹ 179.70,₹ 170.72,460.00,Counter Sale
+INV-4773,22/05/2026,Sunflower Oil 1L,Edible Oil,HSN1003,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4774,22/05/2026,Amul Butter 500g,Dairy,HSN1004,8,"₹ 2,166.00",₹ 114.00,₹ 108.30,245.00,Counter Sale
+INV-4775,22/05/2026,Tata Salt 1kg,Staples,HSN1005,9,₹ 239.40,₹ 12.60,₹ 43.09,22.00,Counter Sale
+INV-4776,22/05/2026,Detergent 1kg,Household,HSN1006,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4777,22/05/2026,Biscuits Pack,Snacks,HSN1007,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-4778,23/05/2026,Toor Dal 1kg,Pulses,HSN1008,10,"₹ 1,490.00",₹ 0.00,₹ 74.50,118.00,Counter Sale
+INV-4779,23/05/2026,Basmati Rice 5kg,Grains,HSN1009,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4780,23/05/2026,Sunflower Oil 1L,Edible Oil,HSN1010,11,"₹ 1,778.70",₹ 36.30,₹ 320.17,128.00,Counter Sale
+INV-4781,23/05/2026,Amul Butter 500g,Dairy,HSN1011,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4782,23/05/2026,Tata Salt 1kg,Staples,HSN1012,16,₹ 439.04,₹ 8.96,₹ 79.03,22.00,Counter Sale
+INV-4783,23/05/2026,Detergent 1kg,Household,HSN1013,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4784,23/05/2026,Biscuits Pack,Snacks,HSN1014,8,₹ 862.40,₹ 17.60,₹ 155.23,75.00,Counter Sale
+INV-4785,24/05/2026,Toor Dal 1kg,Pulses,HSN1015,13,"₹ 1,840.15",₹ 96.85,₹ 92.01,118.00,Counter Sale
+INV-4786,24/05/2026,Basmati Rice 5kg,Grains,HSN1016,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4787,24/05/2026,Sunflower Oil 1L,Edible Oil,HSN1017,12,"₹ 1,940.40",₹ 39.60,₹ 349.27,128.00,Counter Sale
+INV-4788,24/05/2026,Amul Butter 500g,Dairy,HSN1018,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4789,24/05/2026,Tata Salt 1kg,Staples,HSN1019,8,₹ 212.80,₹ 11.20,₹ 38.30,22.00,Counter Sale
+INV-4790,24/05/2026,Detergent 1kg,Household,HSN1020,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4791,24/05/2026,Biscuits Pack,Snacks,HSN1021,6,₹ 627.00,₹ 33.00,₹ 112.86,75.00,Counter Sale
+INV-4792,25/05/2026,Toor Dal 1kg,Pulses,HSN1022,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4793,25/05/2026,Basmati Rice 5kg,Grains,HSN1023,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4794,25/05/2026,Sunflower Oil 1L,Edible Oil,HSN1024,5,₹ 808.50,₹ 16.50,₹ 145.53,128.00,Counter Sale
+INV-4795,25/05/2026,Amul Butter 500g,Dairy,HSN1025,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4796,25/05/2026,Tata Salt 1kg,Staples,HSN1026,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-4797,25/05/2026,Detergent 1kg,Household,HSN1027,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4798,25/05/2026,Biscuits Pack,Snacks,HSN1028,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4799,26/05/2026,Toor Dal 1kg,Pulses,HSN1029,10,"₹ 1,490.00",₹ 0.00,₹ 74.50,118.00,Counter Sale
+INV-4800,26/05/2026,Basmati Rice 5kg,Grains,HSN1030,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4801,26/05/2026,Sunflower Oil 1L,Edible Oil,HSN1031,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4802,26/05/2026,Amul Butter 500g,Dairy,HSN1032,2,₹ 570.00,₹ 0.00,₹ 28.50,245.00,Counter Sale
+INV-4803,26/05/2026,Tata Salt 1kg,Staples,HSN1033,19,₹ 505.40,₹ 26.60,₹ 90.97,22.00,Counter Sale
+INV-4804,26/05/2026,Detergent 1kg,Household,HSN1034,9,"₹ 1,225.98",₹ 25.02,₹ 220.68,96.00,Counter Sale
+INV-4805,26/05/2026,Biscuits Pack,Snacks,HSN1035,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4806,27/05/2026,Toor Dal 1kg,Pulses,HSN1036,5,₹ 730.10,₹ 14.90,₹ 36.51,118.00,Counter Sale
+INV-4807,27/05/2026,Basmati Rice 5kg,Grains,HSN1037,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4808,27/05/2026,Sunflower Oil 1L,Edible Oil,HSN1038,12,"₹ 1,980.00",₹ 0.00,₹ 356.40,128.00,Counter Sale
+INV-4809,27/05/2026,Amul Butter 500g,Dairy,HSN1039,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4810,27/05/2026,Tata Salt 1kg,Staples,HSN1040,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4811,27/05/2026,Detergent 1kg,Household,HSN1041,3,₹ 408.66,₹ 8.34,₹ 73.56,96.00,Counter Sale
+INV-4812,27/05/2026,Biscuits Pack,Snacks,HSN1042,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4813,28/05/2026,Toor Dal 1kg,Pulses,HSN1043,11,"₹ 1,639.00",₹ 0.00,₹ 81.95,118.00,Counter Sale
+INV-4814,28/05/2026,Basmati Rice 5kg,Grains,HSN1044,5,"₹ 2,845.25",₹ 149.75,₹ 142.26,460.00,Counter Sale
+INV-4815,28/05/2026,Sunflower Oil 1L,Edible Oil,HSN1045,9,"₹ 1,410.75",₹ 74.25,₹ 253.94,128.00,Counter Sale
+INV-4816,28/05/2026,Amul Butter 500g,Dairy,HSN1046,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4817,28/05/2026,Tata Salt 1kg,Staples,HSN1047,7,₹ 196.00,₹ 0.00,₹ 35.28,22.00,Counter Sale
+INV-4818,28/05/2026,Detergent 1kg,Household,HSN1048,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4819,28/05/2026,Biscuits Pack,Snacks,HSN1049,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4820,29/05/2026,Toor Dal 1kg,Pulses,HSN1050,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-4821,29/05/2026,Basmati Rice 5kg,Grains,HSN1051,4,"₹ 2,276.20",₹ 119.80,₹ 113.81,460.00,Counter Sale
+INV-4822,29/05/2026,Sunflower Oil 1L,Edible Oil,HSN1052,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4823,29/05/2026,Amul Butter 500g,Dairy,HSN1053,5,"₹ 1,396.50",₹ 28.50,₹ 69.82,245.00,Counter Sale
+INV-4824,29/05/2026,Tata Salt 1kg,Staples,HSN1054,14,₹ 392.00,₹ 0.00,₹ 70.56,22.00,Counter Sale
+INV-4825,29/05/2026,Detergent 1kg,Household,HSN1055,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4826,29/05/2026,Biscuits Pack,Snacks,HSN1056,8,₹ 836.00,₹ 44.00,₹ 150.48,75.00,Counter Sale
+INV-4827,30/05/2026,Toor Dal 1kg,Pulses,HSN1057,14,"₹ 1,981.70",₹ 104.30,₹ 99.08,118.00,Counter Sale
+INV-4828,30/05/2026,Basmati Rice 5kg,Grains,HSN1058,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4829,30/05/2026,Sunflower Oil 1L,Edible Oil,HSN1059,13,"₹ 2,145.00",₹ 0.00,₹ 386.10,128.00,Counter Sale
+INV-4830,30/05/2026,Amul Butter 500g,Dairy,HSN1060,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4831,30/05/2026,Tata Salt 1kg,Staples,HSN1061,21,₹ 588.00,₹ 0.00,₹ 105.84,22.00,Counter Sale
+INV-4832,30/05/2026,Detergent 1kg,Household,HSN1062,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4833,30/05/2026,Biscuits Pack,Snacks,HSN1063,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4834,31/05/2026,Toor Dal 1kg,Pulses,HSN1064,8,"₹ 1,192.00",₹ 0.00,₹ 59.60,118.00,Counter Sale
+INV-4835,31/05/2026,Basmati Rice 5kg,Grains,HSN1065,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4836,31/05/2026,Sunflower Oil 1L,Edible Oil,HSN1066,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-4837,31/05/2026,Amul Butter 500g,Dairy,HSN1067,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4838,31/05/2026,Tata Salt 1kg,Staples,HSN1068,12,₹ 319.20,₹ 16.80,₹ 57.46,22.00,Counter Sale
+INV-4839,31/05/2026,Detergent 1kg,Household,HSN1069,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4840,31/05/2026,Biscuits Pack,Snacks,HSN1070,12,"₹ 1,254.00",₹ 66.00,₹ 225.72,75.00,Counter Sale
+INV-4841,01/06/2026,Toor Dal 1kg,Pulses,HSN1071,10,"₹ 1,415.50",₹ 74.50,₹ 70.78,118.00,Counter Sale
+INV-4842,01/06/2026,Basmati Rice 5kg,Grains,HSN1072,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4843,01/06/2026,Sunflower Oil 1L,Edible Oil,HSN1073,5,₹ 825.00,₹ 0.00,₹ 148.50,128.00,Counter Sale
+INV-4844,01/06/2026,Amul Butter 500g,Dairy,HSN1074,2,₹ 541.50,₹ 28.50,₹ 27.08,245.00,Counter Sale
+INV-4845,01/06/2026,Tata Salt 1kg,Staples,HSN1075,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4846,01/06/2026,Detergent 1kg,Household,HSN1076,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4847,01/06/2026,Biscuits Pack,Snacks,HSN1077,14,"₹ 1,540.00",₹ 0.00,₹ 277.20,75.00,Counter Sale
+INV-4848,02/06/2026,Toor Dal 1kg,Pulses,HSN1078,17,"₹ 2,533.00",₹ 0.00,₹ 126.65,118.00,Counter Sale
+INV-4849,02/06/2026,Basmati Rice 5kg,Grains,HSN1079,2,"₹ 1,138.10",₹ 59.90,₹ 56.90,460.00,Counter Sale
+INV-4850,02/06/2026,Sunflower Oil 1L,Edible Oil,HSN1080,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4851,02/06/2026,Amul Butter 500g,Dairy,HSN1081,3,₹ 855.00,₹ 0.00,₹ 42.75,245.00,Counter Sale
+INV-4852,02/06/2026,Tata Salt 1kg,Staples,HSN1082,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-4853,02/06/2026,Detergent 1kg,Household,HSN1083,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4854,02/06/2026,Biscuits Pack,Snacks,HSN1084,18,"₹ 1,980.00",₹ 0.00,₹ 356.40,75.00,Counter Sale
+INV-4855,03/06/2026,Toor Dal 1kg,Pulses,HSN1085,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4856,03/06/2026,Basmati Rice 5kg,Grains,HSN1086,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4857,03/06/2026,Sunflower Oil 1L,Edible Oil,HSN1087,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-4858,03/06/2026,Amul Butter 500g,Dairy,HSN1088,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4859,03/06/2026,Tata Salt 1kg,Staples,HSN1089,20,₹ 560.00,₹ 0.00,₹ 100.80,22.00,Counter Sale
+INV-4860,03/06/2026,Detergent 1kg,Household,HSN1000,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4861,03/06/2026,Biscuits Pack,Snacks,HSN1001,15,"₹ 1,650.00",₹ 0.00,₹ 297.00,75.00,Counter Sale
+INV-4862,04/06/2026,Toor Dal 1kg,Pulses,HSN1002,13,"₹ 1,937.00",₹ 0.00,₹ 96.85,118.00,Counter Sale
+INV-4863,04/06/2026,Basmati Rice 5kg,Grains,HSN1003,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4864,04/06/2026,Sunflower Oil 1L,Edible Oil,HSN1004,14,"₹ 2,263.80",₹ 46.20,₹ 407.48,128.00,Counter Sale
+INV-4865,04/06/2026,Amul Butter 500g,Dairy,HSN1005,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4866,04/06/2026,Tata Salt 1kg,Staples,HSN1006,22,₹ 585.20,₹ 30.80,₹ 105.34,22.00,Counter Sale
+INV-4867,04/06/2026,Detergent 1kg,Household,HSN1007,5,₹ 660.25,₹ 34.75,₹ 118.84,96.00,Counter Sale
+INV-4868,04/06/2026,Biscuits Pack,Snacks,HSN1008,12,"₹ 1,320.00",₹ 0.00,₹ 237.60,75.00,Counter Sale
+INV-4869,05/06/2026,Toor Dal 1kg,Pulses,HSN1009,18,"₹ 2,547.90",₹ 134.10,₹ 127.40,118.00,Counter Sale
+INV-4870,05/06/2026,Basmati Rice 5kg,Grains,HSN1010,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4871,05/06/2026,Sunflower Oil 1L,Edible Oil,HSN1011,8,"₹ 1,254.00",₹ 66.00,₹ 225.72,128.00,Counter Sale
+INV-4872,05/06/2026,Amul Butter 500g,Dairy,HSN1012,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4873,05/06/2026,Tata Salt 1kg,Staples,HSN1013,9,₹ 252.00,₹ 0.00,₹ 45.36,22.00,Counter Sale
+INV-4874,05/06/2026,Detergent 1kg,Household,HSN1014,5,₹ 681.10,₹ 13.90,₹ 122.60,96.00,Counter Sale
+INV-4875,05/06/2026,Biscuits Pack,Snacks,HSN1015,12,"₹ 1,320.00",₹ 0.00,₹ 237.60,75.00,Counter Sale
+INV-4876,06/06/2026,Toor Dal 1kg,Pulses,HSN1016,12,"₹ 1,698.60",₹ 89.40,₹ 84.93,118.00,Counter Sale
+INV-4877,06/06/2026,Basmati Rice 5kg,Grains,HSN1017,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4878,06/06/2026,Sunflower Oil 1L,Edible Oil,HSN1018,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4879,06/06/2026,Amul Butter 500g,Dairy,HSN1019,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4880,06/06/2026,Tata Salt 1kg,Staples,HSN1020,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-4881,06/06/2026,Detergent 1kg,Household,HSN1021,4,₹ 544.88,₹ 11.12,₹ 98.08,96.00,Counter Sale
+INV-4882,06/06/2026,Biscuits Pack,Snacks,HSN1022,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4883,07/06/2026,Toor Dal 1kg,Pulses,HSN1023,10,"₹ 1,415.50",₹ 74.50,₹ 70.78,118.00,Counter Sale
+INV-4884,07/06/2026,Basmati Rice 5kg,Grains,HSN1024,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4885,07/06/2026,Sunflower Oil 1L,Edible Oil,HSN1025,12,"₹ 1,980.00",₹ 0.00,₹ 356.40,128.00,Counter Sale
+INV-4886,07/06/2026,Amul Butter 500g,Dairy,HSN1026,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-4887,07/06/2026,Tata Salt 1kg,Staples,HSN1027,13,₹ 345.80,₹ 18.20,₹ 62.24,22.00,Counter Sale
+INV-4888,07/06/2026,Detergent 1kg,Household,HSN1028,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-4889,07/06/2026,Biscuits Pack,Snacks,HSN1029,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-4890,08/06/2026,Toor Dal 1kg,Pulses,HSN1030,19,"₹ 2,831.00",₹ 0.00,₹ 141.55,118.00,Counter Sale
+INV-4891,08/06/2026,Basmati Rice 5kg,Grains,HSN1031,4,"₹ 2,348.08",₹ 47.92,₹ 117.40,460.00,Counter Sale
+INV-4892,08/06/2026,Sunflower Oil 1L,Edible Oil,HSN1032,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4893,08/06/2026,Amul Butter 500g,Dairy,HSN1033,5,"₹ 1,425.00",₹ 0.00,₹ 71.25,245.00,Counter Sale
+INV-4894,08/06/2026,Tata Salt 1kg,Staples,HSN1034,15,₹ 420.00,₹ 0.00,₹ 75.60,22.00,Counter Sale
+INV-4895,08/06/2026,Detergent 1kg,Household,HSN1035,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-4896,08/06/2026,Biscuits Pack,Snacks,HSN1036,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-4897,09/06/2026,Toor Dal 1kg,Pulses,HSN1037,9,"₹ 1,341.00",₹ 0.00,₹ 67.05,118.00,Counter Sale
+INV-4898,09/06/2026,Basmati Rice 5kg,Grains,HSN1038,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4899,09/06/2026,Sunflower Oil 1L,Edible Oil,HSN1039,9,"₹ 1,455.30",₹ 29.70,₹ 261.95,128.00,Counter Sale
+INV-4900,09/06/2026,Amul Butter 500g,Dairy,HSN1040,3,₹ 812.25,₹ 42.75,₹ 40.61,245.00,Counter Sale
+INV-4901,09/06/2026,Tata Salt 1kg,Staples,HSN1041,6,₹ 168.00,₹ 0.00,₹ 30.24,22.00,Counter Sale
+INV-4902,09/06/2026,Detergent 1kg,Household,HSN1042,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4903,09/06/2026,Biscuits Pack,Snacks,HSN1043,7,₹ 754.60,₹ 15.40,₹ 135.83,75.00,Counter Sale
+INV-4904,10/06/2026,Toor Dal 1kg,Pulses,HSN1044,15,"₹ 2,235.00",₹ 0.00,₹ 111.75,118.00,Counter Sale
+INV-4905,10/06/2026,Basmati Rice 5kg,Grains,HSN1045,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4906,10/06/2026,Sunflower Oil 1L,Edible Oil,HSN1046,5,₹ 808.50,₹ 16.50,₹ 145.53,128.00,Counter Sale
+INV-4907,10/06/2026,Amul Butter 500g,Dairy,HSN1047,3,₹ 837.90,₹ 17.10,₹ 41.90,245.00,Counter Sale
+INV-4908,10/06/2026,Tata Salt 1kg,Staples,HSN1048,21,₹ 588.00,₹ 0.00,₹ 105.84,22.00,Counter Sale
+INV-4909,10/06/2026,Detergent 1kg,Household,HSN1049,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4910,10/06/2026,Biscuits Pack,Snacks,HSN1050,9,₹ 970.20,₹ 19.80,₹ 174.64,75.00,Counter Sale
+INV-4911,11/06/2026,Toor Dal 1kg,Pulses,HSN1051,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4912,11/06/2026,Basmati Rice 5kg,Grains,HSN1052,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4913,11/06/2026,Sunflower Oil 1L,Edible Oil,HSN1053,5,₹ 783.75,₹ 41.25,₹ 141.07,128.00,Counter Sale
+INV-4914,11/06/2026,Amul Butter 500g,Dairy,HSN1054,7,"₹ 1,895.25",₹ 99.75,₹ 94.76,245.00,Counter Sale
+INV-4915,11/06/2026,Tata Salt 1kg,Staples,HSN1055,23,₹ 644.00,₹ 0.00,₹ 115.92,22.00,Counter Sale
+INV-4916,11/06/2026,Detergent 1kg,Household,HSN1056,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4917,11/06/2026,Biscuits Pack,Snacks,HSN1057,14,"₹ 1,509.20",₹ 30.80,₹ 271.66,75.00,Counter Sale
+INV-4918,12/06/2026,Toor Dal 1kg,Pulses,HSN1058,19,"₹ 2,689.45",₹ 141.55,₹ 134.47,118.00,Counter Sale
+INV-4919,12/06/2026,Basmati Rice 5kg,Grains,HSN1059,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4920,12/06/2026,Sunflower Oil 1L,Edible Oil,HSN1060,7,"₹ 1,155.00",₹ 0.00,₹ 207.90,128.00,Counter Sale
+INV-4921,12/06/2026,Amul Butter 500g,Dairy,HSN1061,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4922,12/06/2026,Tata Salt 1kg,Staples,HSN1062,8,₹ 212.80,₹ 11.20,₹ 38.30,22.00,Counter Sale
+INV-4923,12/06/2026,Detergent 1kg,Household,HSN1063,8,"₹ 1,112.00",₹ 0.00,₹ 200.16,96.00,Counter Sale
+INV-4924,12/06/2026,Biscuits Pack,Snacks,HSN1064,11,"₹ 1,149.50",₹ 60.50,₹ 206.91,75.00,Counter Sale
+INV-4925,13/06/2026,Toor Dal 1kg,Pulses,HSN1065,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-4926,13/06/2026,Basmati Rice 5kg,Grains,HSN1066,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-4927,13/06/2026,Sunflower Oil 1L,Edible Oil,HSN1067,14,"₹ 2,194.50",₹ 115.50,₹ 395.01,128.00,Counter Sale
+INV-4928,13/06/2026,Amul Butter 500g,Dairy,HSN1068,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4929,13/06/2026,Tata Salt 1kg,Staples,HSN1069,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4930,13/06/2026,Detergent 1kg,Household,HSN1070,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4931,13/06/2026,Biscuits Pack,Snacks,HSN1071,17,"₹ 1,776.50",₹ 93.50,₹ 319.77,75.00,Counter Sale
+INV-4932,14/06/2026,Toor Dal 1kg,Pulses,HSN1072,17,"₹ 2,482.34",₹ 50.66,₹ 124.12,118.00,Counter Sale
+INV-4933,14/06/2026,Basmati Rice 5kg,Grains,HSN1073,5,"₹ 2,995.00",₹ 0.00,₹ 149.75,460.00,Counter Sale
+INV-4934,14/06/2026,Sunflower Oil 1L,Edible Oil,HSN1074,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4935,14/06/2026,Amul Butter 500g,Dairy,HSN1075,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4936,14/06/2026,Tata Salt 1kg,Staples,HSN1076,14,₹ 384.16,₹ 7.84,₹ 69.15,22.00,Counter Sale
+INV-4937,14/06/2026,Detergent 1kg,Household,HSN1077,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-4938,14/06/2026,Biscuits Pack,Snacks,HSN1078,13,"₹ 1,401.40",₹ 28.60,₹ 252.25,75.00,Counter Sale
+INV-4939,15/06/2026,Toor Dal 1kg,Pulses,HSN1079,18,"₹ 2,682.00",₹ 0.00,₹ 134.10,118.00,Counter Sale
+INV-4940,15/06/2026,Basmati Rice 5kg,Grains,HSN1080,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-4941,15/06/2026,Sunflower Oil 1L,Edible Oil,HSN1081,7,"₹ 1,131.90",₹ 23.10,₹ 203.74,128.00,Counter Sale
+INV-4942,15/06/2026,Amul Butter 500g,Dairy,HSN1082,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4943,15/06/2026,Tata Salt 1kg,Staples,HSN1083,17,₹ 466.48,₹ 9.52,₹ 83.97,22.00,Counter Sale
+INV-4944,15/06/2026,Detergent 1kg,Household,HSN1084,4,₹ 528.20,₹ 27.80,₹ 95.08,96.00,Counter Sale
+INV-4945,15/06/2026,Biscuits Pack,Snacks,HSN1085,5,₹ 550.00,₹ 0.00,₹ 99.00,75.00,Counter Sale
+INV-4946,16/06/2026,Toor Dal 1kg,Pulses,HSN1086,17,"₹ 2,533.00",₹ 0.00,₹ 126.65,118.00,Counter Sale
+INV-4947,16/06/2026,Basmati Rice 5kg,Grains,HSN1087,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4948,16/06/2026,Sunflower Oil 1L,Edible Oil,HSN1088,14,"₹ 2,263.80",₹ 46.20,₹ 407.48,128.00,Counter Sale
+INV-4949,16/06/2026,Amul Butter 500g,Dairy,HSN1089,2,₹ 541.50,₹ 28.50,₹ 27.08,245.00,Counter Sale
+INV-4950,16/06/2026,Tata Salt 1kg,Staples,HSN1000,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-4951,16/06/2026,Detergent 1kg,Household,HSN1001,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4952,16/06/2026,Biscuits Pack,Snacks,HSN1002,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4953,17/06/2026,Toor Dal 1kg,Pulses,HSN1003,5,₹ 745.00,₹ 0.00,₹ 37.25,118.00,Counter Sale
+INV-4954,17/06/2026,Basmati Rice 5kg,Grains,HSN1004,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4955,17/06/2026,Sunflower Oil 1L,Edible Oil,HSN1005,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4956,17/06/2026,Amul Butter 500g,Dairy,HSN1006,7,"₹ 1,955.10",₹ 39.90,₹ 97.76,245.00,Counter Sale
+INV-4957,17/06/2026,Tata Salt 1kg,Staples,HSN1007,19,₹ 532.00,₹ 0.00,₹ 95.76,22.00,Counter Sale
+INV-4958,17/06/2026,Detergent 1kg,Household,HSN1008,4,₹ 556.00,₹ 0.00,₹ 100.08,96.00,Counter Sale
+INV-4959,17/06/2026,Biscuits Pack,Snacks,HSN1009,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale
+INV-4960,18/06/2026,Toor Dal 1kg,Pulses,HSN1010,13,"₹ 1,898.26",₹ 38.74,₹ 94.91,118.00,Counter Sale
+INV-4961,18/06/2026,Basmati Rice 5kg,Grains,HSN1011,6,"₹ 3,414.30",₹ 179.70,₹ 170.72,460.00,Counter Sale
+INV-4962,18/06/2026,Sunflower Oil 1L,Edible Oil,HSN1012,8,"₹ 1,254.00",₹ 66.00,₹ 225.72,128.00,Counter Sale
+INV-4963,18/06/2026,Amul Butter 500g,Dairy,HSN1013,6,"₹ 1,675.80",₹ 34.20,₹ 83.79,245.00,Counter Sale
+INV-4964,18/06/2026,Tata Salt 1kg,Staples,HSN1014,7,₹ 196.00,₹ 0.00,₹ 35.28,22.00,Counter Sale
+INV-4965,18/06/2026,Detergent 1kg,Household,HSN1015,2,₹ 278.00,₹ 0.00,₹ 50.04,96.00,Counter Sale
+INV-4966,18/06/2026,Biscuits Pack,Snacks,HSN1016,5,₹ 522.50,₹ 27.50,₹ 94.05,75.00,Counter Sale
+INV-4967,19/06/2026,Toor Dal 1kg,Pulses,HSN1017,9,"₹ 1,273.95",₹ 67.05,₹ 63.70,118.00,Counter Sale
+INV-4968,19/06/2026,Basmati Rice 5kg,Grains,HSN1018,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-4969,19/06/2026,Sunflower Oil 1L,Edible Oil,HSN1019,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4970,19/06/2026,Amul Butter 500g,Dairy,HSN1020,2,₹ 558.60,₹ 11.40,₹ 27.93,245.00,Counter Sale
+INV-4971,19/06/2026,Tata Salt 1kg,Staples,HSN1021,14,₹ 384.16,₹ 7.84,₹ 69.15,22.00,Counter Sale
+INV-4972,19/06/2026,Detergent 1kg,Household,HSN1022,9,"₹ 1,251.00",₹ 0.00,₹ 225.18,96.00,Counter Sale
+INV-4973,19/06/2026,Biscuits Pack,Snacks,HSN1023,10,"₹ 1,100.00",₹ 0.00,₹ 198.00,75.00,Counter Sale
+INV-4974,20/06/2026,Toor Dal 1kg,Pulses,HSN1024,18,"₹ 2,628.36",₹ 53.64,₹ 131.42,118.00,Counter Sale
+INV-4975,20/06/2026,Basmati Rice 5kg,Grains,HSN1025,2,"₹ 1,174.04",₹ 23.96,₹ 58.70,460.00,Counter Sale
+INV-4976,20/06/2026,Sunflower Oil 1L,Edible Oil,HSN1026,6,₹ 970.20,₹ 19.80,₹ 174.64,128.00,Counter Sale
+INV-4977,20/06/2026,Amul Butter 500g,Dairy,HSN1027,6,"₹ 1,624.50",₹ 85.50,₹ 81.23,245.00,Counter Sale
+INV-4978,20/06/2026,Tata Salt 1kg,Staples,HSN1028,20,₹ 560.00,₹ 0.00,₹ 100.80,22.00,Counter Sale
+INV-4979,20/06/2026,Detergent 1kg,Household,HSN1029,6,₹ 834.00,₹ 0.00,₹ 150.12,96.00,Counter Sale
+INV-4980,20/06/2026,Biscuits Pack,Snacks,HSN1030,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-4981,21/06/2026,Toor Dal 1kg,Pulses,HSN1031,12,"₹ 1,788.00",₹ 0.00,₹ 89.40,118.00,Counter Sale
+INV-4982,21/06/2026,Basmati Rice 5kg,Grains,HSN1032,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-4983,21/06/2026,Sunflower Oil 1L,Edible Oil,HSN1033,6,₹ 990.00,₹ 0.00,₹ 178.20,128.00,Counter Sale
+INV-4984,21/06/2026,Amul Butter 500g,Dairy,HSN1034,4,"₹ 1,140.00",₹ 0.00,₹ 57.00,245.00,Counter Sale
+INV-4985,21/06/2026,Tata Salt 1kg,Staples,HSN1035,21,₹ 576.24,₹ 11.76,₹ 103.72,22.00,Counter Sale
+INV-4986,21/06/2026,Detergent 1kg,Household,HSN1036,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-4987,21/06/2026,Biscuits Pack,Snacks,HSN1037,17,"₹ 1,832.60",₹ 37.40,₹ 329.87,75.00,Counter Sale
+INV-4988,22/06/2026,Toor Dal 1kg,Pulses,HSN1038,13,"₹ 1,898.26",₹ 38.74,₹ 94.91,118.00,Counter Sale
+INV-4989,22/06/2026,Basmati Rice 5kg,Grains,HSN1039,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-4990,22/06/2026,Sunflower Oil 1L,Edible Oil,HSN1040,14,"₹ 2,263.80",₹ 46.20,₹ 407.48,128.00,Counter Sale
+INV-4991,22/06/2026,Amul Butter 500g,Dairy,HSN1041,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-4992,22/06/2026,Tata Salt 1kg,Staples,HSN1042,7,₹ 186.20,₹ 9.80,₹ 33.52,22.00,Counter Sale
+INV-4993,22/06/2026,Detergent 1kg,Household,HSN1043,6,₹ 792.30,₹ 41.70,₹ 142.61,96.00,Counter Sale
+INV-4994,22/06/2026,Biscuits Pack,Snacks,HSN1044,12,"₹ 1,293.60",₹ 26.40,₹ 232.85,75.00,Counter Sale
+INV-4995,23/06/2026,Toor Dal 1kg,Pulses,HSN1045,17,"₹ 2,533.00",₹ 0.00,₹ 126.65,118.00,Counter Sale
+INV-4996,23/06/2026,Basmati Rice 5kg,Grains,HSN1046,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-4997,23/06/2026,Sunflower Oil 1L,Edible Oil,HSN1047,14,"₹ 2,310.00",₹ 0.00,₹ 415.80,128.00,Counter Sale
+INV-4998,23/06/2026,Amul Butter 500g,Dairy,HSN1048,6,"₹ 1,710.00",₹ 0.00,₹ 85.50,245.00,Counter Sale
+INV-4999,23/06/2026,Tata Salt 1kg,Staples,HSN1049,11,₹ 308.00,₹ 0.00,₹ 55.44,22.00,Counter Sale
+INV-5000,23/06/2026,Detergent 1kg,Household,HSN1050,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-5001,23/06/2026,Biscuits Pack,Snacks,HSN1051,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-5002,24/06/2026,Toor Dal 1kg,Pulses,HSN1052,16,"₹ 2,384.00",₹ 0.00,₹ 119.20,118.00,Counter Sale
+INV-5003,24/06/2026,Basmati Rice 5kg,Grains,HSN1053,5,"₹ 2,935.10",₹ 59.90,₹ 146.76,460.00,Counter Sale
+INV-5004,24/06/2026,Sunflower Oil 1L,Edible Oil,HSN1054,14,"₹ 2,263.80",₹ 46.20,₹ 407.48,128.00,Counter Sale
+INV-5005,24/06/2026,Amul Butter 500g,Dairy,HSN1055,2,₹ 541.50,₹ 28.50,₹ 27.08,245.00,Counter Sale
+INV-5006,24/06/2026,Tata Salt 1kg,Staples,HSN1056,18,₹ 504.00,₹ 0.00,₹ 90.72,22.00,Counter Sale
+INV-5007,24/06/2026,Detergent 1kg,Household,HSN1057,7,₹ 953.54,₹ 19.46,₹ 171.64,96.00,Counter Sale
+INV-5008,24/06/2026,Biscuits Pack,Snacks,HSN1058,5,₹ 539.00,₹ 11.00,₹ 97.02,75.00,Counter Sale
+INV-5009,25/06/2026,Toor Dal 1kg,Pulses,HSN1059,7,"₹ 1,022.14",₹ 20.86,₹ 51.11,118.00,Counter Sale
+INV-5010,25/06/2026,Basmati Rice 5kg,Grains,HSN1060,3,"₹ 1,707.15",₹ 89.85,₹ 85.36,460.00,Counter Sale
+INV-5011,25/06/2026,Sunflower Oil 1L,Edible Oil,HSN1061,9,"₹ 1,485.00",₹ 0.00,₹ 267.30,128.00,Counter Sale
+INV-5012,25/06/2026,Amul Butter 500g,Dairy,HSN1062,7,"₹ 1,895.25",₹ 99.75,₹ 94.76,245.00,Counter Sale
+INV-5013,25/06/2026,Tata Salt 1kg,Staples,HSN1063,13,₹ 364.00,₹ 0.00,₹ 65.52,22.00,Counter Sale
+INV-5014,25/06/2026,Detergent 1kg,Household,HSN1064,6,₹ 817.32,₹ 16.68,₹ 147.12,96.00,Counter Sale
+INV-5015,25/06/2026,Biscuits Pack,Snacks,HSN1065,8,₹ 880.00,₹ 0.00,₹ 158.40,75.00,Counter Sale
+INV-5016,26/06/2026,Toor Dal 1kg,Pulses,HSN1066,14,"₹ 2,086.00",₹ 0.00,₹ 104.30,118.00,Counter Sale
+INV-5017,26/06/2026,Basmati Rice 5kg,Grains,HSN1067,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-5018,26/06/2026,Sunflower Oil 1L,Edible Oil,HSN1068,5,₹ 808.50,₹ 16.50,₹ 145.53,128.00,Counter Sale
+INV-5019,26/06/2026,Amul Butter 500g,Dairy,HSN1069,4,"₹ 1,083.00",₹ 57.00,₹ 54.15,245.00,Counter Sale
+INV-5020,26/06/2026,Tata Salt 1kg,Staples,HSN1070,8,₹ 224.00,₹ 0.00,₹ 40.32,22.00,Counter Sale
+INV-5021,26/06/2026,Detergent 1kg,Household,HSN1071,3,₹ 417.00,₹ 0.00,₹ 75.06,96.00,Counter Sale
+INV-5022,26/06/2026,Biscuits Pack,Snacks,HSN1072,17,"₹ 1,870.00",₹ 0.00,₹ 336.60,75.00,Counter Sale
+INV-5023,27/06/2026,Toor Dal 1kg,Pulses,HSN1073,10,"₹ 1,490.00",₹ 0.00,₹ 74.50,118.00,Counter Sale
+INV-5024,27/06/2026,Basmati Rice 5kg,Grains,HSN1074,2,"₹ 1,198.00",₹ 0.00,₹ 59.90,460.00,Counter Sale
+INV-5025,27/06/2026,Sunflower Oil 1L,Edible Oil,HSN1075,6,₹ 970.20,₹ 19.80,₹ 174.64,128.00,Counter Sale
+INV-5026,27/06/2026,Amul Butter 500g,Dairy,HSN1076,4,"₹ 1,083.00",₹ 57.00,₹ 54.15,245.00,Counter Sale
+INV-5027,27/06/2026,Tata Salt 1kg,Staples,HSN1077,9,₹ 252.00,₹ 0.00,₹ 45.36,22.00,Counter Sale
+INV-5028,27/06/2026,Detergent 1kg,Household,HSN1078,7,₹ 973.00,₹ 0.00,₹ 175.14,96.00,Counter Sale
+INV-5029,27/06/2026,Biscuits Pack,Snacks,HSN1079,12,"₹ 1,320.00",₹ 0.00,₹ 237.60,75.00,Counter Sale
+INV-5030,28/06/2026,Toor Dal 1kg,Pulses,HSN1080,14,"₹ 1,981.70",₹ 104.30,₹ 99.08,118.00,Counter Sale
+INV-5031,28/06/2026,Basmati Rice 5kg,Grains,HSN1081,4,"₹ 2,396.00",₹ 0.00,₹ 119.80,460.00,Counter Sale
+INV-5032,28/06/2026,Sunflower Oil 1L,Edible Oil,HSN1082,11,"₹ 1,815.00",₹ 0.00,₹ 326.70,128.00,Counter Sale
+INV-5033,28/06/2026,Amul Butter 500g,Dairy,HSN1083,8,"₹ 2,280.00",₹ 0.00,₹ 114.00,245.00,Counter Sale
+INV-5034,28/06/2026,Tata Salt 1kg,Staples,HSN1084,8,₹ 224.00,₹ 0.00,₹ 40.32,22.00,Counter Sale
+INV-5035,28/06/2026,Detergent 1kg,Household,HSN1085,5,₹ 695.00,₹ 0.00,₹ 125.10,96.00,Counter Sale
+INV-5036,28/06/2026,Biscuits Pack,Snacks,HSN1086,11,"₹ 1,210.00",₹ 0.00,₹ 217.80,75.00,Counter Sale
+INV-5037,29/06/2026,Toor Dal 1kg,Pulses,HSN1087,6,₹ 894.00,₹ 0.00,₹ 44.70,118.00,Counter Sale
+INV-5038,29/06/2026,Basmati Rice 5kg,Grains,HSN1088,6,"₹ 3,522.12",₹ 71.88,₹ 176.11,460.00,Counter Sale
+INV-5039,29/06/2026,Sunflower Oil 1L,Edible Oil,HSN1089,10,"₹ 1,567.50",₹ 82.50,₹ 282.15,128.00,Counter Sale
+INV-5040,29/06/2026,Amul Butter 500g,Dairy,HSN1000,3,₹ 812.25,₹ 42.75,₹ 40.61,245.00,Counter Sale
+INV-5041,29/06/2026,Tata Salt 1kg,Staples,HSN1001,16,₹ 425.60,₹ 22.40,₹ 76.61,22.00,Counter Sale
+INV-5042,29/06/2026,Detergent 1kg,Household,HSN1002,9,"₹ 1,188.45",₹ 62.55,₹ 213.92,96.00,Counter Sale
+INV-5043,29/06/2026,Biscuits Pack,Snacks,HSN1003,6,₹ 660.00,₹ 0.00,₹ 118.80,75.00,Counter Sale
+INV-5044,30/06/2026,Toor Dal 1kg,Pulses,HSN1004,18,"₹ 2,682.00",₹ 0.00,₹ 134.10,118.00,Counter Sale
+INV-5045,30/06/2026,Basmati Rice 5kg,Grains,HSN1005,3,"₹ 1,797.00",₹ 0.00,₹ 89.85,460.00,Counter Sale
+INV-5046,30/06/2026,Sunflower Oil 1L,Edible Oil,HSN1006,11,"₹ 1,724.25",₹ 90.75,₹ 310.36,128.00,Counter Sale
+INV-5047,30/06/2026,Amul Butter 500g,Dairy,HSN1007,7,"₹ 1,995.00",₹ 0.00,₹ 99.75,245.00,Counter Sale
+INV-5048,30/06/2026,Tata Salt 1kg,Staples,HSN1008,7,₹ 196.00,₹ 0.00,₹ 35.28,22.00,Counter Sale
+INV-5049,30/06/2026,Detergent 1kg,Household,HSN1009,4,₹ 544.88,₹ 11.12,₹ 98.08,96.00,Counter Sale
+INV-5050,30/06/2026,Biscuits Pack,Snacks,HSN1010,16,"₹ 1,672.00",₹ 88.00,₹ 300.96,75.00,Counter Sale

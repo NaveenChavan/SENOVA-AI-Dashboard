@@ -8,6 +8,20 @@ export default {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
+      // Tailwind's default scale bottoms out at 0.75rem (11.25px at our 15px
+      // root), which was too small to read comfortably in dense panels. Each
+      // step is nudged up so `text-xs` is a genuinely readable 12.2px and
+      // `text-sm` is 13.1px, without touching a single component.
+      fontSize: {
+        '2xs': ['0.75rem', { lineHeight: '1.35' }],
+        xs: ['0.8125rem', { lineHeight: '1.45' }],
+        sm: ['0.875rem', { lineHeight: '1.5' }],
+        base: ['0.9375rem', { lineHeight: '1.55' }],
+        lg: ['1.0625rem', { lineHeight: '1.45' }],
+        xl: ['1.1875rem', { lineHeight: '1.35' }],
+        '2xl': ['1.4375rem', { lineHeight: '1.3' }],
+        '3xl': ['1.75rem', { lineHeight: '1.25' }],
+      },
       // Tailwind's default breakpoints stop at 2xl (1536px). We add named
       // breakpoints for QHD/4K/8K desktops and large TVs used as monitors,
       // so layouts can cap width / increase density instead of stretching

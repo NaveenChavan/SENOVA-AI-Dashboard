@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
+
 import Button from '../common/Button'
+import { formatNumber } from '../charts/chartFormat'
 
 /**
  * Column-mapping confirmation screen.
@@ -23,23 +25,6 @@ const FALLBACK_OPTIONAL = []
 
 /** Optional fields that are numbers rather than dimensions, for grouping. */
 const MEASURE_FIELDS = new Set(['Line Total', 'Discount', 'Tax', 'Stock On Hand'])
-
-function ConfidenceBadge({ confidence }) {
-  const styles = {
-    exact: { bg: 'rgba(16,185,129,0.12)', color: '#10b981', label: 'Matched' },
-    fuzzy: { bg: 'rgba(234,179,8,0.12)', color: '#facc15', label: 'Guessed — please check' },
-    none: { bg: 'rgba(148,163,184,0.12)', color: '#94a3b8', label: 'Not recognised' },
-  }
-  const style = styles[confidence] || styles.none
-  return (
-    <span
-      className="text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap"
-      style={{ background: style.bg, color: style.color }}
-    >
-      {style.label}
-    </span>
-  )
-}
 
 export default function ColumnMappingScreen({ preview, onConfirm, onCancel, submitting }) {
   const requiredFields = preview.required_fields?.length ? preview.required_fields : FALLBACK_REQUIRED
@@ -83,30 +68,28 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
   }
 
   return (
-    <div className="card-gradient rounded-2xl overflow-hidden" style={{ border: '1px solid var(--border-strong)' }}>
-      <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ borderBottom: '1px solid var(--border-strong)' }}>
-        <h2 className="text-base sm:text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-          Confirm your columns
-        </h2>
-        <p className="text-xs sm:text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-          Every shop's spreadsheet is a little different. We've matched what we could — please check the
-          guesses below and fix anything that's wrong.
+    <div className="card">
+      <header className="px-[var(--card-pad)] py-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+        <h2>Confirm your columns</h2>
+        <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+          Every shop's spreadsheet is a little different. Check the guesses below and fix anything that's wrong.
         </p>
-        <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
-          {preview.row_count.toLocaleString('en-IN')} row{preview.row_count === 1 ? '' : 's'} detected in{' '}
+        <p className="text-[12px] mt-1" style={{ color: 'var(--text-muted)' }}>
+          {formatNumber(preview.row_count)} row{preview.row_count === 1 ? '' : 's'} detected in{' '}
           <span className="font-medium">{preview.filename}</span>
         </p>
-      </div>
+      </header>
 
-      {/* overflow-x-auto so a wide mapping table scrolls instead of breaking. */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+      {/* Scrolls inside the card: a 40-column file must not make the page
+          endless, and the action row below must stay reachable. */}
+      <div className="scroll-x" style={{ maxHeight: '46vh', overflowY: 'auto' }}>
+        <table className="table">
           <thead>
-            <tr className="text-left" style={{ borderBottom: '1px solid var(--border-strong)' }}>
-              <Th>Your column</Th>
-              <Th>Sample value</Th>
-              <Th>Maps to</Th>
-              <Th>Status</Th>
+            <tr>
+              <th scope="col">Your column</th>
+              <th scope="col">Sample value</th>
+              <th scope="col">Maps to</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -116,26 +99,25 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
               const sample = preview.sample_rows?.[0]?.[column.raw_column]
 
               return (
-                <tr
-                  key={column.raw_column}
-                  className="last:border-0"
-                  style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                >
-                  <td className="px-4 sm:px-6 py-3 font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {column.raw_column}
+                <tr key={column.raw_column}>
+                  <th scope="row">
+                    <span className="block truncate" style={{ maxWidth: 180 }} title={column.raw_column}>
+                      {column.raw_column}
+                    </span>
+                  </th>
+
+                  <td className="font-mono text-[12px]" style={{ color: 'var(--text-muted)', textAlign: 'left' }}>
+                    <span className="block truncate" style={{ maxWidth: 130 }} title={sample ?? ''}>
+                      {sample ?? '—'}
+                    </span>
                   </td>
-                  <td
-                    className="px-4 py-3 font-mono text-xs truncate max-w-[160px]"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {sample ?? '—'}
-                  </td>
-                  <td className="px-4 py-3">
+
+                  <td style={{ textAlign: 'left' }}>
                     <select
                       value={value}
                       onChange={(event) => handleChange(column.raw_column, event.target.value)}
-                      className="filter-select w-full max-w-[220px] cursor-pointer"
-                      style={isDuplicate ? { borderColor: 'var(--accent-red)' } : undefined}
+                      className="filter-select"
+                      style={{ maxWidth: 190, borderColor: isDuplicate ? 'var(--accent-red)' : undefined }}
                       aria-label={`Map column ${column.raw_column} to a field`}
                     >
                       <option value="">Ignore this column</option>
@@ -176,17 +158,21 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                     {/* Helper text for the chosen field: this screen is where a
                         wrong pick quietly corrupts every later number. */}
                     {value && fieldHelp[value] && !isDuplicate && (
-                      <p className="text-[11px] mt-1 max-w-[220px]" style={{ color: 'var(--text-muted)' }}>
+                      <span
+                        className="block text-[11.5px] mt-0.5 whitespace-normal"
+                        style={{ color: 'var(--text-muted)', maxWidth: 190 }}
+                      >
                         {fieldHelp[value]}
-                      </p>
+                      </span>
                     )}
                     {isDuplicate && (
-                      <p className="text-xs mt-1" style={{ color: 'var(--accent-red)' }}>
+                      <span className="block text-[11.5px] mt-0.5" style={{ color: 'var(--accent-red)' }}>
                         Already used by another column
-                      </p>
+                      </span>
                     )}
                   </td>
-                  <td className="px-4 py-3">
+
+                  <td style={{ textAlign: 'left' }}>
                     <ConfidenceBadge confidence={confidenceByColumn[column.raw_column]} />
                   </td>
                 </tr>
@@ -196,29 +182,29 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
         </table>
       </div>
 
-      <div className="px-4 sm:px-6 py-4 sm:py-5 space-y-3" style={{ borderTop: '1px solid var(--border-strong)' }}>
+      <footer className="px-[var(--card-pad)] py-3 space-y-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
         {missingRequired.length > 0 && (
-          <p className="text-sm" style={{ color: 'var(--accent-amber)' }}>
+          <p className="text-xs" style={{ color: 'var(--accent-amber)' }}>
             Still need a column for: <strong>{missingRequired.join(', ')}</strong>
           </p>
         )}
 
         {hasLineTotal && !assignedFields.includes('Selling Price') && (
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            No unit price mapped — we'll calculate it as Line Total ÷ Quantity, which keeps revenue
-            correct instead of multiplying by quantity twice.
+          <p className="text-[12px]" style={{ color: 'var(--text-secondary)' }}>
+            No unit price mapped — we'll calculate it as Line Total ÷ Quantity, which keeps revenue correct instead of
+            multiplying by quantity twice.
           </p>
         )}
 
         {mappedOptional.length > 0 && (
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            Extra features unlocked by this mapping: <strong>{mappedOptional.join(', ')}</strong>
+          <p className="text-[12px]" style={{ color: 'var(--text-secondary)' }}>
+            Extra features unlocked: <strong>{mappedOptional.join(', ')}</strong>
           </p>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={submitting}>
-            Cancel &amp; choose another file
+        <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+          <Button type="button" variant="secondary" onClick={onCancel} disabled={submitting}>
+            Cancel
           </Button>
           <Button
             type="button"
@@ -230,18 +216,25 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
             Confirm &amp; analyse
           </Button>
         </div>
-      </div>
+      </footer>
     </div>
   )
 }
 
-function Th({ children }) {
+function ConfidenceBadge({ confidence }) {
+  const tones = {
+    exact: { colour: 'var(--accent-green)', label: 'Matched' },
+    fuzzy: { colour: 'var(--accent-amber)', label: 'Check this' },
+    none: { colour: 'var(--text-muted)', label: 'Not recognised' },
+  }
+  const tone = tones[confidence] || tones.none
+
   return (
-    <th
-      className="px-4 sm:px-6 py-3 font-medium uppercase tracking-wider text-xs whitespace-nowrap"
-      style={{ color: 'var(--text-muted)' }}
+    <span
+      className="inline-block text-[11.5px] font-semibold px-1.5 rounded-full whitespace-nowrap"
+      style={{ color: tone.colour, border: `1px solid ${tone.colour}` }}
     >
-      {children}
-    </th>
+      {tone.label}
+    </span>
   )
 }

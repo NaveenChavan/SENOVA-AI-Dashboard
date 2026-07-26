@@ -58,6 +58,16 @@ MAD_TO_SIGMA = 0.6745
 #: Report at most this many anomalous days (the worst ones).
 MAX_ANOMALY_CARDS = 2
 
+#: Many shops don't sell every day. Once more than this share of the calendar is
+#: a zero, the zero-filled series stops describing the business: its median
+#: collapses to ₹0 and MAD to 0, which made *every* trading day look like an
+#: outlier and printed the nonsense "0% above your normal daily level of ₹0".
+#: Past this threshold the check runs on **trading days only** — a closed shop
+#: is not an anomaly.
+SPARSE_ZERO_DAY_SHARE = 0.25
+#: A trading-day series still needs this many observations to judge an outlier.
+MIN_TRADING_DAYS_FOR_ANOMALY = 7
+
 #: An item must beat this share of total revenue before a margin problem on it
 #: is worth the owner's attention.
 MARGIN_LEAK_MIN_REVENUE_SHARE = 0.03
@@ -119,9 +129,14 @@ def _inr(value: float | None) -> str:
 
 
 def _pct_text(value: float | None) -> str:
-    """Format a percentage for prose, e.g. ``71%``."""
+    """
+    Format a percentage for prose, e.g. ``71%``.
+
+    Returns ``"an unmeasurable amount"`` for ``None`` — which is what a division
+    by a zero baseline yields — rather than printing a confident "0%".
+    """
     if value is None:
-        return "0%"
+        return "an unmeasurable amount"
     return f"{abs(float(value)):.0f}%"
 
 
@@ -262,13 +277,36 @@ def _anomaly_insights(daily: pd.DataFrame) -> tuple[list[Insight] | None, list[s
     """
     Flag days whose revenue is a statistical outlier.
 
+    Two modes, chosen from the data:
+
+    * **Dense** (the shop sells most days) — judge every calendar day, so a
+      closed day *is* the finding.
+    * **Sparse** (more than ``SPARSE_ZERO_DAY_SHARE`` of days have no sales) —
+      judge trading days only. On a shop that opens three days a week the
+      zero-filled median is ₹0 and MAD is 0, which makes every trading day
+      score as an outlier and produces a meaningless "normal level of ₹0".
+
     Returns ``(None, [])`` when the series is too short to judge — the caller
     turns that into an honest "skipped" note instead of a fabricated finding.
     """
     if len(daily) < MIN_DAYS_FOR_ANOMALY:
         return None, []
 
-    values = daily["revenue"].astype(float).to_numpy()
+    all_values = daily["revenue"].astype(float).to_numpy()
+    zero_share = float((all_values <= 0).mean())
+    sparse = zero_share > SPARSE_ZERO_DAY_SHARE
+
+    if sparse:
+        trading = daily[daily["revenue"] > 0]
+        if len(trading) < MIN_TRADING_DAYS_FOR_ANOMALY:
+            return None, []
+        frame = trading
+    else:
+        frame = daily
+
+    values = frame["revenue"].astype(float).to_numpy()
+    days = frame["_day"].tolist()
+
     median = float(np.median(values))
     # MAD: median of absolute deviations from the median.
     mad = float(np.median(np.abs(values - median)))
@@ -282,14 +320,20 @@ def _anomaly_insights(daily: pd.DataFrame) -> tuple[list[Insight] | None, list[s
             return [], []
         scores = (values - median) / std
 
+    # A baseline of 0 makes every comparison meaningless, so don't publish one.
+    if median <= 0:
+        return [], []
+
+    day_word = "trading day" if sparse else "day"
     flagged: list[Insight] = []
     dates: list[str] = []
+
     # Worst first, so if we only show two cards they're the two that matter.
     for index in np.argsort(-np.abs(scores)):
         score = float(scores[index])
         if abs(score) < ANOMALY_Z_WARNING:
             break
-        day = daily.iloc[index]["_day"]
+        day = days[index]
         value = float(values[index])
         gap = value - median
         dates.append(str(day))
@@ -307,9 +351,9 @@ def _anomaly_insights(daily: pd.DataFrame) -> tuple[list[Insight] | None, list[s
                 severity=severity,
                 title=f"Revenue {'dropped sharply' if is_drop else 'spiked'} on {_date_text(day)}",
                 message=(
-                    f"{_date_text(day)} recorded {_inr(value)} — "
-                    f"{_pct_text(safe_percentage(gap, median))} {direction} your normal daily level of "
-                    f"{_inr(median)}. That single day moved the period total by {_inr(gap)}."
+                    f"{_date_text(day)} took {_inr(value)} — "
+                    f"{_pct_text(safe_percentage(abs(gap), median))} {direction} your typical {day_word} "
+                    f"of {_inr(median)}. That single day moved the period total by {_inr(gap)}."
                 ),
                 action=(
                     "Check whether the shop was closed, staff were short, or sales simply "

@@ -30,15 +30,22 @@
   </head>
   <body class="antialiased">
     <script>
-      // Applied before React mounts so there's no flash of the wrong theme
-      // on first paint. Falls back to the OS preference, then dark.
+      // Applied before React mounts so there's no flash of the wrong theme or
+      // spacing on first paint. Light + compact are the product defaults; a
+      // stored choice or an explicit OS dark preference wins.
       (function () {
+        var root = document.documentElement;
         try {
-          var stored = localStorage.getItem('senova-theme');
-          var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-          document.documentElement.setAttribute('data-theme', theme);
+          var storedTheme = localStorage.getItem('senova-theme');
+          root.setAttribute(
+            'data-theme',
+            storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          );
+          var storedDensity = localStorage.getItem('senova-density');
+          root.setAttribute('data-density', storedDensity === 'comfortable' ? 'comfortable' : 'compact');
         } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark');
+          root.setAttribute('data-theme', 'light');
+          root.setAttribute('data-density', 'compact');
         }
       })();
     </script>

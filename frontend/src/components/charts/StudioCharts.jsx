@@ -40,7 +40,13 @@ import useChartTheme from './useChartTheme'
  *   TreemapView  which tiles dominate, at a glance?
  */
 
-const CHART_HEIGHT = 'h-64 sm:h-72 md:h-80'
+// Height comes from the --chart-h token (see index.css) via .chart-box, so
+// 'make the charts smaller' is one edit for every view at once.
+const CHART_HEIGHT = 'chart-box'
+
+// Cap on bar thickness. Without it a full-width panel showing three groups
+// renders three enormous blocks instead of a chart.
+const BAR_MAX = 56
 
 /** Shared axis/grid props so all views line up visually. */
 function useAxisProps() {
@@ -48,7 +54,7 @@ function useAxisProps() {
   return {
     theme,
     grid: <CartesianGrid strokeDasharray="3 3" stroke={theme.borderStrong} strokeOpacity={0.4} />,
-    tick: { fontSize: 11, fill: theme.textSecondary },
+    tick: { fontSize: 12, fill: theme.textSecondary },
     axisLine: { stroke: theme.borderStrong },
   }
 }
@@ -59,7 +65,7 @@ export function BarView({ data, horizontal = false, onSelect }) {
   const formatTick = tickFormatterFor(data.measure_format)
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data.points}
@@ -101,7 +107,7 @@ export function BarView({ data, horizontal = false, onSelect }) {
             content={<StudioTooltip measureFormat={data.measure_format} />}
             cursor={{ fill: theme.borderSubtle }}
           />
-          <Bar dataKey="value" name={data.measure_label} radius={horizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]} isAnimationActive={false}>
+          <Bar dataKey="value" name={data.measure_label} radius={horizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX}>
             {data.points.map((point) => (
               // The folded "Other" bucket is muted so it never reads as a
               // real, actionable group.
@@ -121,31 +127,28 @@ export function BarView({ data, horizontal = false, onSelect }) {
 /**
  * Donut. The guidance caps a pie at 5–6 slices, which is enforced upstream by
  * requesting top_n=6 — anything beyond that is already folded into "Other".
+ *
+ * Percentages are drawn *inside* the ring and the names live in the legend.
+ * Outside labels were being clipped by the card at compact heights, and a
+ * clipped label is worse than no label.
  */
 export function DonutView({ data, onSelect }) {
   const { theme } = useAxisProps()
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+        <PieChart margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
           <Pie
             data={data.points}
             dataKey="value"
             nameKey="label"
-            innerRadius="52%"
-            outerRadius="78%"
+            innerRadius="46%"
+            outerRadius="76%"
             paddingAngle={2}
             isAnimationActive={false}
-            // Labels on the slices themselves mean the legend isn't the only
-            // way to read the chart. Recharts hands the datum over as
-            // ``payload`` (sometimes nested), so both shapes are handled.
-            label={({ payload, percent, name }) => {
-              if (percent <= 0.06) return ''
-              const text = payload?.label ?? payload?.payload?.label ?? name
-              return `${truncateLabel(text, 10)} ${(percent * 100).toFixed(0)}%`
-            }}
             labelLine={false}
+            label={<SliceLabel />}
             onClick={(slice) => {
               const point = slice?.payload?.payload ?? slice?.payload
               if (point && !point.is_other) onSelect?.(point)
@@ -170,6 +173,26 @@ export function DonutView({ data, onSelect }) {
 }
 
 /**
+ * Percentage printed in the middle of its own slice, in white, and only when
+ * the slice is wide enough to hold it. Nothing can overflow the chart area,
+ * which is what made the previous outside labels get cut off.
+ */
+function SliceLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }) {
+  if (percent < 0.06) return null
+
+  const radian = Math.PI / 180
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.55
+  const x = cx + radius * Math.cos(-midAngle * radian)
+  const y = cy + radius * Math.sin(-midAngle * radian)
+
+  return (
+    <text x={x} y={y} fill="#ffffff" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={700}>
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  )
+}
+
+/**
  * Combo: revenue bars against a margin-% line on a second axis. This is the
  * view that exposes "sells a lot, earns little" without any maths by the user.
  */
@@ -177,7 +200,7 @@ export function ComboView({ data, onSelect }) {
   const { theme, grid, tick, axisLine } = useAxisProps()
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data.points}
@@ -204,8 +227,8 @@ export function ComboView({ data, onSelect }) {
           />
           <Tooltip content={<StudioTooltip measureFormat="currency" />} cursor={{ fill: theme.borderSubtle }} />
           <Legend content={<ChartLegend />} />
-          <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} />
-          <Bar yAxisId="left" dataKey="cost" name="Cost" fill={theme.accentPurple} radius={[6, 6, 0, 0]} isAnimationActive={false} />
+          <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
+          <Bar yAxisId="left" dataKey="cost" name="Cost" fill={theme.accentPurple} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
           <Line
             yAxisId="right"
             type="monotone"
@@ -230,7 +253,7 @@ export function ParetoView({ data, onSelect }) {
   const { theme, grid, tick, axisLine } = useAxisProps()
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data.points}
@@ -263,7 +286,7 @@ export function ParetoView({ data, onSelect }) {
           />
           <Tooltip content={<StudioTooltip measureFormat={data.measure_format} />} cursor={{ fill: theme.borderSubtle }} />
           <Legend content={<ChartLegend />} />
-          <Bar yAxisId="left" dataKey="value" name={data.measure_label} fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} />
+          <Bar yAxisId="left" dataKey="value" name={data.measure_label} fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
           <Line
             yAxisId="right"
             type="monotone"
@@ -291,7 +314,7 @@ export function ScatterView({ data, onSelect }) {
   const points = data.points.filter((point) => !point.is_other && point.avg_price != null)
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
         <ScatterChart margin={{ top: 12, right: 16, bottom: 12, left: 0 }}>
           {grid}
@@ -352,14 +375,14 @@ export function TreemapView({ data, onSelect }) {
 
   if (!tiles.length) {
     return (
-      <p className="text-sm py-16 text-center" style={{ color: 'var(--text-muted)' }}>
+      <p className="chart-box flex items-center justify-center text-xs text-center" style={{ color: 'var(--text-muted)' }}>
         A treemap needs positive values — try Revenue or Units.
       </p>
     )
   }
 
   return (
-    <div className={`${CHART_HEIGHT} w-full`}>
+    <div className={`${CHART_HEIGHT}`}>
       <ResponsiveContainer width="100%" height="100%">
         <Treemap
           data={tiles}
@@ -402,10 +425,10 @@ function TreemapTile({ x, y, width, height, label, value, fill, is_other: isOthe
       />
       {canLabel && (
         <>
-          <text x={x + 8} y={y + 18} fill="#ffffff" fontSize={11} fontWeight={600}>
+          <text x={x + 8} y={y + 18} fill="#ffffff" fontSize={12} fontWeight={600}>
             {truncateLabel(name, Math.max(4, Math.floor(width / 8)))}
           </text>
-          <text x={x + 8} y={y + 32} fill="#ffffff" fontSize={10} opacity={0.85}>
+          <text x={x + 8} y={y + 32} fill="#ffffff" fontSize={11} opacity={0.85}>
             {measureFormat === 'percent'
               ? formatPercent(value)
               : measureFormat === 'number'

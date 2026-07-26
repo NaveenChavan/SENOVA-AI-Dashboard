@@ -163,6 +163,13 @@ COLUMN_ALIAS_MAP: dict[str, str] = {
     "sub-category": "Category",
     "subcategory": "Category",
     "collection": "Category",
+    # Food service (restaurant / cafe / cloud-kitchen POS exports)
+    "section": "Category",
+    "menu group": "Category",
+    "menu category": "Category",
+    "course": "Category",
+    "kitchen group": "Category",
+    "food type": "Category",
     # ── Item ──
     "item": "Item",
     "items": "Item",
@@ -451,6 +458,7 @@ _FUZZY_KEYWORDS: dict[str, str] = {
     "dept": "Category",
     "segment": "Category",
     "group": "Category",
+    "section": "Category",
     "item": "Item",
     "product": "Item",
     "particular": "Item",
@@ -557,6 +565,61 @@ def _rename_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df.rename(columns=renamed)
 
 
+def _coerce_numeric(series: pd.Series) -> pd.Series:
+    """
+    Turn a raw column into numbers without ever raising.
+
+    Two passes: a plain ``to_numeric``, then a retry on whatever is still NaN
+    after stripping currency symbols, thousands separators and stray spaces —
+    ``"₹ 1,299.00"`` is a perfectly normal value in an Indian retail export.
+    ``inf`` is mapped to NaN so a later ``.astype(int)`` can never choke.
+
+    Shared by the main coercion loop *and* by the Line-Total unit-price
+    derivation: doing this cleaning in only one of the two places meant a file
+    whose ``Taxable Value`` carried a ₹ sign produced no analysable rows at all.
+    """
+    numeric = pd.to_numeric(series, errors="coerce")
+
+    still_bad = numeric.isna() & series.notna() & (series.astype(str).str.strip() != "")
+    if still_bad.any():
+        cleaned = series.astype(str).str.replace(r"[₹$€£,\s]", "", regex=True).str.strip()
+        retry = pd.to_numeric(cleaned, errors="coerce")
+        numeric[still_bad] = retry[still_bad]
+
+    return numeric.replace([np.inf, -np.inf], np.nan)
+
+
+def _parse_dates(series: pd.Series) -> pd.Series:
+    """
+    Parse a date column that could be in either Indian or ISO order.
+
+    **ISO first, deliberately.** ``dayfirst=True`` silently reinterprets an ISO
+    date whose day is ≤ 12 — ``2026-04-05`` becomes 5 April *or* 4 May depending
+    on the flag — which scrambled marketplace exports into a date range three
+    times too wide and made every trading day look sparse. So anything matching
+    ``YYYY-MM-DD`` is parsed as ISO, and only the remainder is retried with
+    ``dayfirst=True`` for DD-MM-YYYY / DD/MM/YYYY.
+    """
+    text = series.astype(str).str.strip()
+    looks_iso = text.str.match(r"^\d{4}-\d{1,2}-\d{1,2}")
+
+    parsed = pd.Series(pd.NaT, index=series.index, dtype="datetime64[ns]")
+
+    if looks_iso.any():
+        parsed[looks_iso] = pd.to_datetime(series[looks_iso], errors="coerce")
+
+    remaining = parsed.isna() & series.notna()
+    if remaining.any():
+        parsed[remaining] = pd.to_datetime(series[remaining], dayfirst=True, errors="coerce")
+
+    # Last resort for anything neither pass understood (e.g. "10 Mar 2026").
+    still_missing = parsed.isna() & series.notna()
+    if still_missing.any():
+        parsed[still_missing] = pd.to_datetime(series[still_missing], errors="coerce")
+
+    return parsed
+
+
 def _derive_selling_price_from_line_total(df: pd.DataFrame) -> pd.DataFrame:
     """
     Fill in a per-unit ``Selling Price`` from ``Line Total ÷ Quantity`` when
@@ -572,8 +635,8 @@ def _derive_selling_price_from_line_total(df: pd.DataFrame) -> pd.DataFrame:
         return df
 
     out = df.copy()
-    total = pd.to_numeric(out["Line Total"], errors="coerce")
-    qty = pd.to_numeric(out["Quantity"], errors="coerce")
+    total = _coerce_numeric(out["Line Total"])
+    qty = _coerce_numeric(out["Quantity"])
     # Only divide where quantity is a usable positive number; everywhere else
     # the result stays NaN and the row is reported as missing Selling Price.
     usable = qty.notna() & (qty > 0)
@@ -671,31 +734,13 @@ def normalize_dataframe(
     raw = {col: df[col].copy() for col in df.columns}
     errors: list[dict] = []
 
-    # ── 2. Safe numeric coercion (errors="coerce" never raises) ──
+    # ── 2. Safe numeric coercion (never raises, strips ₹ / commas) ──
     numeric_cols = [c for c in df.columns if STRICT_SCHEMA.get(c) in ("Number", "Integer")]
     for col in numeric_cols:
-        num = pd.to_numeric(df[col], errors="coerce")
-        # Retry the failures after stripping currency symbols, thousands
-        # separators and stray spaces ("₹ 1,299.00" is a perfectly normal
-        # value in an Indian retail export).
-        still_bad = num.isna() & df[col].notna() & (df[col].astype(str).str.strip() != "")
-        if still_bad.any():
-            cleaned = (
-                df[col].astype(str).str.replace(r"[₹$€£,\s]", "", regex=True).str.strip()
-            )
-            retry = pd.to_numeric(cleaned, errors="coerce")
-            num[still_bad] = retry[still_bad]
-        # inf / -inf → NaN so the later .astype(int) can never choke.
-        df[col] = num.replace([np.inf, -np.inf], np.nan)
+        df[col] = _coerce_numeric(df[col])
 
-    # ── 3. Two-pass date parsing ──
-    # dayfirst handles DD-MM-YYYY (the Indian convention); the second pass
-    # catches ISO 8601 rows the first pass rejected.
-    parsed = pd.to_datetime(df["Date"], dayfirst=True, errors="coerce")
-    still_nat = parsed.isna() & df["Date"].notna()
-    if still_nat.any():
-        parsed[still_nat] = pd.to_datetime(df["Date"][still_nat], errors="coerce")
-    df["Date"] = parsed
+    # ── 3. Date parsing: ISO first, then Indian day-first ──
+    df["Date"] = _parse_dates(df["Date"])
 
     # ── 4. Required text columns: blank → NaN so dropna removes the row ──
     for col in ("Category", "Item"):

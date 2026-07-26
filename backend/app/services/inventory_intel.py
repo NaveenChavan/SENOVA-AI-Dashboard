@@ -212,6 +212,11 @@ def _classify_abc(per_item: pd.DataFrame) -> pd.DataFrame:
     """
     Attach an A/B/C class by cumulative revenue share (Pareto classification —
     the standard way retailers decide what deserves attention).
+
+    The boundary is tested on the cumulative share **before** each item, not
+    after, so the item that *crosses* 80% still counts as A. Testing the running
+    total after inclusion put a shop's only item — holding 100% of revenue — in
+    class C, which is the opposite of the truth.
     """
     out = per_item.sort_values("revenue", ascending=False).copy()
     total = float(out["revenue"].sum())
@@ -219,9 +224,12 @@ def _classify_abc(per_item: pd.DataFrame) -> pd.DataFrame:
         out["abc_class"] = "C"
         return out
 
-    cumulative = out["revenue"].cumsum() / total
+    share = out["revenue"] / total
+    cumulative_before = share.cumsum() - share
     out["abc_class"] = np.where(
-        cumulative <= ABC_A_THRESHOLD, "A", np.where(cumulative <= ABC_B_THRESHOLD, "B", "C")
+        cumulative_before < ABC_A_THRESHOLD,
+        "A",
+        np.where(cumulative_before < ABC_B_THRESHOLD, "B", "C"),
     )
     return out
 

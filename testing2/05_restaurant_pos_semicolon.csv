@@ -1,0 +1,557 @@
+Sale Date;Item;Section;Qty Sold;Rate;Cost;Order Type
+01-04-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+01-04-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+01-04-2026;Masala Dosa;South Indian;7;129.00;45.00;Dine-in
+01-04-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+01-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+01-04-2026;Chicken Biryani;Main Course;11;329.00;165.00;Dine-in
+31-02-2026;Veg Thali;Main Course;4;199.00;95.00;Dine-in
+01-04-2026;Chicken Biryani;Main Course;5;149.00;165.00;Zomato
+02-04-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+02-04-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+02-04-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+02-04-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+02-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+02-04-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+03-04-2026;Veg Thali;Main Course;15;199.00;95.00;Dine-in
+03-04-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+03-04-2026;Masala Dosa;South Indian;12;129.00;45.00;Dine-in
+03-04-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+03-04-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+03-04-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+04-04-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+04-04-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+04-04-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+04-04-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+04-04-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+04-04-2026;Chicken Biryani;Main Course;11;329.00;165.00;Dine-in
+05-04-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+05-04-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+05-04-2026;Masala Dosa;South Indian;16;129.00;45.00;Dine-in
+05-04-2026;Cold Coffee;Beverages;18;119.00;38.00;Dine-in
+05-04-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+05-04-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+06-04-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+06-04-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+06-04-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+06-04-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+06-04-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+06-04-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+07-04-2026;Veg Thali;Main Course;11;199.00;95.00;Dine-in
+07-04-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+07-04-2026;Masala Dosa;South Indian;21;129.00;45.00;Dine-in
+07-04-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+07-04-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+07-04-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+08-04-2026;Veg Thali;Main Course;17;199.00;95.00;Dine-in
+08-04-2026;Paneer Butter Masala;Main Course;13;289.00;130.00;Dine-in
+08-04-2026;Masala Dosa;South Indian;10;129.00;45.00;Dine-in
+08-04-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+08-04-2026;Gulab Jamun (2 pc);Desserts;6;89.00;30.00;Dine-in
+08-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+08-04-2026;Cold Coffee;Beverages;0;119.00;38.00;Takeaway
+09-04-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+09-04-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+09-04-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+09-04-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+09-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+09-04-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+10-04-2026;Veg Thali;Main Course;11;199.00;95.00;Dine-in
+10-04-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+10-04-2026;Masala Dosa;South Indian;25;129.00;45.00;Dine-in
+10-04-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+10-04-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+10-04-2026;Chicken Biryani;Main Course;7;329.00;165.00;Dine-in
+11-04-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+11-04-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+11-04-2026;Masala Dosa;South Indian;18;129.00;45.00;Dine-in
+11-04-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+11-04-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+11-04-2026;Chicken Biryani;Main Course;9;329.00;165.00;Dine-in
+12-04-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+12-04-2026;Paneer Butter Masala;Main Course;3;289.00;130.00;Dine-in
+12-04-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+12-04-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+12-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+12-04-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+13-04-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+13-04-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+13-04-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+13-04-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+13-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+13-04-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+14-04-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+14-04-2026;Paneer Butter Masala;Main Course;3;289.00;130.00;Dine-in
+14-04-2026;Masala Dosa;South Indian;9;129.00;45.00;Dine-in
+14-04-2026;Cold Coffee;Beverages;13;119.00;38.00;Dine-in
+14-04-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+14-04-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+15-04-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+15-04-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+15-04-2026;Masala Dosa;South Indian;7;129.00;45.00;Dine-in
+15-04-2026;Cold Coffee;Beverages;7;119.00;38.00;Dine-in
+15-04-2026;Gulab Jamun (2 pc);Desserts;13;89.00;30.00;Dine-in
+15-04-2026;Chicken Biryani;Main Course;9;329.00;165.00;Dine-in
+15-04-2026;Masala Dosa;;3;129.00;45.00;Dine-in
+16-04-2026;Veg Thali;Main Course;18;199.00;95.00;Dine-in
+16-04-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+16-04-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+16-04-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+16-04-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+16-04-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+17-04-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+17-04-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+17-04-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+17-04-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+17-04-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+17-04-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+18-04-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+18-04-2026;Paneer Butter Masala;Main Course;9;289.00;130.00;Dine-in
+18-04-2026;Masala Dosa;South Indian;8;129.00;45.00;Dine-in
+18-04-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+18-04-2026;Gulab Jamun (2 pc);Desserts;13;89.00;30.00;Dine-in
+18-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+19-04-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+19-04-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+19-04-2026;Masala Dosa;South Indian;18;129.00;45.00;Dine-in
+19-04-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+19-04-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+19-04-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+20-04-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+20-04-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+20-04-2026;Masala Dosa;South Indian;25;129.00;45.00;Dine-in
+20-04-2026;Cold Coffee;Beverages;13;119.00;38.00;Dine-in
+20-04-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+20-04-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+21-04-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+21-04-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+21-04-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+21-04-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+21-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+21-04-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+22-04-2026;Veg Thali;Main Course;14;199.00;95.00;Dine-in
+22-04-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+22-04-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+22-04-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+22-04-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+22-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+22-04-2026;Cold Coffee;Beverages;2;free;38.00;Takeaway
+23-04-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+23-04-2026;Paneer Butter Masala;Main Course;13;289.00;130.00;Dine-in
+23-04-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+23-04-2026;Cold Coffee;Beverages;18;119.00;38.00;Dine-in
+23-04-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+23-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+24-04-2026;Veg Thali;Main Course;22;199.00;95.00;Dine-in
+24-04-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+24-04-2026;Masala Dosa;South Indian;16;129.00;45.00;Dine-in
+24-04-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+24-04-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+24-04-2026;Chicken Biryani;Main Course;12;329.00;165.00;Dine-in
+25-04-2026;Veg Thali;Main Course;21;199.00;95.00;Dine-in
+25-04-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+25-04-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+25-04-2026;Cold Coffee;Beverages;13;119.00;38.00;Dine-in
+25-04-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+25-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+26-04-2026;Veg Thali;Main Course;21;199.00;95.00;Dine-in
+26-04-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+26-04-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+26-04-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+26-04-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+26-04-2026;Chicken Biryani;Main Course;10;329.00;165.00;Dine-in
+27-04-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+27-04-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+27-04-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+27-04-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+27-04-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+27-04-2026;Chicken Biryani;Main Course;4;329.00;165.00;Dine-in
+28-04-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+28-04-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+28-04-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+28-04-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+28-04-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+28-04-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+29-04-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+29-04-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+29-04-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+29-04-2026;Cold Coffee;Beverages;7;119.00;38.00;Dine-in
+29-04-2026;Gulab Jamun (2 pc);Desserts;13;89.00;30.00;Dine-in
+29-04-2026;Chicken Biryani;Main Course;12;329.00;165.00;Dine-in
+29-04-2026;Gulab Jamun (2 pc);Desserts;-2;89.00;30.00;Dine-in
+30-04-2026;Veg Thali;Main Course;21;199.00;95.00;Dine-in
+30-04-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+30-04-2026;Masala Dosa;South Indian;18;129.00;45.00;Dine-in
+30-04-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+30-04-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+30-04-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+01-05-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+01-05-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+01-05-2026;Masala Dosa;South Indian;10;129.00;45.00;Dine-in
+01-05-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+01-05-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+01-05-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+01-05-2026;Chicken Biryani;Main Course;5;149.00;165.00;Zomato
+02-05-2026;Veg Thali;Main Course;18;199.00;95.00;Dine-in
+02-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+02-05-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+02-05-2026;Cold Coffee;Beverages;9;119.00;38.00;Dine-in
+02-05-2026;Gulab Jamun (2 pc);Desserts;6;89.00;30.00;Dine-in
+02-05-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+03-05-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+03-05-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+03-05-2026;Masala Dosa;South Indian;9;129.00;45.00;Dine-in
+03-05-2026;Cold Coffee;Beverages;9;119.00;38.00;Dine-in
+03-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+03-05-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+04-05-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+04-05-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+04-05-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+04-05-2026;Cold Coffee;Beverages;7;119.00;38.00;Dine-in
+04-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+04-05-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+05-05-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+05-05-2026;Paneer Butter Masala;Main Course;9;289.00;130.00;Dine-in
+05-05-2026;Masala Dosa;South Indian;23;129.00;45.00;Dine-in
+05-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+05-05-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+05-05-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+06-05-2026;Veg Thali;Main Course;10;199.00;95.00;Dine-in
+06-05-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+06-05-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+06-05-2026;Cold Coffee;Beverages;12;119.00;38.00;Dine-in
+06-05-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+06-05-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+31-02-2026;Veg Thali;Main Course;4;199.00;95.00;Dine-in
+07-05-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+07-05-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+07-05-2026;Masala Dosa;South Indian;10;129.00;45.00;Dine-in
+07-05-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+07-05-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+07-05-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+08-05-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+08-05-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+08-05-2026;Masala Dosa;South Indian;11;129.00;45.00;Dine-in
+08-05-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+08-05-2026;Gulab Jamun (2 pc);Desserts;6;89.00;30.00;Dine-in
+08-05-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+09-05-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+09-05-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+09-05-2026;Masala Dosa;South Indian;8;129.00;45.00;Dine-in
+09-05-2026;Cold Coffee;Beverages;9;119.00;38.00;Dine-in
+09-05-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+09-05-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+10-05-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+10-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+10-05-2026;Masala Dosa;South Indian;12;129.00;45.00;Dine-in
+10-05-2026;Cold Coffee;Beverages;12;119.00;38.00;Dine-in
+10-05-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+10-05-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+11-05-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+11-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+11-05-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+11-05-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+11-05-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+11-05-2026;Chicken Biryani;Main Course;11;329.00;165.00;Dine-in
+12-05-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+12-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+12-05-2026;Masala Dosa;South Indian;26;129.00;45.00;Dine-in
+12-05-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+12-05-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+12-05-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+13-05-2026;Veg Thali;Main Course;6;199.00;95.00;Dine-in
+13-05-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+13-05-2026;Masala Dosa;South Indian;12;129.00;45.00;Dine-in
+13-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+13-05-2026;Gulab Jamun (2 pc);Desserts;6;89.00;30.00;Dine-in
+13-05-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+13-05-2026;Cold Coffee;Beverages;0;119.00;38.00;Takeaway
+14-05-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+14-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+14-05-2026;Masala Dosa;South Indian;17;129.00;45.00;Dine-in
+14-05-2026;Cold Coffee;Beverages;7;119.00;38.00;Dine-in
+14-05-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+14-05-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+15-05-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+15-05-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+15-05-2026;Masala Dosa;South Indian;21;129.00;45.00;Dine-in
+15-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+15-05-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+15-05-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+16-05-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+16-05-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+16-05-2026;Masala Dosa;South Indian;7;129.00;45.00;Dine-in
+16-05-2026;Cold Coffee;Beverages;12;119.00;38.00;Dine-in
+16-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+16-05-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+17-05-2026;Veg Thali;Main Course;6;199.00;95.00;Dine-in
+17-05-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+17-05-2026;Masala Dosa;South Indian;17;129.00;45.00;Dine-in
+17-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+17-05-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+17-05-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+18-05-2026;Veg Thali;Main Course;15;199.00;95.00;Dine-in
+18-05-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+18-05-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+18-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+18-05-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+18-05-2026;Chicken Biryani;Main Course;7;329.00;165.00;Dine-in
+19-05-2026;Veg Thali;Main Course;10;199.00;95.00;Dine-in
+19-05-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+19-05-2026;Masala Dosa;South Indian;8;129.00;45.00;Dine-in
+19-05-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+19-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+19-05-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+20-05-2026;Veg Thali;Main Course;14;199.00;95.00;Dine-in
+20-05-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+20-05-2026;Masala Dosa;South Indian;19;129.00;45.00;Dine-in
+20-05-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+20-05-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+20-05-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+20-05-2026;Masala Dosa;;3;129.00;45.00;Dine-in
+21-05-2026;Veg Thali;Main Course;8;199.00;95.00;Dine-in
+21-05-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+21-05-2026;Masala Dosa;South Indian;24;129.00;45.00;Dine-in
+21-05-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+21-05-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+21-05-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+22-05-2026;Veg Thali;Main Course;15;199.00;95.00;Dine-in
+22-05-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+22-05-2026;Masala Dosa;South Indian;12;129.00;45.00;Dine-in
+22-05-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+22-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+22-05-2026;Chicken Biryani;Main Course;7;329.00;165.00;Dine-in
+23-05-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+23-05-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+23-05-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+23-05-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+23-05-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+23-05-2026;Chicken Biryani;Main Course;10;329.00;165.00;Dine-in
+24-05-2026;Veg Thali;Main Course;18;199.00;95.00;Dine-in
+24-05-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+24-05-2026;Masala Dosa;South Indian;11;129.00;45.00;Dine-in
+24-05-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+24-05-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+24-05-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+25-05-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+25-05-2026;Paneer Butter Masala;Main Course;9;289.00;130.00;Dine-in
+25-05-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+25-05-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+25-05-2026;Gulab Jamun (2 pc);Desserts;12;89.00;30.00;Dine-in
+25-05-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+26-05-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+26-05-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+26-05-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+26-05-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+26-05-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+26-05-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+27-05-2026;Veg Thali;Main Course;19;199.00;95.00;Dine-in
+27-05-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+27-05-2026;Masala Dosa;South Indian;20;129.00;45.00;Dine-in
+27-05-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+27-05-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+27-05-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+27-05-2026;Cold Coffee;Beverages;2;free;38.00;Takeaway
+28-05-2026;Veg Thali;Main Course;21;199.00;95.00;Dine-in
+28-05-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+28-05-2026;Masala Dosa;South Indian;24;129.00;45.00;Dine-in
+28-05-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+28-05-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+28-05-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+29-05-2026;Veg Thali;Main Course;6;199.00;95.00;Dine-in
+29-05-2026;Paneer Butter Masala;Main Course;9;289.00;130.00;Dine-in
+29-05-2026;Masala Dosa;South Indian;21;129.00;45.00;Dine-in
+29-05-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+29-05-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+29-05-2026;Chicken Biryani;Main Course;12;329.00;165.00;Dine-in
+30-05-2026;Veg Thali;Main Course;8;199.00;95.00;Dine-in
+30-05-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+30-05-2026;Masala Dosa;South Indian;23;129.00;45.00;Dine-in
+30-05-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+30-05-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+30-05-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+31-05-2026;Veg Thali;Main Course;15;199.00;95.00;Dine-in
+31-05-2026;Paneer Butter Masala;Main Course;11;289.00;130.00;Dine-in
+31-05-2026;Masala Dosa;South Indian;19;129.00;45.00;Dine-in
+31-05-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+31-05-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+31-05-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+31-05-2026;Chicken Biryani;Main Course;5;149.00;165.00;Zomato
+01-06-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+01-06-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+01-06-2026;Masala Dosa;South Indian;24;129.00;45.00;Dine-in
+01-06-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+01-06-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+01-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+02-06-2026;Veg Thali;Main Course;22;199.00;95.00;Dine-in
+02-06-2026;Paneer Butter Masala;Main Course;9;289.00;130.00;Dine-in
+02-06-2026;Masala Dosa;South Indian;24;129.00;45.00;Dine-in
+02-06-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+02-06-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+02-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+03-06-2026;Veg Thali;Main Course;22;199.00;95.00;Dine-in
+03-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+03-06-2026;Masala Dosa;South Indian;9;129.00;45.00;Dine-in
+03-06-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+03-06-2026;Gulab Jamun (2 pc);Desserts;6;89.00;30.00;Dine-in
+03-06-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+03-06-2026;Gulab Jamun (2 pc);Desserts;-2;89.00;30.00;Dine-in
+04-06-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+04-06-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+04-06-2026;Masala Dosa;South Indian;25;129.00;45.00;Dine-in
+04-06-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+04-06-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+04-06-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+05-06-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+05-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+05-06-2026;Masala Dosa;South Indian;16;129.00;45.00;Dine-in
+05-06-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+05-06-2026;Gulab Jamun (2 pc);Desserts;7;89.00;30.00;Dine-in
+05-06-2026;Chicken Biryani;Main Course;12;329.00;165.00;Dine-in
+06-06-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+06-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+06-06-2026;Masala Dosa;South Indian;8;129.00;45.00;Dine-in
+06-06-2026;Cold Coffee;Beverages;11;119.00;38.00;Dine-in
+06-06-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+06-06-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+07-06-2026;Veg Thali;Main Course;15;199.00;95.00;Dine-in
+07-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+07-06-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+07-06-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+07-06-2026;Gulab Jamun (2 pc);Desserts;13;89.00;30.00;Dine-in
+07-06-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+08-06-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+08-06-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+08-06-2026;Masala Dosa;South Indian;18;129.00;45.00;Dine-in
+08-06-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+08-06-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+08-06-2026;Chicken Biryani;Main Course;14;329.00;165.00;Dine-in
+09-06-2026;Veg Thali;Main Course;18;199.00;95.00;Dine-in
+09-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+09-06-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+09-06-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+09-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+09-06-2026;Chicken Biryani;Main Course;13;329.00;165.00;Dine-in
+10-06-2026;Veg Thali;Main Course;8;199.00;95.00;Dine-in
+10-06-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+10-06-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+10-06-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+10-06-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+10-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+31-02-2026;Veg Thali;Main Course;4;199.00;95.00;Dine-in
+11-06-2026;Veg Thali;Main Course;10;199.00;95.00;Dine-in
+11-06-2026;Paneer Butter Masala;Main Course;13;289.00;130.00;Dine-in
+11-06-2026;Masala Dosa;South Indian;14;129.00;45.00;Dine-in
+11-06-2026;Cold Coffee;Beverages;9;119.00;38.00;Dine-in
+11-06-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+11-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+12-06-2026;Veg Thali;Main Course;11;199.00;95.00;Dine-in
+12-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+12-06-2026;Masala Dosa;South Indian;18;129.00;45.00;Dine-in
+12-06-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+12-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+12-06-2026;Chicken Biryani;Main Course;10;329.00;165.00;Dine-in
+13-06-2026;Veg Thali;Main Course;6;199.00;95.00;Dine-in
+13-06-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+13-06-2026;Masala Dosa;South Indian;25;129.00;45.00;Dine-in
+13-06-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+13-06-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+13-06-2026;Chicken Biryani;Main Course;5;329.00;165.00;Dine-in
+14-06-2026;Veg Thali;Main Course;12;199.00;95.00;Dine-in
+14-06-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+14-06-2026;Masala Dosa;South Indian;25;129.00;45.00;Dine-in
+14-06-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+14-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+14-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+15-06-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+15-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+15-06-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+15-06-2026;Cold Coffee;Beverages;14;119.00;38.00;Dine-in
+15-06-2026;Gulab Jamun (2 pc);Desserts;4;89.00;30.00;Dine-in
+15-06-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+16-06-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+16-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+16-06-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+16-06-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+16-06-2026;Gulab Jamun (2 pc);Desserts;5;89.00;30.00;Dine-in
+16-06-2026;Chicken Biryani;Main Course;11;329.00;165.00;Dine-in
+17-06-2026;Veg Thali;Main Course;17;199.00;95.00;Dine-in
+17-06-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+17-06-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+17-06-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+17-06-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+17-06-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+17-06-2026;Cold Coffee;Beverages;0;119.00;38.00;Takeaway
+18-06-2026;Veg Thali;Main Course;22;199.00;95.00;Dine-in
+18-06-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+18-06-2026;Masala Dosa;South Indian;7;129.00;45.00;Dine-in
+18-06-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+18-06-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+18-06-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+19-06-2026;Veg Thali;Main Course;10;199.00;95.00;Dine-in
+19-06-2026;Paneer Butter Masala;Main Course;8;289.00;130.00;Dine-in
+19-06-2026;Masala Dosa;South Indian;19;129.00;45.00;Dine-in
+19-06-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+19-06-2026;Gulab Jamun (2 pc);Desserts;14;89.00;30.00;Dine-in
+19-06-2026;Chicken Biryani;Main Course;6;329.00;165.00;Dine-in
+20-06-2026;Veg Thali;Main Course;9;199.00;95.00;Dine-in
+20-06-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+20-06-2026;Masala Dosa;South Indian;19;129.00;45.00;Dine-in
+20-06-2026;Cold Coffee;Beverages;17;119.00;38.00;Dine-in
+20-06-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+20-06-2026;Chicken Biryani;Main Course;12;329.00;165.00;Dine-in
+21-06-2026;Veg Thali;Main Course;21;199.00;95.00;Dine-in
+21-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+21-06-2026;Masala Dosa;South Indian;13;129.00;45.00;Dine-in
+21-06-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+21-06-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+21-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+22-06-2026;Veg Thali;Main Course;13;199.00;95.00;Dine-in
+22-06-2026;Paneer Butter Masala;Main Course;5;289.00;130.00;Dine-in
+22-06-2026;Masala Dosa;South Indian;21;129.00;45.00;Dine-in
+22-06-2026;Cold Coffee;Beverages;19;119.00;38.00;Dine-in
+22-06-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+22-06-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+23-06-2026;Veg Thali;Main Course;16;199.00;95.00;Dine-in
+23-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+23-06-2026;Masala Dosa;South Indian;9;129.00;45.00;Dine-in
+23-06-2026;Cold Coffee;Beverages;15;119.00;38.00;Dine-in
+23-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+23-06-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+24-06-2026;Veg Thali;Main Course;10;199.00;95.00;Dine-in
+24-06-2026;Paneer Butter Masala;Main Course;10;289.00;130.00;Dine-in
+24-06-2026;Masala Dosa;South Indian;15;129.00;45.00;Dine-in
+24-06-2026;Cold Coffee;Beverages;16;119.00;38.00;Dine-in
+24-06-2026;Gulab Jamun (2 pc);Desserts;9;89.00;30.00;Dine-in
+24-06-2026;Chicken Biryani;Main Course;8;329.00;165.00;Dine-in
+24-06-2026;Masala Dosa;;3;129.00;45.00;Dine-in
+25-06-2026;Veg Thali;Main Course;18;199.00;95.00;Dine-in
+25-06-2026;Paneer Butter Masala;Main Course;12;289.00;130.00;Dine-in
+25-06-2026;Masala Dosa;South Indian;22;129.00;45.00;Dine-in
+25-06-2026;Cold Coffee;Beverages;6;119.00;38.00;Dine-in
+25-06-2026;Gulab Jamun (2 pc);Desserts;13;89.00;30.00;Dine-in
+25-06-2026;Chicken Biryani;Main Course;17;329.00;165.00;Dine-in
+26-06-2026;Veg Thali;Main Course;11;199.00;95.00;Dine-in
+26-06-2026;Paneer Butter Masala;Main Course;7;289.00;130.00;Dine-in
+26-06-2026;Masala Dosa;South Indian;8;129.00;45.00;Dine-in
+26-06-2026;Cold Coffee;Beverages;5;119.00;38.00;Dine-in
+26-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+26-06-2026;Chicken Biryani;Main Course;15;329.00;165.00;Dine-in
+27-06-2026;Veg Thali;Main Course;20;199.00;95.00;Dine-in
+27-06-2026;Paneer Butter Masala;Main Course;4;289.00;130.00;Dine-in
+27-06-2026;Masala Dosa;South Indian;24;129.00;45.00;Dine-in
+27-06-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+27-06-2026;Gulab Jamun (2 pc);Desserts;10;89.00;30.00;Dine-in
+27-06-2026;Chicken Biryani;Main Course;11;329.00;165.00;Dine-in
+28-06-2026;Veg Thali;Main Course;11;199.00;95.00;Dine-in
+28-06-2026;Paneer Butter Masala;Main Course;6;289.00;130.00;Dine-in
+28-06-2026;Masala Dosa;South Indian;10;129.00;45.00;Dine-in
+28-06-2026;Cold Coffee;Beverages;8;119.00;38.00;Dine-in
+28-06-2026;Gulab Jamun (2 pc);Desserts;8;89.00;30.00;Dine-in
+28-06-2026;Chicken Biryani;Main Course;16;329.00;165.00;Dine-in
+29-06-2026;Veg Thali;Main Course;7;199.00;95.00;Dine-in
+29-06-2026;Paneer Butter Masala;Main Course;3;289.00;130.00;Dine-in
+29-06-2026;Masala Dosa;South Indian;21;129.00;45.00;Dine-in
+29-06-2026;Cold Coffee;Beverages;10;119.00;38.00;Dine-in
+29-06-2026;Gulab Jamun (2 pc);Desserts;11;89.00;30.00;Dine-in
+29-06-2026;Chicken Biryani;Main Course;7;329.00;165.00;Dine-in

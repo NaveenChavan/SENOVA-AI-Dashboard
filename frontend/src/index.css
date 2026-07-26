@@ -3,158 +3,288 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   SENOVA Design System
+   SENOVA Design System — compact, light-first, data-dense
    --------------------------------------------------------------------------
-   Two first-class themes — dark (default) and light — expressed purely as
-   CSS custom properties on [data-theme]. Every component reads these
-   variables instead of hardcoding Tailwind slate/emerald classes, so the
-   whole app repaints correctly when the theme toggle flips the attribute
-   on <html>. No JS re-render needed for colour — only the attribute changes.
+   Resolved style: "Data-Dense Dashboard" (minimal padding, grid layout,
+   maximum data visibility). Everything below is a token or a small utility
+   class; components never hardcode a hex, a padding or a control height, so
+   the whole app re-scales from a 375px phone to an 8K panel by changing this
+   file alone.
+
+   Density rules used throughout:
+   - one spacing scale (4 → 32px), no ad-hoc margins
+   - one control height, so every button/select/pill lines up on a row
+   - one card padding and one radius per surface size
+   - charts sized by a token, never a hardcoded pixel height
    ========================================================================== */
 
 :root,
-[data-theme="dark"] {
-  /* Surfaces */
-  --bg-primary: #050d1a;
-  --bg-canvas-glow-1: rgba(56, 189, 248, 0.05);
-  --bg-canvas-glow-2: rgba(16, 185, 129, 0.04);
-  --bg-card: rgba(10, 22, 45, 0.85);
-  --bg-card-solid: #0a162d;
-  --bg-card-hover: rgba(14, 30, 60, 0.95);
-  --bg-header: rgba(5, 13, 26, 0.9);
-  --bg-input: rgba(10, 22, 45, 0.9);
-  --bg-skeleton: rgba(51, 65, 85, 0.6);
-
-  /* Borders */
-  --border-subtle: rgba(56, 189, 248, 0.12);
-  --border-active: rgba(56, 189, 248, 0.4);
-  --border-strong: rgba(148, 163, 184, 0.25);
-
-  /* Brand accents (identical across themes — this IS the brand) */
-  --accent-blue: #38bdf8;
-  --accent-blue-strong: #0ea5e9;
-  --accent-blue-glow: rgba(56, 189, 248, 0.2);
-  --accent-green: #10b981;
-  --accent-green-glow: rgba(16, 185, 129, 0.2);
-  --accent-amber: #f59e0b;
-  --accent-red: #f87171;
-  --accent-purple: #a78bfa;
-
-  /* Text */
-  --text-primary: #f0f6ff;
-  --text-secondary: #7a9cc4;
-  --text-muted: #3d5875;
-  --text-on-accent: #ffffff;
-
-  /* Elevation */
-  --shadow-color: 0deg 0% 0%;
-  --shadow-elevation-low: 0 1px 2px hsl(var(--shadow-color) / 0.4);
-  --shadow-elevation-medium: 0 4px 16px -4px hsl(var(--shadow-color) / 0.5);
-  --shadow-elevation-high: 0 12px 40px -8px hsl(var(--shadow-color) / 0.6);
-
-  color-scheme: dark;
-}
-
 [data-theme="light"] {
-  /* Surfaces — warm gray-blue tint (not stark white) with stronger card
-     separation so content stands out as clearly as it does in dark mode.
-     Inspired by Notion/Linear light modes — paper-like layering with
-     enough contrast between background and cards to give depth. */
-  --bg-primary: #eef1f6;
-  --bg-canvas-glow-1: rgba(14, 165, 233, 0.04);
-  --bg-canvas-glow-2: rgba(16, 185, 129, 0.03);
+  /* ── Surfaces — soft blue-grey canvas, pure white cards (paper layering) ── */
+  --bg-primary: #f5f7fb;
+  --bg-canvas-glow-1: rgba(37, 99, 235, 0.045);
+  --bg-canvas-glow-2: rgba(5, 150, 105, 0.035);
   --bg-card: #ffffff;
   --bg-card-solid: #ffffff;
-  --bg-card-hover: #ffffff;
-  --bg-header: rgba(255, 255, 255, 0.92);
-  --bg-input: #f8fafc;
-  --bg-skeleton: rgba(148, 163, 184, 0.3);
+  --bg-card-hover: #fafbfe;
+  --bg-header: rgba(255, 255, 255, 0.88);
+  --bg-input: #f4f6fa;
+  --bg-subtle: #eef2f8;
+  --bg-skeleton: #e6eaf1;
 
-  /* Borders — stronger than before so cards have clear edges */
-  --border-subtle: rgba(15, 23, 42, 0.1);
-  --border-active: rgba(14, 165, 233, 0.5);
-  --border-strong: rgba(15, 23, 42, 0.15);
+  /* ── Borders — visible but quiet, so a dense grid still reads as a grid ── */
+  --border-subtle: #e5e9f0;
+  --border-strong: #d6dce6;
+  --border-active: #2563eb;
 
-  /* Brand accents — deepened for AA+ contrast on the light surface */
-  --accent-blue: #0369a1;
-  --accent-blue-strong: #075985;
-  --accent-blue-glow: rgba(3, 105, 161, 0.12);
+  /* ── Accents — AA+ on white ── */
+  --accent-blue: #2563eb;
+  --accent-blue-strong: #1d4ed8;
+  --accent-blue-glow: rgba(37, 99, 235, 0.1);
   --accent-green: #047857;
   --accent-green-glow: rgba(4, 120, 87, 0.1);
-  --accent-amber: #92400e;
-  --accent-red: #b91c1c;
+  --accent-amber: #b45309;
+  --accent-red: #dc2626;
   --accent-purple: #6d28d9;
 
-  /* Text — strong contrast against the light surface, not washed out */
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
+  /* ── Text ── */
+  --text-primary: #101828;
+  --text-secondary: #475467;
+  --text-muted: #8894a8;
   --text-on-accent: #ffffff;
 
-  /* Elevation — visible but refined shadows that make cards pop from bg */
-  --shadow-color: 215deg 20% 50%;
-  --shadow-elevation-low: 0 1px 3px hsl(var(--shadow-color) / 0.08), 0 1px 2px hsl(var(--shadow-color) / 0.06);
-  --shadow-elevation-medium: 0 4px 12px -2px hsl(var(--shadow-color) / 0.14), 0 2px 4px hsl(var(--shadow-color) / 0.08);
-  --shadow-elevation-high: 0 12px 32px -4px hsl(var(--shadow-color) / 0.2), 0 4px 8px hsl(var(--shadow-color) / 0.1);
+  /* ── Elevation — shallow. Deep shadows read as clutter on a dense grid. ── */
+  --shadow-low: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-medium: 0 2px 6px -1px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-high: 0 12px 28px -8px rgba(16, 24, 40, 0.16), 0 2px 6px rgba(16, 24, 40, 0.06);
 
   color-scheme: light;
 }
 
+[data-theme="dark"] {
+  --bg-primary: #070d18;
+  --bg-canvas-glow-1: rgba(56, 189, 248, 0.05);
+  --bg-canvas-glow-2: rgba(16, 185, 129, 0.04);
+  --bg-card: #0d1526;
+  --bg-card-solid: #0d1526;
+  --bg-card-hover: #131d33;
+  --bg-header: rgba(7, 13, 24, 0.9);
+  --bg-input: #101a2e;
+  --bg-subtle: #0f1829;
+  --bg-skeleton: #1c2740;
+
+  --border-subtle: #1d2942;
+  --border-strong: #27354f;
+  --border-active: #38bdf8;
+
+  --accent-blue: #4cc4fb;
+  --accent-blue-strong: #0ea5e9;
+  --accent-blue-glow: rgba(56, 189, 248, 0.18);
+  --accent-green: #34d399;
+  --accent-green-glow: rgba(16, 185, 129, 0.18);
+  --accent-amber: #fbbf24;
+  --accent-red: #f87171;
+  --accent-purple: #a78bfa;
+
+  --text-primary: #eaf2ff;
+  --text-secondary: #9db2cd;
+  --text-muted: #6b829f;
+  --text-on-accent: #04121f;
+
+  --shadow-low: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+  --shadow-high: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+/* ── Spacing / sizing scale (shared by both themes) ────────────────────── */
+:root {
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 32px;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Control height: one number keeps every button, select and pill on the
+     same baseline. 40px on touch (44px target with the row gap), 34px on a
+     precise pointer where a compact toolbar is what the user wants. */
+  --control-h: 40px;
+
+  --card-pad: 14px;
+  --gap: 12px;
+
+  /* Chart height is a token because "make the charts smaller" must be one
+     edit, not twelve. Kept short enough that a whole card fits on screen.
+     ``--chart-h-wide`` is the shorter variant used by a full-width panel: the
+     wider a chart gets, the less height it needs to stay readable. */
+  --chart-h: 190px;
+  --chart-h-wide: 170px;
+  --chart-h-sm: 150px;
+
+  --page-max: 1360px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --control-h: 36px;
+  }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --card-pad: 16px;
+    --gap: 14px;
+    --chart-h: 210px;
+    --chart-h-wide: 180px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --chart-h: 224px;
+    --chart-h-wide: 200px;
+  }
+}
+
+/* Large displays: widen the canvas and nudge density up rather than
+   stretching a fixed layout into a strip of tiny widgets. */
+@media (min-width: 1920px) {
+  :root {
+    --page-max: 1560px;
+    --chart-h: 240px;
+    --chart-h-wide: 215px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --page-max: 1840px;
+    --chart-h: 260px;
+    --chart-h-wide: 230px;
+    --card-pad: 18px;
+    --gap: 16px;
+  }
+}
+
+@media (min-width: 3840px) {
+  :root {
+    --page-max: 2280px;
+    --chart-h: 300px;
+    --chart-h-wide: 260px;
+    --card-pad: 22px;
+    --gap: 20px;
+  }
+}
+
+/* ── Density modes ──────────────────────────────────────────────────────── */
+/* The tokens above are the "compact" default (a data-dense dashboard wants to
+   show more, not bigger). Users who prefer air get the same layout with larger
+   padding, gaps, controls and charts — one attribute on <html>, no re-render. */
+
+[data-density="comfortable"] {
+  --control-h: 40px;
+  --card-pad: 20px;
+  --gap: 20px;
+  --chart-h: 250px;
+  --chart-h-wide: 220px;
+  --chart-h-sm: 190px;
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+
+@media (min-width: 1920px) {
+  [data-density="comfortable"] {
+    --chart-h: 280px;
+    --chart-h-wide: 250px;
+  }
+}
+
 /* ==========================================================================
-   Fluid typography — scales smoothly from small phones up through 4K/8K
-   displays using clamp(), so nothing looks tiny on a 40" 8K monitor or
-   cramped on a 320px phone. Base unit is rem so user font-size prefs
-   still work.
+   Base
    ========================================================================== */
+
 html {
   scroll-behavior: smooth;
-  /* 15px on small phones -> 17px on typical desktops -> 19px on very large /
-     high-density displays. 1vw component makes it continuously fluid. */
-  font-size: clamp(15px, 0.9vw + 12px, 19px);
+  /* Fixed steps instead of a vw-fluid size: fluid type was making every
+     card, control and chart grow together on desktop, which is exactly the
+     "everything is too big, I have to scroll a card" problem. */
+  font-size: 15px;
 }
+
+@media (min-width: 1920px) { html { font-size: 16px; } }
+@media (min-width: 2560px) { html { font-size: 17px; } }
+@media (min-width: 3840px) { html { font-size: 19px; } }
 
 body {
   background-color: var(--bg-primary);
   background-image:
-    radial-gradient(ellipse at 20% 0%, var(--bg-canvas-glow-1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, var(--bg-canvas-glow-2) 0%, transparent 50%);
-  min-height: 100vh;
+    radial-gradient(ellipse 80% 50% at 15% -10%, var(--bg-canvas-glow-1) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 90% 110%, var(--bg-canvas-glow-2) 0%, transparent 70%);
+  background-attachment: fixed;
+  min-height: 100dvh;
   color: var(--text-primary);
   font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  transition: background-color 0.3s ease;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth, deliberate colour transitions on theme switch — avoids a harsh
-   flash while still feeling instant (150ms). Scoped to avoid animating
-   layout properties or fighting chart re-renders. */
-* {
-  transition-property: background-color, border-color, color, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
+/* Transitions are scoped to the elements that actually change state. The old
+   universal selector animated every property on every node, which fought the
+   chart re-renders and made theme switching feel sluggish. */
+a,
+button,
+input,
+select,
+textarea,
+[role="tab"],
+[role="switch"],
+.card,
+.stat-tile,
+.chip,
+.seg__btn,
+tbody tr {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+h1 { font-size: 1.375rem; font-weight: 700; }
+h2 { font-size: 1.0625rem; font-weight: 650; }
+h3 { font-size: 0.9375rem; font-weight: 650; }
+
+.font-mono,
+[class*="font-mono"] {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 /* ==========================================================================
    Accessibility & motion baseline
-   --------------------------------------------------------------------------
-   Three rules that apply to the whole app, in one place:
-
-   1. A visible focus ring on every interactive element. Removing focus
-      outlines without a replacement makes the dashboard unusable by keyboard,
-      so the ring is defined once here rather than per component.
-   2. ``prefers-reduced-motion`` is honoured: users who ask their OS for less
-      motion get no transitions or animations, including the skeleton pulses.
-   3. A skip link, so keyboard users can jump straight to the content instead
-      of tabbing through the header on every page.
    ========================================================================== */
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--accent-blue);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
 }
 
-/* Mouse users don't get the ring (focus-visible handles that), but the ring
-   must never be suppressed for keyboard users. */
 :where(a, button, input, select, textarea, [tabindex]):focus:not(:focus-visible) {
   outline: none;
 }
@@ -170,156 +300,501 @@ body {
   }
 }
 
-/* Visually hidden until focused — the standard skip-link pattern. */
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
   z-index: 100;
-  padding: 10px 16px;
-  border-radius: 0 0 8px 0;
+  padding: 8px 14px;
+  border-radius: 0 0 var(--radius-sm) 0;
   background: var(--accent-blue);
   color: var(--text-on-accent);
   font-weight: 600;
+  font-size: 0.8125rem;
 }
 .skip-link:focus {
   left: 0;
 }
 
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 @layer base {
-  /* A content container that stays readable at 8K: capping at 1600px means
-     even on a 40"+ display the dashboard doesn't stretch into a single
-     unreadable strip of tiny widgets. */
+  /* One page container. Capped so a 4K panel shows a readable dashboard
+     instead of one endless row of widgets; the cap itself scales above. */
   .app-container {
     width: 100%;
-    max-width: 1600px;
+    max-width: var(--page-max);
     margin-inline: auto;
   }
 }
 
 @layer components {
-  .card-gradient {
-    background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-strong);
-    box-shadow: var(--shadow-elevation-low);
-  }
-
-  .glow-emerald {
-    box-shadow: 0 0 20px -4px var(--accent-green-glow);
-  }
-
-  .glow-emerald-text {
-    text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-  }
-  [data-theme="light"] .glow-emerald-text {
-    text-shadow: none; /* glowing text looks like a rendering bug on light surfaces */
-  }
+  /* ── Surfaces ──────────────────────────────────────────────────────── */
 
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-elevation-low);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-low);
   }
-
   .card:hover {
-    border-color: var(--border-active);
-    box-shadow: var(--shadow-elevation-medium);
+    border-color: var(--border-strong);
   }
 
-  .glow-blue { box-shadow: 0 0 24px -6px var(--accent-blue-glow); }
-  .glow-blue-text { text-shadow: 0 0 16px rgba(56, 189, 248, 0.4); }
-  [data-theme="light"] .glow-blue-text { text-shadow: none; }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue));
-    color: var(--text-on-accent);
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-weight: 600;
-    transition: all 0.2s;
-    box-shadow: 0 4px 16px -4px var(--accent-blue-glow);
+  /* Padded card body — the default surface for panels and charts. */
+  .card-pad {
+    padding: var(--card-pad);
   }
-  .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 6px 20px -4px var(--accent-blue-glow); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .filter-select {
-    appearance: none;
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-primary);
-    border-radius: 10px;
-    padding: 10px 36px 10px 14px;
-    min-height: 40px;
-    font-size: 0.875rem;
-    transition: border-color 0.2s;
+  /* Section label above a panel's content. Small caps, muted, tight. */
+  .panel-title {
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
   }
-  .filter-select:focus { outline: none; border-color: var(--border-active); }
 
+  .panel-hint {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  /* KPI tile. No hover translate: shifting tiles in a dense grid makes the
+     whole row look unstable. */
   .stat-tile {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    padding: 20px 24px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-elevation-low);
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-  }
-  .stat-tile::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
+    border-radius: var(--radius);
+    padding: var(--s-3);
+    box-shadow: var(--shadow-low);
+    min-width: 0;
   }
   .stat-tile:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-active);
-    box-shadow: var(--shadow-elevation-medium);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-medium);
   }
-  .stat-tile:hover::before { opacity: 1; }
 
-  /* Premium typographic touches — tighter tracking on large numerals,
-     slightly looser tracking on small-caps labels, for the refined feel
-     of a financial product rather than a generic dashboard template. */
-  h1, h2, h3 { letter-spacing: -0.01em; }
-  .font-mono { letter-spacing: -0.01em; }
+  /* Chart box: fixed, tokenised height so the card never grows past the fold
+     and the page never reflows when data arrives. */
+  .chart-box {
+    height: var(--chart-h);
+    width: 100%;
+    min-width: 0;
+  }
+  .chart-box--sm {
+    height: var(--chart-h-sm);
+  }
 
-  /* Theme toggle switch — a compact pill with a sliding sun/moon thumb. */
+  /* ── Controls ──────────────────────────────────────────────────────── */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    height: var(--control-h);
+    padding: 0 var(--s-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 550;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--bg-card-hover);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    height: var(--control-h);
+    padding: 0 var(--s-4);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: var(--accent-blue);
+    color: var(--text-on-accent);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: var(--shadow-low);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-blue-strong);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--control-h);
+    height: var(--control-h);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .btn-icon:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  /* Segmented control — used for date presets, view tabs and chart types, so
+     all three read as the same component instead of three near-misses. */
+  .seg {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+    border-radius: var(--radius);
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .seg::-webkit-scrollbar {
+    display: none;
+  }
+
+  .seg__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: calc(var(--control-h) - 6px);
+    padding: 0 10px;
+    border-radius: calc(var(--radius) - 3px);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 550;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .seg__btn:hover:not(:disabled) {
+    color: var(--text-primary);
+    background: var(--bg-card);
+  }
+  .seg__btn[aria-pressed="true"],
+  .seg__btn[aria-selected="true"] {
+    background: var(--accent-blue);
+    color: var(--text-on-accent);
+    box-shadow: var(--shadow-low);
+  }
+  .seg__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* Filter chip / toggle pill. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: calc(var(--control-h) - 6px);
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .chip:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .chip[aria-pressed="true"],
+  .chip--active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: var(--text-on-accent);
+  }
+  .chip--static {
+    cursor: default;
+  }
+
+  .filter-select {
+    appearance: none;
+    height: var(--control-h);
+    padding: 0 28px 0 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-card);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238894a8' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 14px;
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    max-width: 100%;
+  }
+  .filter-select:hover {
+    border-color: var(--border-strong);
+  }
+
+  input[type="date"] {
+    appearance: none;
+    height: var(--control-h);
+    padding: 0 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+
+  /* ── Data tables ───────────────────────────────────────────────────── */
+
+  /* Any table wrapped in this scrolls sideways instead of breaking the page. */
+  .scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+  }
+  .table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--bg-card);
+    padding: 7px 8px;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border-strong);
+    text-align: right;
+  }
+  .table thead th:first-child,
+  .table th[scope="row"] {
+    text-align: left;
+  }
+  .table tbody td,
+  .table tbody th {
+    padding: 7px 8px;
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+    text-align: right;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+  .table tbody th[scope="row"] {
+    text-align: left;
+    font-weight: 550;
+    color: var(--text-primary);
+  }
+  .table tbody tr:last-child td,
+  .table tbody tr:last-child th {
+    border-bottom: 0;
+  }
+  .table tbody tr:hover {
+    background: var(--bg-card-hover);
+  }
+  .table--clickable tbody tr {
+    cursor: pointer;
+  }
+
+  /* Sticky toolbar: the date presets, filters and tabs stay reachable while
+     the user scrolls a long dashboard. Offset by the 52px app header, with a
+     backdrop so content scrolling underneath doesn't show through. */
+  .toolbar-sticky {
+    position: sticky;
+    top: 52px;
+    z-index: 20;
+    padding-top: var(--s-2);
+    padding-bottom: var(--s-2);
+    margin-top: calc(var(--s-2) * -1);
+    background: linear-gradient(
+      to bottom,
+      var(--bg-primary) 0%,
+      var(--bg-primary) 82%,
+      transparent 100%
+    );
+  }
+
+  /* On a phone the viewport is too short to give up rows to a sticky bar. */
+  @media (max-width: 640px) {
+    .toolbar-sticky {
+      position: static;
+      background: none;
+      margin-top: 0;
+    }
+  }
+
+  /* ── Command palette ───────────────────────────────────────────────── */
+
+  .palette-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12vh 16px 16px;
+    background: rgba(16, 24, 40, 0.45);
+  }
+
+  .palette {
+    width: 100%;
+    max-width: 520px;
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-high);
+  }
+
+  .palette__input {
+    height: 46px;
+    padding: 0 14px;
+    border: 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    outline: none;
+  }
+
+  .palette__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 14px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .palette__item[aria-selected="true"] {
+    background: var(--accent-blue-glow);
+    color: var(--accent-blue);
+  }
+
+  /* ── Feedback ──────────────────────────────────────────────────────── */
+
+  .skeleton {
+    background: var(--bg-skeleton);
+    border-radius: var(--radius-sm);
+    animation: senova-pulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes senova-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  /* Inline note / banner. Variant colour comes from a data attribute so the
+     markup stays free of inline style objects. */
+  .note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    padding: 9px var(--s-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+  .note[data-tone="info"] {
+    border-color: color-mix(in srgb, var(--accent-blue) 35%, transparent);
+    background: var(--accent-blue-glow);
+  }
+  .note[data-tone="danger"] {
+    border-color: color-mix(in srgb, var(--accent-red) 35%, transparent);
+    background: color-mix(in srgb, var(--accent-red) 8%, transparent);
+    color: var(--accent-red);
+  }
+  .note[data-tone="success"] {
+    border-color: color-mix(in srgb, var(--accent-green) 35%, transparent);
+    background: color-mix(in srgb, var(--accent-green) 8%, transparent);
+    color: var(--accent-green);
+  }
+
+  /* ── Theme toggle ──────────────────────────────────────────────────── */
+
   .theme-toggle {
     position: relative;
-    width: 52px;
-    height: 28px;
-    border-radius: 999px;
+    width: 44px;
+    height: 24px;
+    border-radius: var(--radius-pill);
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
     cursor: pointer;
-    transition: border-color 0.2s;
     flex-shrink: 0;
   }
-  .theme-toggle:hover { border-color: var(--border-active); }
+  .theme-toggle:hover {
+    border-color: var(--border-strong);
+  }
   .theme-toggle__thumb {
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue));
+    background: var(--accent-blue);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-elevation-low);
+    color: var(--text-on-accent);
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-low);
   }
-  [data-theme="light"] .theme-toggle__thumb {
-    transform: translateX(24px);
+  [data-theme="dark"] .theme-toggle__thumb {
+    transform: translateX(20px);
+  }
+
+  /* ── Legacy aliases ────────────────────────────────────────────────── */
+  /* Kept so older markup keeps rendering correctly while it migrates to the
+     tokens above; they intentionally resolve to the flat, compact surface. */
+  .card-gradient {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-low);
+  }
+  .glow-blue,
+  .glow-emerald {
+    box-shadow: var(--shadow-low);
+  }
+  .glow-blue-text,
+  .glow-emerald-text {
+    text-shadow: none;
   }
 }

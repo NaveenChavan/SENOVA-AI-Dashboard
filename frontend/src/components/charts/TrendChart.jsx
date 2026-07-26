@@ -39,11 +39,21 @@ export default function TrendChart({ trend = [], forecast = null, anomalyDates =
   const series = useMemo(() => {
     const byDate = new Map()
 
+    // A 7-day trailing mean over the actual series. On a shop that trades some
+    // days the raw line is a comb of spikes and zeros; the average is what shows
+    // whether the business is actually growing. Only emitted once a full window
+    // exists, so the first six days don't get a misleading half-window value.
+    const window = []
     for (const point of trend) {
+      window.push(point.revenue ?? 0)
+      if (window.length > 7) window.shift()
+      const average = window.length === 7 ? window.reduce((sum, value) => sum + value, 0) / 7 : null
+
       byDate.set(point.date, {
         date: point.date,
         revenue: point.revenue,
         profit: point.profit,
+        average,
       })
     }
 
@@ -67,32 +77,32 @@ export default function TrendChart({ trend = [], forecast = null, anomalyDates =
 
   if (!series.length) {
     return (
-      <p className="text-sm py-16 text-center" style={{ color: 'var(--text-muted)' }}>
+      <p className="chart-box flex items-center justify-center text-xs text-center" style={{ color: 'var(--text-muted)' }}>
         No dated transactions in this period.
       </p>
     )
   }
 
   return (
-    <div className="h-64 sm:h-72 md:h-80 w-full">
+    <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={series} margin={{ top: 8, right: 12, bottom: 4, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={theme.borderStrong} strokeOpacity={0.4} />
           <XAxis
             dataKey="date"
             tickFormatter={formatShortDate}
-            tick={{ fontSize: 11, fill: theme.textSecondary }}
+            tick={{ fontSize: 12, fill: theme.textSecondary }}
             axisLine={{ stroke: theme.borderStrong }}
             interval="preserveStartEnd"
             minTickGap={24}
           />
           <YAxis
             tickFormatter={formatCurrencyCompact}
-            tick={{ fontSize: 11, fill: theme.textSecondary }}
+            tick={{ fontSize: 12, fill: theme.textSecondary }}
             axisLine={{ stroke: theme.borderStrong }}
           />
           <Tooltip content={<TrendTooltip anomalyDates={anomalyDates} />} />
-          <Legend content={<ChartLegend dashedKeys={['Forecast']} />} />
+          <Legend content={<ChartLegend dashedKeys={['Forecast', '7-day average']} />} />
 
           {/* Confidence band first so it sits behind every line. */}
           {forecast?.available && (
@@ -130,6 +140,19 @@ export default function TrendChart({ trend = [], forecast = null, anomalyDates =
             strokeWidth={2}
             dot={false}
             connectNulls={false}
+            isAnimationActive={false}
+          />
+
+          {/* The signal under the noise: a 7-day trailing mean of revenue. */}
+          <Line
+            type="monotone"
+            dataKey="average"
+            name="7-day average"
+            stroke={theme.accentPurple}
+            strokeWidth={1.8}
+            strokeDasharray="2 3"
+            dot={false}
+            connectNulls
             isAnimationActive={false}
           />
 

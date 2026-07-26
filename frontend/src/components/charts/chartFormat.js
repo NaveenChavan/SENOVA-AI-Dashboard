@@ -21,10 +21,25 @@ export function formatCurrencyCompact(value) {
   return `${sign}₹${Math.round(absolute)}`
 }
 
-/** Full currency for tooltips and tables, with Indian digit grouping. */
-export function formatCurrency(value) {
+/**
+ * Full currency with Indian digit grouping — ``₹7,20,126``.
+ *
+ * Whole rupees by default: a KPI tile or an insight card showing
+ * "₹21,992.33" reads like a rounding error rather than a figure. Accounting
+ * surfaces (the P&L, the ledger, the register) pass ``digits = 2``, where the
+ * paise are the point.
+ */
+export function formatCurrency(value, digits = 0) {
   const amount = Number(value) || 0
-  return `₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
+  return `₹${amount.toLocaleString('en-IN', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })}`
+}
+
+/** Currency to the paisa, for accounting tables. */
+export function formatCurrencyExact(value) {
+  return formatCurrency(value, 2)
 }
 
 /** Plain counts (units, transactions) with Indian digit grouping. */

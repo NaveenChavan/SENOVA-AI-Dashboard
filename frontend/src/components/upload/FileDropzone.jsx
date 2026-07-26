@@ -1,26 +1,35 @@
 import { useCallback, useRef, useState } from 'react'
-import Button from '../common/Button'
 
-function generateTemplate() {
-  const header = 'Date,Category,Item,Quantity,Selling Price,Cost Price\n'
+import Icon from '../common/Icon'
+
+/**
+ * File dropzone.
+ *
+ * Compact by design: a 140px drop target with one line of instruction and one
+ * line of reassurance, so the upload page fits on a phone screen without
+ * scrolling. The template download sits underneath as a text link rather than a
+ * second button competing with the primary action.
+ */
+
+function buildTemplate() {
+  const header = 'Date,Category,Item,Quantity,Selling Price,Cost Price,Discount,Branch,Payment Mode,Closing Stock\n'
   const rows = [
-    '01-01-2025,Electronics,Wireless Mouse,15,1200.00,800.00',
-    '02-01-2025,Clothing,Cotton T-Shirt,30,599.00,350.00',
-    '03-01-2025,Home Appliances,Desk Lamp,10,2499.00,1800.00',
-    '04-01-2025,Electronics,USB-C Hub,20,1799.00,1200.00',
-    '05-01-2025,Clothing,Denim Jacket,8,2999.00,2000.00',
+    '01-01-2026,Kurta,Cotton Kurta,15,750.00,300.00,0,MG Road,UPI,40',
+    '02-01-2026,Saree,Silk Saree,3,3200.00,1800.00,100,MG Road,Card,12',
+    '03-01-2026,Shirt,Formal Shirt,8,900.00,420.00,50,Station Road,Cash,25',
+    '04-01-2026,Jeans,Denim Jeans,6,1500.00,700.00,0,Station Road,UPI,18',
+    '05-01-2026,Kurta,Cotton Kurta,11,750.00,300.00,75,MG Road,Cash,29',
   ].join('\n')
   return header + rows
 }
 
 function downloadTemplate() {
-  const csv = generateTemplate()
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const blob = new Blob([buildTemplate()], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'senova_template.csv'
-  a.click()
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'senova_template.csv'
+  link.click()
   URL.revokeObjectURL(url)
 }
 
@@ -32,9 +41,8 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
   const handleFile = useCallback(
     (file) => {
       if (!file) return
-      const allowed = ['.csv', '.xlsx']
-      const ext = '.' + file.name.split('.').pop().toLowerCase()
-      if (!allowed.includes(ext)) {
+      const extension = `.${file.name.split('.').pop().toLowerCase()}`
+      if (!['.csv', '.xlsx'].includes(extension)) {
         setFileError('Unsupported file type. Please upload a .csv or .xlsx file.')
         return
       }
@@ -44,44 +52,40 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
     [onFileSelected],
   )
 
-  const onDrop = useCallback(
-    (e) => {
-      e.preventDefault()
-      setDragging(false)
-      handleFile(e.dataTransfer.files[0])
-    },
-    [handleFile],
-  )
-
-  const onDragOver = (e) => {
-    e.preventDefault()
-    setDragging(true)
-  }
-  const onDragLeave = () => setDragging(false)
-
   return (
     <div>
       <div
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
+        onDrop={(event) => {
+          event.preventDefault()
+          setDragging(false)
+          handleFile(event.dataTransfer.files[0])
+        }}
+        onDragOver={(event) => {
+          event.preventDefault()
+          setDragging(true)
+        }}
+        onDragLeave={() => setDragging(false)}
         onClick={() => !disabled && inputRef.current?.click()}
-        role="button"
-        tabIndex={0}
-        aria-label="Upload a CSV or Excel file"
-        onKeyDown={(e) => {
-          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
+        onKeyDown={(event) => {
+          if (!disabled && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault()
             inputRef.current?.click()
           }
         }}
-        className={`card-gradient border-2 border-dashed rounded-xl p-5 sm:p-8 md:p-12 text-center cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 ${
+        role="button"
+        tabIndex={0}
+        aria-label="Upload a CSV or Excel file"
+        aria-disabled={disabled || undefined}
+        className={`card flex flex-col items-center justify-center text-center gap-2 cursor-pointer ${
           disabled ? 'opacity-60 pointer-events-none' : ''
         }`}
         style={{
-          borderColor: dragging ? 'var(--accent-green)' : 'var(--border-strong)',
-          background: dragging ? 'var(--accent-green-glow)' : undefined,
-          boxShadow: dragging ? '0 0 0 4px var(--accent-green-glow)' : undefined,
+          minHeight: 148,
+          padding: 20,
+          borderStyle: 'dashed',
+          borderWidth: 2,
+          borderColor: dragging ? 'var(--accent-blue)' : 'var(--border-strong)',
+          background: dragging ? 'var(--accent-blue-glow)' : 'var(--bg-card)',
         }}
       >
         <input
@@ -89,66 +93,56 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
           type="file"
           accept=".csv,.xlsx"
           hidden
-          onChange={(e) => handleFile(e.target.files[0])}
+          onChange={(event) => handleFile(event.target.files[0])}
           disabled={disabled}
         />
 
-        <div className="flex flex-col items-center gap-3">
-          <div
-            className="p-3 rounded-full"
-            style={{ background: dragging ? 'var(--accent-green-glow)' : 'var(--bg-input)' }}
-          >
-            <svg
-              className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10"
-              style={{ color: dragging ? 'var(--accent-green)' : 'var(--text-muted)' }}
-              fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        <span
+          className="w-9 h-9 rounded-xl flex items-center justify-center"
+          style={{ background: dragging ? 'var(--bg-card)' : 'var(--bg-input)' }}
+        >
+          <Icon
+            name="download"
+            className="w-4 h-4"
+            style={{ color: dragging ? 'var(--accent-blue)' : 'var(--text-muted)', transform: 'rotate(180deg)' }}
+          />
+        </span>
+
+        <p className="text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>
+          Drop your CSV / Excel file here, or click to browse
+        </p>
+        <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+          Any column layout works — you'll confirm your columns next.
+        </p>
+
+        {progressMessage && (
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium" style={{ color: 'var(--accent-blue)' }}>
+            <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-          </div>
-          <p className="font-medium text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>
-            Drop your CSV / Excel file here, or click to browse
-          </p>
-          <p className="text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
-            Any column layout works — you'll confirm your columns next.
-          </p>
-
-          {progressMessage ? (
-            <div className="flex items-center gap-2 mt-2">
-              <svg className="animate-spin h-4 w-4" style={{ color: 'var(--accent-green)' }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              <span className="text-sm font-medium" style={{ color: 'var(--accent-green)' }}>{progressMessage}</span>
-            </div>
-          ) : null}
-        </div>
-
-        {!disabled && !progressMessage && (
-          <div className="mt-6">
-            <Button type="button" variant="secondary">Choose File</Button>
-          </div>
+            {progressMessage}
+          </span>
         )}
       </div>
 
       {fileError && (
-        <p className="mt-3 text-sm text-center" style={{ color: 'var(--accent-red)' }} role="alert">
-          {fileError}
+        <p className="note mt-2" data-tone="danger" role="alert">
+          <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />
+          <span>{fileError}</span>
         </p>
       )}
 
-      <div className="mt-4 text-center">
+      <p className="text-center mt-2.5">
         <button
           type="button"
           onClick={downloadTemplate}
-          className="min-h-[44px] text-sm underline underline-offset-2 transition-colors"
-          style={{ color: 'var(--text-muted)', textDecorationColor: 'var(--border-strong)' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent-green)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+          className="text-[12px] underline underline-offset-2 cursor-pointer"
+          style={{ color: 'var(--text-muted)' }}
         >
-          Download Standard Format (.csv)
+          Download the sample format (.csv)
         </button>
-      </div>
+      </p>
     </div>
   )
 }

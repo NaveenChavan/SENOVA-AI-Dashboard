@@ -121,8 +121,9 @@ describe('InventoryPanel (Feature 3)', () => {
       />,
     )
 
-    expect(screen.getByText('Capital locked in stock')).toBeTruthy()
-    expect(screen.getByText('₹37,000')).toBeTruthy()
+    // Tiles use the compact ₹ form so a tile never grows to fit a big number.
+    expect(screen.getByText('Capital in stock')).toBeTruthy()
+    expect(screen.getByText('₹37.0K')).toBeTruthy()
     expect(screen.getByRole('columnheader', { name: 'Cover' })).toBeTruthy()
     expect(screen.getByText('8.6d')).toBeTruthy()
     // The per-item demand projection from the forecast is joined in.
@@ -175,8 +176,11 @@ describe('ForecastSummary (Feature 2)', () => {
       />,
     )
 
+    // Compact headline with the exact figure beneath it, and the range given
+    // equal billing.
+    expect(screen.getByText('₹62.0K')).toBeTruthy()
     expect(screen.getByText('₹62,000')).toBeTruthy()
-    expect(screen.getByText(/likely between ₹48,000 and ₹76,000/i)).toBeTruthy()
+    expect(screen.getByText('₹48.0K – ₹76.0K')).toBeTruthy()
     expect(screen.getByText('88.4% accurate')).toBeTruthy()
     expect(screen.getByText('Rising')).toBeTruthy()
     expect(screen.getByRole('group', { name: 'Forecast horizon' })).toBeTruthy()
@@ -282,8 +286,8 @@ describe('DrillDownPanel (Feature 5)', () => {
     const dialog = screen.getByRole('dialog', { name: 'Transactions for Kurta' })
     expect(dialog).toBeTruthy()
     expect(screen.getByText('Cotton Kurta')).toBeTruthy()
-    expect(screen.getByText('₹2,250')).toBeTruthy()
-    expect(screen.getByText(/page 1 of 9 · 210 rows/i)).toBeTruthy()
+    expect(screen.getByText('₹2.3K')).toBeTruthy()
+    expect(screen.getByText(/1 \/ 9 · 210 rows/i)).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Close drill-down' })).toBeTruthy()
   })
 

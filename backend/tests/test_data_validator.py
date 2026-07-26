@@ -165,6 +165,93 @@ def test_currency_symbols_and_indian_dates_are_parsed():
     assert frame.iloc[0]["Date"] == pd.Timestamp("2026-03-15")
 
 
+def test_line_total_with_currency_symbols_still_derives_a_unit_price():
+    """
+    A GST register writes its line total as "₹ 12,345.00". The derivation has to
+    strip the symbol before dividing — cleaning only inside the main coercion
+    loop meant such a file produced *zero* analysable rows.
+    """
+    raw = pd.DataFrame(
+        {
+            "Bill Date": ["01/02/2026", "02/02/2026"],
+            "Item Group": ["Pulses", "Grains"],
+            "Item Name": ["Toor Dal 1kg", "Basmati Rice 5kg"],
+            "Billed Qty": [10, 4],
+            "Taxable Value": ["₹ 1,490.00", "₹ 2,396.00"],
+            "Purchase Rate": ["118.00", "460.00"],
+        }
+    )
+    frame, errors = normalize_dataframe(raw)
+
+    assert len(frame) == 2, errors
+    assert frame["Selling Price"].tolist() == [149.0, 599.0]
+    # Revenue must equal the line totals, not quantity × line total.
+    assert (frame["Quantity"] * frame["Selling Price"]).tolist() == [1490.0, 2396.0]
+
+
+def test_iso_dates_are_not_scrambled_by_dayfirst():
+    """
+    ``dayfirst=True`` silently rereads an ISO date whose day is ≤ 12, which
+    turned a 100-day marketplace export into a 337-day span and made every
+    trading day look sparse. ISO must be parsed as ISO.
+    """
+    raw = pd.DataFrame(
+        {
+            "Ordered On": ["2026-03-10", "2026-04-05", "2026-05-12", "2026-06-30"],
+            "Product type": ["Audio"] * 4,
+            "Lineitem name": ["Speaker"] * 4,
+            "Lineitem quantity": [1, 2, 3, 4],
+            "Lineitem price": [2499.0] * 4,
+            "Unit Cost": [1450.0] * 4,
+        }
+    )
+    frame, _errors = normalize_dataframe(
+        raw,
+        column_mapping={
+            "Ordered On": "Date",
+            "Product type": "Category",
+            "Lineitem name": "Item",
+            "Lineitem quantity": "Quantity",
+            "Lineitem price": "Selling Price",
+            "Unit Cost": "Cost Price",
+        },
+    )
+
+    assert frame["Date"].tolist() == [
+        pd.Timestamp("2026-03-10"),
+        pd.Timestamp("2026-04-05"),
+        pd.Timestamp("2026-05-12"),
+        pd.Timestamp("2026-06-30"),
+    ]
+    span = (frame["Date"].max() - frame["Date"].min()).days
+    assert span == 112, f"ISO dates were re-ordered: span came out as {span} days"
+
+
+def test_indian_and_iso_dates_can_coexist_in_one_column():
+    """A file assembled from two systems must not lose either half."""
+    raw = pd.DataFrame(
+        {
+            "Date": ["15-03-2026", "2026-03-16", "17/03/2026"],
+            "Category": ["Kurta"] * 3,
+            "Item": ["Cotton Kurta"] * 3,
+            "Quantity": [1, 1, 1],
+            "Selling Price": [799.0] * 3,
+            "Cost Price": [320.0] * 3,
+        }
+    )
+    frame, errors = normalize_dataframe(raw)
+
+    assert errors == []
+    assert frame["Date"].dt.day.tolist() == [15, 16, 17]
+    assert frame["Date"].dt.month.tolist() == [3, 3, 3]
+
+
+@pytest.mark.parametrize("header", ["Section", "Menu Group", "Course", "Kitchen Group"])
+def test_food_service_category_headers(header):
+    """Restaurant POS exports call the category a section or a menu group."""
+    assert guess_canonical_column(header)[0] == "Category"
+
+
 def test_bad_rows_are_reported_not_fatal():
     """One unusable row must not stop the other rows from being analysed."""
     raw = pd.DataFrame(

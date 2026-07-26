@@ -4,14 +4,17 @@ import { Helmet } from 'react-helmet-async'
 
 import api from '../services/api'
 import useSalesStore, { buildQueryBody } from '../store/useSalesStore'
+import useDensityStore from '../store/useDensityStore'
 import Card from '../components/common/Card'
+import CommandPalette from '../components/common/CommandPalette'
 import ErrorBoundary from '../components/common/ErrorBoundary'
 import Icon from '../components/common/Icon'
 import Loader from '../components/common/Loader'
 import SummaryStats from '../components/dashboard/SummaryStats'
+import { CHART_TYPES, MEASURES, resolveChartRequest, useChartView } from '../components/charts/chartView'
 
-// Everything below the KPI row is code-split: the Financial Report and
-// Inventory tabs are never downloaded until the user opens them.
+// Everything below the KPI row is code-split: the Inventory and Financial
+// Report tabs are never downloaded until the user opens them.
 const RowErrorsBanner = lazy(() => import('../components/dashboard/RowErrorsBanner'))
 const TopItems = lazy(() => import('../components/dashboard/TopItems'))
 const DeadStockTable = lazy(() => import('../components/dashboard/DeadStockTable'))
@@ -28,20 +31,19 @@ const TrendChart = lazy(() => import('../components/charts/TrendChart'))
 /**
  * The dashboard page.
  *
- * Layout follows the "answer first" idea: automated findings sit at the top,
- * then the KPI row, then the forecast + trend, then the chart studio for
- * open-ended exploration, and finally the item tables. Inventory and the
- * CA-style financial report are separate tabs.
+ * Layout is answer-first and fixed-height: a 52px shell header, one toolbar
+ * row (title + date presets + export), one filter row, one tab row, then the
+ * content grid. Every control is the same height and every card the same
+ * padding, so the first screen fits without scrolling a card to see its edges.
  *
  * All view state (tab, date window, custom range, filters) is mirrored into the
- * URL, so a filtered view survives a refresh and can be shared with an
- * accountant — deep-linkable state is an explicit UX requirement for dashboards.
+ * URL, so a filtered view survives a refresh and can be shared.
  */
 
 const DATE_FILTERS = [
   { value: 'today', label: 'Today', minSpanDays: 1 },
-  { value: 'week', label: 'Last 7 Days', minSpanDays: 8 },
-  { value: '30days', label: 'Last 30 Days', minSpanDays: 31 },
+  { value: 'week', label: '7 Days', minSpanDays: 8 },
+  { value: '30days', label: '30 Days', minSpanDays: 31 },
   { value: 'month', label: 'This Month', minSpanDays: 8 },
   { value: 'all', label: 'All Time', minSpanDays: 1 },
 ]
@@ -55,7 +57,7 @@ const VIEW_TABS = [
 /**
  * A preset is meaningless when the data's span doesn't exceed its window — it
  * would return exactly the same rows as "All Time", which reads as a bug.
- * Disabling (not hiding) it keeps the UI predictable and lets a tooltip explain.
+ * Disabling (not hiding) it keeps the toolbar stable and lets a tooltip explain.
  */
 function isFilterMeaningful(filter, spanDays) {
   if (filter.value === 'today' || filter.value === 'all') return true
@@ -111,14 +113,17 @@ export default function Dashboard() {
 
   const [exporting, setExporting] = useState(false)
   const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') ?? 'overview')
-  const [chartRequest, setChartRequest] = useState({
-    dimension: 'category',
-    measure: 'revenue',
-    top_n: 10,
-    needsHeatmap: false,
-  })
 
-  // ── Hydrate query state from the URL once per navigation ───────────────
+  // The studio's view lives here, not inside the panel, so the command palette
+  // can switch chart type or measure from anywhere on the page.
+  const [chartView, setChartView] = useChartView()
+  const chartRequest = useMemo(() => resolveChartRequest(chartView), [chartView])
+  const { density, toggleDensity } = useDensityStore()
+
+  // ── Hydrate query state from the URL ──────────────────────────────────
+  // Re-runs when the file changes as well as on mount: filters that made sense
+  // for the previous upload may name a dimension the new file doesn't have,
+  // which the API would (correctly) reject with a 422.
   useEffect(() => {
     const range = searchParams.get('range')
     const from = searchParams.get('from')
@@ -142,10 +147,9 @@ export default function Dashboard() {
       endDate: to ?? null,
       filters: parsedFilters,
     })
-    // Intentionally keyed on the raw search string: this runs on back/forward
-    // navigation, not on every state change we ourselves make.
+    // Keyed on the file, not on our own state changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fileId])
 
   /** Push the current view state into the URL (replace, so back still works). */
   const syncUrl = useCallback(
@@ -181,6 +185,9 @@ export default function Dashboard() {
   // serialised body rather than its identity.
   const querySignature = useMemo(() => JSON.stringify(buildQueryBody(query)), [query])
 
+  // A custom range is only valid once both ends are picked.
+  const queryReady = query.timeFilter !== 'custom' || Boolean(query.startDate && query.endDate)
+
   useEffect(() => {
     if (!fileId) return
     if (useSalesStore.getState().fileId !== fileId) {
@@ -188,9 +195,6 @@ export default function Dashboard() {
     }
     fetchDimensions(fileId)
   }, [fileId, fetchDimensions])
-
-  // A custom range is only valid once both ends are picked.
-  const queryReady = query.timeFilter !== 'custom' || Boolean(query.startDate && query.endDate)
 
   useEffect(() => {
     if (!fileId || !queryReady) return
@@ -274,7 +278,12 @@ export default function Dashboard() {
 
   const clearAll = () => {
     resetFilters()
-    syncUrl({ filters: {}, timeFilter: query.timeFilter === 'custom' ? 'all' : query.timeFilter, startDate: null, endDate: null })
+    syncUrl({
+      filters: {},
+      timeFilter: query.timeFilter === 'custom' ? 'all' : query.timeFilter,
+      startDate: null,
+      endDate: null,
+    })
   }
 
   const handleDrillDown = (point) => {
@@ -286,7 +295,7 @@ export default function Dashboard() {
     if (!fileId) return
     setExporting(true)
     try {
-      // The PDF is generated server-side as real tables (P&L, findings,
+      // The PDF is generated server-side as real tables (findings, P&L,
       // forecast, reorder list, ledger) from the same slice shown on screen.
       const response = await api.post(`/analytics/${fileId}/report.pdf`, buildQueryBody(query), {
         responseType: 'blob',
@@ -307,32 +316,115 @@ export default function Dashboard() {
     }
   }
 
+  /**
+   * Everything the dashboard can do, as a flat list for the ⌘K palette.
+   *
+   * Built from the same constants the visible controls use, so a new chart type
+   * or measure appears in both places automatically — and a keyboard user never
+   * has fewer options than a mouse user.
+   */
+  const paletteActions = useMemo(
+    () => [
+      ...VIEW_TABS.map((tab) => ({
+        id: `tab-${tab.value}`,
+        group: 'Go to',
+        label: tab.label,
+        icon: tab.icon,
+        run: () => changeTab(tab.value),
+      })),
+      ...DATE_FILTERS.map((filter) => ({
+        id: `range-${filter.value}`,
+        group: 'Date range',
+        label: filter.label,
+        icon: 'calendar',
+        run: () => changeTimeFilter(filter.value),
+      })),
+      ...CHART_TYPES.map((type) => ({
+        id: `chart-${type.value}`,
+        group: 'Chart',
+        label: type.label,
+        hint: type.hint,
+        icon: 'chart',
+        run: () => {
+          setChartView({ chartType: type.value })
+          changeTab('overview')
+        },
+      })),
+      ...MEASURES.map((option) => ({
+        id: `measure-${option.value}`,
+        group: 'Measure',
+        label: option.label,
+        icon: 'chart',
+        run: () => {
+          setChartView({ measure: option.value })
+          changeTab('overview')
+        },
+      })),
+      {
+        id: 'toggle-table',
+        group: 'Chart',
+        label: chartView.showTable ? 'Show chart instead of table' : 'Show the chart as a table',
+        icon: 'document',
+        run: () => setChartView({ showTable: !chartView.showTable }),
+      },
+      {
+        id: 'clear-filters',
+        group: 'Filters',
+        label: 'Clear all filters',
+        icon: 'close',
+        run: clearAll,
+      },
+      {
+        id: 'export-pdf',
+        group: 'Export',
+        label: 'Download the PDF report',
+        icon: 'download',
+        run: exportPDF,
+      },
+      {
+        id: 'toggle-density',
+        group: 'Display',
+        label: density === 'compact' ? 'Comfortable spacing' : 'Compact spacing',
+        icon: 'refresh',
+        run: toggleDensity,
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeTab, query, chartView, density],
+  )
+
   // ── Guard states ───────────────────────────────────────────────────────
 
-  if (!fileId) {
-    return <NoFileState />
-  }
-
+  if (!fileId) return <NoFileState />
   if (isLoading && !data) return <LoadingSkeleton />
 
   if (error) {
+    const filterCount = Object.values(query.filters ?? {}).reduce((total, values) => total + values.length, 0)
     return (
-      <div className="flex flex-col items-center justify-center py-12 md:py-24 text-center px-4">
+      <div className="flex flex-col items-center justify-center py-16 text-center px-4">
         <Helmet>
           <title>Error — SENOVA Digital Lab</title>
         </Helmet>
-        <div className="p-4 rounded-full mb-4" style={{ background: 'rgba(239,68,68,0.1)' }}>
-          <Icon name="alert" className="w-8 h-8" style={{ color: 'var(--accent-red)' }} />
-        </div>
-        <p className="text-lg font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+        <Icon name="alert" className="w-7 h-7 mb-3" style={{ color: 'var(--accent-red)' }} />
+        <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
           Something went wrong
         </p>
-        <p className="mb-6" style={{ color: 'var(--text-secondary)' }}>
+        <p className="text-xs mb-4 max-w-sm" style={{ color: 'var(--text-secondary)' }}>
           {error}
         </p>
-        <Link to="/upload" className="underline underline-offset-2" style={{ color: 'var(--accent-blue)' }}>
-          Upload a new file
-        </Link>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {/* A filter carried over in the URL from a different upload can name a
+              column this file doesn't have — clearing it is the actual fix, so
+              offer it here rather than leaving a dead end. */}
+          {filterCount > 0 && (
+            <button type="button" className="btn-primary" onClick={clearAll}>
+              Clear filters and retry
+            </button>
+          )}
+          <Link to="/upload" className={filterCount > 0 ? 'btn' : 'btn-primary'}>
+            Upload a new file
+          </Link>
+        </div>
       </div>
     )
   }
@@ -347,107 +439,113 @@ export default function Dashboard() {
       : DATE_FILTERS.find((f) => f.value === query.timeFilter)?.label
 
   return (
-    <section className="space-y-5 sm:space-y-7">
+    <section className="space-y-3 sm:space-y-4">
       <Helmet>
         <title>Dashboard — SENOVA Digital Lab | Retail &amp; MSME Analytics</title>
         <meta
           name="description"
-          content="AI retail analytics: automated insights, revenue forecasting, reorder intelligence, seven chart types and drill-down into every transaction."
+          content="AI retail analytics: automated insights, revenue forecasting, reorder intelligence, eight chart views and drill-down into every transaction."
         />
       </Helmet>
 
-      {/* ── Header: title, presets, export ──────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Analytics Overview
-          </h1>
-          <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-            All values in INR (₹) · {periodLabel}
-            {activeFilterCount > 0 && ` · ${activeFilterCount} filter(s) applied`}
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div
-            role="group"
-            aria-label="Filter analytics by date range"
-            className="flex items-center gap-1 p-1 rounded-xl overflow-x-auto"
-            style={{ background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}
-          >
-            {DATE_FILTERS.map((filter) => {
-              const disabled = !isFilterMeaningful(filter, dateRange?.span_days)
-              const active = query.timeFilter === filter.value
-              return (
-                <button
-                  key={filter.value}
-                  onClick={() => !disabled && changeTimeFilter(filter.value)}
-                  disabled={disabled}
-                  aria-pressed={active}
-                  title={
-                    disabled
-                      ? `Your data only spans ${dateRange?.span_days} day(s) — this filter would show the same results as "All Time".`
-                      : undefined
-                  }
-                  className="text-xs font-medium rounded-lg whitespace-nowrap transition-colors"
-                  style={{
-                    padding: '10px 14px',
-                    minHeight: 40,
-                    cursor: disabled ? 'not-allowed' : 'pointer',
-                    opacity: disabled ? 0.35 : 1,
-                    background: active
-                      ? 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))'
-                      : 'transparent',
-                    color: active ? 'var(--text-on-accent)' : 'var(--text-secondary)',
-                    boxShadow: active ? '0 2px 8px var(--accent-blue-glow)' : 'none',
-                  }}
-                >
-                  {filter.label}
-                </button>
-              )
-            })}
+      {/* ── Toolbar: title · date presets · export ─────────────────────── */}
+      {/* Sticky below the 52px app header: on a long dashboard the date range
+          and filters are the controls people reach for while scrolling. */}
+      <div className="toolbar-sticky space-y-2 sm:space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="truncate">Analytics Overview</h1>
+            <p className="panel-hint truncate">
+              All values in INR (₹) · {periodLabel}
+              {activeFilterCount > 0 && ` · ${activeFilterCount} filter(s)`}
+            </p>
           </div>
 
-          <button
-            onClick={exportPDF}
-            disabled={exporting}
-            aria-busy={exporting}
-            className="btn-primary flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
-          >
-            <Icon name="download" className="w-4 h-4" />
-            {exporting ? 'Generating…' : 'Export PDF'}
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="seg" role="group" aria-label="Filter analytics by date range">
+              {DATE_FILTERS.map((filter) => {
+                const disabled = !isFilterMeaningful(filter, dateRange?.span_days)
+                return (
+                  <button
+                    key={filter.value}
+                    type="button"
+                    className="seg__btn"
+                    onClick={() => !disabled && changeTimeFilter(filter.value)}
+                    disabled={disabled}
+                    aria-pressed={query.timeFilter === filter.value}
+                    title={
+                      disabled
+                        ? `Your data only spans ${dateRange?.span_days} day(s) — this filter would show the same results as "All Time".`
+                        : undefined
+                    }
+                  >
+                    {filter.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Hints the ⌘K palette exists; keyboard users find it anyway. */}
+            <span
+              className="hidden lg:inline-flex items-center gap-1 text-[11px] font-mono px-2 rounded-md"
+              style={{
+                height: 'var(--control-h)',
+                border: '1px solid var(--border-subtle)',
+                background: 'var(--bg-input)',
+                color: 'var(--text-muted)',
+              }}
+              title="Press Ctrl-K (⌘K on Mac) for the command palette"
+            >
+              ⌘K
+            </span>
+
+            <button onClick={exportPDF} disabled={exporting} aria-busy={exporting} className="btn-primary">
+              <Icon name="download" className="w-3.5 h-3.5" />
+              {exporting ? 'Generating…' : 'Export PDF'}
+            </button>
+          </div>
+        </div>
+
+        {/* ── Filters ──────────────────────────────────────────────────── */}
+        <ErrorBoundary>
+          <FilterPanel
+            dimensions={dimensions}
+            filters={query.filters}
+            onChange={changeFilters}
+            dateRange={dateRange}
+            customRange={{ start: query.startDate ?? '', end: query.endDate ?? '' }}
+            onCustomRangeChange={changeCustomRange}
+            onClear={clearAll}
+          />
+        </ErrorBoundary>
+
+        {/* ── Tabs ─────────────────────────────────────────────────────── */}
+        <div className="seg" role="tablist" aria-label="Dashboard view">
+          {VIEW_TABS.map((tab) => (
+            <button
+              key={tab.value}
+              role="tab"
+              type="button"
+              className="seg__btn"
+              aria-selected={activeTab === tab.value}
+              onClick={() => changeTab(tab.value)}
+            >
+              <Icon name={tab.icon} className="w-3.5 h-3.5" />
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* ── Filters ─────────────────────────────────────────────────── */}
-      <ErrorBoundary>
-        <FilterPanel
-          dimensions={dimensions}
-          filters={query.filters}
-          onChange={changeFilters}
-          dateRange={dateRange}
-          customRange={{ start: query.startDate ?? '', end: query.endDate ?? '' }}
-          onCustomRangeChange={changeCustomRange}
-          onClear={clearAll}
-        />
-      </ErrorBoundary>
-
       {/* Short-span explainer — prevents "why are all filters the same?" */}
       {dateRange?.span_days > 0 && dateRange.span_days < 8 && (
-        <div
-          className="card px-4 sm:px-5 py-3 flex items-start gap-3"
-          style={{ border: '1px solid var(--border-active)' }}
-          role="note"
-        >
-          <Icon name="info" className="w-5 h-5 shrink-0 mt-0.5" style={{ color: 'var(--accent-blue)' }} />
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Your uploaded data covers only{' '}
-            <strong style={{ color: 'var(--text-primary)' }}>{dateRange.span_days} day(s)</strong> (
-            {dateRange.min_date} to {dateRange.max_date}). Wider presets are disabled because they'd show
-            identical results to "All Time" — there simply isn't more data to compare yet.
-          </p>
-        </div>
+        <p className="note" data-tone="info" role="note">
+          <Icon name="info" className="w-4 h-4 shrink-0 mt-px" style={{ color: 'var(--accent-blue)' }} />
+          <span>
+            This file covers only <strong>{dateRange.span_days} day(s)</strong> ({dateRange.min_date} to{' '}
+            {dateRange.max_date}). Wider presets are disabled because they'd show identical results to "All Time".
+          </span>
+        </p>
       )}
 
       {data.errors?.length > 0 && (
@@ -456,43 +554,15 @@ export default function Dashboard() {
         </ErrorBoundary>
       )}
 
-      {/* ── Tabs ────────────────────────────────────────────────────── */}
-      <div
-        role="tablist"
-        aria-label="Dashboard view"
-        className="flex items-center gap-1 p-1 rounded-xl w-fit"
-        style={{ background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}
-      >
-        {VIEW_TABS.map((tab) => {
-          const active = activeTab === tab.value
-          return (
-            <button
-              key={tab.value}
-              role="tab"
-              aria-selected={active}
-              onClick={() => changeTab(tab.value)}
-              className="flex items-center gap-2 text-xs sm:text-sm font-medium rounded-lg cursor-pointer transition-colors"
-              style={{
-                padding: '10px 14px',
-                minHeight: 40,
-                background: active
-                  ? 'linear-gradient(135deg, var(--accent-blue-strong), var(--accent-blue))'
-                  : 'transparent',
-                color: active ? 'var(--text-on-accent)' : 'var(--text-secondary)',
-              }}
-            >
-              <Icon name={tab.icon} className="w-4 h-4" />
-              {tab.label}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* ── Overview ────────────────────────────────────────────────── */}
+      {/* ── Overview ───────────────────────────────────────────────────── */}
       {activeTab === 'overview' && (
-        <div className="space-y-5 sm:space-y-7">
+        <div className="space-y-3 sm:space-y-4">
           {isEmpty ? (
-            <EmptyPeriodState onReset={() => changeTimeFilter('all')} hasFilters={activeFilterCount > 0} onClear={clearAll} />
+            <EmptyPeriodState
+              onReset={() => changeTimeFilter('all')}
+              hasFilters={activeFilterCount > 0}
+              onClear={clearAll}
+            />
           ) : (
             <>
               <ErrorBoundary>
@@ -510,57 +580,63 @@ export default function Dashboard() {
                 />
               </ErrorBoundary>
 
-              <Card title="Daily Sales Trend & Forecast">
-                <ErrorBoundary>
-                  <TrendChart
-                    trend={data.daily_trend}
-                    forecast={forecast}
-                    anomalyDates={insights?.anomaly_dates ?? []}
-                  />
-                </ErrorBoundary>
-              </Card>
+              {/* Trend and the top-items chart share a row: both are the same
+                  tokenised height, so the row has no ragged edge. */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--gap)] items-start">
+                <Card title="Daily trend & forecast" hint="Solid = actual · dashed = projection">
+                  <ErrorBoundary>
+                    <TrendChart
+                      trend={data.daily_trend}
+                      forecast={forecast}
+                      anomalyDates={insights?.anomaly_dates ?? []}
+                    />
+                  </ErrorBoundary>
+                </Card>
 
-              <ErrorBoundary>
-                <ChartStudio
-                  chartData={chartData}
-                  heatmapData={heatmapData}
-                  loading={chartLoading || heatmapLoading}
-                  availableDimensions={dimensions}
-                  onQueryChange={setChartRequest}
-                  onDrillDown={handleDrillDown}
-                  selectedLabel={drillSelection?.label}
-                />
-              </ErrorBoundary>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
                 <ErrorBoundary>
                   <TopItems items={data.top_items} />
                 </ErrorBoundary>
-                <ErrorBoundary>
-                  <DeadStockTable items={data.dead_stock} />
-                </ErrorBoundary>
               </div>
+
+              {/* The studio is the exploration surface, so it gets the full
+                  page width — and correspondingly less height. */}
+                <ErrorBoundary>
+                  <ChartStudio
+                    chartData={chartData}
+                    heatmapData={heatmapData}
+                    loading={chartLoading || heatmapLoading}
+                    availableDimensions={dimensions}
+                    view={chartView}
+                    onViewChange={setChartView}
+                    onDrillDown={handleDrillDown}
+                    selectedLabel={drillSelection?.label}
+                    wide
+                  />
+                </ErrorBoundary>
+
+              <ErrorBoundary>
+                <DeadStockTable items={data.dead_stock} />
+              </ErrorBoundary>
             </>
           )}
         </div>
       )}
 
-      {/* ── Inventory ───────────────────────────────────────────────── */}
+      {/* ── Inventory ──────────────────────────────────────────────────── */}
       {activeTab === 'inventory' && (
         <ErrorBoundary>
           <InventoryPanel inventory={inventory} loading={inventoryLoading} forecast={forecast} />
         </ErrorBoundary>
       )}
 
-      {/* ── Financial report ────────────────────────────────────────── */}
+      {/* ── Financial report ───────────────────────────────────────────── */}
       {activeTab === 'report' && (
-        <div className="space-y-5 sm:space-y-7">
+        <div className="space-y-3 sm:space-y-4">
           {caReportError && (
-            <div className="card px-4 py-3" style={{ border: '1px solid rgba(239,68,68,0.3)' }}>
-              <p className="text-sm" style={{ color: 'var(--accent-red)' }}>
-                {caReportError}
-              </p>
-            </div>
+            <p className="note" data-tone="danger">
+              <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />
+              <span>{caReportError}</span>
+            </p>
           )}
           <ErrorBoundary>
             {caReportLoading && !caReport ? (
@@ -579,7 +655,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* ── Drill-down overlay ──────────────────────────────────────── */}
+      {/* ── Drill-down overlay ─────────────────────────────────────────── */}
       <ErrorBoundary>
         <DrillDownPanel
           selection={drillSelection}
@@ -591,34 +667,43 @@ export default function Dashboard() {
           }
         />
       </ErrorBoundary>
+
+      {/* ── ⌘K palette ─────────────────────────────────────────────────── */}
+      <CommandPalette actions={paletteActions} />
     </section>
   )
 }
 
-/** Skeleton that reserves the real layout's height, so nothing jumps on load. */
+/** Skeleton that mirrors the real layout's heights, so nothing jumps on load. */
 function LoadingSkeleton() {
   return (
-    <div className="space-y-6 sm:space-y-8 animate-pulse">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+    <div className="space-y-3 sm:space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--gap)]">
         {[...Array(3)].map((_, index) => (
-          <div key={index} className="card p-4" style={{ minHeight: 120 }}>
-            <div className="h-3 rounded w-24 mb-3" style={{ background: 'var(--bg-skeleton)' }} />
-            <div className="h-3 rounded w-full mb-2" style={{ background: 'var(--bg-skeleton)' }} />
-            <div className="h-3 rounded w-4/5" style={{ background: 'var(--bg-skeleton)' }} />
+          <div key={index} className="card card-pad" style={{ height: 104 }}>
+            <div className="skeleton h-2.5 w-24 mb-2.5" />
+            <div className="skeleton h-2.5 w-full mb-1.5" />
+            <div className="skeleton h-2.5 w-4/5" />
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[var(--gap)]">
         {[...Array(5)].map((_, index) => (
-          <div key={index} className="card p-4 sm:p-6">
-            <div className="h-3 rounded w-20 mb-3" style={{ background: 'var(--bg-skeleton)' }} />
-            <div className="h-7 rounded w-28" style={{ background: 'var(--bg-skeleton)' }} />
+          <div key={index} className="stat-tile" style={{ height: 76 }}>
+            <div className="skeleton h-2 w-16 mb-2.5" />
+            <div className="skeleton h-4 w-20" />
           </div>
         ))}
       </div>
-      <div className="card p-4 sm:p-6">
-        <div className="h-4 rounded w-48 mb-6" style={{ background: 'var(--bg-skeleton)' }} />
-        <div className="h-64 rounded" style={{ background: 'var(--bg-skeleton)', opacity: 0.5 }} />
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--gap)]">
+        {[...Array(2)].map((_, index) => (
+          <div key={index} className="card card-pad">
+            <div className="skeleton h-2.5 w-32 mb-3" />
+            <div className="skeleton chart-box" />
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -627,24 +712,24 @@ function LoadingSkeleton() {
 /** No file selected / no analytics yet. */
 function NoFileState() {
   return (
-    <div className="flex flex-col items-center justify-center py-16 md:py-24 text-center px-4">
+    <div className="flex items-center justify-center py-16">
       <Helmet>
         <title>No Data — SENOVA Digital Lab</title>
       </Helmet>
-      <div className="card max-w-sm w-full p-8">
+      <div className="card card-pad max-w-xs w-full text-center">
         <div
-          className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          className="w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-3"
           style={{ background: 'var(--accent-blue-glow)' }}
         >
-          <Icon name="chart" className="w-6 h-6" style={{ color: 'var(--accent-blue)' }} />
+          <Icon name="chart" className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
         </div>
-        <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
+        <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
           No analytics yet
         </p>
-        <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>
+        <p className="text-xs mb-4" style={{ color: 'var(--text-secondary)' }}>
           Upload a sales file to generate your first dashboard.
         </p>
-        <Link to="/upload" className="btn-primary inline-block cursor-pointer">
+        <Link to="/upload" className="btn-primary w-full">
           Upload a file
         </Link>
       </div>
@@ -659,28 +744,21 @@ function NoFileState() {
  */
 function EmptyPeriodState({ onReset, hasFilters, onClear }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center card max-w-md mx-auto">
-      <Icon name="inbox" className="w-10 h-10 mb-4" style={{ color: 'var(--text-muted)' }} />
-      <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
-        No data for this selection
-      </h3>
-      <p className="text-sm mb-6 px-6" style={{ color: 'var(--text-secondary)' }}>
+    <div className="card card-pad text-center py-10 max-w-sm mx-auto">
+      <Icon name="inbox" className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
+      <h3 className="mb-1">No data for this selection</h3>
+      <p className="text-xs mb-4" style={{ color: 'var(--text-secondary)' }}>
         {hasFilters
           ? 'Your filters and date range together match no transactions.'
           : 'The selected date range returned no matching records.'}
       </p>
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center">
         {hasFilters && (
-          <button onClick={onClear} className="btn-primary cursor-pointer" type="button">
+          <button onClick={onClear} className="btn-primary" type="button">
             Clear filters
           </button>
         )}
-        <button
-          onClick={onReset}
-          type="button"
-          className="cursor-pointer rounded-lg px-4"
-          style={{ minHeight: 40, border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}
-        >
+        <button onClick={onReset} type="button" className="btn">
           Show all time
         </button>
       </div>

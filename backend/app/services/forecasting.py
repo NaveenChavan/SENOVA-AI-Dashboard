@@ -55,6 +55,10 @@ SEASONAL_INDEX_CLAMP = (0.3, 3.0)
 Z_80_PERCENT = 1.2816
 #: Days held back for the accuracy backtest.
 BACKTEST_DAYS = 7
+#: Above this share of zero-revenue days the shop is treated as "trades some
+#: days": per-day accuracy stops being informative (the error is dominated by
+#: which days were open) and the backtest scores the period total instead.
+SPARSE_ZERO_DAY_SHARE = 0.25
 #: A trend flatter than this share of the daily average is reported as "flat".
 FLAT_TREND_RATIO = 0.01
 #: Cap on how many items get an individual demand forecast.
@@ -159,6 +163,18 @@ def compute_forecast(df: pd.DataFrame, horizon_days: int = 14) -> ForecastRespon
     if abs(slope) > max(daily_average * FLAT_TREND_RATIO, 1e-9):
         direction = "rising" if slope > 0 else "falling"
 
+    accuracy, accuracy_basis = _backtest_accuracy(dates, values)
+    trading_days = int((values > 0).sum())
+
+    # A shop that doesn't trade every day deserves to be told how its numbers
+    # were derived, rather than silently reading a low daily average as decline.
+    sparse_note = None
+    if trading_days < history_days:
+        sparse_note = (
+            f"Sales were recorded on {trading_days} of {history_days} days, so the daily "
+            "average spreads takings across closed days too — judge the period total, not the day figure."
+        )
+
     return ForecastResponse(
         available=True,
         horizon_days=horizon,
@@ -169,16 +185,25 @@ def compute_forecast(df: pd.DataFrame, horizon_days: int = 14) -> ForecastRespon
         daily_average=safe_float(daily_average, default=0.0) or 0.0,
         trend_per_day=safe_float(slope, default=0.0) or 0.0,
         trend_direction=direction,
-        accuracy_pct=_backtest_accuracy(dates, values),
+        accuracy_pct=accuracy,
+        accuracy_basis=accuracy_basis,
+        trading_days=trading_days,
+        history_days=history_days,
         seasonality_applied=use_seasonality,
         weekday_indices={k: safe_float(v, digits=3, default=1.0) or 1.0 for k, v in weekday_indices.items()},
         item_forecasts=_item_forecasts(prepped, horizon),
         reason=(
-            None
+            sparse_note
             if use_seasonality
-            else (
-                f"Weekday patterns need {MIN_DAYS_FOR_SEASONALITY}+ days of history, so this "
-                "projection uses the overall trend only."
+            else " ".join(
+                filter(
+                    None,
+                    [
+                        f"Weekday patterns need {MIN_DAYS_FOR_SEASONALITY}+ days of history, so this "
+                        "projection uses the overall trend only.",
+                        sparse_note,
+                    ],
+                )
             )
         ),
     )
@@ -253,17 +278,27 @@ def _index_vector(dates: pd.Series, indices: dict[str, float]) -> np.ndarray:
     return dates.dt.strftime("%a").map(lambda d: indices.get(d, 1.0)).to_numpy(dtype=float)
 
 
-def _backtest_accuracy(dates: pd.Series, values: np.ndarray) -> float | None:
+def _backtest_accuracy(dates: pd.Series, values: np.ndarray) -> tuple[float | None, str | None]:
     """
     Hold out the last ``BACKTEST_DAYS`` days, refit on the rest, and score the
-    prediction as ``100 − MAPE`` (clamped to 0–100).
+    prediction. Returns ``(accuracy_pct, basis)``.
 
-    Days with zero actual revenue are excluded from the percentage error —
-    dividing by zero would make MAPE meaningless. Returns ``None`` when the
-    history isn't long enough to hold anything back.
+    Two bases, chosen from the data:
+
+    * ``"daily"`` — ``100 − MAPE`` across the held-out days. Meaningful when the
+      shop trades most days.
+    * ``"total"`` — accuracy of the held-out **period total**. On a shop that
+      trades a third of the calendar, per-day error is dominated by *which* days
+      were open, which no revenue model can know; the seven-day total is the
+      number the user actually plans against, so that is what gets scored.
+      Reporting a 20%-accurate daily figure there would understate a projection
+      that is fine in aggregate.
+
+    Returns ``(None, None)`` when the history isn't long enough to hold anything
+    back.
     """
     if len(values) < MIN_DAYS_FOR_FORECAST + BACKTEST_DAYS:
-        return None
+        return None, None
 
     split = len(values) - BACKTEST_DAYS
     train_positions = np.arange(split, dtype=float)
@@ -272,21 +307,35 @@ def _backtest_accuracy(dates: pd.Series, values: np.ndarray) -> float | None:
         dates.iloc[:split], values[:split], intercept + slope * train_positions
     )
 
-    errors: list[float] = []
+    predictions: list[float] = []
+    actuals: list[float] = []
     for offset in range(BACKTEST_DAYS):
-        actual = float(values[split + offset])
-        if actual <= 0:
-            continue
         position = split + offset
         index = indices.get(dates.iloc[position].strftime("%a"), 1.0)
-        predicted = max((intercept + slope * position) * index, 0.0)
-        errors.append(abs(actual - predicted) / actual)
+        predictions.append(max((intercept + slope * position) * index, 0.0))
+        actuals.append(float(values[position]))
 
+    sparse = float((values <= 0).mean()) > SPARSE_ZERO_DAY_SHARE
+
+    if sparse:
+        actual_total = float(np.sum(actuals))
+        if actual_total <= 0:
+            return None, None
+        error = abs(float(np.sum(predictions)) - actual_total) / actual_total
+        return safe_float(max(0.0, min(100.0, 100.0 - error * 100.0)), digits=1), "total"
+
+    # Days with zero actual revenue are excluded from a percentage error —
+    # dividing by zero would make MAPE meaningless.
+    errors = [
+        abs(actual - predicted) / actual
+        for actual, predicted in zip(actuals, predictions)
+        if actual > 0
+    ]
     if not errors:
-        return None
+        return None, None
 
     mape = float(np.mean(errors)) * 100.0
-    return safe_float(max(0.0, min(100.0, 100.0 - mape)), digits=1)
+    return safe_float(max(0.0, min(100.0, 100.0 - mape)), digits=1), "daily"
 
 
 def _item_forecasts(prepped: pd.DataFrame, horizon: int) -> list[ItemForecast]:

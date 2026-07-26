@@ -1,54 +1,58 @@
 import Card from '../common/Card'
-
-const fmtMoney = (n) => `₹${Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
+import { formatCurrencyExact, formatNumber, formatPercent } from '../charts/chartFormat'
 
 /**
- * Profit & Loss statement, presented the way a Chartered Accountant would
- * print it: labelled line items with a ruled-off subtotal — not a chart.
+ * CA-style financial report: a Profit & Loss statement plus the category-wise
+ * ledger schedule beneath it — rows and columns, the way an accountant prints
+ * them, not charts.
+ *
+ * Both tables use the shared compact `.table` styling, so the report reads at
+ * the same density as every other panel and a long ledger scrolls inside its
+ * own card instead of stretching the page.
  */
+
 function PnLStatement({ pnl }) {
-  if (!pnl || pnl.length === 0) return null
+  if (!pnl?.length) return null
 
   return (
-    <Card title="Profit &amp; Loss Statement">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+    <Card title="Profit &amp; loss statement">
+      <div className="scroll-x">
+        <table className="table">
           <thead>
-            <tr className="border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-              <th className="text-left py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
-                Particulars
-              </th>
-              <th className="text-right py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
-                Amount (₹)
-              </th>
-              <th className="text-right py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
-                % of Revenue
-              </th>
+            <tr>
+              <th scope="col">Particulars</th>
+              <th scope="col">Amount</th>
+              <th scope="col">% of revenue</th>
             </tr>
           </thead>
           <tbody>
             {pnl.map((line) => (
-              <tr
-                key={line.label}
-                className={line.is_subtotal ? 'border-t-2' : 'border-b'}
-                style={{
-                  borderColor: line.is_subtotal ? 'var(--border-active)' : 'var(--border-subtle)',
-                }}
-              >
-                <td
-                  className={`py-2.5 whitespace-nowrap ${line.is_subtotal ? 'font-bold' : ''}`}
-                  style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-primary)' }}
+              <tr key={line.label}>
+                <th
+                  scope="row"
+                  style={{
+                    color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-primary)',
+                    fontWeight: line.is_subtotal ? 700 : 550,
+                    borderTop: line.is_subtotal ? '1px solid var(--border-strong)' : undefined,
+                  }}
                 >
                   {line.label}
+                </th>
+                <td
+                  className="font-mono"
+                  style={{
+                    color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-secondary)',
+                    fontWeight: line.is_subtotal ? 700 : 400,
+                    borderTop: line.is_subtotal ? '1px solid var(--border-strong)' : undefined,
+                  }}
+                >
+                  {formatCurrencyExact(line.amount)}
                 </td>
                 <td
-                  className={`py-2.5 text-right font-mono whitespace-nowrap ${line.is_subtotal ? 'font-bold' : ''}`}
-                  style={{ color: line.is_subtotal ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
+                  className="font-mono"
+                  style={{ borderTop: line.is_subtotal ? '1px solid var(--border-strong)' : undefined }}
                 >
-                  {fmtMoney(line.amount)}
-                </td>
-                <td className="py-2.5 text-right font-mono text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
-                  {line.percentage_of_revenue != null ? `${line.percentage_of_revenue}%` : '—'}
+                  {line.percentage_of_revenue != null ? formatPercent(line.percentage_of_revenue) : '—'}
                 </td>
               </tr>
             ))}
@@ -59,41 +63,37 @@ function PnLStatement({ pnl }) {
   )
 }
 
-/**
- * Category-wise sales ledger — the "schedule" a CA attaches behind the
- * P&L to show revenue/cost/profit split by product segment.
- */
 function CategoryLedger({ rows }) {
-  if (!rows || rows.length === 0) return null
+  if (!rows?.length) return null
 
   return (
-    <Card title="Category-wise Ledger">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+    <Card title="Category-wise ledger" hint={`${rows.length} category group(s)`}>
+      <div className="scroll-x" style={{ maxHeight: 320, overflowY: 'auto' }}>
+        <table className="table">
           <thead>
-            <tr className="border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-              {['Category', 'Units Sold', 'Revenue (₹)', 'Cost (₹)', 'Profit (₹)', 'Margin %'].map((h, i) => (
-                <th
-                  key={h}
-                  className={`py-2 font-medium uppercase tracking-wider text-xs whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}`}
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  {h}
-                </th>
-              ))}
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Units</th>
+              <th scope="col">Revenue</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Margin</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.category} className="border-b last:border-0" style={{ borderColor: 'var(--border-subtle)' }}>
-                <td className="py-2.5 font-medium" style={{ color: 'var(--text-primary)' }}>{row.category}</td>
-                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>
-                  {row.units_sold.toLocaleString('en-IN')}
+              <tr key={row.category}>
+                <th scope="row">{row.category}</th>
+                <td className="font-mono">{formatNumber(row.units_sold)}</td>
+                <td className="font-mono">{formatCurrencyExact(row.revenue)}</td>
+                <td className="font-mono">{formatCurrencyExact(row.cost)}</td>
+                <td
+                  className="font-mono"
+                  style={{ color: row.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
+                >
+                  {formatCurrencyExact(row.profit)}
                 </td>
-                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(row.revenue)}</td>
-                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{fmtMoney(row.cost)}</td>
-                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--accent-green)' }}>{fmtMoney(row.profit)}</td>
-                <td className="py-2.5 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>{row.margin_percentage}%</td>
+                <td className="font-mono">{formatPercent(row.margin_percentage)}</td>
               </tr>
             ))}
           </tbody>
@@ -103,35 +103,29 @@ function CategoryLedger({ rows }) {
   )
 }
 
-/**
- * Full CA-style financial report: period header, P&L statement, and the
- * category-wise ledger beneath it.
- */
 export default function PnLReportTable({ report }) {
   if (!report) return null
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-2">
-        <h2 className="text-base sm:text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-          Financial Report — {report.period_label}
-        </h2>
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <h2 className="truncate">Financial report — {report.period_label}</h2>
         {report.period_start && (
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            {report.period_start} to {report.period_end} &middot; {report.total_transactions.toLocaleString('en-IN')} transactions
+          <p className="panel-hint">
+            {report.period_start} to {report.period_end} · {formatNumber(report.total_transactions)} transactions
           </p>
         )}
       </div>
 
       {report.pnl.length === 0 ? (
-        <div className="card-gradient rounded-xl p-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+        <p className="card card-pad text-center text-xs" style={{ color: 'var(--text-muted)' }}>
           No transactions in this period.
-        </div>
+        </p>
       ) : (
-        <>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--gap)] items-start">
           <PnLStatement pnl={report.pnl} />
           <CategoryLedger rows={report.category_ledger} />
-        </>
+        </div>
       )}
     </div>
   )

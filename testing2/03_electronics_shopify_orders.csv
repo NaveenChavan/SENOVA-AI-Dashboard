@@ -1,0 +1,701 @@
+Order ID,Ordered On,Lineitem name,Product type,Lineitem quantity,Lineitem price,MRP,Unit Cost,Currency,Payment Method,Order Status,Notes
+#90001,2026-03-10,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90002,2026-03-10,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90003,2026-03-10,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90004,2026-03-10,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90005,2026-03-10,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90006,2026-03-10,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90007,2026-03-10,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90008,2026-03-11,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90009,2026-03-11,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90010,2026-03-11,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90011,2026-03-11,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90012,2026-03-11,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90013,2026-03-11,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90014,2026-03-11,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90015,2026-03-12,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90016,2026-03-12,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90017,2026-03-12,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90018,2026-03-12,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90019,2026-03-12,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90020,2026-03-12,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90021,2026-03-12,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90022,2026-03-13,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90023,2026-03-13,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90024,2026-03-13,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90025,2026-03-13,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90026,2026-03-13,65W GaN Charger,Power,9,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90027,2026-03-13,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90028,2026-03-13,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90029,2026-03-14,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90030,2026-03-14,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90031,2026-03-14,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90032,2026-03-14,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90033,2026-03-14,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90034,2026-03-14,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90035,2026-03-14,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90036,2026-03-15,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90037,2026-03-15,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90038,2026-03-15,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90039,2026-03-15,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90040,2026-03-15,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90041,2026-03-15,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90042,2026-03-15,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90043,2026-03-16,Wireless Mouse,Accessories,10,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90044,2026-03-16,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90045,2026-03-16,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90046,2026-03-16,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90047,2026-03-16,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90048,2026-03-16,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90049,2026-03-16,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90050,2026-03-17,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90051,2026-03-17,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90052,2026-03-17,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90053,2026-03-17,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90054,2026-03-17,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90055,2026-03-17,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90056,2026-03-17,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90057,2026-03-18,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90058,2026-03-18,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90059,2026-03-18,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90060,2026-03-18,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90061,2026-03-18,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90062,2026-03-18,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90063,2026-03-18,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90064,2026-03-19,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90065,2026-03-19,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90066,2026-03-19,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90067,2026-03-19,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90068,2026-03-19,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90069,2026-03-19,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90070,2026-03-19,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90071,2026-03-20,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90072,2026-03-20,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90073,2026-03-20,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90074,2026-03-20,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90075,2026-03-20,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90076,2026-03-20,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90077,2026-03-20,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90078,2026-03-21,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90079,2026-03-21,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90080,2026-03-21,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90081,2026-03-21,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90082,2026-03-21,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90083,2026-03-21,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90084,2026-03-21,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90085,2026-03-22,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90086,2026-03-22,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90087,2026-03-22,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90088,2026-03-22,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90089,2026-03-22,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90090,2026-03-22,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90091,2026-03-22,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90092,2026-03-23,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90093,2026-03-23,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90094,2026-03-23,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90095,2026-03-23,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90096,2026-03-23,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90097,2026-03-23,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90098,2026-03-23,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90099,2026-03-24,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90100,2026-03-24,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90101,2026-03-24,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90102,2026-03-24,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90103,2026-03-24,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90104,2026-03-24,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90105,2026-03-24,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90106,2026-03-25,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90107,2026-03-25,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90108,2026-03-25,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90109,2026-03-25,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90110,2026-03-25,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90111,2026-03-25,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90112,2026-03-25,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90113,2026-03-26,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90114,2026-03-26,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90115,2026-03-26,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90116,2026-03-26,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90117,2026-03-26,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90118,2026-03-26,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90119,2026-03-26,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90120,2026-03-27,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90121,2026-03-27,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90122,2026-03-27,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90123,2026-03-27,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90124,2026-03-27,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90125,2026-03-27,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90126,2026-03-27,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90127,2026-03-28,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90128,2026-03-28,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90129,2026-03-28,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90130,2026-03-28,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90131,2026-03-28,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90132,2026-03-28,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90133,2026-03-28,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90134,2026-03-29,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90135,2026-03-29,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90136,2026-03-29,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90137,2026-03-29,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90138,2026-03-29,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90139,2026-03-29,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90140,2026-03-29,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90141,2026-03-30,Wireless Mouse,Accessories,11,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90142,2026-03-30,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90143,2026-03-30,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90144,2026-03-30,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90145,2026-03-30,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90146,2026-03-30,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90147,2026-03-30,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90148,2026-03-31,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90149,2026-03-31,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90150,2026-03-31,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90151,2026-03-31,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90152,2026-03-31,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90153,2026-03-31,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90154,2026-03-31,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90155,2026-04-01,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90156,2026-04-01,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90157,2026-04-01,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90158,2026-04-01,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90159,2026-04-01,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90160,2026-04-01,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90161,2026-04-01,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90162,2026-04-02,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90163,2026-04-02,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90164,2026-04-02,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90165,2026-04-02,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90166,2026-04-02,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90167,2026-04-02,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90168,2026-04-02,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90169,2026-04-03,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90170,2026-04-03,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90171,2026-04-03,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90172,2026-04-03,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90173,2026-04-03,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90174,2026-04-03,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90175,2026-04-03,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90176,2026-04-04,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90177,2026-04-04,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90178,2026-04-04,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90179,2026-04-04,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90180,2026-04-04,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90181,2026-04-04,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90182,2026-04-04,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90183,2026-04-05,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90184,2026-04-05,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90185,2026-04-05,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90186,2026-04-05,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90187,2026-04-05,65W GaN Charger,Power,9,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90188,2026-04-05,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90189,2026-04-05,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90190,2026-04-06,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90191,2026-04-06,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90192,2026-04-06,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90193,2026-04-06,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90194,2026-04-06,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90195,2026-04-06,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90196,2026-04-06,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90197,2026-04-07,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90198,2026-04-07,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90199,2026-04-07,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90200,2026-04-07,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90201,2026-04-07,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90202,2026-04-07,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90203,2026-04-07,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90204,2026-04-08,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90205,2026-04-08,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90206,2026-04-08,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90207,2026-04-08,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90208,2026-04-08,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90209,2026-04-08,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90210,2026-04-08,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90211,2026-04-09,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90212,2026-04-09,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90213,2026-04-09,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90214,2026-04-09,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90215,2026-04-09,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90216,2026-04-09,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90217,2026-04-09,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90218,2026-04-10,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90219,2026-04-10,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90220,2026-04-10,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90221,2026-04-10,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90222,2026-04-10,65W GaN Charger,Power,9,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90223,2026-04-10,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90224,2026-04-10,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90225,2026-04-11,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90226,2026-04-11,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90227,2026-04-11,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90228,2026-04-11,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90229,2026-04-11,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90230,2026-04-11,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90231,2026-04-11,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90232,2026-04-12,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90233,2026-04-12,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90234,2026-04-12,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90235,2026-04-12,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90236,2026-04-12,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90237,2026-04-12,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90238,2026-04-12,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90239,2026-04-13,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90240,2026-04-13,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90241,2026-04-13,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90242,2026-04-13,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90243,2026-04-13,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90244,2026-04-13,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90245,2026-04-13,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90246,2026-04-14,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90247,2026-04-14,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90248,2026-04-14,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90249,2026-04-14,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90250,2026-04-14,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90251,2026-04-14,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90252,2026-04-14,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90253,2026-04-15,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90254,2026-04-15,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90255,2026-04-15,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90256,2026-04-15,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90257,2026-04-15,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90258,2026-04-15,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90259,2026-04-15,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90260,2026-04-16,Wireless Mouse,Accessories,11,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90261,2026-04-16,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90262,2026-04-16,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90263,2026-04-16,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90264,2026-04-16,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90265,2026-04-16,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90266,2026-04-16,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90267,2026-04-17,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90268,2026-04-17,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90269,2026-04-17,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90270,2026-04-17,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90271,2026-04-17,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90272,2026-04-17,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90273,2026-04-17,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90274,2026-04-18,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90275,2026-04-18,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90276,2026-04-18,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90277,2026-04-18,ANC Headphones,Audio,4,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90278,2026-04-18,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90279,2026-04-18,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90280,2026-04-18,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90281,2026-04-19,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90282,2026-04-19,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90283,2026-04-19,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90284,2026-04-19,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90285,2026-04-19,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90286,2026-04-19,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90287,2026-04-19,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90288,2026-04-20,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90289,2026-04-20,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90290,2026-04-20,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90291,2026-04-20,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90292,2026-04-20,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90293,2026-04-20,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90294,2026-04-20,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90295,2026-04-21,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90296,2026-04-21,USB-C Hub 7-in-1,Accessories,1,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90297,2026-04-21,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90298,2026-04-21,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90299,2026-04-21,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90300,2026-04-21,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90301,2026-04-21,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90302,2026-04-22,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90303,2026-04-22,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90304,2026-04-22,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90305,2026-04-22,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90306,2026-04-22,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90307,2026-04-22,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90308,2026-04-22,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90309,2026-04-23,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90310,2026-04-23,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90311,2026-04-23,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90312,2026-04-23,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90313,2026-04-23,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90314,2026-04-23,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90315,2026-04-23,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90316,2026-04-24,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90317,2026-04-24,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90318,2026-04-24,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90319,2026-04-24,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90320,2026-04-24,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90321,2026-04-24,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90322,2026-04-24,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90323,2026-04-25,Wireless Mouse,Accessories,11,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90324,2026-04-25,USB-C Hub 7-in-1,Accessories,1,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90325,2026-04-25,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90326,2026-04-25,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90327,2026-04-25,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90328,2026-04-25,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90329,2026-04-25,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90330,2026-04-26,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90331,2026-04-26,USB-C Hub 7-in-1,Accessories,1,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90332,2026-04-26,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90333,2026-04-26,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90334,2026-04-26,65W GaN Charger,Power,9,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90335,2026-04-26,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90336,2026-04-26,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90337,2026-04-27,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90338,2026-04-27,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90339,2026-04-27,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90340,2026-04-27,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90341,2026-04-27,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90342,2026-04-27,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90343,2026-04-27,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90344,2026-04-28,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90345,2026-04-28,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90346,2026-04-28,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90347,2026-04-28,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90348,2026-04-28,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90349,2026-04-28,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90350,2026-04-28,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90351,2026-04-29,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90352,2026-04-29,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90353,2026-04-29,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90354,2026-04-29,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90355,2026-04-29,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90356,2026-04-29,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90357,2026-04-29,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90358,2026-04-30,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90359,2026-04-30,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90360,2026-04-30,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90361,2026-04-30,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90362,2026-04-30,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90363,2026-04-30,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90364,2026-04-30,1080p Webcam,Video,4,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90365,2026-05-01,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90366,2026-05-01,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90367,2026-05-01,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90368,2026-05-01,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90369,2026-05-01,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90370,2026-05-01,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90371,2026-05-01,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90372,2026-05-02,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90373,2026-05-02,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90374,2026-05-02,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90375,2026-05-02,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90376,2026-05-02,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90377,2026-05-02,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90378,2026-05-02,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90379,2026-05-03,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90380,2026-05-03,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90381,2026-05-03,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90382,2026-05-03,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90383,2026-05-03,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90384,2026-05-03,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90385,2026-05-03,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90386,2026-05-04,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90387,2026-05-04,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90388,2026-05-04,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90389,2026-05-04,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90390,2026-05-04,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90391,2026-05-04,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90392,2026-05-04,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90393,2026-05-05,Wireless Mouse,Accessories,10,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90394,2026-05-05,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90395,2026-05-05,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90396,2026-05-05,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90397,2026-05-05,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90398,2026-05-05,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90399,2026-05-05,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90400,2026-05-06,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90401,2026-05-06,USB-C Hub 7-in-1,Accessories,1,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90402,2026-05-06,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90403,2026-05-06,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90404,2026-05-06,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90405,2026-05-06,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90406,2026-05-06,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90407,2026-05-07,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90408,2026-05-07,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90409,2026-05-07,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90410,2026-05-07,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90411,2026-05-07,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90412,2026-05-07,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90413,2026-05-07,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90414,2026-05-08,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90415,2026-05-08,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90416,2026-05-08,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90417,2026-05-08,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90418,2026-05-08,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90419,2026-05-08,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90420,2026-05-08,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90421,2026-05-09,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90422,2026-05-09,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90423,2026-05-09,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90424,2026-05-09,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90425,2026-05-09,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90426,2026-05-09,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90427,2026-05-09,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90428,2026-05-10,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90429,2026-05-10,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90430,2026-05-10,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90431,2026-05-10,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90432,2026-05-10,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90433,2026-05-10,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90434,2026-05-10,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90435,2026-05-11,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90436,2026-05-11,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90437,2026-05-11,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90438,2026-05-11,ANC Headphones,Audio,4,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90439,2026-05-11,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90440,2026-05-11,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90441,2026-05-11,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90442,2026-05-12,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90443,2026-05-12,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90444,2026-05-12,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90445,2026-05-12,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90446,2026-05-12,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90447,2026-05-12,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90448,2026-05-12,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90449,2026-05-13,Wireless Mouse,Accessories,11,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90450,2026-05-13,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90451,2026-05-13,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90452,2026-05-13,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90453,2026-05-13,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90454,2026-05-13,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90455,2026-05-13,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90456,2026-05-14,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90457,2026-05-14,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90458,2026-05-14,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90459,2026-05-14,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90460,2026-05-14,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90461,2026-05-14,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90462,2026-05-14,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90463,2026-05-15,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90464,2026-05-15,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90465,2026-05-15,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90466,2026-05-15,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90467,2026-05-15,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90468,2026-05-15,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90469,2026-05-15,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90470,2026-05-16,Wireless Mouse,Accessories,10,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90471,2026-05-16,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90472,2026-05-16,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90473,2026-05-16,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90474,2026-05-16,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90475,2026-05-16,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90476,2026-05-16,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90477,2026-05-17,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90478,2026-05-17,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90479,2026-05-17,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90480,2026-05-17,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90481,2026-05-17,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90482,2026-05-17,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90483,2026-05-17,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90484,2026-05-18,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90485,2026-05-18,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90486,2026-05-18,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90487,2026-05-18,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90488,2026-05-18,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90489,2026-05-18,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90490,2026-05-18,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90491,2026-05-19,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90492,2026-05-19,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90493,2026-05-19,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90494,2026-05-19,ANC Headphones,Audio,4,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90495,2026-05-19,65W GaN Charger,Power,9,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90496,2026-05-19,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90497,2026-05-19,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90498,2026-05-20,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90499,2026-05-20,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90500,2026-05-20,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90501,2026-05-20,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90502,2026-05-20,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90503,2026-05-20,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90504,2026-05-20,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90505,2026-05-21,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90506,2026-05-21,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90507,2026-05-21,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90508,2026-05-21,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90509,2026-05-21,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90510,2026-05-21,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90511,2026-05-21,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90512,2026-05-22,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90513,2026-05-22,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90514,2026-05-22,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90515,2026-05-22,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90516,2026-05-22,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90517,2026-05-22,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90518,2026-05-22,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90519,2026-05-23,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90520,2026-05-23,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90521,2026-05-23,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90522,2026-05-23,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90523,2026-05-23,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90524,2026-05-23,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90525,2026-05-23,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90526,2026-05-24,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90527,2026-05-24,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90528,2026-05-24,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90529,2026-05-24,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90530,2026-05-24,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90531,2026-05-24,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90532,2026-05-24,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90533,2026-05-25,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90534,2026-05-25,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90535,2026-05-25,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90536,2026-05-25,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90537,2026-05-25,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90538,2026-05-25,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90539,2026-05-25,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90540,2026-05-26,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90541,2026-05-26,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90542,2026-05-26,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90543,2026-05-26,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90544,2026-05-26,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90545,2026-05-26,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90546,2026-05-26,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90547,2026-05-27,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90548,2026-05-27,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90549,2026-05-27,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90550,2026-05-27,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90551,2026-05-27,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90552,2026-05-27,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90553,2026-05-27,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90554,2026-05-28,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90555,2026-05-28,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90556,2026-05-28,Bluetooth Speaker,Audio,1,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90557,2026-05-28,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90558,2026-05-28,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90559,2026-05-28,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90560,2026-05-28,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90561,2026-05-29,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90562,2026-05-29,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90563,2026-05-29,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90564,2026-05-29,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90565,2026-05-29,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90566,2026-05-29,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90567,2026-05-29,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90568,2026-05-30,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90569,2026-05-30,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90570,2026-05-30,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90571,2026-05-30,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90572,2026-05-30,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90573,2026-05-30,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90574,2026-05-30,1080p Webcam,Video,4,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90575,2026-05-31,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90576,2026-05-31,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90577,2026-05-31,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90578,2026-05-31,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90579,2026-05-31,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90580,2026-05-31,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90581,2026-05-31,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90582,2026-06-01,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90583,2026-06-01,USB-C Hub 7-in-1,Accessories,1,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90584,2026-06-01,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90585,2026-06-01,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90586,2026-06-01,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90587,2026-06-01,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90588,2026-06-01,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90589,2026-06-02,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90590,2026-06-02,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90591,2026-06-02,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90592,2026-06-02,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90593,2026-06-02,65W GaN Charger,Power,2,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90594,2026-06-02,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90595,2026-06-02,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90596,2026-06-03,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90597,2026-06-03,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90598,2026-06-03,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90599,2026-06-03,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90600,2026-06-03,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90601,2026-06-03,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90602,2026-06-03,1080p Webcam,Video,4,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90603,2026-06-04,Wireless Mouse,Accessories,2,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90604,2026-06-04,USB-C Hub 7-in-1,Accessories,2,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90605,2026-06-04,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90606,2026-06-04,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90607,2026-06-04,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90608,2026-06-04,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90609,2026-06-04,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90610,2026-06-05,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90611,2026-06-05,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90612,2026-06-05,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90613,2026-06-05,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90614,2026-06-05,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90615,2026-06-05,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90616,2026-06-05,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90617,2026-06-06,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90618,2026-06-06,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90619,2026-06-06,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90620,2026-06-06,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90621,2026-06-06,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90622,2026-06-06,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90623,2026-06-06,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90624,2026-06-07,Wireless Mouse,Accessories,6,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90625,2026-06-07,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90626,2026-06-07,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90627,2026-06-07,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90628,2026-06-07,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90629,2026-06-07,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90630,2026-06-07,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90631,2026-06-08,Wireless Mouse,Accessories,9,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90632,2026-06-08,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90633,2026-06-08,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90634,2026-06-08,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90635,2026-06-08,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90636,2026-06-08,Power Bank 20000mAh,Power,1,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90637,2026-06-08,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90638,2026-06-09,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90639,2026-06-09,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90640,2026-06-09,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90641,2026-06-09,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90642,2026-06-09,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90643,2026-06-09,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90644,2026-06-09,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90645,2026-06-10,Wireless Mouse,Accessories,7,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90646,2026-06-10,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90647,2026-06-10,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90648,2026-06-10,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90649,2026-06-10,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90650,2026-06-10,Power Bank 20000mAh,Power,2,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90651,2026-06-10,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90652,2026-06-11,Wireless Mouse,Accessories,3,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90653,2026-06-11,USB-C Hub 7-in-1,Accessories,6,1899.00,2299.00,1240.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90654,2026-06-11,Bluetooth Speaker,Audio,3,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90655,2026-06-11,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90656,2026-06-11,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90657,2026-06-11,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90658,2026-06-11,1080p Webcam,Video,3,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90659,2026-06-12,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90660,2026-06-12,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90661,2026-06-12,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90662,2026-06-12,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90663,2026-06-12,65W GaN Charger,Power,4,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90664,2026-06-12,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90665,2026-06-12,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90666,2026-06-13,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90667,2026-06-13,USB-C Hub 7-in-1,Accessories,7,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90668,2026-06-13,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90669,2026-06-13,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90670,2026-06-13,65W GaN Charger,Power,5,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90671,2026-06-13,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90672,2026-06-13,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90673,2026-06-14,Wireless Mouse,Accessories,5,1299.00,1499.00,780.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90674,2026-06-14,USB-C Hub 7-in-1,Accessories,4,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90675,2026-06-14,Bluetooth Speaker,Audio,4,2499.00,2999.00,1450.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90676,2026-06-14,ANC Headphones,Audio,2,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90677,2026-06-14,65W GaN Charger,Power,8,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90678,2026-06-14,Power Bank 20000mAh,Power,5,2199.00,2699.00,1350.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90679,2026-06-14,1080p Webcam,Video,2,2899.00,3499.00,1750.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90680,2026-06-15,Wireless Mouse,Accessories,10,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90681,2026-06-15,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90682,2026-06-15,Bluetooth Speaker,Audio,5,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90683,2026-06-15,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90684,2026-06-15,65W GaN Charger,Power,6,1699.00,1999.00,980.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90685,2026-06-15,Power Bank 20000mAh,Power,3,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90686,2026-06-15,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90687,2026-06-16,Wireless Mouse,Accessories,8,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90688,2026-06-16,USB-C Hub 7-in-1,Accessories,5,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90689,2026-06-16,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90690,2026-06-16,ANC Headphones,Audio,1,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90691,2026-06-16,65W GaN Charger,Power,7,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90692,2026-06-16,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90693,2026-06-16,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90694,2026-06-17,Wireless Mouse,Accessories,4,1299.00,1499.00,780.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90695,2026-06-17,USB-C Hub 7-in-1,Accessories,3,1899.00,2299.00,1240.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90696,2026-06-17,Bluetooth Speaker,Audio,2,2499.00,2999.00,1450.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse
+#90697,2026-06-17,ANC Headphones,Audio,3,5499.00,6999.00,3200.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90698,2026-06-17,65W GaN Charger,Power,3,1699.00,1999.00,980.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90699,2026-06-17,Power Bank 20000mAh,Power,4,2199.00,2699.00,1350.00,INR,COD,fulfilled,shipped from Mumbai warehouse
+#90700,2026-06-17,1080p Webcam,Video,1,2899.00,3499.00,1750.00,INR,Prepaid,fulfilled,shipped from Mumbai warehouse

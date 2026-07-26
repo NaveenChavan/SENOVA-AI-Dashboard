@@ -1,97 +1,113 @@
-function TrendBadge({ direction }) {
-  if (!direction) return null
-  const isUp = direction === 'up'
+import Icon from '../common/Icon'
+import { formatCurrency, formatNumber, formatPercent } from '../charts/chartFormat'
+
+/**
+ * The KPI row — five compact tiles on one line at desktop, two per row on a
+ * phone.
+ *
+ * Sizing is deliberate: amounts use the compact ₹1.8L form so a tile never has
+ * to grow to fit a nine-digit number, and the tile itself has no hover
+ * translate, because shifting tiles make a dense row look unstable.
+ *
+ * Trend is shown as an arrow icon **and** the signed percentage, never colour
+ * alone. The direction comes from the server-computed `trend_percentage`.
+ */
+
+function Trend({ metric }) {
+  const pct = metric?.trend_percentage
+  if (pct == null || pct === 0) return null
+
+  const up = pct > 0
   return (
     <span
-      className="text-xs font-semibold px-1.5 py-0.5 rounded-full"
-      style={
-        isUp
-          ? { background: 'rgba(16,185,129,0.12)', color: '#10b981' }
-          : { background: 'rgba(239,68,68,0.12)', color: '#f87171' }
-      }
-      aria-label={isUp ? 'Trending up' : 'Trending down'}
+      className="inline-flex items-center gap-0.5 text-[12px] font-semibold shrink-0"
+      style={{ color: up ? 'var(--accent-green)' : 'var(--accent-red)' }}
+      title={`${up ? 'Up' : 'Down'} ${Math.abs(pct)}% vs the previous period`}
     >
-      {isUp ? '▲' : '▼'}
+      <Icon name={up ? 'trendUp' : 'trendDown'} className="w-3 h-3" strokeWidth={2.2} />
+      {formatPercent(Math.abs(pct), 0)}
     </span>
   )
 }
 
 export default function SummaryStats({ summary }) {
   if (!summary) return null
-  const fmt = (n) => (n != null ? Number(n).toLocaleString('en-IN', { maximumFractionDigits: 2 }) : '—')
 
-  const rev = summary.revenue?.value ?? 0
+  const revenue = summary.revenue?.value ?? 0
   const profit = summary.profit?.value ?? 0
   const cost = summary.cost?.value ?? 0
   const units = summary.units_sold?.value ?? 0
   const unique = summary.unique_items_sold?.value ?? 0
-  const margin = rev > 0 ? ((profit / rev) * 100).toFixed(1) : null
-
-  // Trend direction driven by the actual server-computed trend_percentage,
-  // not a hardcoded assumption — a metric that's down should show ▼.
-  const trendDirection = (metric) => {
-    const pct = metric?.trend_percentage
-    if (pct == null || pct === 0) return null
-    return pct > 0 ? 'up' : 'down'
-  }
+  const margin = revenue > 0 ? (profit / revenue) * 100 : null
 
   const tiles = [
     {
-      label: 'Total Revenue',
-      value: `₹${fmt(rev)}`,
-      color: 'var(--accent-blue)',
-      sub: margin ? `${margin}% margin` : null,
-      trend: trendDirection(summary.revenue),
+      label: 'Revenue',
+      value: formatCurrency(revenue),
+      colour: 'var(--text-primary)',
+      sub: margin != null ? `${formatPercent(margin, 1)} margin` : null,
+      metric: summary.revenue,
     },
     {
-      label: 'Total Profit',
-      value: `₹${fmt(profit)}`,
-      color: 'var(--accent-green)',
-      sub: rev > 0 ? `${margin}% of revenue` : null,
-      trend: trendDirection(summary.profit),
+      label: 'Profit',
+      value: formatCurrency(profit),
+      colour: profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)',
+      sub: margin != null ? `${formatPercent(margin, 1)} of revenue` : null,
+      metric: summary.profit,
     },
     {
-      label: 'Total Cost',
-      value: `₹${fmt(cost)}`,
-      color: 'var(--text-secondary)',
-      sub: null,
-      trend: trendDirection(summary.cost),
+      label: 'Cost',
+      value: formatCurrency(cost),
+      colour: 'var(--text-primary)',
+      sub: revenue > 0 ? `${formatPercent((cost / revenue) * 100, 1)} of revenue` : null,
+      metric: summary.cost,
     },
     {
       label: 'Units Sold',
-      value: Number(units).toLocaleString('en-IN'),
-      color: 'var(--accent-purple)',
-      sub: `${unique} unique SKU${unique === 1 ? '' : 's'}`,
-      trend: trendDirection(summary.units_sold),
+      value: formatNumber(units),
+      colour: 'var(--text-primary)',
+      sub: `${formatNumber(unique)} unique SKU${unique === 1 ? '' : 's'}`,
+      metric: summary.units_sold,
     },
     {
       label: 'Unique Items',
-      value: Number(unique),
-      color: 'var(--accent-amber)',
-      sub: null,
-      trend: null,
+      value: formatNumber(unique),
+      colour: 'var(--text-primary)',
+      sub: units > 0 ? `${(units / Math.max(unique, 1)).toFixed(1)} units per item` : null,
+      metric: null,
     },
   ]
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 3xl:grid-cols-5 gap-3 sm:gap-4">
-      {tiles.map((t) => (
-        <div key={t.label} className="stat-tile">
-          <div className="flex items-start justify-between mb-2 sm:mb-3">
-            <span
-              className="text-[0.65rem] sm:text-xs uppercase tracking-widest font-medium"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {t.label}
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[var(--gap)]">
+      {tiles.map((tile) => (
+        <div key={tile.label} className="stat-tile">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[12px] uppercase tracking-wide font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
+              {tile.label}
             </span>
-            <TrendBadge direction={t.trend} />
+            <Trend metric={tile.metric} />
           </div>
-          <p className="text-lg sm:text-xl font-bold glow-blue-text" style={{ color: t.color, lineHeight: 1.2 }}>
-            {t.value}
+
+          {/*
+            The full figure, not an abbreviation: "₹7,20,126" is what the shop
+            owner needs to read off the screen. The font size steps down as the
+            number gets longer (clamp on ch width) so a 9-digit amount still
+            fits the tile instead of being clipped or wrapping.
+          */}
+          <p
+            className="font-bold font-mono leading-tight"
+            style={{
+              color: tile.colour,
+              fontSize: `clamp(0.9rem, ${Math.max(1.35 - tile.value.length * 0.045, 0.62)}rem, 1.35rem)`,
+            }}
+          >
+            {tile.value}
           </p>
-          {t.sub && (
-            <p className="text-xs mt-1.5" style={{ color: 'var(--text-muted)' }}>
-              {t.sub}
+
+          {tile.sub && (
+            <p className="text-[12.5px] mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
+              {tile.sub}
             </p>
           )}
         </div>

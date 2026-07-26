@@ -133,6 +133,59 @@ body {
   transition-timing-function: ease;
 }
 
+/* ==========================================================================
+   Accessibility & motion baseline
+   --------------------------------------------------------------------------
+   Three rules that apply to the whole app, in one place:
+
+   1. A visible focus ring on every interactive element. Removing focus
+      outlines without a replacement makes the dashboard unusable by keyboard,
+      so the ring is defined once here rather than per component.
+   2. ``prefers-reduced-motion`` is honoured: users who ask their OS for less
+      motion get no transitions or animations, including the skeleton pulses.
+   3. A skip link, so keyboard users can jump straight to the content instead
+      of tabbing through the header on every page.
+   ========================================================================== */
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Mouse users don't get the ring (focus-visible handles that), but the ring
+   must never be suppressed for keyboard users. */
+:where(a, button, input, select, textarea, [tabindex]):focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visually hidden until focused — the standard skip-link pattern. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 0 0 8px 0;
+  background: var(--accent-blue);
+  color: var(--text-on-accent);
+  font-weight: 600;
+}
+.skip-link:focus {
+  left: 0;
+}
+
 @layer base {
   /* A content container that stays readable at 8K: capping at 1600px means
      even on a 40"+ display the dashboard doesn't stretch into a single

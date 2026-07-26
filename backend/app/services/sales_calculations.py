@@ -66,13 +66,32 @@ def _zero_fill_daily(
 
 def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Add pre-computed per-row derived columns so every groupby below can use
-    plain ``.agg()``.
+    Add the per-row derived columns every aggregation below relies on, so
+    each groupby can stay a plain ``.agg()`` call.
+
+    Columns added:
+
+    ``_row_gross_revenue``  Quantity × Selling Price
+    ``_row_discount``       the mapped Discount column, or 0 when absent
+    ``_row_revenue``        gross revenue **net of discount** (never below 0)
+    ``_row_cost``           Quantity × Cost Price
+    ``_row_profit``         net revenue − cost
+    ``_row_tax``            the mapped Tax column, or 0 when absent
+
+    Discount and Tax only exist in files that mapped those columns; when
+    they're missing the maths reduces exactly to the previous behaviour
+    (net = gross), so existing numbers don't move. Tax is tracked separately
+    and deliberately excluded from profit — GST collected is not income.
     """
     out = df.copy()
-    out["_row_revenue"] = out["Quantity"] * out["Selling Price"]
+    out["_row_gross_revenue"] = out["Quantity"] * out["Selling Price"]
+    out["_row_discount"] = (
+        out["Discount"].fillna(0.0) if "Discount" in out.columns else 0.0
+    )
+    out["_row_revenue"] = (out["_row_gross_revenue"] - out["_row_discount"]).clip(lower=0.0)
     out["_row_cost"] = out["Quantity"] * out["Cost Price"]
     out["_row_profit"] = out["_row_revenue"] - out["_row_cost"]
+    out["_row_tax"] = out["Tax"].fillna(0.0) if "Tax" in out.columns else 0.0
     return out
 
 # ── Time-filter helpers ────────────────────────────────────────────────────
@@ -153,18 +172,46 @@ def _split_periods(df: pd.DataFrame, time_filter: str) -> tuple[pd.DataFrame, pd
 # ── KPI computation ────────────────────────────────────────────────────────
 
 def compute_summary(df: pd.DataFrame, time_filter: str = "all") -> SalesSummary:
-    """Aggregate top-level KPIs. Uses the full raw DataFrame to properly split."""
-    current, previous = _split_periods(df, time_filter)
+    """
+    Aggregate top-level KPIs for a preset window.
 
+    Takes the **whole** normalised frame (not a pre-filtered one) because the
+    trend arrows need the previous period for comparison — slicing first
+    would throw that period away and make every trend read 0%.
+    """
+    current, previous = _split_periods(df, time_filter)
+    spark_start, spark_end = _get_expected_range(df, time_filter)
+    return compute_summary_between(current, previous, spark_start, spark_end)
+
+
+def compute_summary_between(
+    current: pd.DataFrame,
+    previous: pd.DataFrame,
+    spark_start=None,
+    spark_end=None,
+) -> SalesSummary:
+    """
+    Build the KPI block from two explicit frames: the period being viewed and
+    the period immediately before it.
+
+    Splitting this out lets custom date ranges (the Pro filter panel) reuse
+    exactly the same KPI maths as the presets — the caller decides what
+    "previous" means, this function only aggregates.
+
+    ``spark_start`` / ``spark_end`` bound the sparkline's calendar so days
+    with no sales show as zeros instead of being silently skipped, which
+    otherwise makes a 7-day and a 30-day sparkline look identical.
+    """
     prepped_curr = _prepare(current)
     prepped_prev = _prepare(previous)
 
     def _trend(cur: float, prev: float) -> float:
+        """Percentage change, treating "no previous data" as 0% rather than infinity."""
         if prev == 0:
             return 0.0
         return round(((cur - prev) / prev) * 100, 2)
 
-    # Calculate exact totals based ONLY on the isolated period dataframe
+    # Totals for the visible period.
     if not prepped_curr.empty:
         rev = float(prepped_curr["_row_revenue"].sum())
         cost = float(prepped_curr["_row_cost"].sum())
@@ -174,6 +221,7 @@ def compute_summary(df: pd.DataFrame, time_filter: str = "all") -> SalesSummary:
     else:
         rev, cost, profit, units, unique = 0.0, 0.0, 0.0, 0, 0
 
+    # Same totals for the comparison period (drives the trend arrows).
     if not prepped_prev.empty:
         rev_p = float(prepped_prev["_row_revenue"].sum())
         cost_p = float(prepped_prev["_row_cost"].sum())
@@ -182,8 +230,7 @@ def compute_summary(df: pd.DataFrame, time_filter: str = "all") -> SalesSummary:
     else:
         rev_p, cost_p, profit_p, units_p = 0.0, 0.0, 0.0, 0
 
-    # Sparkline daily grouping — zero-fill calendar gaps so week vs month
-    # always produce visually distinct sparklines even when data has gaps.
+    # Sparklines: one point per calendar day in the window, zero-filled.
     if prepped_curr.empty:
         spark_rev, spark_profit, spark_cost, spark_units = [], [], [], []
     else:
@@ -198,8 +245,9 @@ def compute_summary(df: pd.DataFrame, time_filter: str = "all") -> SalesSummary:
             )
             .sort_values("_day")
         )
-        spark_start, spark_end = _get_expected_range(df, time_filter)
-        daily_filled = _zero_fill_daily(daily, spark_start, spark_end)
+        start = spark_start if spark_start is not None else prepped_curr["Date"].min()
+        end = spark_end if spark_end is not None else prepped_curr["Date"].max()
+        daily_filled = _zero_fill_daily(daily, start, end)
         spark_rev = [round(v, 2) for v in daily_filled["revenue"].tolist()]
         spark_profit = [round(v, 2) for v in daily_filled["profit"].tolist()]
         spark_cost = [round(v, 2) for v in daily_filled["cost"].tolist()]
@@ -275,6 +323,37 @@ def compute_daily_trend(df: pd.DataFrame, time_filter: str = "all") -> list[Dail
         )
         for _, row in daily_filled.iterrows()
     ]
+
+def compute_daily_trend_between(df: pd.DataFrame, start, end) -> list[DailyTrend]:
+    """
+    Daily revenue & profit for an explicit window, zero-filled day by day.
+
+    The Pro query layer already knows the exact window it sliced (including
+    custom date ranges), so it passes the bounds in rather than re-deriving
+    them from a preset name. ``end`` is inclusive here — callers holding an
+    exclusive bound should pass ``end - 1 day``.
+    """
+    if df.empty:
+        return []
+
+    prepped = _prepare(df)
+    daily = (
+        prepped.assign(_day=prepped["Date"].dt.date)
+        .groupby("_day", as_index=False)
+        .agg(revenue=("_row_revenue", "sum"), profit=("_row_profit", "sum"))
+        .sort_values("_day")
+    )
+    filled = _zero_fill_daily(daily, start, end).rename(columns={"_day": "Date"})
+
+    return [
+        DailyTrend(
+            date=str(row["Date"]),
+            revenue=round(float(row["revenue"]), 2),
+            profit=round(float(row["profit"]), 2),
+        )
+        for _, row in filled.iterrows()
+    ]
+
 
 def compute_dead_stock(df: pd.DataFrame, threshold_qty: int = 5) -> list[DeadStockItem]:
     """Identify items that sold very few units (or zero) over the analysed period."""
@@ -370,23 +449,51 @@ def compute_pnl_report(df: pd.DataFrame, time_filter: str, period_label: str) ->
         )
 
     prepped = _prepare(df)
+    gross = float(prepped["_row_gross_revenue"].sum())
+    discount = float(prepped["_row_discount"].sum()) if "Discount" in df.columns else 0.0
+    tax = float(prepped["_row_tax"].sum()) if "Tax" in df.columns else 0.0
     revenue = float(prepped["_row_revenue"].sum())
     cost = float(prepped["_row_cost"].sum())
     profit = revenue - cost
 
     def _pct(amount: float) -> float | None:
+        """Share of net revenue, or None when there's no revenue to divide by."""
         if revenue == 0:
             return None
         return round((amount / revenue) * 100, 2)
 
-    # Standard P&L presentation: Revenue, then COGS as a deduction,
-    # then Gross Profit as the ruled-off subtotal, then margin as an
-    # informational line beneath it.
-    pnl = [
-        PnLLineItem(label="Gross Revenue", amount=round(revenue, 2), percentage_of_revenue=100.0 if revenue else None),
-        PnLLineItem(label="Cost of Goods Sold (COGS)", amount=round(cost, 2), percentage_of_revenue=_pct(cost)),
-        PnLLineItem(label="Gross Profit", amount=round(profit, 2), percentage_of_revenue=_pct(profit), is_subtotal=True),
-    ]
+    # Standard P&L presentation: revenue, deductions, then the ruled-off
+    # subtotal. The discount and GST lines only appear when the uploaded file
+    # actually mapped those columns — a shop whose export has no discount
+    # column sees exactly the three lines it saw before.
+    pnl: list[PnLLineItem] = []
+    if discount > 0:
+        pnl.append(
+            PnLLineItem(label="Gross Sales (before discount)", amount=round(gross, 2), percentage_of_revenue=_pct(gross))
+        )
+        pnl.append(
+            PnLLineItem(label="Less: Discounts Allowed", amount=round(discount, 2), percentage_of_revenue=_pct(discount))
+        )
+        pnl.append(
+            PnLLineItem(label="Net Revenue", amount=round(revenue, 2), percentage_of_revenue=100.0, is_subtotal=True)
+        )
+    else:
+        pnl.append(
+            PnLLineItem(label="Gross Revenue", amount=round(revenue, 2), percentage_of_revenue=100.0 if revenue else None)
+        )
+
+    pnl.append(
+        PnLLineItem(label="Cost of Goods Sold (COGS)", amount=round(cost, 2), percentage_of_revenue=_pct(cost))
+    )
+    pnl.append(
+        PnLLineItem(label="Gross Profit", amount=round(profit, 2), percentage_of_revenue=_pct(profit), is_subtotal=True)
+    )
+    if tax > 0:
+        # GST collected is money held for the government, not income, so it
+        # sits below the profit line as an informational memo.
+        pnl.append(
+            PnLLineItem(label="GST / Tax Collected (memo)", amount=round(tax, 2), percentage_of_revenue=_pct(tax))
+        )
 
     # Category-wise ledger — same shape a CA would use for a "sales by
     # segment" schedule attached to the P&L.
@@ -511,15 +618,19 @@ def run_full_analysis(
     column_mapping: dict[str, str] | None = None,
 ) -> AnalyticsResponse:
     """
-    1. Normalise & validate raw DataFrame (using the user-confirmed column
-       mapping when available — see the /upload/{file_id}/confirm-mapping
-       flow — so we never silently re-guess a different mapping here).
-    2. Apply time filter AFTER validation (so date column is clean).
-    3. Run analytics on filtered rows only.
+    Legacy single-shot pipeline used by the classic GET endpoints:
+
+    1. Normalise & validate the raw frame using the user-confirmed column
+       mapping (never re-guessing it here — see the confirm-mapping flow).
+    2. Compute the KPI block from the *unfiltered* frame so the trend
+       arrows have a previous period to compare against.
+    3. Compute every other widget from the time-filtered rows only.
     """
     df, error_dicts = normalize_dataframe(df, column_mapping=column_mapping)
     errors = [RowError(**e) for e in error_dicts]
 
+    # Keep the full frame for the period-over-period KPI split, then slice.
+    unfiltered = df
     df = apply_time_filter(df, time_filter)
 
     if df.empty:
@@ -539,9 +650,9 @@ def run_full_analysis(
         )
 
     return AnalyticsResponse(
-        summary=compute_summary(df),
+        summary=compute_summary(unfiltered, time_filter),
         top_items=compute_top_items(df),
-        daily_trend=compute_daily_trend(df),
+        daily_trend=compute_daily_trend(df, time_filter),
         dead_stock=compute_dead_stock(df),
         categories=compute_revenue_by_category(df),
         errors=errors,

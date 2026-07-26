@@ -25,4 +25,12 @@ export default defineConfig({
       },
     },
   },
+  // Component smoke tests (`npm test`). jsdom is required because the chart
+  // components measure and paint DOM nodes; ``globals`` lets the test files use
+  // describe/it/expect without importing them everywhere.
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    include: ['src/**/*.test.{js,jsx}'],
+  },
 })

@@ -210,6 +210,143 @@ def _ledger_table(entries, truncated: bool) -> Table:
     return table
 
 
+def _insights_table(insights) -> Table | None:
+    """
+    The automatically-detected findings, printed as a two-column table so the
+    PDF carries the same conclusions the dashboard showed on screen.
+    """
+    if not insights or not insights.insights:
+        return None
+
+    # Severity is spelled out in words as well as colour — a printed report is
+    # often photocopied in black and white, where colour alone says nothing.
+    severity_words = {
+        "critical": "URGENT",
+        "warning": "WATCH",
+        "positive": "GOOD",
+        "neutral": "NOTE",
+    }
+    styles = getSampleStyleSheet()
+    body = ParagraphStyle(name="InsightBody", parent=styles["Normal"], fontSize=8.5, leading=11)
+
+    rows = [["Priority", "Finding"]]
+    for insight in insights.insights:
+        text = f"<b>{insight.title}</b><br/>{insight.message}"
+        if insight.action:
+            text += f"<br/><i>Suggested action: {insight.action}</i>"
+        rows.append([severity_words.get(insight.severity, "NOTE"), Paragraph(text, body)])
+
+    table = Table(rows, colWidths=[22 * mm, 148 * mm], repeatRows=1)
+    table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _DARK_TEXT),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 8.5),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#e2e8f0")),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, _ROW_ALT]),
+            ]
+        )
+    )
+    return table
+
+
+def _forecast_table(forecast) -> Table | None:
+    """
+    Forecast summary: expected revenue with its range, the trend direction and
+    the backtested accuracy, so the reader can judge how much to trust it.
+    """
+    if not forecast or not forecast.available:
+        return None
+
+    rows = [
+        ["Measure", "Value"],
+        [f"Expected revenue (next {forecast.horizon_days} days)", _fmt_money(forecast.expected_revenue)],
+        [
+            "Likely range (80% confidence)",
+            f"{_fmt_money(forecast.expected_revenue_lower)}  to  {_fmt_money(forecast.expected_revenue_upper)}",
+        ],
+        ["Recent daily average", _fmt_money(forecast.daily_average)],
+        ["Trend", f"{forecast.trend_direction.title()} ({_fmt_money(forecast.trend_per_day)} per day)"],
+        [
+            "Backtest accuracy (last 7 days)",
+            f"{forecast.accuracy_pct}%" if forecast.accuracy_pct is not None else "Not enough history to test",
+        ],
+    ]
+    table = Table(rows, colWidths=[90 * mm, 80 * mm])
+    table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _BRAND_BLUE),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 9),
+                ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#e2e8f0")),
+            ]
+        )
+    )
+    return table
+
+
+def _reorder_table(inventory) -> Table | None:
+    """
+    Reorder-priority list. The stock-dependent columns are only printed when
+    the uploaded file actually mapped a stock column.
+    """
+    if not inventory or not inventory.items:
+        return None
+
+    stock_aware = inventory.stock_aware
+    header = ["Item", "ABC", "Units", "Units/Day", "Idle Days", "Priority"]
+    widths = [58 * mm, 12 * mm, 18 * mm, 22 * mm, 20 * mm, 20 * mm]
+    if stock_aware:
+        header += ["Stock", "Cover (days)"]
+        widths += [18 * mm, 22 * mm]
+
+    rows = [header]
+    for item in inventory.items[:20]:
+        row = [
+            item.item[:38],
+            item.abc_class,
+            f"{item.units_sold:,}",
+            f"{item.velocity_per_day:.2f}",
+            f"{item.days_since_last_sale}",
+            f"{item.reorder_priority:.0f}",
+        ]
+        if stock_aware:
+            row += [
+                f"{item.stock_on_hand:,.0f}" if item.stock_on_hand is not None else "-",
+                f"{item.days_of_cover:.1f}" if item.days_of_cover is not None else "-",
+            ]
+        rows.append(row)
+
+    table = Table(rows, colWidths=widths, repeatRows=1)
+    table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _DARK_TEXT),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 8),
+                ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
+                ("ALIGN", (0, 0), (0, -1), "LEFT"),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ("TOPPADDING", (0, 0), (-1, -1), 4),
+                ("GRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#e2e8f0")),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, _ROW_ALT]),
+            ]
+        )
+    )
+    return table
+
+
 def generate_ca_report_pdf(
     *,
     filename: str,
@@ -217,6 +354,9 @@ def generate_ca_report_pdf(
     ca_report: CAReportSummary,
     ledger_entries,
     ledger_total_rows: int,
+    insights=None,
+    inventory=None,
+    forecast=None,
 ) -> bytes:
     """
     Build the full CA-style PDF report and return it as raw bytes, ready
@@ -225,12 +365,17 @@ def generate_ca_report_pdf(
     Parameters
     ----------
     filename : the original uploaded filename, shown in the report header.
-    analytics : the standard AnalyticsResponse (for top items / dead stock sections).
-    ca_report : the CAReportSummary (P&L + category ledger) for the selected period.
-    ledger_entries : list[LedgerEntry] to print in the detailed register
-        (already capped to ``MAX_LEDGER_ROWS_IN_PDF`` by the caller).
-    ledger_total_rows : total transaction count, to note if the printed
-        ledger was truncated.
+    analytics : the standard AnalyticsResponse (top items / dead stock sections).
+    ca_report : the CAReportSummary (P&L + category ledger) for the period.
+    ledger_entries : list[LedgerEntry] for the detailed register (already
+        capped to ``MAX_LEDGER_ROWS_IN_PDF`` by the caller).
+    ledger_total_rows : total transaction count, to note any truncation.
+    insights : optional ``InsightsResponse`` — printed as a findings section.
+    inventory : optional ``InventoryResponse`` — printed as a reorder list.
+    forecast : optional ``ForecastResponse`` — printed as a projection summary.
+
+    The three optional sections are simply omitted when not supplied or when
+    they have nothing to say, so the report never contains an empty heading.
     """
     buffer = BytesIO()
     doc = SimpleDocTemplate(
@@ -253,6 +398,12 @@ def generate_ca_report_pdf(
         styles["ReportSubtitle"],
     ))
 
+    # ── Automated findings (printed first: it's the summary a reader wants) ──
+    insights_tbl = _insights_table(insights)
+    if insights_tbl:
+        story.append(Paragraph("What Changed — Automated Findings", styles["SectionHeading"]))
+        story.append(insights_tbl)
+
     # ── Profit & Loss ───────────────────────────────────────────────────
     story.append(Paragraph("Profit &amp; Loss Statement", styles["SectionHeading"]))
     if ca_report.pnl:
@@ -265,6 +416,21 @@ def generate_ca_report_pdf(
         story.append(Paragraph("Category-wise Ledger", styles["SectionHeading"]))
         story.append(_category_ledger_table(ca_report))
 
+    # ── Forecast ────────────────────────────────────────────────────────
+    forecast_tbl = _forecast_table(forecast)
+    if forecast_tbl:
+        story.append(Paragraph("Revenue Forecast", styles["SectionHeading"]))
+        story.append(forecast_tbl)
+        story.append(Spacer(1, 4))
+        story.append(Paragraph(
+            "Projection from a recency-weighted trend with weekday seasonality. "
+            "Treat the range, not the single figure, as the expectation.",
+            styles["FootNote"],
+        ))
+    elif forecast is not None and forecast.reason:
+        story.append(Paragraph("Revenue Forecast", styles["SectionHeading"]))
+        story.append(Paragraph(forecast.reason, styles["Normal"]))
+
     # ── Top items / dead stock ──────────────────────────────────────────
     top_items_tbl = _top_items_table(analytics)
     if top_items_tbl:
@@ -275,6 +441,16 @@ def generate_ca_report_pdf(
     if dead_stock_tbl:
         story.append(Paragraph("Dead Stock / Slow Movers", styles["SectionHeading"]))
         story.append(dead_stock_tbl)
+
+    # ── Reorder priority ────────────────────────────────────────────────
+    reorder_tbl = _reorder_table(inventory)
+    if reorder_tbl:
+        story.append(PageBreak())
+        story.append(Paragraph("Reorder Priority (Top 20 by Demand)", styles["SectionHeading"]))
+        story.append(reorder_tbl)
+        if inventory is not None and inventory.note:
+            story.append(Spacer(1, 4))
+            story.append(Paragraph(inventory.note, styles["FootNote"]))
 
     # ── Detailed transaction ledger ─────────────────────────────────────
     if ledger_entries:

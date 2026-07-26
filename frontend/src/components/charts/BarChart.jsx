@@ -1,21 +1,21 @@
-import { BarChart as ReBar, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
+import { Bar, BarChart as ReBar, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+
+import { SimpleTooltip } from './ChartTooltip'
+import { formatNumber, truncateLabel } from './chartFormat'
 import useChartTheme from './useChartTheme'
 
-function CustomTooltip({ active, payload, label }) {
-  if (!active || !payload?.length) return null
-  return (
-    <div className="card-gradient px-4 py-3 rounded-lg" style={{ border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-elevation-medium)' }}>
-      <p className="text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>{label}</p>
-      {payload.map((entry, i) => (
-        <p key={i} className="text-sm font-semibold" style={{ color: entry.color }}>
-          {entry.name}: {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
-        </p>
-      ))}
-    </div>
-  )
-}
-
-export default function BarChart({ data, dataKey = 'revenue', color }) {
+/**
+ * Small single-series bar chart used by the "Top items" panel.
+ *
+ * Distinct from the chart studio's BarView: this one plots a plain
+ * `[{ name, quantity, revenue }]` list (the summary payload's `top_items`)
+ * rather than the studio's fully-measured ChartPoint objects, so it stays a
+ * separate, tiny component instead of adding branches to the studio.
+ *
+ * Tooltip and number formatting come from the shared modules so a change to
+ * currency/label formatting lands here too.
+ */
+export default function BarChart({ data, dataKey = 'revenue', color, valueFormat = 'number' }) {
   const theme = useChartTheme()
   const barColor = color || theme.accentGreen
 
@@ -24,10 +24,30 @@ export default function BarChart({ data, dataKey = 'revenue', color }) {
       <ResponsiveContainer width="100%" height="100%">
         <ReBar data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={theme.borderStrong} strokeOpacity={0.3} />
-          <XAxis dataKey="name" tick={{ fontSize: 12, fill: theme.textSecondary }} axisLine={{ stroke: theme.borderStrong }} />
-          <YAxis tick={{ fontSize: 12, fill: theme.textSecondary }} axisLine={{ stroke: theme.borderStrong }} />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: theme.borderSubtle }} />
-          <Bar dataKey={dataKey} fill={barColor} radius={[4, 4, 0, 0]} maxBarSize={48} />
+          <XAxis
+            dataKey="name"
+            tickFormatter={(value) => truncateLabel(value, 10)}
+            tick={{ fontSize: 12, fill: theme.textSecondary }}
+            axisLine={{ stroke: theme.borderStrong }}
+          />
+          <YAxis
+            tickFormatter={(value) => formatNumber(value)}
+            tick={{ fontSize: 12, fill: theme.textSecondary }}
+            axisLine={{ stroke: theme.borderStrong }}
+          />
+          <Tooltip
+            content={<SimpleTooltip measureFormat={valueFormat} />}
+            cursor={{ fill: theme.borderSubtle }}
+          />
+          {/* Animation off to match the rest of the dashboard: the chart
+              re-renders on every filter change, where a sweep is noise. */}
+          <Bar
+            dataKey={dataKey}
+            fill={barColor}
+            radius={[4, 4, 0, 0]}
+            maxBarSize={48}
+            isAnimationActive={false}
+          />
         </ReBar>
       </ResponsiveContainer>
     </div>

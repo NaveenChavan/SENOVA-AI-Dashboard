@@ -81,7 +81,7 @@ export default function HeatmapGrid({ data }) {
                       key={column}
                       title={label}
                       aria-label={label}
-                      className="rounded transition-colors"
+                      className="rounded transition-transform hover:scale-110"
                       style={{
                         width: 34,
                         height: 26,
@@ -91,6 +91,8 @@ export default function HeatmapGrid({ data }) {
                           ? `color-mix(in srgb, var(--accent-blue) ${Math.round(intensityOf(value) * 100)}%, transparent)`
                           : 'var(--bg-input)',
                         border: '1px solid var(--border-subtle)',
+                        boxShadow: cell && intensityOf(value) > 0.7 ? 'var(--shadow-glow)' : 'none',
+                        cursor: cell ? 'default' : 'default',
                       }}
                     />
                   )

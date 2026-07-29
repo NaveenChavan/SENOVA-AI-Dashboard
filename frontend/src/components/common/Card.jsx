@@ -5,10 +5,15 @@
  * The title and the action sit on one line at a fixed height so every panel
  * header across the dashboard aligns to the same baseline — that alignment is
  * what makes a dense grid look deliberate rather than assembled.
+ *
+ * `gradient` opts a single card into the hairline gradient-border treatment
+ * (`.card-gradient`) — reserved for the one or two panels per screen that
+ * should read as "the engine computed this" (e.g. the forecast summary),
+ * never the whole grid at once.
  */
-export default function Card({ title, hint, action, children, className = '', bodyClassName = '' }) {
+export default function Card({ title, hint, action, children, className = '', bodyClassName = '', gradient = false }) {
   return (
-    <section className={`card ${className}`}>
+    <section className={`${gradient ? 'card-gradient' : 'card'} ${className}`}>
       {(title || action) && (
         <header
           className="flex items-center justify-between gap-3 px-[var(--card-pad)]"

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 
 import Card from '../common/Card'
 import Icon from '../common/Icon'
@@ -81,8 +82,14 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
     <section className="space-y-3 sm:space-y-4" aria-label="Inventory intelligence">
       {/* ── ABC + capital tiles ────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--gap)]">
-        {inventory.abc_buckets.map((bucket) => (
-          <div key={bucket.label} className="stat-tile">
+        {inventory.abc_buckets.map((bucket, i) => (
+          <motion.div
+            key={bucket.label}
+            className="stat-tile"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+          >
             <p className="text-[11px] uppercase tracking-wider font-semibold mb-1 truncate" style={{ color: 'var(--text-muted)' }}>
               {bucket.label}
             </p>
@@ -93,10 +100,15 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
             <p className="text-[12px] mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
               {formatCurrencyCompact(bucket.revenue)} · {formatPercent(bucket.revenue_share_pct, 0)} of revenue
             </p>
-          </div>
+          </motion.div>
         ))}
 
-        <div className="stat-tile">
+        <motion.div
+          className="stat-tile"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: inventory.abc_buckets.length * 0.04, ease: [0.16, 1, 0.3, 1] }}
+        >
           <p className="text-[11px] uppercase tracking-wider font-semibold mb-1 truncate" style={{ color: 'var(--text-muted)' }}>
             {inventory.stock_aware ? 'Capital in stock' : 'Reorder candidates'}
           </p>
@@ -110,7 +122,7 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
               ? `${formatNumber(inventory.reorder_count)} below 7 days cover`
               : `Priority 50+ over ${inventory.window_days} day(s)`}
           </p>
-        </div>
+        </motion.div>
       </div>
 
       {/* ── Ageing buckets ─────────────────────────────────────────────── */}
@@ -229,13 +241,14 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
   )
 }
 
-/** A/B/C class as a letter badge — the letter carries the meaning, not the colour. */
+/** A/B/C class as a filled pill — the letter carries the meaning, the colour reinforces it. */
 function ClassBadge({ value }) {
   const colours = { A: 'var(--accent-green)', B: 'var(--accent-blue)', C: 'var(--text-muted)' }
+  const colour = colours[value]
   return (
     <span
-      className="inline-block text-[11px] font-bold rounded px-1"
-      style={{ color: colours[value], border: `1px solid ${colours[value]}` }}
+      className="inline-flex items-center justify-center text-[11px] font-bold rounded-md"
+      style={{ width: 20, height: 20, color: colour, background: `${colour}1a`, border: `1px solid ${colour}40` }}
     >
       {value}
     </span>
@@ -256,8 +269,9 @@ function TrendBadge({ factor }) {
   )
 }
 
-/** Priority as a bar plus its number — the bar alone would be unreadable. */
+/** Priority as a gradient bar plus its number — the bar alone would be unreadable. */
 function PriorityBar({ value }) {
+  const high = value >= 70
   return (
     <span className="inline-flex items-center gap-1.5">
       <span
@@ -267,7 +281,10 @@ function PriorityBar({ value }) {
       >
         <span
           className="block h-full rounded-full"
-          style={{ width: `${Math.min(value, 100)}%`, background: 'var(--accent-blue)' }}
+          style={{
+            width: `${Math.min(value, 100)}%`,
+            background: high ? 'var(--gradient-accent)' : 'var(--accent-blue)',
+          }}
         />
       </span>
       <span className="font-mono text-[12px]" style={{ color: 'var(--text-primary)' }}>

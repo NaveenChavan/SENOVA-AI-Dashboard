@@ -1,3 +1,5 @@
+import { motion } from 'motion/react'
+
 import Icon from '../common/Icon'
 import { formatCurrency, formatNumber, formatPercent } from '../charts/chartFormat'
 
@@ -80,8 +82,14 @@ export default function SummaryStats({ summary }) {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[var(--gap)]">
-      {tiles.map((tile) => (
-        <div key={tile.label} className="stat-tile">
+      {tiles.map((tile, i) => (
+        <motion.div
+          key={tile.label}
+          className="stat-tile"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+        >
           <div className="flex items-center justify-between gap-2 mb-1">
             <span className="text-[12px] uppercase tracking-wide font-semibold truncate" style={{ color: 'var(--text-muted)' }}>
               {tile.label}
@@ -110,7 +118,7 @@ export default function SummaryStats({ summary }) {
               {tile.sub}
             </p>
           )}
-        </div>
+        </motion.div>
       ))}
     </div>
   )

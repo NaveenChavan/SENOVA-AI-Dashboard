@@ -7,6 +7,10 @@ export default {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        // Display face for hero/h1-scale headlines only — everything else
+        // (body copy, controls, tables) stays on the sans family above so
+        // the dense screens don't inherit a wider, louder letterform.
+        display: ['Space Grotesk', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       // Tailwind's default scale bottoms out at 0.75rem (11.25px at our 15px
       // root), which was too small to read comfortably in dense panels. Each

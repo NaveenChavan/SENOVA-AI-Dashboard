@@ -58,6 +58,16 @@
   --shadow-medium: 0 2px 6px -1px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
   --shadow-high: 0 12px 28px -8px rgba(16, 24, 40, 0.16), 0 2px 6px rgba(16, 24, 40, 0.06);
 
+  /* ── Premium accent treatment — gradient + glow, same blue family ──────
+     Used sparingly: primary CTAs, the hero graphic, the "computed engine"
+     badge, and focus/active states that want to feel alive rather than flat.
+     Never used on data-table rows or dense grid tiles — depth there is a
+     legibility cost, not a feature. */
+  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%);
+  --gradient-accent-soft: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(124, 58, 237, 0.1) 100%);
+  --shadow-glow: 0 0 0 1px rgba(37, 99, 235, 0.15), 0 8px 24px -4px rgba(37, 99, 235, 0.28);
+  --shadow-glow-hover: 0 0 0 1px rgba(37, 99, 235, 0.22), 0 12px 32px -4px rgba(37, 99, 235, 0.38);
+
   color-scheme: light;
 }
 
@@ -93,7 +103,18 @@
 
   --shadow-low: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-medium: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
-  --shadow-high: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  --shadow-high: 0 20px 48px -12px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  /* Dark mode gets the brighter cyan-blue → violet sweep and a stronger glow,
+     since a glow has to fight less ambient light to read as "alive" here. */
+  /* Dark mode's gradient is deliberately deeper than the flat accent (which is
+     a light cyan, meant to sit on a dark card) — this gradient carries WHITE
+     text on top of it everywhere it's used (buttons, active tabs, badges), so
+     every stop must hold >=4.5:1 against white, not just look "brand-blue". */
+  --gradient-accent: linear-gradient(135deg, #0284c7 0%, #4338ca 55%, #6d28d9 100%);
+  --gradient-accent-soft: linear-gradient(135deg, rgba(56, 189, 248, 0.16) 0%, rgba(167, 139, 250, 0.14) 100%);
+  --shadow-glow: 0 0 0 1px rgba(56, 189, 248, 0.2), 0 8px 28px -2px rgba(56, 189, 248, 0.35);
+  --shadow-glow-hover: 0 0 0 1px rgba(56, 189, 248, 0.3), 0 14px 40px -2px rgba(99, 102, 241, 0.45);
 
   color-scheme: dark;
 }
@@ -130,6 +151,11 @@
   --chart-h-sm: 150px;
 
   --page-max: 1360px;
+
+  /* Display face — headlines only (hero, page h1 on Login/Upload empty
+     states). Body copy, controls and tables stay on --font-sans equivalent
+     (the bare `font-family` on body) so density is unaffected. */
+  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -341,6 +367,7 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
   .card:hover {
     border-color: var(--border-strong);
+    box-shadow: var(--shadow-medium);
   }
 
   /* Padded card body — the default surface for panels and charts. */
@@ -363,18 +390,32 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
 
   /* KPI tile. No hover translate: shifting tiles in a dense grid makes the
-     whole row look unstable. */
+     whole row look unstable — depth comes from a glow + border shift instead. */
   .stat-tile {
+    position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius);
     padding: var(--s-3);
     box-shadow: var(--shadow-low);
     min-width: 0;
+    overflow: hidden;
+  }
+  .stat-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity 160ms ease;
   }
   .stat-tile:hover {
     border-color: var(--border-strong);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-glow);
+  }
+  .stat-tile:hover::before {
+    opacity: 1;
   }
 
   /* Chart box: fixed, tokenised height so the card never grows past the fold
@@ -411,6 +452,9 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
     border-color: var(--border-strong);
     color: var(--text-primary);
   }
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
   .btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;
@@ -435,6 +479,10 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
   .btn-primary:hover:not(:disabled) {
     background: var(--accent-blue-strong);
+    box-shadow: var(--shadow-medium);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
   }
   .btn-primary:disabled {
     opacity: 0.5;
@@ -496,9 +544,9 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
   .seg__btn[aria-pressed="true"],
   .seg__btn[aria-selected="true"] {
-    background: var(--accent-blue);
-    color: var(--text-on-accent);
-    box-shadow: var(--shadow-low);
+    background: var(--gradient-accent);
+    color: #ffffff;
+    box-shadow: var(--shadow-glow);
   }
   .seg__btn:disabled {
     opacity: 0.35;
@@ -527,9 +575,9 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
   .chip[aria-pressed="true"],
   .chip--active {
-    background: var(--accent-blue);
-    border-color: var(--accent-blue);
-    color: var(--text-on-accent);
+    background: var(--gradient-accent);
+    border-color: transparent;
+    color: #ffffff;
   }
   .chip--static {
     cursor: default;
@@ -626,11 +674,15 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
 
   /* Sticky toolbar: the date presets, filters and tabs stay reachable while
-     the user scrolls a long dashboard. Offset by the 52px app header, with a
-     backdrop so content scrolling underneath doesn't show through. */
+     the user scrolls a long dashboard. It sticks at the top of the viewport
+     (top: 0) and is nudged down by --header-offset via `transform`, not by
+     changing `top` itself — `top` is a layout property (the browser reflows
+     on every frame), which desynced visibly from the header's own transform-
+     based hide/show and looked like two separate jumps instead of one motion.
+     Same technique (transform) on both elements keeps them locked together. */
   .toolbar-sticky {
     position: sticky;
-    top: 52px;
+    top: 0;
     z-index: 20;
     padding-top: var(--s-2);
     padding-bottom: var(--s-2);
@@ -641,6 +693,8 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
       var(--bg-primary) 82%,
       transparent 100%
     );
+    transform: translateY(var(--header-offset, 52px));
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* On a phone the viewport is too short to give up rows to a sticky bar. */
@@ -649,6 +703,7 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
       position: static;
       background: none;
       margin-top: 0;
+      transform: none;
     }
   }
 
@@ -781,20 +836,117 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
     transform: translateX(20px);
   }
 
-  /* ── Legacy aliases ────────────────────────────────────────────────── */
-  /* Kept so older markup keeps rendering correctly while it migrates to the
-     tokens above; they intentionally resolve to the flat, compact surface. */
+  /* ── Premium accent surfaces ───────────────────────────────────────── */
+  /* Gradient card border — a hairline gradient ring around an otherwise flat
+     card, used for the one or two elements per screen that should read as
+     "the AI did this" (hero CTA, engine badge, forecast confidence card).
+     Kept rare deliberately: everywhere would just be noise. */
   .card-gradient {
+    position: relative;
     background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-low);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    box-shadow: var(--shadow-glow);
   }
+  .card-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-accent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
   .glow-blue,
   .glow-emerald {
-    box-shadow: var(--shadow-low);
+    box-shadow: var(--shadow-glow);
   }
   .glow-blue-text,
   .glow-emerald-text {
-    text-shadow: none;
+    text-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
+  }
+
+  /* Gradient CTA — the one button per screen that should feel premium
+     rather than utilitarian. Distinct from .btn-primary (flat accent),
+     used for hero/primary conversion actions only. */
+  .btn-gradient {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    height: var(--control-h);
+    padding: 0 var(--s-4);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background: var(--gradient-accent);
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: var(--shadow-glow);
+  }
+  .btn-gradient:hover:not(:disabled) {
+    box-shadow: var(--shadow-glow-hover);
+  }
+  .btn-gradient:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .btn-gradient:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Animated-glow badge — for the "computed analytics engine" style
+     indicator. The glow breathes slowly; reduced-motion users get the
+     static gradient border only (handled by the global reduced-motion rule
+     above, which zeroes animation-duration). */
+  .badge-glow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    background: var(--gradient-accent-soft);
+    color: var(--accent-blue);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-accent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.55;
+    animation: senova-badge-breathe 2.8s ease-in-out infinite;
+  }
+
+  @keyframes senova-badge-breathe {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.9; }
+  }
+
+  /* Display heading utility — Space Grotesk, used on hero/h1-scale copy
+     only. Tighter tracking than the body h1 because the wider grotesque
+     letterforms need it to feel dense rather than loose. Weight bumped to
+     700 (not 600): Space Grotesk's strokes are thinner than Plus Jakarta
+     Sans at the same weight number, so matching the *number* alone produced
+     headlines that read as smaller/lighter than the rest of the page. */
+  .text-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 700;
   }
 }

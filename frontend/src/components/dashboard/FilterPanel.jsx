@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 
 import Icon from '../common/Icon'
 
@@ -63,7 +64,7 @@ export default function FilterPanel({
           {activeCount > 0 && (
             <span
               className="text-[11px] font-bold rounded-full px-1.5"
-              style={{ background: 'var(--accent-blue)', color: 'var(--text-on-accent)' }}
+              style={{ background: 'var(--gradient-accent)', color: '#ffffff' }}
             >
               {activeCount}
             </span>
@@ -109,11 +110,16 @@ export default function FilterPanel({
         )}
       </div>
 
-      {open && (
-        <div
-          className="px-[var(--card-pad)] py-3 space-y-3"
-          style={{ borderTop: '1px solid var(--border-subtle)' }}
-        >
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            className="px-[var(--card-pad)] py-3 space-y-3 overflow-hidden"
+            style={{ borderTop: '1px solid var(--border-subtle)' }}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
           {/* Custom date range — the presets can't express "1st to 15th". */}
           <fieldset>
             <legend className="panel-title mb-1.5">Custom date range</legend>
@@ -182,8 +188,9 @@ export default function FilterPanel({
               ))}
             </div>
           )}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

@@ -87,6 +87,12 @@ export default function TrendChart({ trend = [], forecast = null, anomalyDates =
     <div className="chart-box">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={series} margin={{ top: 8, right: 12, bottom: 4, left: 0 }}>
+          <defs>
+            <linearGradient id="senova-forecast-band" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={theme.forecast} stopOpacity={0.28} />
+              <stop offset="100%" stopColor={theme.forecast} stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" stroke={theme.borderStrong} strokeOpacity={0.4} />
           <XAxis
             dataKey="date"
@@ -111,8 +117,7 @@ export default function TrendChart({ trend = [], forecast = null, anomalyDates =
               dataKey="band"
               name="Likely range (80%)"
               stroke="none"
-              fill={theme.forecast}
-              fillOpacity={0.16}
+              fill="url(#senova-forecast-band)"
               connectNulls
               isAnimationActive={false}
             />

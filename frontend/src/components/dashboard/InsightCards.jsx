@@ -1,3 +1,5 @@
+import { motion } from 'motion/react'
+
 import Icon from '../common/Icon'
 import { formatCurrency, formatNumber, formatPercent } from '../charts/chartFormat'
 
@@ -69,8 +71,8 @@ export default function InsightCards({ insights, loading }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-[var(--gap)] items-start">
-        {insights.insights.map((insight) => (
-          <InsightCard key={insight.id} insight={insight} />
+        {insights.insights.map((insight, i) => (
+          <InsightCard key={insight.id} insight={insight} index={i} />
         ))}
       </div>
 
@@ -79,11 +81,21 @@ export default function InsightCards({ insights, loading }) {
   )
 }
 
-function InsightCard({ insight }) {
+function InsightCard({ insight, index = 0 }) {
   const severity = SEVERITY[insight.severity] ?? SEVERITY.neutral
+  const glow = insight.severity === 'critical' || insight.severity === 'positive'
 
   return (
-    <article className="card card-pad flex flex-col gap-1.5" style={{ borderLeft: `3px solid ${severity.colour}` }}>
+    <motion.article
+      className="card card-pad flex flex-col gap-1.5"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        borderLeft: `3px solid ${severity.colour}`,
+        boxShadow: glow ? `var(--shadow-low), inset 0 0 0 1px ${severity.colour}1a` : undefined,
+      }}
+    >
       <header className="flex items-start gap-1.5">
         <Icon name={severity.icon} className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: severity.colour }} />
         <div className="min-w-0">
@@ -109,7 +121,7 @@ function InsightCard({ insight }) {
           <span>{insight.action}</span>
         </p>
       )}
-    </article>
+    </motion.article>
   )
 }
 

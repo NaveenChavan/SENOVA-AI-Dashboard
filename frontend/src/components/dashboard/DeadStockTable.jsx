@@ -19,7 +19,10 @@ function Status({ days }) {
         : { label: 'Recent', colour: 'var(--accent-green)', icon: 'check' }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[12px] font-semibold" style={{ color: tone.colour }}>
+    <span
+      className="inline-flex items-center gap-1 text-[12px] font-semibold rounded-full px-2"
+      style={{ height: 22, color: tone.colour, background: `${tone.colour}14` }}
+    >
       <Icon name={tone.icon} className="w-3 h-3" strokeWidth={2.2} />
       {tone.label}
     </span>

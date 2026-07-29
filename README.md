@@ -179,8 +179,15 @@ Body: `{ "time_filter": "all|today|week|30days|month|custom", "start_date": …,
   would break `JSON.parse` in the browser.
 - **Uploads are temporary** — a TTL sweep removes files and both sidecars
   after `UPLOAD_TTL_MINUTES`.
-- No new third-party dependencies were added on either side, so the supply
-  chain surface is unchanged.
+- **One new frontend dependency, pinned exactly.** The UI redesign added
+  [`motion`](https://motion.dev) (the actively-maintained successor to
+  Framer Motion) at an exact pinned version (`12.42.2`, no `^`/`~` range) for
+  entrance/exit animation and the drill-down panel's slide-over transition.
+  It ships no network calls and has no access to sales data — it only
+  animates DOM nodes already rendered by React. This is intentionally the
+  **only** new third-party runtime dependency introduced by the redesign; no
+  icon libraries, animation-adjacent utility packages, or CSS frameworks
+  were added beyond it. The backend added nothing.
 
 ## Accessibility & UX
 
@@ -303,6 +310,8 @@ GitHub Pages (static hosting only) can't provide. Use Vercel (frontend)
 ## Tech stack
 
 - **Frontend:** React 18, Vite, Tailwind CSS, Zustand, Firebase Auth,
-  Recharts, React Router (tests: Vitest + Testing Library)
+  Recharts, React Router, [Motion](https://motion.dev) (animation), Space
+  Grotesk (display typeface, headlines only — body/UI text stays on Plus
+  Jakarta Sans) (tests: Vitest + Testing Library)
 - **Backend:** FastAPI, Pandas, NumPy, ReportLab (PDF), Firebase Admin SDK
   (token verification) (tests: pytest)

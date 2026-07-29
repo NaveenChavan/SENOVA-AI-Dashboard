@@ -6,12 +6,15 @@ function getInitialTheme() {
   if (typeof window === 'undefined') return 'light'
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY)
-    if (stored === 'light' || stored === 'dark') return stored
+    if (stored === 'dark') return 'dark'
   } catch {
-    // localStorage unavailable (private browsing, etc.) — fall through to OS preference.
+    // localStorage unavailable (private browsing, etc.) — fall through to light.
   }
-  // Light is the product default; only an explicit OS dark preference flips it.
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  // Light is the product default on a fresh visit, regardless of the OS/
+  // browser's dark-mode preference — must match the inline script in
+  // index.html exactly, or React's initial state would disagree with the
+  // data-theme attribute that script already applied before mount.
+  return 'light'
 }
 
 function applyTheme(theme) {

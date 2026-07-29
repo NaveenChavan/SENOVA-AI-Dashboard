@@ -1,6 +1,7 @@
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import { motion } from 'motion/react'
 
 import api from '../services/api'
 import useSalesStore, { buildQueryBody } from '../store/useSalesStore'
@@ -9,7 +10,6 @@ import Card from '../components/common/Card'
 import CommandPalette from '../components/common/CommandPalette'
 import ErrorBoundary from '../components/common/ErrorBoundary'
 import Icon from '../components/common/Icon'
-import Loader from '../components/common/Loader'
 import SummaryStats from '../components/dashboard/SummaryStats'
 import { CHART_TYPES, MEASURES, resolveChartRequest, useChartView } from '../components/charts/chartView'
 
@@ -53,6 +53,16 @@ const VIEW_TABS = [
   { value: 'inventory', label: 'Inventory', icon: 'box' },
   { value: 'report', label: 'Financial Report', icon: 'document' },
 ]
+
+const EASE = [0.16, 1, 0.3, 1]
+
+/** Shared entrance variants for the staggered content grid — fast and precise
+ * (0.35-0.4s), never bouncy, so the "computed intelligence" feel holds. */
+const fadeUp = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.35, ease: EASE },
+}
 
 /**
  * A preset is meaningless when the data's span doesn't exceed its window — it
@@ -451,10 +461,15 @@ export default function Dashboard() {
       {/* ── Toolbar: title · date presets · export ─────────────────────── */}
       {/* Sticky below the 52px app header: on a long dashboard the date range
           and filters are the controls people reach for while scrolling. */}
-      <div className="toolbar-sticky space-y-2 sm:space-y-2.5">
+      <motion.div
+        className="toolbar-sticky space-y-2 sm:space-y-2.5"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: EASE }}
+      >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="min-w-0">
-            <h1 className="truncate">Analytics Overview</h1>
+            <h1 className="text-display truncate">Analytics Overview</h1>
             <p className="panel-hint truncate">
               All values in INR (₹) · {periodLabel}
               {activeFilterCount > 0 && ` · ${activeFilterCount} filter(s)`}
@@ -535,7 +550,7 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Short-span explainer — prevents "why are all filters the same?" */}
       {dateRange?.span_days > 0 && dateRange.span_days < 8 && (
@@ -565,24 +580,35 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              <ErrorBoundary>
-                <InsightCards insights={insights} loading={insightsLoading} />
-              </ErrorBoundary>
+              <motion.div {...fadeUp}>
+                <ErrorBoundary>
+                  <InsightCards insights={insights} loading={insightsLoading} />
+                </ErrorBoundary>
+              </motion.div>
 
-              <SummaryStats key={querySignature} summary={data.summary} />
+              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.05 }}>
+                <SummaryStats key={querySignature} summary={data.summary} />
+              </motion.div>
 
-              <ErrorBoundary>
-                <ForecastSummary
-                  forecast={forecast}
-                  loading={forecastLoading}
-                  horizon={forecastHorizon}
-                  onHorizonChange={setForecastHorizon}
-                />
-              </ErrorBoundary>
+              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.1 }}>
+                <ErrorBoundary>
+                  <ForecastSummary
+                    forecast={forecast}
+                    loading={forecastLoading}
+                    horizon={forecastHorizon}
+                    onHorizonChange={setForecastHorizon}
+                  />
+                </ErrorBoundary>
+              </motion.div>
 
               {/* Trend and the top-items chart share a row: both are the same
                   tokenised height, so the row has no ragged edge. */}
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--gap)] items-start">
+              <motion.div
+                className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--gap)] items-start"
+                initial={fadeUp.initial}
+                animate={fadeUp.animate}
+                transition={{ ...fadeUp.transition, delay: 0.15 }}
+              >
                 <Card title="Daily trend & forecast" hint="Solid = actual · dashed = projection">
                   <ErrorBoundary>
                     <TrendChart
@@ -596,10 +622,11 @@ export default function Dashboard() {
                 <ErrorBoundary>
                   <TopItems items={data.top_items} />
                 </ErrorBoundary>
-              </div>
+              </motion.div>
 
               {/* The studio is the exploration surface, so it gets the full
                   page width — and correspondingly less height. */}
+              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.2 }}>
                 <ErrorBoundary>
                   <ChartStudio
                     chartData={chartData}
@@ -613,10 +640,13 @@ export default function Dashboard() {
                     wide
                   />
                 </ErrorBoundary>
+              </motion.div>
 
-              <ErrorBoundary>
-                <DeadStockTable items={data.dead_stock} />
-              </ErrorBoundary>
+              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.25 }}>
+                <ErrorBoundary>
+                  <DeadStockTable items={data.dead_stock} />
+                </ErrorBoundary>
+              </motion.div>
             </>
           )}
         </div>
@@ -640,7 +670,15 @@ export default function Dashboard() {
           )}
           <ErrorBoundary>
             {caReportLoading && !caReport ? (
-              <Loader message="Building financial report…" />
+              <div className="card card-pad space-y-2" aria-busy="true" aria-label="Building financial report">
+                <div className="skeleton h-3 w-40 mb-1" />
+                {[...Array(6)].map((_, index) => (
+                  <div key={index} className="flex items-center justify-between gap-3">
+                    <div className="skeleton h-2.5 flex-1" style={{ maxWidth: 180 }} />
+                    <div className="skeleton h-2.5 w-20" />
+                  </div>
+                ))}
+              </div>
             ) : (
               <PnLReportTable report={caReport} />
             )}
@@ -716,23 +754,28 @@ function NoFileState() {
       <Helmet>
         <title>No Data — SENOVA Digital Lab</title>
       </Helmet>
-      <div className="card card-pad max-w-xs w-full text-center">
+      <motion.div
+        className="card card-pad max-w-xs w-full text-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: EASE }}
+      >
         <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-3"
-          style={{ background: 'var(--accent-blue-glow)' }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-3"
+          style={{ background: 'var(--gradient-accent-soft)' }}
         >
-          <Icon name="chart" className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
+          <Icon name="chart" className="w-4.5 h-4.5" style={{ color: 'var(--accent-blue)' }} />
         </div>
-        <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+        <p className="text-display text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
           No analytics yet
         </p>
         <p className="text-xs mb-4" style={{ color: 'var(--text-secondary)' }}>
           Upload a sales file to generate your first dashboard.
         </p>
-        <Link to="/upload" className="btn-primary w-full">
+        <Link to="/upload" className="btn-gradient w-full">
           Upload a file
         </Link>
-      </div>
+      </motion.div>
     </div>
   )
 }

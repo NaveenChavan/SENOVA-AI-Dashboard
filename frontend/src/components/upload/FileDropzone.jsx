@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 
 import Icon from '../common/Icon'
 
@@ -9,7 +10,14 @@ import Icon from '../common/Icon'
  * line of reassurance, so the upload page fits on a phone screen without
  * scrolling. The template download sits underneath as a text link rather than a
  * second button competing with the primary action.
+ *
+ * States: idle → dragging (dashed border animates, icon lifts) → uploading
+ * (progressMessage from the store drives the spinner label) → error (inline,
+ * dropzone stays interactive) — success isn't shown here, it's the page
+ * navigating to the column-mapping step, which is state the parent owns.
  */
+
+const EASE = [0.16, 1, 0.3, 1]
 
 function buildTemplate() {
   const header = 'Date,Category,Item,Quantity,Selling Price,Cost Price,Discount,Branch,Payment Mode,Closing Stock\n'
@@ -52,9 +60,11 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
     [onFileSelected],
   )
 
+  const active = dragging && !disabled
+
   return (
     <div>
-      <div
+      <motion.div
         onDrop={(event) => {
           event.preventDefault()
           setDragging(false)
@@ -79,13 +89,16 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
         className={`card flex flex-col items-center justify-center text-center gap-2 cursor-pointer ${
           disabled ? 'opacity-60 pointer-events-none' : ''
         }`}
+        animate={{ scale: active ? 1.01 : 1 }}
+        transition={{ duration: 0.15, ease: EASE }}
         style={{
           minHeight: 148,
           padding: 20,
           borderStyle: 'dashed',
           borderWidth: 2,
-          borderColor: dragging ? 'var(--accent-blue)' : 'var(--border-strong)',
-          background: dragging ? 'var(--accent-blue-glow)' : 'var(--bg-card)',
+          borderColor: active ? 'var(--accent-blue)' : 'var(--border-strong)',
+          background: active ? 'var(--accent-blue-glow)' : 'var(--bg-card)',
+          boxShadow: active ? 'var(--shadow-glow)' : 'var(--shadow-low)',
         }}
       >
         <input
@@ -97,34 +110,45 @@ export default function FileDropzone({ onFileSelected, disabled, progressMessage
           disabled={disabled}
         />
 
-        <span
+        <motion.span
           className="w-9 h-9 rounded-xl flex items-center justify-center"
-          style={{ background: dragging ? 'var(--bg-card)' : 'var(--bg-input)' }}
+          style={{ background: active ? 'var(--bg-card)' : 'var(--bg-input)' }}
+          animate={{ y: active ? -3 : 0 }}
+          transition={{ duration: 0.15, ease: EASE }}
         >
           <Icon
             name="download"
             className="w-4 h-4"
-            style={{ color: dragging ? 'var(--accent-blue)' : 'var(--text-muted)', transform: 'rotate(180deg)' }}
+            style={{ color: active ? 'var(--accent-blue)' : 'var(--text-muted)', transform: 'rotate(180deg)' }}
           />
-        </span>
+        </motion.span>
 
         <p className="text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>
-          Drop your CSV / Excel file here, or click to browse
+          {active ? 'Drop it right here' : 'Drop your CSV / Excel file here, or click to browse'}
         </p>
         <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
           Any column layout works — you'll confirm your columns next.
         </p>
 
-        {progressMessage && (
-          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium" style={{ color: 'var(--accent-blue)' }}>
-            <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            {progressMessage}
-          </span>
-        )}
-      </div>
+        <AnimatePresence>
+          {progressMessage && (
+            <motion.span
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2, ease: EASE }}
+              className="inline-flex items-center gap-1.5 text-[12px] font-medium"
+              style={{ color: 'var(--accent-blue)' }}
+            >
+              <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              {progressMessage}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {fileError && (
         <p className="note mt-2" data-tone="danger" role="alert">

@@ -1,14 +1,19 @@
 /**
  * Button primitive.
  *
- * Every variant resolves to the shared `.btn` / `.btn-primary` classes in
- * index.css, so its height matches every select, chip and segmented control on
- * the same toolbar row — one control height is what makes a dense toolbar look
- * aligned rather than assembled.
+ * Every variant resolves to the shared `.btn` / `.btn-primary` / `.btn-gradient`
+ * classes in index.css, so its height matches every select, chip and segmented
+ * control on the same toolbar row — one control height is what makes a dense
+ * toolbar look aligned rather than assembled.
+ *
+ * `gradient` is a deliberately rare variant: the one primary conversion action
+ * per screen (sign-in CTA, "Build my dashboard") that should read as premium,
+ * not every button on a dense toolbar.
  */
 
 const VARIANT_CLASS = {
   primary: 'btn-primary',
+  gradient: 'btn-gradient',
   secondary: 'btn',
   ghost: 'btn',
   danger: 'btn',

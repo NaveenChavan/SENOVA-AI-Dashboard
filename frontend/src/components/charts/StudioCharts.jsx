@@ -63,6 +63,7 @@ function useAxisProps() {
 export function BarView({ data, horizontal = false, onSelect }) {
   const { theme, grid, tick, axisLine } = useAxisProps()
   const formatTick = tickFormatterFor(data.measure_format)
+  const gradientId = `senova-bar-gradient-${horizontal ? 'h' : 'v'}`
 
   return (
     <div className={`${CHART_HEIGHT}`}>
@@ -78,6 +79,12 @@ export function BarView({ data, horizontal = false, onSelect }) {
             if (point && !point.is_other) onSelect?.(point)
           }}
         >
+          <defs>
+            <linearGradient id={gradientId} x1={horizontal ? '0' : '0'} y1={horizontal ? '0' : '0'} x2={horizontal ? '1' : '0'} y2={horizontal ? '0' : '1'}>
+              <stop offset="0%" stopColor={theme.accentBlue} stopOpacity={0.95} />
+              <stop offset="100%" stopColor={theme.accentBlue} stopOpacity={0.55} />
+            </linearGradient>
+          </defs>
           {grid}
           {horizontal ? (
             <>
@@ -113,7 +120,7 @@ export function BarView({ data, horizontal = false, onSelect }) {
               // real, actionable group.
               <Cell
                 key={point.label}
-                fill={point.is_other ? theme.textMuted : theme.accentBlue}
+                fill={point.is_other ? theme.textMuted : `url(#${gradientId})`}
                 cursor={point.is_other ? 'default' : 'pointer'}
               />
             ))}
@@ -210,6 +217,16 @@ export function ComboView({ data, onSelect }) {
             if (point && !point.is_other) onSelect?.(point)
           }}
         >
+          <defs>
+            <linearGradient id="senova-combo-revenue" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={theme.accentBlue} stopOpacity={0.95} />
+              <stop offset="100%" stopColor={theme.accentBlue} stopOpacity={0.55} />
+            </linearGradient>
+            <linearGradient id="senova-combo-cost" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={theme.accentPurple} stopOpacity={0.95} />
+              <stop offset="100%" stopColor={theme.accentPurple} stopOpacity={0.55} />
+            </linearGradient>
+          </defs>
           {grid}
           <XAxis
             dataKey="label"
@@ -227,8 +244,8 @@ export function ComboView({ data, onSelect }) {
           />
           <Tooltip content={<StudioTooltip measureFormat="currency" />} cursor={{ fill: theme.borderSubtle }} />
           <Legend content={<ChartLegend />} />
-          <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
-          <Bar yAxisId="left" dataKey="cost" name="Cost" fill={theme.accentPurple} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
+          <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="url(#senova-combo-revenue)" radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
+          <Bar yAxisId="left" dataKey="cost" name="Cost" fill="url(#senova-combo-cost)" radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
           <Line
             yAxisId="right"
             type="monotone"
@@ -263,6 +280,12 @@ export function ParetoView({ data, onSelect }) {
             if (point && !point.is_other) onSelect?.(point)
           }}
         >
+          <defs>
+            <linearGradient id="senova-pareto-bar" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={theme.accentBlue} stopOpacity={0.95} />
+              <stop offset="100%" stopColor={theme.accentBlue} stopOpacity={0.55} />
+            </linearGradient>
+          </defs>
           {grid}
           <XAxis
             dataKey="label"
@@ -286,7 +309,7 @@ export function ParetoView({ data, onSelect }) {
           />
           <Tooltip content={<StudioTooltip measureFormat={data.measure_format} />} cursor={{ fill: theme.borderSubtle }} />
           <Legend content={<ChartLegend />} />
-          <Bar yAxisId="left" dataKey="value" name={data.measure_label} fill={theme.accentBlue} radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
+          <Bar yAxisId="left" dataKey="value" name={data.measure_label} fill="url(#senova-pareto-bar)" radius={[6, 6, 0, 0]} isAnimationActive={false} maxBarSize={BAR_MAX} />
           <Line
             yAxisId="right"
             type="monotone"

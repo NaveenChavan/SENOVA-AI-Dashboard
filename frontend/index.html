@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
     <meta property="og:title" content="SENOVA AI Dashboard | Intelligent Retail & MSME Analytics India" />
@@ -31,16 +31,17 @@
   <body class="antialiased">
     <script>
       // Applied before React mounts so there's no flash of the wrong theme or
-      // spacing on first paint. Light + compact are the product defaults; a
-      // stored choice or an explicit OS dark preference wins.
+      // spacing on first paint. Light + compact are the product defaults on a
+      // fresh visit — only an explicit choice made via the in-app toggle
+      // (persisted to localStorage) switches it. The OS/browser dark-mode
+      // preference is intentionally NOT used to pick the initial theme, so
+      // every first-time visitor sees the same light default regardless of
+      // their system setting.
       (function () {
         var root = document.documentElement;
         try {
           var storedTheme = localStorage.getItem('senova-theme');
-          root.setAttribute(
-            'data-theme',
-            storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-          );
+          root.setAttribute('data-theme', storedTheme === 'dark' ? 'dark' : 'light');
           var storedDensity = localStorage.getItem('senova-density');
           root.setAttribute('data-density', storedDensity === 'comfortable' ? 'comfortable' : 'compact');
         } catch (e) {

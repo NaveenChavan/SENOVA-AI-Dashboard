@@ -15,7 +15,7 @@ function PnLStatement({ pnl }) {
   if (!pnl?.length) return null
 
   return (
-    <Card title="Profit &amp; loss statement">
+    <Card title="Profit &amp; loss statement" gradient>
       <div className="scroll-x">
         <table className="table">
           <thead>

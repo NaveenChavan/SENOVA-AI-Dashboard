@@ -9,6 +9,8 @@ expiry, and issuer using the Firebase Admin SDK before letting the
 request reach the route handler.
 """
 
+import json
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pathlib import Path
@@ -20,6 +22,7 @@ from firebase_admin import credentials
 from app.core.config import (
     DISABLE_AUTH,
     FIREBASE_PROJECT_ID,
+    FIREBASE_SERVICE_ACCOUNT_JSON,
     FIREBASE_SERVICE_ACCOUNT_PATH,
 )
 
@@ -31,17 +34,62 @@ _bearer = HTTPBearer(auto_error=False)
 _firebase_app = None
 
 
+def _credential_from_json_env():
+    """
+    Build a credential from ``FIREBASE_SERVICE_ACCOUNT_JSON``.
+
+    Managed hosts have no good way to receive a gitignored key file, so the
+    whole service-account JSON is passed as one secret env var instead.
+
+    The ``private_key`` fix-up matters in practice: many dashboards store the
+    value with the newlines already escaped, so the key arrives containing
+    the two characters ``\\n`` where it needs real line breaks, and the
+    resulting PEM is rejected with a confusing "No key could be detected"
+    error. Repairing it here is much easier to live with than asking every
+    deployment to paste the key in exactly the right shape.
+    """
+    try:
+        info = json.loads(FIREBASE_SERVICE_ACCOUNT_JSON)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "FIREBASE_SERVICE_ACCOUNT_JSON is set but is not valid JSON. "
+            "Paste the entire contents of the service-account file, including "
+            f"the outer braces. Parser said: {exc}"
+        ) from exc
+
+    if not isinstance(info, dict):
+        raise RuntimeError(
+            "FIREBASE_SERVICE_ACCOUNT_JSON must be a JSON object (the contents "
+            "of the service-account file), not a list or bare value."
+        )
+
+    private_key = info.get("private_key")
+    if isinstance(private_key, str) and "\\n" in private_key:
+        info["private_key"] = private_key.replace("\\n", "\n")
+
+    return credentials.Certificate(info)
+
+
 def get_firebase_app():
     """
     Lazily initialise the Firebase Admin app exactly once.
 
-    Requires an explicit service-account credential file
-    (``FIREBASE_SERVICE_ACCOUNT_PATH``) unless ``DISABLE_AUTH=true``. We do
-    NOT silently fall back to Application Default Credentials on a
-    developer's laptop — that fallback only works inside Google Cloud /
-    Firebase Hosting and produces a confusing "default credentials not
-    found" 401 on every request everywhere else, which is what causes the
-    "token verification failed" error seen locally.
+    Credentials are resolved in this order:
+
+    1. ``FIREBASE_SERVICE_ACCOUNT_JSON`` — the service-account JSON inline in
+       an env var. Preferred on any managed host, because the key file is
+       gitignored and therefore cannot travel with the repo.
+    2. ``FIREBASE_SERVICE_ACCOUNT_PATH`` — the same JSON as a file on disk.
+       This is the local-development path.
+
+    Neither is required when ``DISABLE_AUTH=true``, which is local-only and
+    refused at startup in production (see ``app.core.config``).
+
+    We do NOT silently fall back to Application Default Credentials: that
+    fallback only works inside Google Cloud / Firebase Hosting and produces a
+    confusing "default credentials not found" 401 on every request everywhere
+    else, which is what causes the "token verification failed" error seen
+    locally.
 
     Public (no leading underscore) because other modules that need the
     Firebase Admin app for non-token-verification purposes — e.g.
@@ -53,23 +101,25 @@ def get_firebase_app():
     if _firebase_app is not None:
         return _firebase_app
 
-    if not FIREBASE_SERVICE_ACCOUNT_PATH:
+    if FIREBASE_SERVICE_ACCOUNT_JSON:
+        cred = _credential_from_json_env()
+    elif FIREBASE_SERVICE_ACCOUNT_PATH:
+        if not Path(FIREBASE_SERVICE_ACCOUNT_PATH).is_file():
+            raise RuntimeError(
+                f"FIREBASE_SERVICE_ACCOUNT_PATH points to '{FIREBASE_SERVICE_ACCOUNT_PATH}' "
+                "but that file does not exist. Double-check the path in backend/.env."
+            )
+        cred = credentials.Certificate(FIREBASE_SERVICE_ACCOUNT_PATH)
+    else:
         raise RuntimeError(
-            "FIREBASE_SERVICE_ACCOUNT_PATH is not set. Download a service "
-            "account key from Firebase Console > Project Settings > "
-            "Service Accounts > Generate new private key, save it as "
-            "backend/firebase-service-account.json, and set "
-            "FIREBASE_SERVICE_ACCOUNT_PATH in backend/.env. "
+            "No Firebase credentials configured. Set FIREBASE_SERVICE_ACCOUNT_JSON "
+            "to the full service-account JSON (recommended on a deployed host), "
+            "or FIREBASE_SERVICE_ACCOUNT_PATH to the JSON file on disk (local "
+            "development). Download the file from Firebase Console > Project "
+            "Settings > Service Accounts > Generate new private key. "
             "For local development without Firebase, set DISABLE_AUTH=true instead."
         )
 
-    if not Path(FIREBASE_SERVICE_ACCOUNT_PATH).is_file():
-        raise RuntimeError(
-            f"FIREBASE_SERVICE_ACCOUNT_PATH points to '{FIREBASE_SERVICE_ACCOUNT_PATH}' "
-            "but that file does not exist. Double-check the path in backend/.env."
-        )
-
-    cred = credentials.Certificate(FIREBASE_SERVICE_ACCOUNT_PATH)
     _firebase_app = firebase_admin.initialize_app(
         cred, {"projectId": FIREBASE_PROJECT_ID}
     )

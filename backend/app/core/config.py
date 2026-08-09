@@ -32,6 +32,16 @@ ALLOWED_ORIGINS: list[str] = [
 ENV: str = os.getenv("ENV", "development")
 
 # --- Firebase Auth ---
+# Two ways to supply the Admin SDK service account, checked in this order:
+#
+# 1. FIREBASE_SERVICE_ACCOUNT_JSON — the whole service-account JSON as a single
+#    env var. This is the one to use on a managed host (Render, Railway, Fly):
+#    the JSON file itself is gitignored (it holds a private key), so it can
+#    never reach the host through the repo, and pasting it into a secret env
+#    var avoids depending on host-specific file mounting.
+# 2. FIREBASE_SERVICE_ACCOUNT_PATH — path to the JSON file on disk. This is
+#    the local-development path.
+FIREBASE_SERVICE_ACCOUNT_JSON: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON", "")
 # Path to the Firebase service-account JSON used by firebase-admin to verify
 # ID tokens issued by the frontend's Firebase Auth (Google sign-in).
 # Download from Firebase Console > Project Settings > Service Accounts.
@@ -61,6 +71,18 @@ MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
 UPLOAD_TTL_MINUTES: int = int(os.getenv("UPLOAD_TTL_MINUTES", "120"))
 # How often the background sweep runs.
 UPLOAD_SWEEP_INTERVAL_MINUTES: int = int(os.getenv("UPLOAD_SWEEP_INTERVAL_MINUTES", "30"))
+
+# --- Frame cache (memory tuning) ---
+# The normalised-DataFrame LRU. These are env-tunable because the right values
+# depend entirely on how much RAM the host gives you: a Render free instance
+# has 512 MB total, shared with the Python process, pandas/numpy themselves and
+# every in-flight request, so the defaults here are deliberately conservative
+# rather than as-large-as-possible. Raise them on a bigger instance to trade
+# memory for fewer re-parses.
+FRAME_CACHE_MAX_ENTRIES: int = int(os.getenv("FRAME_CACHE_MAX_ENTRIES", "3"))
+# Frames with more rows than this are served but never cached — slow beats
+# being killed by the host's OOM reaper.
+FRAME_CACHE_MAX_ROWS: int = int(os.getenv("FRAME_CACHE_MAX_ROWS", "120000"))
 
 # --- Password reset email (SendGrid) ---
 # API key for SendGrid's Mail Send API. Required only when the

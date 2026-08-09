@@ -85,7 +85,14 @@ export default function SummaryStats({ summary }) {
       {tiles.map((tile, i) => (
         <motion.div
           key={tile.label}
-          className="stat-tile"
+          // With an odd number of tiles the last one is left alone in a
+          // half-width cell at the 2-column mobile breakpoint, which reads as
+          // a broken grid. Letting it span the full row closes that gap.
+          // Only needed for the 2-column case: the 3- and 5-column layouts
+          // above `sm` lay 5 tiles out without a stranded cell.
+          className={`stat-tile${
+            tiles.length % 2 === 1 && i === tiles.length - 1 ? ' col-span-2 sm:col-span-1' : ''
+          }`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}

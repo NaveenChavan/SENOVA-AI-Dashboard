@@ -261,6 +261,19 @@ body {
   font-size: 0.9375rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
+  /* Horizontal-overflow guard. Without this, one child that overshoots the
+     viewport (a long control row, a wide table, an un-truncated label) makes
+     the *whole page* pannable sideways — which reads as the layout being
+     shifted left, with the header and every section dragged along.
+     `clip` rather than `hidden` on purpose: `overflow: hidden` on body
+     silently turns the sticky app header into a statically-positioned one,
+     because it makes body a scroll container. `clip` cuts the overflow
+     without creating that scroll container, so sticky keeps working.
+     This is a safety net, not a licence to overflow — anything that needs to
+     extend past the viewport (tables, segmented controls) opts into its own
+     `overflow-x: auto` scroller instead of relying on this. */
+  overflow-x: clip;
 }
 
 /* Transitions are scoped to the elements that actually change state. The old
@@ -430,6 +443,34 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
   }
 
   /* ── Controls ──────────────────────────────────────────────────────── */
+
+  /* Text input for forms outside the dense dashboard grid (auth pages).
+     Shares height/radius/border tokens with .btn so a field and a button
+     sitting side-by-side line up exactly. */
+  .field-input {
+    display: block;
+    width: 100%;
+    height: var(--control-h);
+    padding: 0 var(--s-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+  }
+  .field-input::placeholder {
+    color: var(--text-muted);
+  }
+  .field-input:hover {
+    border-color: var(--border-strong);
+  }
+  .field-input:focus {
+    border-color: var(--accent-blue);
+  }
+  .field-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 
   .btn {
     display: inline-flex;

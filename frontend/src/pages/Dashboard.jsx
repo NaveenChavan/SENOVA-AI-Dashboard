@@ -467,7 +467,12 @@ export default function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: EASE }}
       >
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        {/* Row 1: title + export. Row 2: date presets.
+            On a phone these were competing for one wrapping flex row, which
+            resolved into several stacked rows and pushed the actual data far
+            below the fold. Splitting them explicitly keeps it to two rows,
+            and the presets get the full width they need to scroll. */}
+        <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
             <h1 className="text-display truncate">Analytics Overview</h1>
             <p className="panel-hint truncate">
@@ -476,30 +481,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="seg" role="group" aria-label="Filter analytics by date range">
-              {DATE_FILTERS.map((filter) => {
-                const disabled = !isFilterMeaningful(filter, dateRange?.span_days)
-                return (
-                  <button
-                    key={filter.value}
-                    type="button"
-                    className="seg__btn"
-                    onClick={() => !disabled && changeTimeFilter(filter.value)}
-                    disabled={disabled}
-                    aria-pressed={query.timeFilter === filter.value}
-                    title={
-                      disabled
-                        ? `Your data only spans ${dateRange?.span_days} day(s) — this filter would show the same results as "All Time".`
-                        : undefined
-                    }
-                  >
-                    {filter.label}
-                  </button>
-                )
-              })}
-            </div>
-
+          <div className="flex items-center gap-2 shrink-0">
             {/* Hints the ⌘K palette exists; keyboard users find it anyway. */}
             <span
               className="hidden lg:inline-flex items-center gap-1 text-[11px] font-mono px-2 rounded-md"
@@ -514,11 +496,37 @@ export default function Dashboard() {
               ⌘K
             </span>
 
-            <button onClick={exportPDF} disabled={exporting} aria-busy={exporting} className="btn-primary">
+            {/* Icon-only below sm to save a whole toolbar row; the label stays
+                in the accessibility tree rather than being dropped. */}
+            <button onClick={exportPDF} disabled={exporting} aria-busy={exporting} className="btn-primary shrink-0">
               <Icon name="download" className="w-3.5 h-3.5" />
-              {exporting ? 'Generating…' : 'Export PDF'}
+              <span className="hidden sm:inline">{exporting ? 'Generating…' : 'Export PDF'}</span>
+              <span className="sr-only sm:hidden">{exporting ? 'Generating PDF' : 'Export PDF'}</span>
             </button>
           </div>
+        </div>
+
+        <div className="seg w-full sm:w-auto min-w-0" role="group" aria-label="Filter analytics by date range">
+          {DATE_FILTERS.map((filter) => {
+            const disabled = !isFilterMeaningful(filter, dateRange?.span_days)
+            return (
+              <button
+                key={filter.value}
+                type="button"
+                className="seg__btn"
+                onClick={() => !disabled && changeTimeFilter(filter.value)}
+                disabled={disabled}
+                aria-pressed={query.timeFilter === filter.value}
+                title={
+                  disabled
+                    ? `Your data only spans ${dateRange?.span_days} day(s) — this filter would show the same results as "All Time".`
+                    : undefined
+                }
+              >
+                {filter.label}
+              </button>
+            )
+          })}
         </div>
 
         {/* ── Filters ──────────────────────────────────────────────────── */}
@@ -535,7 +543,7 @@ export default function Dashboard() {
         </ErrorBoundary>
 
         {/* ── Tabs ─────────────────────────────────────────────────────── */}
-        <div className="seg" role="tablist" aria-label="Dashboard view">
+        <div className="seg w-full sm:w-auto min-w-0" role="tablist" aria-label="Dashboard view">
           {VIEW_TABS.map((tab) => (
             <button
               key={tab.value}

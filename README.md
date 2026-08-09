@@ -112,11 +112,18 @@ on every row.
 senova-ai-dashboard/
 ├── frontend/   React 18 + Vite + Tailwind CSS + Firebase Auth + Recharts + Zustand
 ├── backend/    FastAPI + Pandas + NumPy + ReportLab (PDF generation)
+├── docs/       Architecture, changelogs and session notes (see docs/README.md)
 └── testing/    Sample CSV files for manual testing
 ```
 
 Frontend and backend are deployed **separately** — frontend to Vercel,
 backend to any Python host (Railway, Render, Fly.io, etc.).
+
+## Documentation
+
+Deeper technical docs, changelogs and past session notes live in
+[`docs/`](docs/README.md) — start there for architecture, the Pro
+upgrade feature reference, and the UI/accuracy audit.
 
 ## API
 
@@ -238,9 +245,12 @@ cp .env.example .env      # fill in your Firebase web config + leave VITE_API_UR
 npm run dev
 ```
 
-Runs on `http://localhost:5173`. The Vite dev server proxies `/upload`,
-`/process`, `/analytics`, `/health` to the backend at `127.0.0.1:8000`
-(see `frontend/vite.config.js`) — no extra setup needed locally.
+Runs on `http://localhost:5173`. The Vite dev server proxies `/api/*` to the
+backend at `127.0.0.1:8000`, stripping the `/api` prefix (see
+`frontend/vite.config.js`) — no extra setup needed locally. The prefix exists
+so API traffic can't collide with the SPA's own client-side routes: proxying
+`/upload` directly meant a page reload at `/upload` was forwarded to the
+backend instead of serving the app.
 
 Component tests (all eight chart views plus the four feature panels):
 

@@ -31,7 +31,7 @@ _bearer = HTTPBearer(auto_error=False)
 _firebase_app = None
 
 
-def _get_firebase_app():
+def get_firebase_app():
     """
     Lazily initialise the Firebase Admin app exactly once.
 
@@ -42,6 +42,12 @@ def _get_firebase_app():
     Firebase Hosting and produces a confusing "default credentials not
     found" 401 on every request everywhere else, which is what causes the
     "token verification failed" error seen locally.
+
+    Public (no leading underscore) because other modules that need the
+    Firebase Admin app for non-token-verification purposes — e.g.
+    `app/services/email_service.py` generating password-reset links —
+    share this same lazily-initialised app instance rather than each
+    creating their own.
     """
     global _firebase_app
     if _firebase_app is not None:
@@ -104,7 +110,7 @@ def get_current_user(
     token = credentials_.credentials
 
     try:
-        app = _get_firebase_app()
+        app = get_firebase_app()
     except RuntimeError as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

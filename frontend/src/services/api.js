@@ -2,8 +2,19 @@ import axios from 'axios'
 import { getIdToken } from './firebase'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
-  timeout: 30_000,
+  // In production `VITE_API_URL` points straight at the deployed backend
+  // origin. Left empty (local dev) we fall back to the `/api` prefix that
+  // `vite.config.js` proxies to 127.0.0.1:8000 — not to `''`, because bare
+  // relative paths like `/upload/` would collide with the SPA's own
+  // client-side route of the same name.
+  baseURL: import.meta.env.VITE_API_URL || '/api',
+  // Generous on purpose. A first request against a freshly uploaded 30–50k
+  // row Excel file has to parse and validate the whole sheet before it can
+  // answer, which is measured in seconds, not milliseconds — and the
+  // dashboard's cold load fires several such requests at once. 30s was tight
+  // enough that a 30k-row file could trip it and surface as a bare
+  // "timeout of 30000ms exceeded" on the dashboard.
+  timeout: 60_000,
 })
 
 // Attach the current Firebase ID token to every outgoing request.

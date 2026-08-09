@@ -4,8 +4,10 @@ import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'motion/
 
 import AppRoutes from './routes/AppRoutes'
 import { auth, onAuthStateChanged, signOut } from './services/firebase'
+import { displayIdentifier } from './utils/authValidation'
 import DensityToggle from './components/common/DensityToggle'
 import ThemeToggle from './components/common/ThemeToggle'
+import DeleteAccountDialog from './components/common/DeleteAccountDialog'
 
 /**
  * App shell: a single compact 52px header bar, the routed page, and a thin
@@ -18,14 +20,15 @@ export default function App() {
   const navigate = useNavigate()
   const [user, setUser] = useState(auth.currentUser)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const menuRef = useRef(null)
 
-  // The login screen owns its entire viewport (its own full-bleed hero +
-  // sign-in layout) — wrapping it in the app shell's header/footer double-
-  // chromes the page and pushes it past one viewport height, which is what
-  // caused the header's Upload/Dashboard nav and account avatar to appear on
-  // top of the sign-in screen even for a signed-out visitor.
-  const isAuthScreen = pathname.startsWith('/login')
+  // The auth screens (login, signup, forgot-password, verify-email) each own
+  // their entire viewport (a full-bleed hero + centred card layout, with
+  // their own logo mark) — wrapping any of them in the app shell's
+  // header/footer double-chromes the page, duplicates the theme toggle, and
+  // pushes the page past one viewport height.
+  const isAuthScreen = ['/login', '/signup', '/forgot-password', '/verify-email'].some((p) => pathname.startsWith(p))
 
   // Auto-hiding header: slides up out of view on scroll-down, slides back in
   // on scroll-up (or once the user is back near the top). Both the header AND
@@ -55,7 +58,13 @@ export default function App() {
   })
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser)
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser)
+      // Account deletion signs the user out as a side effect — close the
+      // confirmation dialog once that happens so it doesn't linger over
+      // whatever the guard redirects to.
+      if (!firebaseUser) setDeleteDialogOpen(false)
+    })
     return unsubscribe
   }, [])
 
@@ -88,7 +97,7 @@ export default function App() {
     navigate('/login')
   }
 
-  const initials = (user?.displayName || user?.email || '?').trim().charAt(0).toUpperCase()
+  const initials = (user?.displayName || displayIdentifier(user) || '?').trim().charAt(0).toUpperCase()
 
   if (isAuthScreen) {
     return (
@@ -119,15 +128,20 @@ export default function App() {
         animate={{ y: headerHidden ? '-100%' : 0 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="app-container px-3 sm:px-5 lg:px-6 flex items-center justify-between gap-3" style={{ height: 52 }}>
-          <Link to={user ? '/upload' : '/login'} className="flex items-center gap-2.5 shrink-0">
+        <div className="app-container px-3 sm:px-5 lg:px-6 flex items-center justify-between gap-2 sm:gap-3" style={{ height: 52 }}>
+          <Link to={user ? '/upload' : '/login'} className="flex items-center gap-2.5 min-w-0 shrink">
             <span
               className="shrink-0 rounded-lg overflow-hidden"
               style={{ width: 30, height: 30, border: '1px solid var(--border-subtle)' }}
             >
               <img src="/assets/logo.jpeg" alt="SENOVA" width={30} height={30} className="w-full h-full object-cover" />
             </span>
-            <span className="text-display text-sm font-bold leading-none tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            {/* Wordmark is hidden on phones: the logo tile beside it already
+                carries the brand, and at 375px this text was ~72px of the
+                overflow that dragged the whole header (and page) sideways.
+                Nav labels are kept instead — they're primary navigation,
+                whereas a second brand cue is redundant. */}
+            <span className="hidden sm:block text-display text-sm font-bold leading-none tracking-tight min-w-0 truncate" style={{ color: 'var(--text-primary)' }}>
               SENOVA
               <span className="hidden sm:block font-sans text-[9px] font-semibold tracking-[0.14em] uppercase mt-0.5" style={{ color: 'var(--text-muted)' }}>
                 Digital Lab
@@ -135,9 +149,9 @@ export default function App() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             {user && (
-              <nav className="seg" aria-label="Main navigation">
+              <nav className="seg min-w-0" aria-label="Main navigation">
                 {navLinks.map(({ to, label }) => (
                   <Link
                     key={to}
@@ -155,17 +169,24 @@ export default function App() {
               </nav>
             )}
 
-            <DensityToggle />
-            <ThemeToggle />
+            {/* Density is a comfort preference for dense desktop tables; on a
+                phone the tables scroll regardless, so it's the least-essential
+                control here and the first to go when width is scarce. */}
+            <span className="hidden sm:inline-flex shrink-0">
+              <DensityToggle />
+            </span>
+            <span className="shrink-0">
+              <ThemeToggle />
+            </span>
 
             {user && (
-              <div className="relative" ref={menuRef}>
+              <div className="relative shrink-0" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((open) => !open)}
                   aria-haspopup="menu"
                   aria-expanded={menuOpen}
                   aria-label="Account menu"
-                  className="rounded-full flex items-center justify-center text-xs font-bold cursor-pointer"
+                  className="rounded-full flex items-center justify-center text-xs font-bold cursor-pointer shrink-0"
                   style={{
                     width: 28,
                     height: 28,
@@ -197,16 +218,27 @@ export default function App() {
                           {user.displayName || 'Signed in'}
                         </p>
                         <p className="text-[12px] truncate" style={{ color: 'var(--text-muted)' }}>
-                          {user.email}
+                          {displayIdentifier(user)}
                         </p>
                       </div>
                       <button
                         role="menuitem"
                         onClick={handleSignOut}
                         className="w-full text-left px-3 py-2.5 text-xs font-medium cursor-pointer"
-                        style={{ color: 'var(--accent-red)' }}
+                        style={{ color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-subtle)' }}
                       >
                         Sign out
+                      </button>
+                      <button
+                        role="menuitem"
+                        onClick={() => {
+                          setMenuOpen(false)
+                          setDeleteDialogOpen(true)
+                        }}
+                        className="w-full text-left px-3 py-2.5 text-xs font-medium cursor-pointer"
+                        style={{ color: 'var(--accent-red)' }}
+                      >
+                        Delete account
                       </button>
                     </motion.div>
                   )}
@@ -216,6 +248,13 @@ export default function App() {
           </div>
         </div>
       </motion.header>
+
+      <DeleteAccountDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        isGoogleAccount={(user?.providerData ?? []).some((p) => p.providerId === 'google.com')}
+        accountEmail={user?.email ?? ''}
+      />
 
       <main
         id="main"

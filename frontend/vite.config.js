@@ -4,15 +4,22 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    // Single proxy prefix, deliberately. Proxying the real API paths
+    // (`/upload`, `/analytics`, …) directly would collide with the SPA's own
+    // client-side routes of the same name: a reload at
+    // http://localhost:5173/upload got proxied to the backend instead of
+    // serving index.html, and FastAPI's redirect to `/upload/` came back as
+    // an absolute cross-origin URL that the browser then blocked
+    // ("Unsafe attempt to load URL … Domains, protocols and ports must
+    // match"). Routing every call under `/api` keeps API traffic and page
+    // routes in separate namespaces, and automatically covers new backend
+    // route groups without another proxy rule per group.
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      '/upload': 'http://127.0.0.1:8000',
-      '/process': 'http://127.0.0.1:8000',
-      '/analytics': 'http://127.0.0.1:8000',
-      '/health': 'http://127.0.0.1:8000',
     },
   },
   build: {

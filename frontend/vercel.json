@@ -1,13 +1,9 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/upload/(.*)", "destination": "https://your-backend.railway.app/upload/$1" },
-    { "source": "/upload", "destination": "https://your-backend.railway.app/upload" },
-    { "source": "/process/(.*)", "destination": "https://your-backend.railway.app/process/$1" },
-    { "source": "/analytics/(.*)", "destination": "https://your-backend.railway.app/analytics/$1" },
-    { "source": "/health", "destination": "https://your-backend.railway.app/health" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

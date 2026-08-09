@@ -177,10 +177,12 @@ Body: `{ "time_filter": "all|today|week|30days|month|custom", "start_date": …,
 - **Bounded inputs:** ≤8 filter keys, ≤50 values each, `top_n` ≤ 50,
   `page_size` ≤ 1000, forecast horizon ≤ 90 days, ≤100 columns per upload,
   upload size capped by `MAX_UPLOAD_SIZE_MB`.
-- **Bounded compute:** normalised frames are cached in a small LRU (8
-  entries, ≤300k rows) keyed on file mtime + mapping, so repeated filter
-  changes don't re-parse a 50k-row Excel file — and an unbounded cache
-  can't become a memory DoS.
+- **Bounded compute:** normalised frames are cached in a small LRU
+  (`FRAME_CACHE_MAX_ENTRIES` entries, `FRAME_CACHE_MAX_ROWS` rows max)
+  keyed on file mtime + mapping, so repeated filter changes don't re-parse
+  a 50k-row Excel file — and an unbounded cache can't become a memory DoS.
+  Defaults are sized for a 512 MB host; a per-key parse lock means several
+  concurrent requests for the same file cause one parse, not one each.
 - **NaN/Infinity are never serialised.** Every number leaving the API goes
   through `safe_float`/`safe_int`, because bare `NaN` is invalid JSON and
   would break `JSON.parse` in the browser.
@@ -281,17 +283,25 @@ backend in one repo). When creating the Vercel project:
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
    - `VITE_API_URL` — your deployed backend's full URL (e.g.
-     `https://your-backend.onrender.com`). This makes the frontend call
-     the backend directly; the rewrites in `frontend/vercel.json` are a
-     fallback and can be left as-is or removed once `VITE_API_URL` is set.
+     `https://your-backend.onrender.com`, no trailing slash). The frontend
+     calls the backend directly at this origin, so the backend's
+     `CORS_ORIGINS` must include your Vercel domain. Left empty, the app
+     falls back to the `/api` prefix that only exists on the local Vite
+     dev proxy — so in production this must be set.
 5. Deploy. If a build still fails with a `react-scripts` or other
    Create-React-App-related error, it means Root Directory (step 2) is
    not actually saved — re-check that setting; it's the most common cause
    of this specific error, since nothing in this codebase uses CRA.
 
+`frontend/vercel.json` deliberately contains **only** the SPA fallback
+rewrite (`/(.*)` → `/index.html`). It must not proxy API paths: rules like
+`/upload/*` → backend would swallow the app's own `/upload` client-side
+route, so a reload on that page hit the API instead of the app. API traffic
+goes to `VITE_API_URL` instead.
+
 ## Deploying the backend
 
-Any host that runs a Python ASGI app works (Railway, Render, Fly.io,
+Any host that runs a Python ASGI app works (Render, Railway, Fly.io,
 etc.). Start command:
 
 ```bash
@@ -301,14 +311,45 @@ uvicorn app.main:app --host 0.0.0.0 --port $PORT
 Set these environment variables on the host (see `backend/.env.example`
 for the full list and explanations):
 
+- `ENV=production` — startup refuses to boot if `DISABLE_AUTH=true` while
+  this is `production`, so a stray dev flag can't silently expose an
+  unauthenticated API
 - `CORS_ORIGINS` — include your Vercel production domain here, e.g.
   `https://your-app.vercel.app`
-- `FIREBASE_SERVICE_ACCOUNT_PATH` and `FIREBASE_PROJECT_ID` — required
-  unless `DISABLE_AUTH=true` (local dev only — never set this in
-  production)
+- `FIREBASE_SERVICE_ACCOUNT_JSON` — the whole service-account JSON as one
+  env var, plus `FIREBASE_PROJECT_ID`. Use this rather than
+  `FIREBASE_SERVICE_ACCOUNT_PATH` on a managed host: the key file is
+  gitignored (it holds a private key), so it can't travel with the repo.
+  A `private_key` whose newlines arrived escaped as literal `\n` is
+  repaired automatically.
+- `APP_DOMAIN` — your Vercel domain, used to build the password-reset link
+- `SENDGRID_API_KEY`, `SENDER_EMAIL` — password-reset email delivery. Left
+  unset, the frontend falls back to Firebase's own reset email (which
+  works, but frequently lands in Spam)
 - `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, `UPLOAD_TTL_MINUTES`,
   `UPLOAD_SWEEP_INTERVAL_MINUTES` — upload storage tuning, sensible
   defaults are already set
+- `FRAME_CACHE_MAX_ENTRIES`, `FRAME_CACHE_MAX_ROWS` — memory ceiling for
+  the parsed-frame cache
+
+### Render free tier — what to expect
+
+The free instance type works, with three real constraints worth knowing
+before you rely on it:
+
+- **Ephemeral disk.** `UPLOAD_DIR` does not survive a restart or a
+  redeploy, and free instances spin down when idle. An uploaded file can
+  disappear before its TTL expires, and the dashboard will report the file
+  as missing. Uploads are already designed to be temporary, so this
+  degrades the experience rather than corrupting anything.
+- **Cold starts.** The first request after an idle period waits for the
+  instance to wake (tens of seconds). The frontend's request timeout is
+  60s, which absorbs this, but the first dashboard load after idle is slow.
+- **512 MB RAM,** shared with pandas/numpy and every in-flight request.
+  The frame-cache defaults (`FRAME_CACHE_MAX_ENTRIES=3`,
+  `FRAME_CACHE_MAX_ROWS=120000`) are chosen for this ceiling. Raising them
+  on the free tier risks the host's OOM reaper killing the process
+  mid-request.
 
 ## Note on GitHub Pages
 

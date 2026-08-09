@@ -36,14 +36,17 @@ from collections import OrderedDict
 
 import pandas as pd
 
+from app.core.config import FRAME_CACHE_MAX_ENTRIES, FRAME_CACHE_MAX_ROWS
 from app.services.file_handler import get_file_mtime, read_to_dataframe
 from app.utils.data_validator import normalize_dataframe
 
 #: Maximum number of normalised frames held at once (small on purpose).
-MAX_ENTRIES = 8
+#: Env-tunable via FRAME_CACHE_MAX_ENTRIES — see app/core/config.py for why the
+#: default is sized for a 512 MB host rather than a generous one.
+MAX_ENTRIES = FRAME_CACHE_MAX_ENTRIES
 
 #: Frames with more rows than this are served but not cached.
-MAX_CACHED_ROWS = 300_000
+MAX_CACHED_ROWS = FRAME_CACHE_MAX_ROWS
 
 # OrderedDict gives us LRU semantics: move_to_end on hit, popitem(last=False)
 # to evict. The lock matters because FastAPI runs sync route handlers in a

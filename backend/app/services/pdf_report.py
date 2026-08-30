@@ -234,6 +234,7 @@ def _insights_table(insights) -> Table | None:
         text = f"<b>{insight.title}</b><br/>{insight.message}"
         if insight.action:
             text += f"<br/><i>Suggested action: {insight.action}</i>"
+        text = text.replace("₹ ", "Rs. ").replace("₹", "Rs. ")
         rows.append([severity_words.get(insight.severity, "NOTE"), Paragraph(text, body)])
 
     table = Table(rows, colWidths=[22 * mm, 148 * mm], repeatRows=1)

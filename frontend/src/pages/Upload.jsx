@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'motion/react'
@@ -8,6 +8,11 @@ import FileDropzone from '../components/upload/FileDropzone'
 import ColumnMappingScreen from '../components/upload/ColumnMappingScreen'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
 import Icon from '../components/common/Icon'
+
+// Minimum visible duration for each step (ms)
+const MIN_STEP_DURATION = 600
+// Extra delay after step 4 becomes active before navigation (ms)
+const STEP4_HOLD_DURATION = 700
 
 /**
  * Upload page — two steps in one route.
@@ -90,9 +95,11 @@ export default function Upload() {
     uploadErrors,
   } = useSalesStore()
   const [uploadDone, setUploadDone] = useState(false)
+  const validateStartRef = useRef(null)
 
   const handleFile = async (file) => {
     setUploadDone(false)
+    validateStartRef.current = null
     try {
       // Step 1 only returns a column-mapping preview; whether the data is
       // usable is decided after the user confirms the mapping.
@@ -104,9 +111,17 @@ export default function Upload() {
 
   const handleConfirmMapping = async (mapping) => {
     const fileId = useSalesStore.getState().fileId
+    validateStartRef.current = Date.now()
     try {
       const response = await confirmMapping(fileId, mapping)
+      // Ensure minimum visible duration for "Validate rows" step (step 3)
+      const elapsed = Date.now() - validateStartRef.current
+      if (elapsed < MIN_STEP_DURATION) {
+        await new Promise(resolve => setTimeout(resolve, MIN_STEP_DURATION - elapsed))
+      }
       setUploadDone(true)
+      // Hold step 4 ("Build dashboard") visibly before navigating
+      await new Promise(resolve => setTimeout(resolve, STEP4_HOLD_DURATION))
       if (response.valid_count > 0) navigate(`/dashboard?fileId=${fileId}`)
     } catch {
       // Error already stored; stay on this page to show it.

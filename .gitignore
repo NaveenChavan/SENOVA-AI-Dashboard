@@ -9,6 +9,9 @@ backend/firebase-service-account.json
 backend/*.egg-info/
 backend/venv/
 backend/.venv/
+# FastEmbed's downloaded ONNX model (~0.5 GB binary, re-fetched on demand).
+backend/fastembed_cache/
+fastembed_cache/
 
 # --- Frontend (Node) ---
 frontend/node_modules/

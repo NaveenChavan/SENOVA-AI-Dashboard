@@ -10,3 +10,11 @@ openpyxl==3.1.5
 reportlab==4.2.5
 sendgrid==6.11.0
 email-validator==2.2.0
+# Tier 1 local column classifier. onnxruntime is pulled in transitively; it is
+# pinned here too so a surprise upgrade can't change the inference runtime
+# underneath cached embeddings.
+fastembed==0.7.3
+onnxruntime==1.23.2
+# Tier 2 Gemini client. Was dev-only (TestClient needs it); promoted to runtime
+# because the AI insights endpoint makes real outbound calls through it.
+httpx==0.28.1

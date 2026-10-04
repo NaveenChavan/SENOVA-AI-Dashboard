@@ -151,6 +151,18 @@ def _meta_path(file_id: str) -> Path:
     return _ensure_upload_dir() / f"{validate_file_id(file_id)}.meta.json"
 
 
+def _aicache_path(file_id: str) -> Path:
+    """
+    Sidecar JSON storing cached Gemini column verdicts for a file.
+
+    Lives here, alongside the other sidecars, because this module owns the
+    on-disk layout. ``sweep_expired_uploads`` needs no change for it: the sweep
+    removes *every* file in ``UPLOAD_DIR`` past the TTL window, sidecars
+    included, and this sits in the same directory with its own mtime.
+    """
+    return _ensure_upload_dir() / f"{validate_file_id(file_id)}.aicache.json"
+
+
 # ── Reading ─────────────────────────────────────────────────────────────────
 
 
@@ -268,7 +280,7 @@ def read_to_dataframe(file_id: str) -> pd.DataFrame:
 
 
 def cleanup(file_id: str) -> None:
-    """Remove an upload and both of its sidecars (mapping + metadata) from disk."""
+    """Remove an upload and all of its sidecars (mapping + metadata + AI cache) from disk."""
     try:
         path = _resolve_path(file_id)
     except (FileNotFoundError, ValueError):
@@ -277,7 +289,7 @@ def cleanup(file_id: str) -> None:
         if path.exists():
             path.unlink()
 
-    for sidecar in (_mapping_path(file_id), _meta_path(file_id)):
+    for sidecar in (_mapping_path(file_id), _meta_path(file_id), _aicache_path(file_id)):
         if sidecar.exists():
             sidecar.unlink()
 

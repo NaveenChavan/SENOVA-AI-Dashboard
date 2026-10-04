@@ -25,19 +25,23 @@ Security notes
   corrected mapping can't be shadowed by a stale cache entry.
 """
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+import time
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 import pandas as pd
 
 from app.core.config import MAX_UPLOAD_SIZE_MB
 from app.models.schemas import (
+    AiNotice,
     ColumnGuess,
     ColumnMappingPreview,
     DataDateRange,
+    PipelineTimings,
     RowError,
     UploadResponse,
 )
-from app.services import frame_cache
+from app.services import column_understanding, frame_cache, tier2_gemini
 from app.services.file_handler import (
     assert_owner,
     cleanup,
@@ -108,11 +112,19 @@ def _validate_upload_constraints(file: UploadFile) -> None:
 @router.post("/", response_model=ColumnMappingPreview, status_code=201)
 async def upload_file(
     file: UploadFile = File(...),
+    ai_consent: bool = Form(False),
     user: str = Depends(get_current_user),
 ):
     """
     Step 1 — save the file (owned by the caller) and return a best-guess
     column mapping. No rows are validated and no analysis runs yet.
+
+    ``ai_consent`` is the user's explicit permission for this upload to use
+    Gemini Flash on the columns Tier 1 couldn't settle. It defaults to
+    ``False``, so a client that doesn't send it is treated as *declining* rather
+    than consenting. It only matters when the server also has
+    ``AI_ASSIST_ENABLED=true``; both must hold before anything leaves the
+    server. Tier 1 always runs locally.
     """
     _validate_upload_constraints(file)
 
@@ -146,7 +158,13 @@ async def upload_file(
             detail=f"This file has {len(df.columns)} columns; the maximum supported is {_MAX_COLUMNS}.",
         )
 
-    guesses = detect_column_mapping(df)
+    # The 2-tier column-understanding pipeline: Tier 1 classifies locally,
+    # escalating only the columns it can't settle to Tier 2 (and only with
+    # consent). Falls back to the alias map when the embedding model is
+    # unavailable, and never raises — see column_understanding.analyse.
+    reports, timings, ai_notice = await column_understanding.analyse(
+        df, ai_consent=ai_consent, file_id=file_id
+    )
 
     # Sample rows for the live preview: NaN → None so the JSON stays valid, and
     # everything else stringified so no numpy/pandas type leaks into the payload.
@@ -155,15 +173,24 @@ async def upload_file(
         for row in df.head(_SAMPLE_ROW_COUNT).to_dict(orient="records")
     ]
 
+    unresolved = sum(1 for report in reports if not report.get("suggested_field"))
+
     return ColumnMappingPreview(
         file_id=file_id,
         filename=file.filename,
-        detected_columns=[ColumnGuess(**g) for g in guesses],
+        detected_columns=[ColumnGuess(**report) for report in reports],
         required_fields=sorted(REQUIRED_COLUMNS),
         optional_fields=[f for f in MAPPABLE_FIELDS if f not in REQUIRED_COLUMNS],
         field_help=_FIELD_HELP,
         row_count=len(df),
         sample_rows=sample_rows,
+        pipeline_timings=PipelineTimings(**timings.as_dict()),
+        ai_notice=(
+            AiNotice(message=ai_notice, tone="info", affected_columns=unresolved)
+            if ai_notice
+            else None
+        ),
+        ai_enabled=tier2_gemini.gemini_enabled(),
     )
 
 
@@ -196,8 +223,10 @@ async def confirm_mapping(
         raise HTTPException(status_code=404, detail="File not found. Upload a file first.")
 
     try:
+        pandas_started = time.perf_counter()
         valid_df, error_dicts = normalize_dataframe(df, soft_fail=True, column_mapping=body.mapping)
         errors = [RowError(**e) for e in error_dicts]
+        pandas_ms = (time.perf_counter() - pandas_started) * 1000.0
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
@@ -220,4 +249,5 @@ async def confirm_mapping(
         errors=errors,
         date_range=DataDateRange(**compute_data_date_range(valid_df)),
         optional_fields=optional_present,
+        pipeline_timings=PipelineTimings(pandas_ms=round(pandas_ms, 2), total_ms=round(pandas_ms, 2)),
     )

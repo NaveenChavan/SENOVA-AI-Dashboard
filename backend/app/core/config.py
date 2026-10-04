@@ -99,3 +99,95 @@ SENDER_EMAIL: str = os.getenv("SENDER_EMAIL", "noreply@example.com")
 # /reset-password-confirm link that replaces Firebase's hosted action page.
 # No trailing slash.
 APP_DOMAIN: str = os.getenv("APP_DOMAIN", "http://localhost:5173")
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  Smart Column Understanding — 2-Tier pipeline (Tier 1 local, Tier 2 Gemini)
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Read the privacy note in the repo README before changing anything here.
+#
+# SENOVA's founding promise is that a shop's sales data never leaves the
+# backend. That promise is what this block exists to keep honest:
+#
+# * ``AI_ASSIST_ENABLED`` is the master switch and defaults to **false**. With
+#   it false, no code path constructs a Gemini request — the app behaves
+#   exactly as it did before this feature existed.
+# * Even when it is true, Tier 2 only runs if the *request* also carries
+#   ``ai_consent=true`` (a form field on upload, a body field on
+#   ai-insights). Both must be true. A client that omits the flag is treated
+#   as declining, never as consenting.
+# * What Tier 2 may see is narrowed server-side by ``pii_mask`` regardless of
+#   what the client sends: no values from customer/name-like columns, and no
+#   values at all from unmapped text columns.
+#
+# So "data never leaves our backend" is *literally* true with the switch off,
+# and precisely describable with it on. Never weaken a default here.
+
+#: Master switch for every Gemini call. False = no Gemini code path runs.
+AI_ASSIST_ENABLED: bool = os.getenv("AI_ASSIST_ENABLED", "false").lower() == "true"
+
+#: Google's Gemini API key. Read from the environment only — never hardcoded,
+#: never logged, never returned in a response. Passed solely as the
+#: ``x-goog-api-key`` request header. Left blank, Tier 2 is skipped.
+GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+
+#: Gemini model id. Flash-class by design: this only disambiguates column
+#: headers, which is not a reasoning-heavy job. Note gemini-2.0-flash needs an
+#: explicit ``propertyOrdering`` to produce well-formed structured output, so
+#: prefer 2.5+ here.
+GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+#: Per-attempt HTTP timeout for a Gemini call, in seconds.
+GEMINI_TIMEOUT_SECONDS: float = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "10"))
+
+#: Retry attempts after the first failure (so 2 == 3 total tries).
+GEMINI_MAX_RETRIES: int = int(os.getenv("GEMINI_MAX_RETRIES", "2"))
+
+#: Hard ceiling on the whole Tier 2 stage, in seconds. This — not the per
+#: attempt timeout — is what actually protects the request: 3 attempts x 10 s
+#: plus exponential backoff would otherwise run to roughly 33 s and trip the
+#: frontend's request timeout on a slow response.
+GEMINI_TOTAL_BUDGET_SECONDS: float = float(os.getenv("GEMINI_TOTAL_BUDGET_SECONDS", "15"))
+
+#: Load the FastEmbed model and classify locally. When false, Tier 1 falls
+#: back to the existing alias map + fuzzy keyword heuristic, so the app still
+#: works — just with the older, lower-accuracy guesser.
+#:
+#: Set this to false on a memory-constrained host: onnxruntime plus a
+#: multilingual model is a large native allocation, and the Render free tier
+#: has 512 MB shared with pandas/numpy and every in-flight request.
+FASTEMBED_ENABLED: bool = os.getenv("FASTEMBED_ENABLED", "true").lower() == "true"
+
+#: FastEmbed model id. Defaults to the multilingual one because shop headers
+#: are routinely Hindi or Hinglish.
+#:
+#: Note: fastembed ships no multilingual MiniLM-class model. The only
+#: multilingual dense-text option it carries is this one, at ~0.512 GB. The
+#: MiniLM-class alternatives are English-only:
+#:
+#:   BAAI/bge-small-en-v1.5              384-dim, ~0.067 GB
+#:   snowflake/snowflake-arctic-embed-s  384-dim, ~0.13 GB
+#:   minishlab/potion-base-8M            256-dim, ~0.030 GB
+#:
+#: Swapping to one of those cuts memory ~8x but pushes Hindi/Hinglish headers
+#: onto the alias map and Tier 2.
+FASTEMBED_MODEL: str = os.getenv("FASTEMBED_MODEL", "minishlab/potion-multilingual-128M")
+
+#: Where the downloaded ONNX model is cached. Gitignored — it is a ~0.5 GB
+#: binary that must never reach the repo.
+FASTEMBED_CACHE_PATH: str = os.getenv("FASTEMBED_CACHE_PATH", "fastembed_cache")
+
+#: Cosine score at or above which a Tier 1 column match is trusted outright and
+#: never escalated to Gemini.
+HIGH_CONF_THRESHOLD: float = float(os.getenv("HIGH_CONF_THRESHOLD", "0.80"))
+
+#: Minimum gap between the best and second-best catalog label. Below this the
+#: top two meanings are too close to call on a header alone, so the column is
+#: escalated to Tier 2 even if it cleared ``HIGH_CONF_THRESHOLD`` — this is
+#: what catches MRP-vs-Selling-Price, where both labels are strongly present.
+AMBIGUITY_MARGIN: float = float(os.getenv("AMBIGUITY_MARGIN", "0.05"))
+
+#: How much of a Tier 1 column score comes from the header text versus the
+#: value-shape statistics. They must sum to 1.
+TIER1_HEADER_WEIGHT: float = float(os.getenv("TIER1_HEADER_WEIGHT", "0.7"))
+TIER1_STATS_WEIGHT: float = float(os.getenv("TIER1_STATS_WEIGHT", "0.3"))

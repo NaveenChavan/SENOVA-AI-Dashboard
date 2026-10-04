@@ -3,3 +3,6 @@
 pytest==8.3.4
 # TestClient in tests/test_api.py needs httpx; FastAPI does not require it at runtime.
 httpx==0.28.1
+# The Tier 2 Gemini client is async, so its tests are too. ``asyncio_mode = auto``
+# in pytest.ini lets them be written as plain ``async def test_*``.
+pytest-asyncio==0.25.3

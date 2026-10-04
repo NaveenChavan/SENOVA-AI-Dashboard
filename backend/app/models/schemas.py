@@ -24,7 +24,14 @@ class ColumnGuess(BaseModel):
     Shown to the user on the column-mapping confirmation screen so they can
     fix any wrong guesses before we run analysis — every shop's export
     format is different, so we never assume our guess is correct.
+
+    The first three fields are the original contract and keep their exact
+    meaning: ``confidence`` is still the string ``exact``/``fuzzy``/``none``
+    so older frontends keep rendering their badge unchanged. Everything
+    below is additive — the 2-tier column-understanding pipeline fills these
+    in when it runs, and an older backend simply omits them.
     """
+
     raw_column: str = Field(..., description="The exact column header as it appears in the uploaded file")
     suggested_field: str | None = Field(
         None,
@@ -38,6 +45,76 @@ class ColumnGuess(BaseModel):
         ...,
         description="'exact' (known alias), 'fuzzy' (keyword match, needs confirmation), or 'none' (no match).",
     )
+    confidence_score: float = Field(
+        0.0,
+        ge=0.0,
+        le=1.0,
+        description="Granular confidence 0–1. 'exact' scores 1.0; a model verdict carries its own score.",
+    )
+    confidence_band: Literal["high", "medium", "low"] = Field(
+        "low", description="Bucketed confidence, for the badge colour and the 'needs review' highlight."
+    )
+    margin: float = Field(
+        0.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Gap between the best and second-best candidate meanings. A small margin means two "
+            "meanings fit about equally well, which is why it escalates even at a high score."
+        ),
+    )
+    source: Literal["local", "gemini", "fallback"] = Field(
+        "local",
+        description=(
+            "Who decided this column: 'local' = the on-server FastEmbed classifier or the alias "
+            "map, 'gemini' = Gemini Flash, 'fallback' = we could not decide and the user must map it."
+        ),
+    )
+    semantic_label: str = Field(
+        "other",
+        description="The internal meaning assigned (date, quantity, unit_price, mrp, …), before translation to a canonical field.",
+    )
+    reason: str = Field("", description="One short sentence explaining the decision, written for a shop owner.")
+    alternatives: List[dict] = Field(
+        default_factory=list,
+        description="Runner-up meanings and their scores, so the UI can offer 'we also considered…'.",
+    )
+    needs_review: bool = Field(
+        False,
+        description="True when the user should look at this row before anything is computed.",
+    )
+
+
+class PipelineTimings(BaseModel):
+    """
+    Per-stage wall-clock milliseconds from the column-understanding pipeline.
+
+    Returned on both upload steps so the real speed of each stage can be
+    measured rather than guessed at. ``pandas_ms`` covers the row validation
+    run at confirm-mapping time; it is absent on the first step because no row
+    validation has happened yet.
+    """
+
+    tier1_ms: float = Field(0.0, description="Local FastEmbed classification time")
+    tier2_ms: float = Field(0.0, description="Gemini Flash disambiguation time (0 when skipped)")
+    pandas_ms: float | None = Field(None, description="Row normalisation/validation time, when it ran")
+    total_ms: float = Field(0.0, description="End-to-end pipeline time")
+
+
+class AiNotice(BaseModel):
+    """
+    A user-facing explanation of anything that limited the AI's contribution.
+
+    Populated when Gemini was unavailable, failed, or was declined. The
+    dashboard must never break because an AI call did, so the notice says
+    what happened and the pipeline carries on without it.
+    """
+
+    message: str
+    #: What the UI should do about it — a banner, or nothing at all.
+    tone: Literal["info", "warning"] = "info"
+    #: How many columns ended up needing manual mapping because of this.
+    affected_columns: int = 0
 
 
 class ColumnMappingPreview(BaseModel):
@@ -70,6 +147,21 @@ class ColumnMappingPreview(BaseModel):
     sample_rows: List[dict] = Field(
         default_factory=list,
         description="First few raw rows (original column names) so the UI can show a live preview.",
+    )
+    pipeline_timings: PipelineTimings = Field(
+        default_factory=PipelineTimings,
+        description="How long each classification stage took, so the real speed can be measured.",
+    )
+    ai_notice: AiNotice | None = Field(
+        None,
+        description=(
+            "Set when the AI tier was unavailable, declined, or failed. The mapping below is "
+            "still complete and usable — this only explains why some columns need the user."
+        ),
+    )
+    ai_enabled: bool = Field(
+        False,
+        description="Whether AI disambiguation is available on this server, so the UI knows to offer consent.",
     )
 
 
@@ -259,6 +351,10 @@ class UploadResponse(BaseModel):
             "Payment Mode, Discount, Stock On Hand). Each one unlocks extra "
             "dimensions/measures in the dashboard, so the UI can advertise them."
         ),
+    )
+    pipeline_timings: PipelineTimings = Field(
+        default_factory=PipelineTimings,
+        description="Per-stage timings for the row validation that just ran.",
     )
 
 

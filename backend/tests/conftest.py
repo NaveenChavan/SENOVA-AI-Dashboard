@@ -15,8 +15,25 @@ reproducible rather than "usually true".
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
+
+# Keep the 2-tier column-understanding pipeline offline for the whole test run.
+#
+# These must be set as environment variables *before* ``app.core.config`` is
+# imported, not as monkeypatches on the module attributes: several test modules
+# build their fixtures with ``scope="module"``, and pytest sets a higher-scoped
+# fixture up **before** any function-scoped autouse fixture runs. A module-scoped
+# ``client`` fixture that performs an upload would therefore run against the real
+# settings and block on a ~0.5 GB FastEmbed download from HuggingFace — or, worse,
+# let a test make a real Gemini call.
+#
+# ``load_dotenv`` does not override variables already in the environment, so this
+# also wins over any value in a developer's local ``.env``.
+os.environ["FASTEMBED_ENABLED"] = "false"
+os.environ["AI_ASSIST_ENABLED"] = "false"
+os.environ["GEMINI_API_KEY"] = ""
 
 import numpy as np
 import pandas as pd
@@ -34,6 +51,25 @@ LEAK_ITEM = "Clearance Kurta"
 
 #: Item that stops selling after the first two weeks, for the dead-stock test.
 DEAD_ITEM = "Winter Shawl"
+
+
+@pytest.fixture(autouse=True)
+def _no_ai_by_default(monkeypatch):
+    """
+    Second line of defence, for the tests that do opt back in.
+
+    The environment variables above are what actually keep module-scoped fixtures
+    safe; this catches anything that re-imports or reloads a settings module, and
+    gives the opt-in tests a known starting point. Individual tests enable what
+    they need by monkeypatching afterwards — see ``gemini_on`` in
+    ``test_tier2_gemini.py`` and ``_force_fastembed_enabled`` in
+    ``test_tier1_classifier.py``.
+    """
+    from app.services import embedder, tier1_classifier, tier2_gemini
+
+    embedder.reset_cache()
+    yield
+    embedder.reset_cache()
 
 
 @pytest.fixture

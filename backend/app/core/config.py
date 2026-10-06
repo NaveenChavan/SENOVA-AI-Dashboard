@@ -161,19 +161,28 @@ FASTEMBED_ENABLED: bool = os.getenv("FASTEMBED_ENABLED", "true").lower() == "tru
 #: FastEmbed model id. Defaults to the multilingual one because shop headers
 #: are routinely Hindi or Hinglish.
 #:
-#: Note: fastembed ships no multilingual MiniLM-class model. The only
-#: multilingual dense-text option it carries is this one, at ~0.512 GB. The
-#: MiniLM-class alternatives are English-only:
+#: Chosen over the previously-configured ``minishlab/potion-multilingual-128M``
+#: because **that model is not in FastEmbed's supported list at all**.
+#: ``TextEmbedding(model_name="minishlab/potion-multilingual-128M")`` raises
+#: ``ValueError``, ``embedder._load_model`` swallows it, and Tier 1 silently
+#: degraded to the alias map on *every* upload — the embedding classifier was
+#: inert while still paying the "fastembed is enabled" appearance. Verified
+#: against ``TextEmbedding.list_supported_models()`` (30 entries).
 #:
-#:   BAAI/bge-small-en-v1.5              384-dim, ~0.067 GB
-#:   snowflake/snowflake-arctic-embed-s  384-dim, ~0.13 GB
-#:   minishlab/potion-base-8M            256-dim, ~0.030 GB
+#: This is the only multilingual MiniLM-class model FastEmbed carries:
 #:
-#: Swapping to one of those cuts memory ~8x but pushes Hindi/Hinglish headers
-#: onto the alias map and Tier 2.
-FASTEMBED_MODEL: str = os.getenv("FASTEMBED_MODEL", "minishlab/potion-multilingual-128M")
+#:   sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2   384-dim, ~0.22 GB
+#:
+#: ~50 languages including Hindi, and *smaller* than the broken default's 0.512 GB
+#: — so this fixes Tier 1 without costing memory. The English-only alternatives
+#: are cheaper still (BAAI/bge-small-en-v1.5 ~0.067 GB) but would push Hindi and
+#: Hinglish headers onto the alias map and Tier 2.
+FASTEMBED_MODEL: str = os.getenv(
+    "FASTEMBED_MODEL",
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+)
 
-#: Where the downloaded ONNX model is cached. Gitignored — it is a ~0.5 GB
+#: Where the downloaded ONNX model is cached. Gitignored — it is a ~0.22 GB
 #: binary that must never reach the repo.
 FASTEMBED_CACHE_PATH: str = os.getenv("FASTEMBED_CACHE_PATH", "fastembed_cache")
 

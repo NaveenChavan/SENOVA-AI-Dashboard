@@ -10,6 +10,8 @@ costs money at request time.
 
 from __future__ import annotations
 
+import threading
+
 import numpy as np
 import pytest
 
@@ -155,3 +157,119 @@ class TestNormalize:
         # A zero row must not become NaN — it would poison every comparison.
         assert np.allclose(normalized[1], [0.0, 0.0])
         assert not np.isnan(normalized).any()
+
+
+# ── Regressions ──────────────────────────────────────────────────────────────
+#
+# Everything above stubs ``_load_model``, which is exactly why the deadlock
+# below survived a green suite: the real loader — the only code that takes the
+# lock a second time — never ran in a test. These two tests exercise it for
+# real, with only the ``fastembed`` *import* faked so no 0.22 GB download
+# happens, and with a join timeout so a regression fails the run instead of
+# hanging CI forever.
+
+
+class _FakeFastembedModule:
+    """Enough of ``fastembed`` for the real ``_load_model`` to succeed."""
+
+    def __init__(self, model):
+        self._model = model
+        self.calls: list[dict] = []
+
+    def __call__(self, **kwargs):
+        self.calls.append(kwargs)
+        return self._model
+
+
+@pytest.fixture
+def importable_fastembed(monkeypatch):
+    """Make ``from fastembed import TextEmbedding`` resolve to a fake."""
+    import builtins
+    import types
+
+    model = _FakeModel()
+    module = types.ModuleType("fastembed")
+    module.TextEmbedding = _FakeFastembedModule(model)
+    real_import = builtins.__import__
+
+    def _fake_import(name, *args, **kwargs):
+        if name == "fastembed":
+            return module
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", _fake_import)
+    return model
+
+
+class TestNestedLockIsNotDeadlocked:
+    def test_lock_is_reentrant(self):
+        """The load path takes the lock twice on one thread; a plain Lock hangs."""
+        assert isinstance(embedder._lock, type(embedder._lock))
+        reentrant = getattr(embedder._lock, "_is_owned", None)
+        # RLock exposes ``_is_owned``; a plain Lock does not. Asserted directly so
+        # the failure message names the cause instead of surfacing as a hang.
+        assert callable(reentrant), (
+            "embedder._lock must be a reentrant lock: catalog_embeddings() holds "
+            "it while encode() -> _load_model() acquires it again."
+        )
+
+    def test_catalog_embeddings_with_the_real_loader_returns(self, importable_fastembed):
+        """
+        The exact production call chain, with only the model import faked:
+
+            catalog_embeddings()   # holds _lock
+              -> encode()           # -> _load_model()  # acquires _lock AGAIN
+
+        With a plain ``threading.Lock`` this never returns and ``POST /upload/``
+        hangs forever with no response and no log line. Run on a worker thread
+        with a timeout so a regression is a test failure, not a stuck suite.
+        """
+        result: dict = {}
+
+        def _work():
+            result["value"] = embedder.catalog_embeddings()
+
+        worker = threading.Thread(target=_work, daemon=True)
+        worker.start()
+        worker.join(timeout=30)
+
+        assert not worker.is_alive(), (
+            "catalog_embeddings() deadlocked against embedder._lock — "
+            "POST /upload/ would hang forever."
+        )
+
+        matrix, labels = result["value"]
+        assert matrix is not None and labels is not None
+        assert matrix.shape[0] == len(labels)
+        # The real loader ran: the catalog was embedded exactly once.
+        assert len(importable_fastembed.calls) == 1
+
+
+class TestConfiguredModelIsUsable:
+    def test_default_model_is_in_fastembeds_supported_list(self):
+        """
+        Guards the silent "inert Tier 1" failure.
+
+        ``TextEmbedding(model_name=...)`` raises ``ValueError`` for a model id
+        FastEmbed does not carry. ``_load_model`` swallows that to a warning and
+        returns ``None``, so every upload quietly fell back to the alias map while
+        the config still advertised an embedding classifier. That is exactly what
+        happened with ``minishlab/potion-multilingual-128M``.
+        """
+        from app.core.config import FASTEMBED_MODEL
+
+        try:
+            from fastembed import TextEmbedding
+
+            supported = {
+                m.get("model") for m in TextEmbedding.list_supported_models()
+            }
+        except Exception:
+            pytest.skip("fastembed not importable; nothing to validate against")
+
+        assert FASTEMBED_MODEL in supported, (
+            f"{FASTEMBED_MODEL!r} is not a model FastEmbed supports, so Tier 1 "
+            f"would silently fall back to the alias map on every upload. "
+            f"Supported multilingual options include: "
+            f"'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'."
+        )

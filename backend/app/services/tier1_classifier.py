@@ -83,6 +83,7 @@ _CANONICAL_TO_SEMANTIC: dict[str, str] = {
     "Customer": "customer",
     "Branch": "region",
     "Invoice No": "id",
+    "MRP": "mrp",
 }
 
 #: Where a canonical field the alias map can return, but which has no semantic
@@ -107,34 +108,8 @@ def _semantic_from_canonical(canonical: str | None) -> str | None:
 
 
 #: Headers the legacy alias map resolves confidently but *wrongly*.
-#:
-#: ``COLUMN_ALIAS_MAP`` contains ``"mrp" -> "Selling Price"``. That predates this
-#: module and ``test_data_validator.py`` still asserts it, so the map is left
-#: exactly as it is — this feature's documented behaviour change is delivered at
-#: the pipeline level instead of by editing the map.
-#:
-#: An MRP is a printed list price, not a price anyone paid. Left unchallenged it
-#: silently reports revenue as if every sale happened at the shelf price, which
-#: is exactly the kind of quiet overstatement this pipeline exists to remove. So
-#: for these headers the exact-alias short-circuit is skipped and the column
-#: goes through scoring and escalation like any other ambiguous header.
-#:
-#: Kept as an explicit, auditable list rather than a heuristic: every entry is a
-#: deliberate decision someone can review, which is not true of a rule.
-_ALIAS_MAP_CONFLICTS: frozenset[str] = frozenset(
-    {
-        "mrp",
-        "m.r.p",
-        "m.r.p.",
-        "maximum retail price",
-        "max retail price",
-        "list price",
-        "marked price",
-        "printed price",
-        "showroom price",
-        "एमआरपी",
-    }
-)
+#: (Currently empty since MRP has been corrected in the alias map).
+_ALIAS_MAP_CONFLICTS: frozenset[str] = frozenset()
 
 
 # ── Result types ─────────────────────────────────────────────────────────────

@@ -24,7 +24,7 @@ const FALLBACK_REQUIRED = ['Date', 'Category', 'Item', 'Quantity', 'Selling Pric
 const FALLBACK_OPTIONAL = []
 
 /** Optional fields that are numbers rather than dimensions, for grouping. */
-const MEASURE_FIELDS = new Set(['Line Total', 'Discount', 'Tax', 'Stock On Hand'])
+const MEASURE_FIELDS = new Set(['Line Total', 'Discount', 'Tax', 'Stock On Hand', 'MRP'])
 
 export default function ColumnMappingScreen({ preview, onConfirm, onCancel, submitting }) {
   const requiredFields = preview.required_fields?.length ? preview.required_fields : FALLBACK_REQUIRED
@@ -39,9 +39,19 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
     return initial
   })
 
+  /**
+   * Columns the user has personally picked a field for.
+   *
+   * Needed because a pre-filled guess and a deliberate choice look identical
+   * from `mapping` alone — a low-confidence row arrives with a field already
+   * selected, and that row is precisely the one worth highlighting. Once the
+   * user touches it themselves, the question is answered and the highlight goes.
+   */
+  const [reviewed, setReviewed] = useState(() => new Set())
+
   const confidenceByColumn = useMemo(() => {
     const map = {}
-    for (const column of preview.detected_columns) map[column.raw_column] = column.confidence
+    for (const column of preview.detected_columns) map[column.raw_column] = column
     return map
   }, [preview.detected_columns])
 
@@ -65,6 +75,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
 
   const handleChange = (rawColumn, value) => {
     setMapping((previous) => ({ ...previous, [rawColumn]: value }))
+    setReviewed((previous) => (previous.has(rawColumn) ? previous : new Set(previous).add(rawColumn)))
   }
 
   return (
@@ -97,9 +108,17 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
               const value = mapping[column.raw_column]
               const isDuplicate = value && duplicates.includes(value)
               const sample = preview.sample_rows?.[0]?.[column.raw_column]
+              const guess = confidenceByColumn[column.raw_column]
+              // A flagged row stays flagged until the user answers it themselves,
+              // even though a server guess has already pre-filled the select —
+              // an unexamined low-confidence pick is the whole risk here.
+              const needsReview = guess?.needs_review && !reviewed.has(column.raw_column)
 
               return (
-                <tr key={column.raw_column}>
+                <tr
+                  key={column.raw_column}
+                  style={needsReview ? { background: 'rgba(245,158,11,0.06)' } : undefined}
+                >
                   <th scope="row">
                     <span className="block truncate" style={{ maxWidth: 180 }} title={column.raw_column}>
                       {column.raw_column}
@@ -125,7 +144,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                       <optgroup label="Required">
                         {requiredFields.map((field) => (
                           <option key={field} value={field} title={fieldHelp[field]}>
-                            {field}
+                            {field === 'MRP' ? 'List price (MRP)' : field}
                           </option>
                         ))}
                       </optgroup>
@@ -136,7 +155,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                             .filter((field) => MEASURE_FIELDS.has(field))
                             .map((field) => (
                               <option key={field} value={field} title={fieldHelp[field]}>
-                                {field}
+                                {field === 'MRP' ? 'List price (MRP)' : field}
                               </option>
                             ))}
                         </optgroup>
@@ -148,7 +167,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                             .filter((field) => !MEASURE_FIELDS.has(field))
                             .map((field) => (
                               <option key={field} value={field} title={fieldHelp[field]}>
-                                {field}
+                                {field === 'MRP' ? 'List price (MRP)' : field}
                               </option>
                             ))}
                         </optgroup>
@@ -173,7 +192,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                   </td>
 
                   <td style={{ textAlign: 'left' }}>
-                    <ConfidenceBadge confidence={confidenceByColumn[column.raw_column]} />
+                    <ConfidenceBadge column={guess} />
                   </td>
                 </tr>
               )
@@ -221,20 +240,74 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
   )
 }
 
-function ConfidenceBadge({ confidence }) {
-  const tones = {
-    exact: { colour: 'var(--accent-green)', label: 'Matched' },
-    fuzzy: { colour: 'var(--accent-amber)', label: 'Check this' },
-    none: { colour: 'var(--text-muted)', label: 'Not recognised' },
-  }
-  const tone = tones[confidence] || tones.none
+/**
+ * What to trust this row by.
+ *
+ * `confidence` is the original contract and the floor: an older backend sends
+ * only the `exact|fuzzy|none` string, and the new fields simply do not exist.
+ * So the score, the band and the source are *additive detail* — present when
+ * the 2-tier pipeline ran, absent otherwise, and never required to render
+ * anything sensible.
+ *
+ * The band, not the score, drives the colour. A 0.42 is a different kind of
+ * unsure from a 0.62, and a gradient of shades of amber would communicate that
+ * distinction less clearly than three words would.
+ */
+const BAND_TONE = {
+  high: { colour: 'var(--accent-green)', label: 'Confident' },
+  medium: { colour: 'var(--accent-amber)', label: 'Likely' },
+  low: { colour: 'var(--accent-red)', label: 'Check this' },
+}
+
+/** The wording an older backend's `exact|fuzzy|none` string has always had. */
+const LEGACY_TONE = {
+  exact: { colour: 'var(--accent-green)', label: 'Matched' },
+  fuzzy: { colour: 'var(--accent-amber)', label: 'Check this' },
+  none: { colour: 'var(--text-muted)', label: 'Not recognised' },
+}
+
+const SOURCE_LABEL = {
+  gemini: 'AI',
+  local: 'on-device',
+  fallback: 'needs a human',
+}
+
+function ConfidenceBadge({ column }) {
+  const legacy = LEGACY_TONE[column?.confidence] ?? LEGACY_TONE.none
+  const tone = BAND_TONE[column?.confidence_band] ?? legacy
+
+  const score = Number(column?.confidence_score)
+  const hasScore = Number.isFinite(score) && score > 0
+  const source = SOURCE_LABEL[column?.source]
 
   return (
-    <span
-      className="inline-block text-[11.5px] font-semibold px-1.5 rounded-full whitespace-nowrap"
-      style={{ color: tone.colour, border: `1px solid ${tone.colour}` }}
-    >
-      {tone.label}
+    <span className="inline-flex flex-wrap items-center gap-1 align-middle">
+      <span
+        className="inline-block text-[11.5px] font-semibold px-1.5 rounded-full whitespace-nowrap"
+        style={{ color: tone.colour, border: `1px solid ${tone.colour}` }}
+      >
+        {tone.label}
+      </span>
+
+      {/* The score is a refinement of the word beside it, never a replacement:
+          0.95 and the next one below it both read as "Confident" here. */}
+      {hasScore && (
+        <span className="text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
+          {Math.round(score * 100)}%
+        </span>
+      )}
+
+      {source && (
+        <span className="text-[11px]" style={{ color: 'var(--text-muted)' }} title={`Decided by: ${column.source}`}>
+          {source}
+        </span>
+      )}
+
+      {column?.reason && (
+        <span className="block w-full text-[11.5px] leading-snug mt-0.5" style={{ color: 'var(--text-muted)' }}>
+          {column.reason}
+        </span>
+      )}
     </span>
   )
 }

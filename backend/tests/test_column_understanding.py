@@ -276,23 +276,23 @@ class TestTier2Merging:
         assert _by_name(reports)["Zorp Factor"]["suggested_field"] is None
 
     async def test_mapped_semantics_with_no_canonical_target(self, gemini_on, no_embeddings, monkeypatch):
-        """Gemini identifying an MRP column is a real answer — it just has
+        """Gemini identifying a notes column is a real answer — it just has
         nowhere to go. It must surface as recognised-but-unused, not as a
         broken mapping."""
 
         async def _fake_resolve(*args, **kwargs):
             return tier2_gemini.Tier2Result(
-                verdicts={"MRP": {"label": "mrp", "confidence": 0.95, "reason": "maximum retail price"}},
+                verdicts={"Remarks": {"label": "notes", "confidence": 0.95, "reason": "additional info"}},
                 source=tier2_gemini.SOURCE_GEMINI,
             )
 
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
-        frame = pd.DataFrame({"MRP": [1200, 1500]})
+        frame = pd.DataFrame({"Remarks": ["ok", "damaged"]})
         reports, _t, _n = await analyse(frame, ai_consent=True)
 
-        report = _by_name(reports)["MRP"]
-        assert report["semantic_label"] == "mrp"
+        report = _by_name(reports)["Remarks"]
+        assert report["semantic_label"] == "notes"
         assert report["suggested_field"] is None
 
 

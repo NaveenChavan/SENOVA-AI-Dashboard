@@ -364,8 +364,8 @@ SEMANTIC_TO_CANONICAL: dict[str, str | None] = {
     "category": "Category",
     "customer": "Customer",
     "region": "Branch",
+    "mrp": "MRP",
     # Recognised, deliberately not analysed.
-    "mrp": None,
     "status": None,
     "notes": None,
     # Resolved at call time by ``canonical_field_for`` — a bare "id" is not

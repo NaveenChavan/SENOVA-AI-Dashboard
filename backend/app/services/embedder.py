@@ -44,7 +44,17 @@ logger = logging.getLogger("senova.tier1")
 #: sync handlers in a thread pool, so two uploads really can reach this at once
 #: and loading the model twice would double the memory peak on exactly the host
 #: that cannot afford it.
-_lock = threading.Lock()
+#:
+#: **Must be reentrant.** ``catalog_embeddings()`` holds this lock while calling
+#: ``encode()``, which calls ``_load_model()``, which takes the same lock again.
+#: That nesting is not hypothetical — it is the only path through the module, and
+#: a plain ``Lock`` deadlocks on it permanently: ``/upload/`` hangs forever with
+#: no response and no log line, because the blocking ``with _lock:`` sits
+#: *outside* the try/except that would otherwise swallow a load failure. Every
+#: test that reaches ``catalog_embeddings()`` stubs ``_load_model`` out, so the
+#: suite could not see this; ``TestNestedLockIsNotDeadlocked`` and
+#: ``TestConfiguredModelIsUsable`` cover it for real.
+_lock = threading.RLock()
 
 #: The FastEmbed model instance, or ``None`` if loading failed / was disabled.
 _model = None

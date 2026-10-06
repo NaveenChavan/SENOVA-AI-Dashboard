@@ -65,6 +65,55 @@ const INITIAL_QUERY = {
   filters: {},
 }
 
+/**
+ * Opt-in AI consent, in localStorage.
+ *
+ * UX only — the real guarantee is server-side. Both Gemini-calling endpoints
+ * require `ai_consent` explicitly, so this value can only ever *withhold* a
+ * request, never widen one. Kept under a versioned key so a future consent
+ * that covers more than this does not silently inherit an older answer.
+ */
+const CONSENT_KEY = 'senova.aiConsent.v1'
+
+/** 'granted' | 'declined', or null when the user has never been asked. */
+export function readStoredConsent() {
+  try {
+    const raw = window.localStorage.getItem(CONSENT_KEY)
+    return raw === 'granted' || raw === 'declined' ? raw : null
+  } catch {
+    // Private browsing or storage disabled. "Not answered" is the safe reading:
+    // the server then sends nothing, and we ask again next time.
+    return null
+  }
+}
+
+export function writeStoredConsent(answer) {
+  try {
+    if (answer) window.localStorage.setItem(CONSENT_KEY, answer)
+    else window.localStorage.removeItem(CONSENT_KEY)
+  } catch {
+    // Consent still applies for this session in memory; only the memory of it
+    // is lost, which costs one extra prompt.
+  }
+}
+
+/**
+ * Index the AI rewrites by insight id, keeping only the verified ones.
+ *
+ * Done here rather than in the component so an unverified rewrite has no path
+ * to the screen at all: the guarantee is "the UI cannot render it", not "the UI
+ * is careful not to render it". The backend already decided this, so this is a
+ * filter, not a second opinion — but the render is the thing worth making
+ * unforgeable, because a bug there would put an invented number on a card.
+ */
+export function verifiedNarratives(aiText) {
+  const map = {}
+  for (const entry of aiText ?? []) {
+    if (entry?.verified && entry?.text) map[entry.id] = entry.text
+  }
+  return map
+}
+
 const useSalesStore = create((set, get) => ({
   // ── Upload state ───────────────────────────────────────────────────────
   data: null,
@@ -86,11 +135,59 @@ const useSalesStore = create((set, get) => ({
   /** Actual date span of the uploaded data (set once mapping is confirmed). */
   dateRange: null,
 
-  /** Optional canonical fields this file provided (Branch, Discount, Stock…). */
+/** Optional canonical fields this file provided (Branch, Discount, Stock…). */
   optionalFields: [],
 
+  // ── Opt-in AI (2-tier column understanding) ───────────────────────────
+  //
+  // 'granted' | 'declined' | null. Null is the common first-run state and means
+  // the upload page still owes the user a decision — not that consent is
+  // assumed either way.
+  aiConsentAnswer: readStoredConsent(),
+  aiConsent: readStoredConsent() === 'granted',
+
+  /** Whether the server says the AI tier could run at all (from GET /health). */
+  aiAvailable: false,
+  aiCapabilitiesLoading: false,
+
+  /** Server explanation when the AI tier was unavailable or failed. */
+  aiNotice: null,
+
+  /** Real per-stage milliseconds from the last upload — measured, not invented. */
+  pipelineTimings: null,
+
+  /** Record the answer and remember it. Called by the consent modal. */
+  persistConsent: (granted) => {
+    const answer = granted ? 'granted' : 'declined'
+    writeStoredConsent(answer)
+    set({ aiConsent: granted, aiConsentAnswer: answer })
+  },
+
   /**
-   * Step 1 of upload: store the file server-side and get back our best guess at
+   * Ask the server whether AI disambiguation is even available.
+   *
+   * Needed before uploading, because consent travels on the upload request
+   * itself: a page that only learned the answer afterwards could never grant it
+   * on the first upload. A failed probe reports "not available" on purpose —
+   * with consent unset the server sends nothing either way, so a wrong "no" is
+   * merely a missing prompt, while a wrong "yes" would be a consent the user
+   * never gave.
+   */
+  fetchAiCapabilities: async () => {
+    set({ aiCapabilitiesLoading: true })
+    try {
+      const { data } = await api.get('/health')
+      const available = Boolean(data?.ai_enabled)
+      set({ aiAvailable: available, aiCapabilitiesLoading: false })
+      return available
+    } catch {
+      set({ aiAvailable: false, aiCapabilitiesLoading: false })
+      return false
+    }
+  },
+
+  /**
+   * Step 1: store the file server-side and get back our best guess at
    * the column mapping. No analysis runs yet.
    */
   uploadFile: async (file) => {
@@ -100,12 +197,19 @@ const useSalesStore = create((set, get) => ({
       data: null,
       uploadErrors: [],
       mappingPreview: null,
+      aiNotice: null,
+      pipelineTimings: null,
       validationMessage: 'Uploading to server...',
     })
 
     try {
       const form = new FormData()
       form.append('file', file)
+      // Always sent, and false unless the user actively granted consent. The
+      // server defaults an omitted field to false too, so this is belt and
+      // braces — the point is that forgetting to send it can never widen
+      // consent, only withhold it.
+      form.append('ai_consent', get().aiConsent ? 'true' : 'false')
 
       const { data: preview } = await api.post('/upload/', form)
 
@@ -113,6 +217,11 @@ const useSalesStore = create((set, get) => ({
         fileId: preview.file_id,
         filename: preview.filename,
         mappingPreview: preview,
+        // The server's own account of what it could and could not do, plus the
+        // measured stage timings. Both are absent on an older backend.
+        aiNotice: preview.ai_notice ?? null,
+        pipelineTimings: preview.pipeline_timings ?? null,
+        aiAvailable: preview.ai_enabled ?? get().aiAvailable,
         validationMessage: '',
       })
 
@@ -180,6 +289,12 @@ const useSalesStore = create((set, get) => ({
       ledgerPage: null,
       dateRange: null,
       optionalFields: [],
+      aiNotice: null,
+      pipelineTimings: null,
+      dynamicSchema: null,
+      aiNarratives: {},
+      aiSource: 'skipped',
+      aiInsightNotice: null,
       query: { ...INITIAL_QUERY },
       dimensions: [],
       chartData: null,
@@ -310,6 +425,14 @@ const useSalesStore = create((set, get) => ({
   insights: null,
   insightsLoading: false,
 
+  /**
+   * The deterministic insights, unchanged and always fetched the same way.
+   *
+   * Kept separate from `fetchAiInsights` below because it is the correctness
+   * guarantee: every figure in it is computed by `insights_engine`, so it works
+   * with the whole AI tier switched off and is what every other widget's
+   * numbers are reconciled against.
+   */
   fetchInsights: async (fileId, query = get().query) => {
     set({ insightsLoading: true })
     try {
@@ -320,6 +443,73 @@ const useSalesStore = create((set, get) => ({
     } catch (err) {
       if (isCancelled(err)) return
       set({ insights: null, insightsLoading: false })
+    }
+  },
+
+  // ── Opt-in AI: same findings, nicer wording ───────────────────────────
+  aiNarratives: {},
+  aiSource: 'skipped',
+  aiInsightNotice: null,
+
+  /**
+   * The same findings plus AI-written wording, where every figure in that
+   * wording traces back to the insight's own metrics.
+   *
+   * This is a *superset* of `fetchInsights`, not a replacement, so it is called
+   * in addition to it rather than instead of it: if this request fails the
+   * dashboard still has the deterministic sentences, and no number that the
+   * engine did not compute is ever shown.
+   */
+  fetchAiInsights: async (fileId, query = get().query) => {
+    set({ aiInsightLoading: true })
+    try {
+      const { data } = await api.post(
+        `/analytics/${fileId}/ai-insights`,
+        { ...buildQueryBody(query), ai_consent: get().aiConsent },
+        { signal: freshSignal('ai-insights') },
+      )
+      set({
+        aiNarratives: verifiedNarratives(data?.ai_text),
+        aiSource: data?.ai_source ?? 'skipped',
+        aiInsightNotice: data?.ai_notice ?? null,
+        aiInsightElapsedMs: data?.ai_elapsed_ms ?? 0,
+        aiInsightLoading: false,
+      })
+    } catch (err) {
+      if (isCancelled(err)) return
+      // Loses wording only. The insights themselves came from the other call
+      // and are untouched, so there is nothing to recover here.
+      set({ aiNarratives: {}, aiInsightNotice: null, aiInsightLoading: false })
+    }
+  },
+
+  aiInsightLoading: false,
+  aiInsightElapsedMs: 0,
+
+  // ── Dynamic schema: what this particular file can be asked ────────────
+  dynamicSchema: null,
+  schemaLoading: false,
+
+  /**
+   * Ask the server which cards, charts, dimensions and measures *this* file can
+   * actually produce, each flagged unavailable with the reason when it isn't.
+   *
+   * Purely additive: it carries no business figures, so it cannot disagree with
+   * the numbers already on the page. A failure is swallowed on purpose — a file
+   * whose mapping is not confirmed yet answers 409, and the dashboard must not
+   * fall over because an optional panel could not load.
+   */
+  fetchSchema: async (fileId) => {
+    set({ schemaLoading: true })
+    try {
+      const { data } = await api.post(`/analytics/${fileId}/schema`, null, {
+        signal: freshSignal('schema'),
+      })
+      set({ dynamicSchema: data, schemaLoading: false })
+      return data
+    } catch (err) {
+      if (isCancelled(err)) return
+      set({ dynamicSchema: null, schemaLoading: false })
     }
   },
 

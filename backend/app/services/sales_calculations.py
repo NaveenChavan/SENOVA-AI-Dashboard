@@ -71,10 +71,17 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     """
     out = df.copy()
     out["_row_gross_revenue"] = out["Quantity"] * out["Selling Price"]
-    out["_row_discount"] = (
-        out["Discount"].fillna(0.0) if "Discount" in out.columns else 0.0
-    )
-    out["_row_revenue"] = (out["_row_gross_revenue"] - out["_row_discount"]).clip(lower=0.0)
+    if "Discount" in out.columns:
+        out["_row_discount"] = out["Discount"].fillna(0.0)
+        out["_row_revenue"] = (out["_row_gross_revenue"] - out["_row_discount"]).clip(lower=0.0)
+    elif "MRP" in out.columns:
+        mrp_discount = ((out["MRP"] - out["Selling Price"]) * out["Quantity"]).clip(lower=0.0)
+        invalid_mrp = out["MRP"].isna() | (out["MRP"] <= 0) | (out["MRP"] < out["Selling Price"])
+        out["_row_discount"] = mrp_discount.mask(invalid_mrp, 0.0)
+        out["_row_revenue"] = out["_row_gross_revenue"]
+    else:
+        out["_row_discount"] = 0.0
+        out["_row_revenue"] = out["_row_gross_revenue"]
     out["_row_cost"] = out["Quantity"] * out["Cost Price"]
     out["_row_profit"] = out["_row_revenue"] - out["_row_cost"]
     out["_row_tax"] = out["Tax"].fillna(0.0) if "Tax" in out.columns else 0.0

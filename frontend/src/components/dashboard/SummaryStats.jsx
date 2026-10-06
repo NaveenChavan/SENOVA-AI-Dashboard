@@ -32,7 +32,7 @@ function Trend({ metric }) {
   )
 }
 
-export default function SummaryStats({ summary }) {
+export default function SummaryStats({ summary, discountMetrics }) {
   if (!summary) return null
 
   const revenue = summary.revenue?.value ?? 0
@@ -79,6 +79,25 @@ export default function SummaryStats({ summary }) {
       metric: null,
     },
   ]
+
+  if (discountMetrics && discountMetrics.valid_discount_rows > 0) {
+    tiles.push(
+      {
+        label: 'Discount Given',
+        value: formatCurrency(discountMetrics.discount_given),
+        colour: 'var(--accent-red)',
+        sub: 'Total list price reductions',
+        metric: null,
+      },
+      {
+        label: 'Discount %',
+        value: formatPercent(discountMetrics.discount_pct, 1),
+        colour: 'var(--accent-red)',
+        sub: 'of list price (MRP) value',
+        metric: null,
+      }
+    )
+  }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[var(--gap)]">

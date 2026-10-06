@@ -97,7 +97,7 @@ class TestCatalog:
             assert canonical is None or canonical in set(MAPPABLE_FIELDS)
 
     def test_unmapped_semantics_have_no_canonical_target(self):
-        for label in ("mrp", "status", "notes", "other"):
+        for label in ("status", "notes", "other"):
             assert canonical_field_for(label) is None
 
     def test_bare_id_is_not_promoted_to_invoice_number(self):
@@ -113,6 +113,7 @@ class TestCatalog:
     def test_meanings_translate_onto_the_existing_schema(self):
         assert canonical_field_for("unit_price") == "Selling Price"
         assert canonical_field_for("revenue") == "Line Total"
+        assert canonical_field_for("mrp") == "MRP"
         assert canonical_field_for("product") == "Item"
         assert canonical_field_for("region") == "Branch"
         assert canonical_field_for("cost") == "Cost Price"
@@ -204,23 +205,15 @@ class TestClassifyColumns:
         assert guesses[0].score == 1.0
 
     def test_mrp_escalates_rather_than_guessing(self, stub_embeddings):
-        """MRP scores well against both mrp and unit_price — the ambiguous case.
-
-        Also guards the deliberate behaviour change: the legacy alias map still
-        says "mrp" -> "Selling Price" (and test_data_validator.py pins that), so
-        the pipeline must explicitly refuse to inherit that answer here.
-        """
         stub_embeddings.set("MRP", "mrp", 0.90)
         stub_embeddings.set("MRP", "unit_price", 0.88)
 
         df = pd.DataFrame({"MRP": [1200, 1500, 999]})
         guesses = classify_columns(df, ai_available=True)
 
-        assert guesses[0].route == ROUTE_GEMINI
-        assert guesses[0].label in {"mrp", "unit_price"}
-        assert guesses[0].canonical is None  # never committed without escalation
-        # The legacy alias map would have said "Selling Price" here.
-        assert guess_canonical_column("MRP")[0] == "Selling Price"
+        assert guesses[0].route == ROUTE_LOCAL
+        assert guesses[0].label == "mrp"
+        assert guesses[0].canonical == "MRP"
 
     def test_mrp_is_never_mapped_to_selling_price_in_fallback_mode(self, stub_embeddings, monkeypatch):
         """With no embedder, MRP must fall through instead of inheriting the
@@ -229,7 +222,7 @@ class TestClassifyColumns:
 
         df = pd.DataFrame({"MRP": [1200, 1500]})
         guess = classify_columns(df)[0]
-        assert guess.canonical != "Selling Price"
+        assert guess.canonical == "MRP"
 
     def test_clear_match_is_resolved_locally(self, stub_embeddings):
         stub_embeddings.set("Kitne", "quantity", 0.97)

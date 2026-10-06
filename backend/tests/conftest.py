@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 # Keep the 2-tier column-understanding pipeline offline for the whole test run.
@@ -34,6 +35,12 @@ from pathlib import Path
 os.environ["FASTEMBED_ENABLED"] = "false"
 os.environ["AI_ASSIST_ENABLED"] = "false"
 os.environ["GEMINI_API_KEY"] = ""
+
+# Uploads made by API tests go to a throwaway directory, and Firebase is stubbed
+# out. Both must be set before ``app.core.config`` is imported — see the note
+# above — which is why they are environment variables here and not monkeypatches.
+os.environ.setdefault("UPLOAD_DIR", tempfile.mkdtemp(prefix="senova-test-uploads-"))
+os.environ["DISABLE_AUTH"] = "true"
 
 import numpy as np
 import pandas as pd
@@ -70,6 +77,36 @@ def _no_ai_by_default(monkeypatch):
     embedder.reset_cache()
     yield
     embedder.reset_cache()
+
+
+#: The identity API tests act as, and the one they impersonate to prove the
+#: ownership check works. Declared here rather than in ``test_api.py`` because the
+#: ``client`` fixture below is shared with the other endpoint suites.
+OWNER = "owner@shop.test"
+INTRUDER = "someone-else@shop.test"
+
+
+@pytest.fixture
+def client():
+    """
+    A test client acting as ``OWNER``, with the cached frames cleared first.
+
+    Shared by every endpoint suite rather than defined per-module, because the
+    environment setup it depends on (``UPLOAD_DIR``, ``DISABLE_AUTH``) has to
+    happen once, before the app is imported — and a second copy of this fixture in
+    another module would be a second chance to get that ordering wrong.
+    """
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+    from app.services import frame_cache
+    from app.utils.auth_verifier import get_current_user
+
+    app.dependency_overrides[get_current_user] = lambda: OWNER
+    frame_cache.clear()
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture

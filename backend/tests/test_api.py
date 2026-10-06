@@ -35,23 +35,12 @@ from fastapi.testclient import TestClient  # noqa: E402  (import after env setup
 
 from app.main import app  # noqa: E402
 from app.services import frame_cache  # noqa: E402
+from app.services import tier2_gemini  # noqa: E402
 from app.utils.auth_verifier import get_current_user  # noqa: E402
-
-OWNER = "owner@shop.test"
-INTRUDER = "someone-else@shop.test"
+from tests.conftest import INTRUDER, OWNER  # noqa: E402  (shared identity fixtures)
 
 #: A well-formed but non-existent id (32 hex chars), for "not found" cases.
 UNKNOWN_FILE_ID = "0" * 32
-
-
-@pytest.fixture
-def client():
-    """Test client acting as ``OWNER`` unless a test swaps the override."""
-    app.dependency_overrides[get_current_user] = lambda: OWNER
-    frame_cache.clear()
-    with TestClient(app) as test_client:
-        yield test_client
-    app.dependency_overrides.clear()
 
 
 def _act_as(user: str) -> None:
@@ -98,7 +87,40 @@ def test_upload_returns_mapping_preview(client, raw_sales_frame):
     assert len(body["sample_rows"]) == 5
 
 
-def test_confirm_mapping_reports_optional_fields(client, raw_sales_frame, mapping):
+def test_upload_carries_the_legacy_confidence_string(client, raw_sales_frame):
+    """``confidence`` must stay the string the old frontend badge renders. The
+    pipeline adds fields beside it; it does not repurpose it, because
+    ConfidenceBadge keys off these exact three values."""
+
+    csv_bytes = raw_sales_frame.to_csv(index=False).encode("utf-8")
+    response = client.post(
+        "/upload/", files={"file": ("export.csv", io.BytesIO(csv_bytes), "text/csv")}
+    )
+
+    by_name = {row["raw_column"]: row for row in response.json()["detected_columns"]}
+    assert by_name["Bill Date"]["confidence"] == "exact"
+    assert by_name["Remarks"]["confidence"] == "none"
+    # The additive fields arrive alongside it.
+    assert by_name["Bill Date"]["confidence_score"] == 1.0
+    assert by_name["Bill Date"]["confidence_band"] in {"high", "medium", "low"}
+    assert by_name["Bill Date"]["source"] in {"local", "gemini", "fallback"}
+    assert isinstance(by_name["Bill Date"]["needs_review"], bool)
+
+
+def test_upload_reports_pipeline_timings(client, raw_sales_frame):
+    csv_bytes = raw_sales_frame.to_csv(index=False).encode("utf-8")
+    body = client.post(
+        "/upload/", files={"file": ("export.csv", io.BytesIO(csv_bytes), "text/csv")}
+    ).json()
+
+    timings = body["pipeline_timings"]
+    assert timings["tier1_ms"] > 0
+    assert timings["total_ms"] >= timings["tier1_ms"]
+    # AI is off in tests, so Tier 2 must report zero rather than a guess.
+    assert timings["tier2_ms"] == 0.0
+
+
+def test_confirm_mapping_reports_pandas_timing(client, raw_sales_frame, mapping):
     csv_bytes = raw_sales_frame.to_csv(index=False).encode("utf-8")
     file_id = client.post(
         "/upload/", files={"file": ("export.csv", io.BytesIO(csv_bytes), "text/csv")}
@@ -112,12 +134,209 @@ def test_confirm_mapping_reports_optional_fields(client, raw_sales_frame, mappin
     assert body["date_range"]["span_days"] == 90
     assert {"Branch", "Discount", "Payment Mode", "Stock On Hand"} <= set(body["optional_fields"])
 
+    # confirm-mapping is the compute step, so it reports the normalisation cost
+    # under the same timings envelope as upload's classification cost.
+    assert body["pipeline_timings"]["pandas_ms"] > 0
+    assert body["pipeline_timings"]["total_ms"] >= body["pipeline_timings"]["pandas_ms"]
+
+
+# ── AI consent gate ──────────────────────────────────────────────────────────
+#
+# These are the tests that matter most in this file. Everything else here is
+# about correctness; these are about a promise to the shopkeeper — that their
+# data does not leave the server unless they said yes, on this request.
+
+
+@pytest.fixture
+def gemini_reachable(monkeypatch):
+    """
+    Make Gemini *available* but ensure every attempt would be recorded.
+
+    A consent test that runs with AI switched off proves nothing, because Tier 2
+    would skip for the other reason. So the operator switch and key are forced
+    on, and ``httpx.AsyncClient`` is replaced with a counter that raises. The
+    count is the assertion: a Gemini attempt is an outbound request.
+    """
+    from app.services import tier2_gemini
+
+    monkeypatch.setattr(tier2_gemini, "AI_ASSIST_ENABLED", True)
+    monkeypatch.setattr(tier2_gemini, "GEMINI_API_KEY", "test-key-not-real")
+
+    attempts: list[str] = []
+
+    class _TrippedClient:
+        def __init__(self, *args, **kwargs):
+            attempts.append("client")
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def post(self, *args, **kwargs):
+            attempts.append("post")
+            raise AssertionError("A Gemini request was attempted without consent.")
+
+    monkeypatch.setattr(tier2_gemini.httpx, "AsyncClient", _TrippedClient)
+    return attempts
+
+
+def _upload(client, frame, **form):
+    csv_bytes = frame.to_csv(index=False).encode("utf-8")
+    return client.post(
+        "/upload/",
+        files={"file": ("export.csv", io.BytesIO(csv_bytes), "text/csv")},
+        data=form,
+    )
+
+
+def test_consent_false_makes_zero_gemini_calls(client, gemini_reachable):
+    """The headline guarantee. Consent withheld, AI enabled server-side, and a
+    file whose headers force an escalation — the whole pipeline still returns a
+    complete mapping and nothing goes out over the wire."""
+
+    # Every header is unknown, so Tier 1 must escalate every column if Tier 2 is
+    # going to run at all. If this test ever stops escalating, it stops proving
+    # anything, which is why it asserts the columns were left for review.
+    frame = pd.DataFrame(
+        {
+            "Zorp Factor": ["alpha", "beta"],
+            "Quibble": ["x", "y"],
+        }
+    )
+
+    response = _upload(client, frame, ai_consent="false")
+
+    assert response.status_code == 201
+    assert gemini_reachable == [], "Gemini was contacted despite ai_consent=false"
+
+    # The degradation is honest, not silent: these columns are visibly unmapped.
+    rows = response.json()["detected_columns"]
+    assert all(row["suggested_field"] is None for row in rows)
+    assert all(row["source"] == "fallback" for row in rows)
+    assert all(row["needs_review"] is True for row in rows)
+
+
+def test_omitting_ai_consent_is_treated_as_declining(client, gemini_reachable):
+    """An older client that doesn't know about consent must not be able to opt
+    itself in by silence. The field defaults to False precisely so absence can
+    never mean yes."""
+
+    frame = pd.DataFrame({"Zorp Factor": ["alpha", "beta"]})
+
+    response = _upload(client, frame)  # no ai_consent sent at all
+
+    assert response.status_code == 201
+    assert gemini_reachable == []
+
+
+def test_consent_false_yields_no_ai_notice(client, gemini_reachable):
+    """Declining is a normal path, not an error. It must not produce the
+    'Gemini unavailable' banner, which would imply something broke."""
+
+    frame = pd.DataFrame({"Zorp Factor": ["alpha", "beta"]})
+    response = _upload(client, frame, ai_consent="false")
+
+    body = response.json()
+    assert body["ai_notice"] is None or "not approved" in body["ai_notice"]["message"]
+    # The flag is still reported so the UI knows consent is worth offering.
+    assert body["ai_enabled"] is True
+
 
 def test_unsupported_file_type_is_rejected(client):
     response = client.post(
         "/upload/", files={"file": ("notes.txt", io.BytesIO(b"hello"), "text/plain")}
     )
     assert response.status_code == 400
+
+
+# ── Dynamic schema endpoint ──────────────────────────────────────────────────
+
+
+def test_schema_reports_what_the_file_supports(client, uploaded):
+    body = client.post(f"/analytics/{uploaded}/schema").json()
+
+    assert body["kpi_cards"] and body["charts"] and body["measures"]
+    assert body["missing_required_columns"] == []
+    assert body["date_range"]["span_days"] == 90
+
+
+def test_schema_finds_the_optional_columns_this_file_mapped(client, uploaded):
+    """The conftest export maps Branch, Discount, Payment Mode and Stock On Hand.
+    A false negative here would tell a paying shop it cannot see data it uploaded,
+    which is worse than not offering the panel at all."""
+    body = client.post(f"/analytics/{uploaded}/schema").json()
+
+    cards = {c["key"]: c for c in body["kpi_cards"]}
+    dimensions = {d["key"]: d for d in body["dimensions"]}
+    assert cards["discount"]["available"] is True
+    assert cards["stock_on_hand"]["available"] is True
+    assert dimensions["branch"]["available"] is True
+    assert dimensions["payment_mode"]["available"] is True
+
+
+def test_schema_reports_the_confirmed_mapping(client, uploaded):
+    """The UI joins schema entries back onto mapping-screen rows by name, so the
+    mapping has to travel with the schema."""
+    body = client.post(f"/analytics/{uploaded}/schema").json()
+    assert body["mapped_columns"]["Bill Date"] == "Date"
+
+
+def test_schema_never_reports_unavailable_without_a_reason(client, uploaded):
+    body = client.post(f"/analytics/{uploaded}/schema").json()
+
+    for group in ("kpi_cards", "charts", "dimensions", "measures"):
+        for entry in body[group]:
+            if not entry["available"]:
+                assert entry["reason"], f"{entry['key']} unavailable with no reason"
+
+
+def test_schema_makes_no_gemini_call(client, uploaded):
+    """The schema is pure introspection — which columns exist. It must never reach
+    the network, even with AI enabled server-side and consent implied."""
+    from app.services import tier2_gemini
+
+    attempts: list[str] = []
+
+    class _Tripped:
+        def __init__(self, *a, **k):
+            attempts.append("client")
+
+    original_enabled = tier2_gemini.AI_ASSIST_ENABLED
+    original_key = tier2_gemini.GEMINI_API_KEY
+    tier2_gemini.AI_ASSIST_ENABLED = True
+    tier2_gemini.GEMINI_API_KEY = "test-key-not-real"
+    tier2_gemini.httpx.AsyncClient = _Tripped
+    try:
+        response = client.post(f"/analytics/{uploaded}/schema")
+    finally:
+        tier2_gemini.AI_ASSIST_ENABLED = original_enabled
+        tier2_gemini.GEMINI_API_KEY = original_key
+
+    assert response.status_code == 200
+    assert attempts == []
+
+
+def test_schema_requires_a_confirmed_mapping(client, raw_sales_frame):
+    csv_bytes = raw_sales_frame.to_csv(index=False).encode("utf-8")
+    file_id = client.post(
+        "/upload/", files={"file": ("export.csv", io.BytesIO(csv_bytes), "text/csv")}
+    ).json()["file_id"]
+
+    response = client.post(f"/analytics/{file_id}/schema")
+    assert response.status_code == 409
+    assert "confirm-mapping" in response.json()["detail"]
+
+
+def test_schema_is_not_readable_by_another_user(client, uploaded):
+    """Same rule as every other analytics route: someone else's file looks
+    missing rather than forbidden."""
+    _act_as(INTRUDER)
+    response = client.post(f"/analytics/{uploaded}/schema")
+
+    assert response.status_code == 404
+    assert "not belong" not in response.text.lower()
 
 
 # ── Security ────────────────────────────────────────────────────────────────
@@ -359,7 +578,27 @@ def test_classic_get_routes_still_work(client, uploaded):
     assert client.get(f"/analytics/{uploaded}/report", params={"time_filter": "month"}).status_code == 200
     assert client.get(f"/analytics/{uploaded}/ledger", params={"page": 1}).status_code == 200
     assert client.get(f"/process/{uploaded}").status_code == 200
-    assert client.get("/health").json() == {"status": "ok"}
+    assert client.get("/health").json() == {"status": "ok", "ai_enabled": tier2_gemini.gemini_enabled()}
+
+
+def test_health_reports_whether_the_ai_tier_could_run(client, monkeypatch):
+    """
+    The upload page must know *before* it uploads whether consent is worth
+    asking for — consent rides on the upload request itself, so a page that
+    learned the answer afterwards could never grant it on the first try.
+
+    Reported as a bare boolean: no key, no model id, no endpoint.
+    """
+    monkeypatch.setattr(tier2_gemini, "AI_ASSIST_ENABLED", False)
+    assert client.get("/health").json()["ai_enabled"] is False
+
+    # The switch alone is not enough — without a key there is nothing to call.
+    monkeypatch.setattr(tier2_gemini, "AI_ASSIST_ENABLED", True)
+    monkeypatch.setattr(tier2_gemini, "GEMINI_API_KEY", "")
+    assert client.get("/health").json()["ai_enabled"] is False
+
+    monkeypatch.setattr(tier2_gemini, "GEMINI_API_KEY", "test-key-not-real")
+    assert client.get("/health").json()["ai_enabled"] is True
 
 
 def test_empty_filter_result_returns_zeroed_payload(client, uploaded):

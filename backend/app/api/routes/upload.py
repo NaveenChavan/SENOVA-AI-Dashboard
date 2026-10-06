@@ -58,7 +58,6 @@ from app.utils.data_validator import (
     OPTIONAL_DIMENSION_COLUMNS,
     OPTIONAL_MEASURE_COLUMNS,
     REQUIRED_COLUMNS,
-    detect_column_mapping,
     normalize_dataframe,
 )
 
@@ -84,6 +83,7 @@ _FIELD_HELP: dict[str, str] = {
     "Cost Price": "Your purchase cost for ONE piece.",
     "Line Total": "Line amount = quantity × rate. Map this if your file has Amount / Net Amount instead of a unit price.",
     "Discount": "Discount given on the line, in rupees. Revenue is reported net of this.",
+    "MRP": "Original price before discount. Used only to calculate discount.",
     "Tax": "GST / VAT collected on the line. Shown separately, never counted as profit.",
     "Stock On Hand": "Pieces still in stock. Unlocks days-of-cover and reorder alerts.",
     "Branch": "Shop, store or godown name — becomes a filter and a chart axis.",

@@ -11,6 +11,7 @@ import CommandPalette from '../components/common/CommandPalette'
 import ErrorBoundary from '../components/common/ErrorBoundary'
 import Icon from '../components/common/Icon'
 import SummaryStats from '../components/dashboard/SummaryStats'
+import SchemaOverviewPanel from '../components/dashboard/SchemaOverviewPanel'
 import { CHART_TYPES, MEASURES, resolveChartRequest, useChartView } from '../components/charts/chartView'
 
 // Everything below the KPI row is code-split: the Inventory and Financial
@@ -27,6 +28,7 @@ const FilterPanel = lazy(() => import('../components/dashboard/FilterPanel'))
 const DrillDownPanel = lazy(() => import('../components/dashboard/DrillDownPanel'))
 const ChartStudio = lazy(() => import('../components/charts/ChartStudio'))
 const TrendChart = lazy(() => import('../components/charts/TrendChart'))
+const DiscountMarginChart = lazy(() => import('../components/dashboard/DiscountMarginChart'))
 
 /**
  * The dashboard page.
@@ -98,6 +100,13 @@ export default function Dashboard() {
     insights,
     insightsLoading,
     fetchInsights,
+    // Additive on top of the two above: the same findings plus optional AI
+    // wording. Fetched separately so a failure costs wording, not findings.
+    aiNarratives,
+    aiInsightNotice,
+    fetchAiInsights,
+    dynamicSchema,
+    fetchSchema,
     inventory,
     inventoryLoading,
     fetchInventory,
@@ -204,12 +213,21 @@ export default function Dashboard() {
       useSalesStore.setState({ fileId })
     }
     fetchDimensions(fileId)
-  }, [fileId, fetchDimensions])
+    // Capability only — describes what this file can be asked, never a figure.
+    // Answers 409 until the mapping is confirmed, which is why a failure is
+    // swallowed inside the store rather than surfaced here.
+    fetchSchema(fileId)
+  }, [fileId, fetchDimensions, fetchSchema])
 
   useEffect(() => {
     if (!fileId || !queryReady) return
     fetchAnalytics(fileId, query)
     fetchInsights(fileId, query)
+    // Sent alongside the deterministic insights, not instead of them. With
+    // consent withheld the server still answers, with zero outbound calls and
+    // `ai_source: "skipped"` — so this costs one redundant compute and never a
+    // missing insight card.
+    fetchAiInsights(fileId, query)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileId, querySignature, queryReady])
 
@@ -590,12 +608,22 @@ export default function Dashboard() {
             <>
               <motion.div {...fadeUp}>
                 <ErrorBoundary>
-                  <InsightCards insights={insights} loading={insightsLoading} />
+                  <SchemaOverviewPanel schema={dynamicSchema} />
                 </ErrorBoundary>
               </motion.div>
 
+              <motion.div {...fadeUp}>
+                <ErrorBoundary>
+                  <InsightCards insights={insights} loading={insightsLoading} aiTextById={aiNarratives} />
+                </ErrorBoundary>
+                {/* Only shown when the server explains itself. A deliberately
+                    declined or disabled AI tier is silent by design, so there
+                    is nothing to say and nothing is said. */}
+                {aiInsightNotice && <p className="panel-hint mt-1">{aiInsightNotice}</p>}
+              </motion.div>
+
               <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.05 }}>
-                <SummaryStats key={querySignature} summary={data.summary} />
+                <SummaryStats key={querySignature} summary={data.summary} discountMetrics={data.discount_metrics} />
               </motion.div>
 
               <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.1 }}>
@@ -650,7 +678,15 @@ export default function Dashboard() {
                 </ErrorBoundary>
               </motion.div>
 
-              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.25 }}>
+              {data.discount_vs_margin?.length > 0 && (
+                <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.25 }}>
+                  <ErrorBoundary>
+                    <DiscountMarginChart data={data.discount_vs_margin} metrics={data.discount_metrics} />
+                  </ErrorBoundary>
+                </motion.div>
+              )}
+
+              <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.3 }}>
                 <ErrorBoundary>
                   <DeadStockTable items={data.dead_stock} />
                 </ErrorBoundary>

@@ -216,6 +216,23 @@ class CategoryBreakdown(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class DiscountMarginItem(BaseModel):
+    """Breakdown of discount and margin per item for the Discount vs Margin chart."""
+    item: str
+    discount_pct: float
+    margin_pct: float
+    revenue: float
+
+
+class DiscountMetrics(BaseModel):
+    """High-level metrics for MRP-based discount analysis."""
+    discount_given: float
+    discount_pct: float
+    valid_discount_rows: int
+    missing_mrp_rows: int
+    price_above_mrp_rows: int
+
+
 class AnalyticsResponse(BaseModel):
     """
     The full payload returned by GET /process/{file_id}.
@@ -233,6 +250,12 @@ class AnalyticsResponse(BaseModel):
     errors: List[RowError] = Field(             # Row-level validation failures
         default_factory=list,
         description="Per-row validation errors. Empty when all rows are clean.",
+    )
+    discount_metrics: DiscountMetrics | None = Field(
+        None, description="MRP-based discount stats, available when MRP is mapped."
+    )
+    discount_vs_margin: List[DiscountMarginItem] = Field(
+        default_factory=list, description="Item-wise discount and margin comparison."
     )
 
 
@@ -568,6 +591,152 @@ class DimensionsResponse(BaseModel):
     date_range: DataDateRange = Field(default_factory=DataDateRange)
 
 
+class AiInsightsRequest(AnalysisQuery):
+    """
+    Body for ``POST /analytics/{id}/ai-insights``.
+
+    ``ai_consent`` is required on every call and defaults to ``False``, for the
+    same reason it does on upload: this endpoint sends computed aggregates to
+    Gemini, so it needs its own explicit permission rather than inheriting a
+    previous answer. A dashboard that called this endpoint automatically would
+    otherwise be the one path where consent from an earlier upload leaked into a
+    later request.
+    """
+
+    ai_consent: bool = Field(
+        False,
+        description=(
+            "Explicit per-request permission to send this slice's aggregates to "
+            "Gemini. False or absent means no outbound request is made."
+        ),
+    )
+
+
+class AiNarrative(BaseModel):
+    """
+    One insight's AI-written message, and whether it passed the number check.
+
+    ``verified`` is the field that matters. It is computed by comparing every
+    figure in ``text`` against that insight's own ``metrics`` and ``evidence``
+    (see ``number_guard``), and the frontend renders ``text`` only when it is
+    true — otherwise it shows the deterministic sentence. An unverified rewrite is
+    still returned rather than dropped, so the UI can explain why it declined.
+    """
+
+    id: str = Field(..., description="The insight this rewrites")
+    text: str = Field(..., description="The AI wording — render only when verified")
+    verified: bool = Field(
+        False,
+        description=(
+            "True when every amount, percentage and count in the text traces back "
+            "to this insight's metrics. Dates, years and small ranking ordinals are "
+            "exempt."
+        ),
+    )
+    rejected_numbers: List[str] = Field(
+        default_factory=list,
+        description="Figures that could not be traced, for diagnostics and for the UI's explanation",
+    )
+
+
+# ── Dynamic schema ───────────────────────────────────────────────────────────
+#
+# Every entry is *flagged* rather than omitted, so "this file has no profit card"
+# and "this file cannot show profit, map Cost Price to unlock it" are different
+# responses. See ``app/services/dynamic_schema.py`` for why that distinction is
+# the whole point of the module.
+
+
+class KpiCard(BaseModel):
+    """One headline number this file supports, and if not, what would unlock it."""
+
+    key: str = Field(..., description="Stable id, e.g. 'revenue', 'profit', 'days_of_cover'")
+    label: str = Field(..., description="Card title as shown in the UI")
+    description: str = Field("", description="One line explaining what this number means")
+    available: bool = Field(
+        False,
+        description=(
+            "Whether this file can produce the card. False means 'not computable from "
+            "this file', which is different from computing it as zero."
+        ),
+    )
+    reason: str | None = Field(
+        None, description="When unavailable, the one action that would unlock it"
+    )
+    formats: List[str] = Field(default_factory=list, description="currency | percent | number")
+    blocked_by: List[str] = Field(
+        default_factory=list, description="Canonical columns this card is waiting on"
+    )
+    blocks: List[str] = Field(
+        default_factory=list, description="Other cards/charts that go unavailable with this one"
+    )
+
+
+class ChartSpec(BaseModel):
+    """One chart this file supports.
+
+    ``min_categories`` is reported alongside ``distinct_values`` so the UI can say
+    "not enough data yet" instead of drawing a single lonely bar.
+    """
+
+    key: str = Field(..., description="Stable id, e.g. 'daily_trend', 'weekday_heatmap'")
+    label: str
+    description: str = ""
+    available: bool = False
+    reason: str | None = None
+    distinct_values: int | None = Field(
+        None, description="Distinct values in the chart's dimension for this file"
+    )
+    min_categories: int = Field(0, description="Below this the chart says nothing useful")
+
+
+class SchemaDimension(BaseModel):
+    """A dimension this file could be sliced by, and whether it can."""
+
+    key: str = Field(..., description="API dimension key, e.g. 'branch'")
+    label: str
+    available: bool = False
+    column: str | None = Field(None, description="Canonical DataFrame column it reads")
+    reason: str | None = None
+
+
+class SchemaMeasure(BaseModel):
+    """A measure this file can aggregate."""
+
+    key: str = Field(..., description="API measure key, e.g. 'margin_pct'")
+    label: str
+    available: bool = False
+    format: str = Field("number", description="currency | percent | number")
+    additive: bool = Field(False, description="True when summing across rows is meaningful")
+    reason: str | None = None
+    blocked_by: List[str] = Field(default_factory=list)
+
+
+class DynamicSchema(BaseModel):
+    """
+    What this particular file can be asked, computed once and rendered up front.
+
+    Deliberately describes capability and nothing else: no business figure
+    appears here. Every actual number still comes from the existing endpoints, so
+    this panel cannot disagree with the dashboard.
+    """
+
+    kpi_cards: List[KpiCard] = Field(default_factory=list)
+    charts: List[ChartSpec] = Field(default_factory=list)
+    dimensions: List[SchemaDimension] = Field(default_factory=list)
+    measures: List[SchemaMeasure] = Field(default_factory=list)
+    mapped_columns: dict[str, str] = Field(
+        default_factory=dict, description="The confirmed {raw_column: canonical_field} this was built from"
+    )
+    present_columns: List[str] = Field(
+        default_factory=list, description="Canonical columns that survived normalisation"
+    )
+    missing_required_columns: List[str] = Field(
+        default_factory=list, description="Required fields this file still lacks"
+    )
+    date_range: DataDateRange = Field(default_factory=DataDateRange)
+
+
 # ── Feature 1: AI insight cards ─────────────────────────────────────────────
 
 
@@ -605,6 +774,29 @@ class InsightsResponse(BaseModel):
     note: str | None = Field(
         None, description="Set when the data was too small/sparse for some checks to run"
     )
+
+
+class AiInsightsResponse(InsightsResponse):
+    """
+    Everything ``/insights`` returns, plus any AI wording that survived checking.
+
+    A superset by design, and deliberately so: the existing insights stay
+    authoritative and complete, so a client that ignores ``ai_text`` — or an old
+    client that has never heard of this field — sees exactly what it saw before.
+    That is what makes the AI stage safe to add to a working dashboard.
+    """
+
+    ai_text: List[AiNarrative] = Field(
+        default_factory=list,
+        description="Per-insight AI wording, each with its verification result",
+    )
+    ai_source: Literal["gemini", "cache", "skipped", "fallback"] = Field(
+        "skipped", description="Whether the AI prose stage ran, and why not when it didn't"
+    )
+    ai_notice: str | None = Field(
+        None, description="Plain-language explanation when the AI prose stage was skipped or failed"
+    )
+    ai_elapsed_ms: float = Field(0.0, description="Time the AI prose stage took")
 
 
 # ── Feature 3: inventory & reorder intelligence ─────────────────────────────

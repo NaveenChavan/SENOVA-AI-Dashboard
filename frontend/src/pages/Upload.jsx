@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'motion/react'
@@ -6,6 +6,8 @@ import { motion } from 'motion/react'
 import useSalesStore from '../store/useSalesStore'
 import FileDropzone from '../components/upload/FileDropzone'
 import ColumnMappingScreen from '../components/upload/ColumnMappingScreen'
+import AiConsentModal from '../components/upload/AiConsentModal'
+import AiNoticeBanner, { PipelineTimingNote } from '../components/upload/AiNoticeBanner'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
 import Icon from '../components/common/Icon'
 
@@ -88,8 +90,32 @@ export default function Upload() {
     validationMessage,
     error,
     uploadErrors,
+    aiConsent,
+    aiConsentAnswer,
+    aiAvailable,
+    aiCapabilitiesLoading,
+    aiNotice,
+    pipelineTimings,
+    persistConsent,
+    fetchAiCapabilities,
   } = useSalesStore()
   const [uploadDone, setUploadDone] = useState(false)
+  const [reopeningConsent, setReopeningConsent] = useState(false)
+
+  // Consent has to be settled *before* a file is sent, because it travels on
+  // the upload request. So the page asks on mount whenever the server says AI
+  // is available and the user has never answered. `reopeningConsent` is the
+  // user asking again later — the answer is changed, never guessed at.
+  useEffect(() => {
+    fetchAiCapabilities()
+  }, [fetchAiCapabilities])
+
+  const consentOpen = (aiAvailable && aiConsentAnswer === null) || reopeningConsent
+
+  const answerConsent = (granted) => {
+    persistConsent(granted)
+    setReopeningConsent(false)
+  }
 
   const handleFile = async (file) => {
     setUploadDone(false)
@@ -128,6 +154,25 @@ export default function Upload() {
 
         <PipelineStepper activeIndex={activeIndex} />
 
+        {/* Only says something when the AI tier actually limited something, so
+            a clean run shows no banner at all rather than a reassuring one. */}
+        <div className="space-y-2 mb-3">
+          <AiNoticeBanner notice={aiNotice} />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <PipelineTimingNote timings={pipelineTimings} aiEnabled={mappingPreview.ai_enabled ?? aiAvailable} preview={mappingPreview} />
+            {mappingPreview.ai_enabled && (
+              <button
+                type="button"
+                className="text-[11.5px] underline"
+                style={{ color: 'var(--text-muted)' }}
+                onClick={() => setReopeningConsent(true)}
+              >
+                {aiConsent ? 'AI is on — change this' : 'AI is off — what would it send?'}
+              </button>
+            )}
+          </div>
+        </div>
+
         <ColumnMappingScreen
           preview={mappingPreview}
           onConfirm={handleConfirmMapping}
@@ -141,6 +186,13 @@ export default function Upload() {
             <span>{error}</span>
           </p>
         )}
+
+        <AiConsentModal
+          open={reopeningConsent}
+          onAccept={() => answerConsent(true)}
+          onDecline={() => answerConsent(false)}
+          onClose={() => setReopeningConsent(false)}
+        />
       </section>
     )
   }
@@ -157,6 +209,17 @@ export default function Upload() {
       </Helmet>
 
       <PipelineStepper activeIndex={activeIndex} />
+
+      {/* The consent question comes before the dropzone, and the dropzone waits
+          for it. Sending the file first and asking afterwards would be asking
+          for permission retroactively — and with it, an upload that already
+          went out with no answer recorded. */}
+      <AiConsentModal
+        open={consentOpen}
+        onAccept={() => answerConsent(true)}
+        onDecline={() => answerConsent(false)}
+        onClose={() => answerConsent(false)}
+      />
 
       <motion.div
         className="text-center mb-4"
@@ -181,10 +244,23 @@ export default function Upload() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.1, ease: EASE }}
       >
-        <FileDropzone onFileSelected={handleFile} disabled={isLoading} progressMessage={validationMessage} />
+        <FileDropzone
+          onFileSelected={handleFile}
+          disabled={isLoading || consentOpen || aiCapabilitiesLoading}
+          progressMessage={validationMessage}
+        />
       </motion.div>
 
       <div className="mt-3 space-y-2">
+        {/* Reopening the modal must not read as an error, so this sits above
+            the message list and says plainly that nothing was sent. */}
+        {reopeningConsent && (
+          <p className="note" data-tone="info" role="status">
+            <Icon name="lock" className="w-4 h-4 shrink-0 mt-px" />
+            <span>Nothing has been sent. Your answer applies to the next upload.</span>
+          </p>
+        )}
+
         {error && (
           <p className="note" data-tone="danger" role="alert">
             <Icon name="alert" className="w-4 h-4 shrink-0 mt-px" />

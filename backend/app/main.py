@@ -16,6 +16,7 @@ from app.core.config import ALLOWED_ORIGINS, UPLOAD_SWEEP_INTERVAL_MINUTES
 from app.api.routes import upload, analytics, auth
 from app.api.routes.analytics import analytics_router
 from app.services.file_handler import sweep_expired_uploads
+from app.services import tier2_gemini
 
 logger = logging.getLogger("senova.uploads")
 
@@ -74,5 +75,13 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 
 @app.get("/health")
 def health_check():
-    """Lightweight liveness probe for container orchestration / monitoring."""
-    return {"status": "ok"}
+    """
+    Lightweight liveness probe for container orchestration / monitoring.
+
+    ``ai_enabled`` rides along because the upload page has to decide *before*
+    uploading whether to ask for consent — consent travels on the upload request
+    itself, so a page that only learned the answer afterwards could never grant
+    it on the first try. It is a boolean about a capability, not a secret: no
+    key, no model id and no endpoint leave the process here.
+    """
+    return {"status": "ok", "ai_enabled": tier2_gemini.gemini_enabled()}

@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 
+import AiNarrativeNotice from './AiNarrativeNotice'
 import Icon from '../common/Icon'
 import { formatCurrency, formatNumber, formatPercent } from '../charts/chartFormat'
 
@@ -19,6 +20,11 @@ import { formatCurrency, formatNumber, formatPercent } from '../charts/chartForm
  *
  * Severity is carried by an icon *and* a word, not just a colour, so the
  * meaning survives greyscale printing and colour-blindness.
+ *
+ * `aiTextById` is optional and additive: when an entry is present it replaces
+ * the deterministic sentence for that one card, and a small marker says the
+ * wording was reworded. The numbers in `metrics` are untouched either way,
+ * which is the whole guarantee — only the prose is borrowed.
  */
 
 const SEVERITY = {
@@ -28,7 +34,7 @@ const SEVERITY = {
   neutral: { word: 'Note', icon: 'spark', colour: 'var(--accent-blue)' },
 }
 
-export default function InsightCards({ insights, loading }) {
+export default function InsightCards({ insights, loading, aiTextById }) {
   if (loading && !insights) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-[var(--gap)]">
@@ -72,7 +78,7 @@ export default function InsightCards({ insights, loading }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-[var(--gap)] items-start">
         {insights.insights.map((insight, i) => (
-          <InsightCard key={insight.id} insight={insight} index={i} />
+          <InsightCard key={insight.id} insight={insight} index={i} aiText={aiTextById?.[insight.id]} />
         ))}
       </div>
 
@@ -81,7 +87,7 @@ export default function InsightCards({ insights, loading }) {
   )
 }
 
-function InsightCard({ insight, index = 0 }) {
+function InsightCard({ insight, index = 0, aiText }) {
   const severity = SEVERITY[insight.severity] ?? SEVERITY.neutral
   const glow = insight.severity === 'critical' || insight.severity === 'positive'
 
@@ -106,9 +112,15 @@ function InsightCard({ insight, index = 0 }) {
         </div>
       </header>
 
+      {/* `aiText` arrives only for a rewrite whose every figure the backend
+          traced back to this insight's own metrics, so there is no branch here
+          that could render unverified wording — the store filters it out before
+          it reaches this component at all. */}
       <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-        {insight.message}
+        {aiText || insight.message}
       </p>
+
+      {aiText && <AiNarrativeNotice />}
 
       <KeyFigures insight={insight} />
 

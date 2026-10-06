@@ -29,6 +29,7 @@ Security applied to every route in this file
 """
 
 from datetime import timedelta
+import logging
 
 import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -36,12 +37,16 @@ from fastapi.responses import Response
 from typing import Literal
 
 from app.models.schemas import (
+    AiInsightsRequest,
+    AiInsightsResponse,
+    AiNarrative,
     AnalysisQuery,
     AnalyticsResponse,
     CAReportSummary,
     ChartDataResponse,
     ChartQuery,
     DimensionsResponse,
+    DynamicSchema,
     ForecastQuery,
     ForecastResponse,
     HeatmapResponse,
@@ -51,7 +56,9 @@ from app.models.schemas import (
     LedgerQuery,
     RowError,
 )
-from app.services import frame_cache, query_engine
+from app.services import dynamic_schema, frame_cache, number_guard, query_engine, tier2_gemini
+
+logger = logging.getLogger("senova.analytics")
 from app.services.file_handler import (
     assert_owner,
     get_original_filename,
@@ -63,6 +70,7 @@ from app.services.insights_engine import compute_insights
 from app.services.inventory_intel import compute_inventory_intelligence
 from app.services.pdf_report import MAX_LEDGER_ROWS_IN_PDF, generate_ca_report_pdf
 from app.services.query_engine import QueryError
+from app.services.discount_calculations import compute_discount, compute_discount_vs_margin
 from app.services.sales_calculations import (
     build_ledger_page,
     compute_daily_trend_between,
@@ -81,6 +89,8 @@ TimeFilter = Literal["all", "today", "week", "30days", "month"]
 #: Human-readable labels for the classic presets (kept in sync with the engine).
 _PERIOD_LABELS = query_engine.PERIOD_LABELS
 
+
+logger = logging.getLogger("senova.analytics")
 
 # ── Shared loading + slicing ────────────────────────────────────────────────
 
@@ -168,6 +178,8 @@ def _empty_analytics(errors: list[RowError]) -> AnalyticsResponse:
         dead_stock=[],
         categories=[],
         errors=errors,
+        discount_metrics=None,
+        discount_vs_margin=[],
     )
 
 
@@ -185,6 +197,8 @@ def _build_analytics(current, previous, window, errors: list[RowError]) -> Analy
         dead_stock=compute_dead_stock(current),
         categories=compute_revenue_by_category(current),
         errors=errors,
+        discount_metrics=compute_discount(current),
+        discount_vs_margin=compute_discount_vs_margin(current),
     )
 
 
@@ -263,6 +277,118 @@ def get_dimensions(file_id: str, user: str = Depends(get_current_user)):
     """
     frame = _load_frame(file_id, user)
     return query_engine.dimension_options(frame)
+
+
+@analytics_router.post("/{file_id}/schema", response_model=DynamicSchema)
+def post_schema(file_id: str, user: str = Depends(get_current_user)):
+    """
+    What this file can be asked — KPI cards, charts, dimensions and measures,
+    each flagged available or not with the reason when it isn't.
+
+    Additive: the existing dashboard does not depend on this. Its value is that
+    the UI can stop hiding cards silently. A file with no Cost Price would
+    otherwise show a profit card reading zero, which is indistinguishable from a
+    genuinely unprofitable month.
+
+    Goes through ``_load_frame``, so it carries the same ownership check, the same
+    indistinguishable 404 and the same 409-until-mapping-confirmed rule as every
+    other route in this file.
+    """
+    frame = _load_frame(file_id, user)
+    mapping = load_column_mapping(file_id) or {}
+    return dynamic_schema.build(frame, mapping=mapping)
+
+
+@analytics_router.post("/{file_id}/ai-insights", response_model=AiInsightsResponse)
+async def post_ai_insights(file_id: str, body: AiInsightsRequest, user: str = Depends(get_current_user)):
+    """
+    The existing insights, plus AI wording for each card that passed a number check.
+
+    Additive in the strongest sense: ``insights`` is exactly what
+    ``POST /{file_id}/insights`` returns, computed by the same untouched
+    ``insights_engine``. Gemini only ever rephrases. No new statistic, no new
+    severity, no new card type — so if this endpoint is unreachable, the
+    dashboard loses nothing but nicer wording.
+
+    Two gates before anything leaves the server: ``AI_ASSIST_ENABLED`` (the
+    operator switch) and ``ai_consent`` on this request. When either is closed the
+    response is the plain insights with ``ai_source="skipped"`` and **zero** HTTP
+    calls, which is why a declined user gets a completely normal dashboard.
+
+    Each rewrite is verified against its own insight's ``metrics`` and
+    ``evidence`` by ``number_guard``. An unverified rewrite is reported with
+    ``verified=false`` and the frontend renders the deterministic sentence instead,
+    so one bad rewrite costs one card's wording, not the response.
+    """
+    current, previous, window = _slice(file_id, user, body)
+    insights = compute_insights(current, previous, period_label=window.label)
+
+    candidates: dict[str, str] = {}
+    notice: str | None = None
+    source = "skipped"
+    elapsed_ms = 0.0
+
+    # The gate is re-checked here as well as in tier2_gemini, so that the "zero
+    # calls" promise is visible at the route rather than only inside a helper.
+    if tier2_gemini.gemini_enabled() and body.ai_consent:
+        payload = [
+            {
+                "id": item.id,
+                "title": item.title,
+                "message": item.message,
+                "severity": item.severity,
+                "metrics": item.metrics,
+                "evidence": item.evidence,
+            }
+            for item in insights.insights
+        ]
+        result = await tier2_gemini.rewrite_insights(payload, ai_consent=True)
+        candidates = result.rewrites
+        source = result.source
+        notice = result.notice
+        elapsed_ms = result.elapsed_ms
+
+    ai_text: list[AiNarrative] = []
+    verified_count = 0
+
+    # Built from the computed insights rather than from the request, so the check
+    # is always against the figures actually in this response. A rewrite is
+    # verified against the insight it claims to rewrite, never against a pool of
+    # every number on the dashboard — that would let a card cite a real number
+    # belonging to a completely different finding.
+    by_id = {item.id: item for item in insights.insights}
+    for insight_id, text in candidates.items():
+        insight = by_id.get(insight_id)
+        if insight is None:
+            continue  # defence in depth; _sanitise_rewrites already filters these
+        verified, offenders = number_guard.verify(
+            text, metrics=insight.metrics, evidence=insight.evidence
+        )
+        verified_count += int(verified)
+        ai_text.append(
+            AiNarrative(id=insight_id, text=text, verified=verified, rejected_numbers=offenders)
+        )
+
+    if candidates and verified_count == 0:
+        # Every rewrite failed the check. Say so rather than shipping a response
+        # where nothing is renderable and the failure looks like silence.
+        logger.warning("All %d AI rewrite(s) failed the number check.", len(candidates))
+
+    logger.info(
+        "AI insights: source=%s cards=%d rewrites=%d verified=%d elapsed=%.1fms",
+        source, len(insights.insights), len(ai_text), verified_count, elapsed_ms,
+    )
+
+    return AiInsightsResponse(
+        insights=insights.insights,
+        anomaly_dates=insights.anomaly_dates,
+        analysed_days=insights.analysed_days,
+        note=insights.note,
+        ai_text=ai_text,
+        ai_source=source,
+        ai_notice=notice,
+        ai_elapsed_ms=elapsed_ms,
+    )
 
 
 @analytics_router.post("/{file_id}/summary", response_model=AnalyticsResponse)

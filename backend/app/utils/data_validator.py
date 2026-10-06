@@ -67,7 +67,7 @@ EXPECTED_COLUMNS = REQUIRED_COLUMNS
 #: Optional numeric fields. Each unlocks extra analysis when present:
 #: Line Total → unit-price derivation, Discount → net revenue,
 #: Tax → GST line in the P&L, Stock On Hand → days-of-cover + reorder alerts.
-OPTIONAL_MEASURE_COLUMNS: set[str] = {"Line Total", "Discount", "Tax", "Stock On Hand"}
+OPTIONAL_MEASURE_COLUMNS: set[str] = {"Line Total", "Discount", "Tax", "Stock On Hand", "MRP"}
 
 #: Optional text fields. Every one becomes a slice-able dimension in the
 #: chart engine and the filter panel (e.g. revenue by Branch, by Payment Mode).
@@ -98,6 +98,7 @@ STRICT_SCHEMA: dict[str, str] = {
     "Discount": "Number",
     "Tax": "Number",
     "Stock On Hand": "Number",
+    "MRP": "Number",
 }
 
 #: Value written into an optional dimension when a row leaves it blank.
@@ -250,7 +251,10 @@ COLUMN_ALIAS_MAP: dict[str, str] = {
     "unit rate": "Selling Price",
     "retail price": "Selling Price",
     "retail_price": "Selling Price",
-    "mrp": "Selling Price",
+    "mrp": "MRP",
+    "m.r.p": "MRP",
+    "list price": "MRP",
+    "maximum retail price": "MRP",
     "sp": "Selling Price",
     "lineitem price": "Selling Price",
     "item-price": "Selling Price",
@@ -449,7 +453,7 @@ _FUZZY_KEYWORDS: dict[str, str] = {
     "amount": "Line Total",
     "turnover": "Line Total",
     "revenue": "Line Total",
-    "mrp": "Selling Price",
+    "mrp": "MRP",
     "selling": "Selling Price",
     "unit price": "Selling Price",
     "rate": "Selling Price",

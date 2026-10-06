@@ -34,7 +34,7 @@ from app.utils.data_validator import (
         ("Qty.", "Quantity"),
         ("Billed Qty", "Quantity"),
         ("Rate/Unit", "Selling Price"),
-        ("MRP", "Selling Price"),
+        ("MRP", "MRP"),
         ("Purchase Rate", "Cost Price"),
         ("Landing Cost", "Cost Price"),
         # Line totals must NOT become a unit selling price
@@ -90,7 +90,7 @@ def test_duplicate_suggestions_are_downgraded():
     frame = pd.DataFrame(columns=["Rate", "MRP", "Item", "Date", "Qty", "Cost"])
     report = {row["raw_column"]: row["suggested_field"] for row in detect_column_mapping(frame)}
     assert report["Rate"] == "Selling Price"
-    assert report["MRP"] is None
+    assert report["MRP"] == "MRP"
 
 
 def test_line_total_derives_unit_price():

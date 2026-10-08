@@ -41,6 +41,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from app.core.config import (
+    DISCOUNT_LEADER_MARGIN_PP,
+    MARGIN_GAP_PP,
+    TOP_N_REVENUE,
+    PAYMENT_SHARE_MIN_PCT,
+    MIN_ROWS,
+)
 from app.models.schemas import Insight, InsightsResponse
 from app.services.sales_calculations import _prepare, _zero_fill_daily
 from app.utils.safe_json import safe_float, safe_percentage
@@ -100,23 +107,18 @@ _SEVERITY_RANK = {"critical": 0, "warning": 1, "positive": 2, "neutral": 3}
 
 def _inr(value: float | None) -> str:
     """
-    Format an amount the way an Indian shop owner reads it: lakh/crore for big
-    numbers, and 2,34,567-style grouping (not 234,567) for the rest.
+    Format an amount the way an Indian shop owner reads it: exact value with
+    2,34,567-style grouping (not 234,567).
     """
     if value is None:
-        return "₹0"
+        return "Rs 0"
     amount = float(value)
     sign = "-" if amount < 0 else ""
     amount = abs(amount)
 
-    if amount >= 1e7:
-        return f"{sign}₹{amount / 1e7:.2f}Cr"
-    if amount >= 1e5:
-        return f"{sign}₹{amount / 1e5:.2f}L"
-
     whole = f"{int(round(amount)):d}"
     if len(whole) <= 3:
-        return f"{sign}₹{whole}"
+        return f"{sign}Rs {whole}"
     # Last three digits, then groups of two — the Indian numbering system.
     head, tail = whole[:-3], whole[-3:]
     groups = []
@@ -125,19 +127,19 @@ def _inr(value: float | None) -> str:
         head = head[:-2]
     if head:
         groups.insert(0, head)
-    return f"{sign}₹{','.join(groups)},{tail}"
+    return f"{sign}Rs {','.join(groups)},{tail}"
 
 
 def _pct_text(value: float | None) -> str:
     """
-    Format a percentage for prose, e.g. ``71%``.
+    Format a percentage for prose, e.g. ``71.4%``.
 
     Returns ``"an unmeasurable amount"`` for ``None`` — which is what a division
     by a zero baseline yields — rather than printing a confident "0%".
     """
     if value is None:
         return "an unmeasurable amount"
-    return f"{abs(float(value)):.0f}%"
+    return f"{abs(float(value)):.1f}%"
 
 
 def _date_text(value) -> str:
@@ -191,6 +193,21 @@ def compute_insights(
 
     # 3. Margin leaks
     insights.extend(_margin_leak_insights(prepped))
+
+    if len(prepped) >= MIN_ROWS:
+        # B2 (a) Discount Leader
+        dl = _discount_leader_insight(prepped)
+        if dl:
+            insights.append(dl)
+
+        # B2 (b) Margin Gap
+        mg = _margin_gap_insight(prepped)
+        insights.extend(mg)
+
+        # B2 (c) Payment Mix
+        pm = _payment_mix_insight(prepped)
+        if pm:
+            insights.append(pm)
 
     # 4. Revenue concentration
     concentration = _concentration_insight(prepped)
@@ -530,6 +547,166 @@ def _margin_leak_insights(prepped: pd.DataFrame) -> list[Insight]:
 
 # ── Check 4: revenue concentration (Pareto) ─────────────────────────────────
 
+
+def _discount_leader_insight(prepped: pd.DataFrame) -> Insight | None:
+    if "MRP" not in prepped.columns:
+        return None
+        
+    totals = prepped.groupby("Item").agg(
+        revenue=("_row_revenue", "sum"),
+        discount=("_row_discount", "sum")
+    )
+    if len(totals) < 3:
+        return None
+        
+    total_rev = float(totals["revenue"].sum())
+    total_disc = float(totals["discount"].sum())
+    
+    overall_mrp = total_rev + total_disc
+    if overall_mrp <= 0:
+        return None
+    overall_discount_pct = (total_disc / overall_mrp) * 100
+
+    totals["mrp"] = totals["revenue"] + totals["discount"]
+    totals = totals[totals["mrp"] > 0]
+    totals["discount_pct"] = (totals["discount"] / totals["mrp"]) * 100
+    
+    if totals.empty:
+        return None
+        
+    leader = totals.loc[totals["discount_pct"].idxmax()]
+    lead_pp = leader["discount_pct"] - overall_discount_pct
+    
+    if lead_pp >= DISCOUNT_LEADER_MARGIN_PP:
+        item = str(leader.name)
+        return Insight(
+            id="discount_leader",
+            kind="discount_leader",
+            severity="warning",
+            title="Deep discount alert",
+            message=f"{item} carries your deepest discount: {_pct_text(leader['discount_pct'])} off list price ({_inr(leader['discount'])} given up vs {_pct_text(overall_discount_pct)} overall).",
+            action="Check whether this discount is needed to sell it.",
+            metrics={
+                "discount_pct": safe_float(leader["discount_pct"]),
+                "discount_rs": safe_float(leader["discount"]),
+                "overall_discount_pct": safe_float(overall_discount_pct),
+                "lead_pp": safe_float(lead_pp),
+                "revenue_share_pct": safe_float((leader["revenue"] / total_rev) * 100 if total_rev > 0 else 0)
+            },
+            evidence=[
+                f"{item} total list price: {_inr(leader['mrp'])}",
+                f"{item} revenue: {_inr(leader['revenue'])}"
+            ]
+        )
+    return None
+
+def _margin_gap_insight(prepped: pd.DataFrame) -> list[Insight]:
+    totals = prepped.groupby("Item").agg(
+        revenue=("_row_revenue", "sum"),
+        cost=("_row_cost", "sum")
+    )
+    if len(totals) < 3:
+        return []
+        
+    total_rev = float(totals["revenue"].sum())
+    if total_rev <= 0:
+        return []
+        
+    totals["margin_pct"] = np.where(
+        totals["revenue"] > 0,
+        ((totals["revenue"] - totals["cost"]) / totals["revenue"]) * 100,
+        np.nan
+    )
+    
+    overall_margin = float(((total_rev - totals["cost"].sum()) / total_rev) * 100)
+    
+    top_n = totals.sort_values("revenue", ascending=False).head(TOP_N_REVENUE)
+    
+    insights = []
+    for item, row in top_n.iterrows():
+        margin = float(row["margin_pct"])
+        if pd.notna(margin) and margin < overall_margin - MARGIN_GAP_PP:
+            insights.append(Insight(
+                id=f"margin_gap_{item}",
+                kind="margin_gap",
+                severity="warning",
+                title="Top seller dragging margin",
+                message=f"One of your top sellers ({item}) earns a {_pct_text(margin)} margin, pulling down your {_pct_text(overall_margin)} average.",
+                action="Review sourcing costs or adjust price.",
+                metrics={
+                    "item_margin_pct": safe_float(margin),
+                    "overall_margin_pct": safe_float(overall_margin),
+                    "gap_pp": safe_float(overall_margin - margin),
+                    "revenue_rank": 1.0 + list(top_n.index).index(item)
+                },
+                evidence=[
+                    f"{item} revenue: {_inr(row['revenue'])}",
+                    f"{item} cost: {_inr(row['cost'])}"
+                ]
+            ))
+            
+    return insights
+
+def _payment_mix_insight(prepped: pd.DataFrame) -> Insight | None:
+    if "Payment Mode" not in prepped.columns:
+        return None
+        
+    methods = prepped.groupby("Payment Mode").agg(
+        revenue=("_row_revenue", "sum"),
+        cost=("_row_cost", "sum")
+    )
+    if len(methods) < 2:
+        return None
+        
+    total_rev = float(methods["revenue"].sum())
+    if total_rev <= 0:
+        return None
+
+    methods["margin_pct"] = np.where(
+        methods["revenue"] > 0,
+        ((methods["revenue"] - methods["cost"]) / methods["revenue"]) * 100,
+        np.nan
+    )
+        
+    dominant = methods["revenue"].idxmax()
+    dominant_rev = float(methods["revenue"].max())
+    share = (dominant_rev / total_rev) * 100
+    
+    if share >= PAYMENT_SHARE_MIN_PCT:
+        # Check margins between COD and Prepaid if they exist
+        cod_margin = methods.loc["COD", "margin_pct"] if "COD" in methods.index else None
+        prepaid_margin = methods.loc["Prepaid", "margin_pct"] if "Prepaid" in methods.index else None
+        
+        severity = "neutral"
+        if pd.notna(cod_margin) and pd.notna(prepaid_margin):
+            gap = abs(cod_margin - prepaid_margin)
+            if gap <= 1.0:
+                severity = "positive"
+                
+        message = f"{dominant} dominates your sales, making up {_pct_text(share)} of total revenue."
+        if pd.notna(cod_margin) and pd.notna(prepaid_margin):
+            message += f" COD margin is {_pct_text(cod_margin)} vs Prepaid {_pct_text(prepaid_margin)}."
+            
+        return Insight(
+            id="payment_mix",
+            kind="payment_mix",
+            severity=severity,
+            title="Dominant payment mode",
+            message=message,
+            action="Check returns and cash handling for COD; this file does not show them.",
+            metrics={
+                "revenue": safe_float(dominant_rev),
+                "share_pct": safe_float(share),
+                "total_revenue": safe_float(total_rev),
+                "cod_margin": safe_float(cod_margin),
+                "prepaid_margin": safe_float(prepaid_margin)
+            },
+            evidence=[
+                f"{dominant} revenue: {_inr(dominant_rev)}",
+                f"Total revenue: {_inr(total_rev)}"
+            ]
+        )
+    return None
 
 def _concentration_insight(prepped: pd.DataFrame) -> Insight | None:
     """

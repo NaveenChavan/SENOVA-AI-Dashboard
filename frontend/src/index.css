@@ -714,37 +714,205 @@ h3 { font-size: 0.9375rem; font-weight: 650; }
     cursor: pointer;
   }
 
-  /* Sticky toolbar: the date presets, filters and tabs stay reachable while
-     the user scrolls a long dashboard. It sticks at the top of the viewport
-     (top: 0) and is nudged down by --header-offset via `transform`, not by
-     changing `top` itself — `top` is a layout property (the browser reflows
-     on every frame), which desynced visibly from the header's own transform-
-     based hide/show and looked like two separate jumps instead of one motion.
-     Same technique (transform) on both elements keeps them locked together. */
-  .toolbar-sticky {
+  /* ── Dashboard toolbar / filter row ───────────────────────────────── */
+  /* Keep the title, date presets and tabs in normal flow. Only the compact
+     filter row is sticky so long Inventory tables remain filterable without
+     reserving a tall blank block at the top of the dashboard. */
+  .dashboard-toolbar {
+    position: relative;
+  }
+
+  .dashboard-filter-sticky {
     position: sticky;
-    top: 0;
-    z-index: 20;
-    padding-top: var(--s-2);
-    padding-bottom: var(--s-2);
-    margin-top: calc(var(--s-2) * -1);
+    top: var(--header-offset, 52px);
+    z-index: 30;
+    padding: 4px 0 6px;
+    margin-top: -2px;
     background: linear-gradient(
       to bottom,
       var(--bg-primary) 0%,
-      var(--bg-primary) 82%,
+      var(--bg-primary) 86%,
       transparent 100%
     );
-    transform: translateY(var(--header-offset, 52px));
-    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* On a phone the viewport is too short to give up rows to a sticky bar. */
+  .dashboard-tabs {
+    position: relative;
+    z-index: 4;
+    margin-top: var(--s-2);
+  }
+
+  .filter-bar {
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-low);
+  }
+
+  .filter-bar__row {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px var(--card-pad);
+  }
+
+  .filter-bar__chips {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+  }
+
+  .filter-bar__chips .chip {
+    max-width: 230px;
+    flex: 0 0 auto;
+  }
+
+  .filter-bar__count {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .filter-bar__clear {
+    flex: 0 0 auto;
+    padding: 4px 2px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .filter-bar__clear:hover {
+    color: var(--text-primary);
+  }
+
+  .filter-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: var(--card-pad);
+    width: min(760px, calc(100vw - 40px));
+    max-height: min(68vh, 680px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card-solid);
+    box-shadow: var(--shadow-high);
+  }
+
+  .filter-popover__header,
+  .filter-popover__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg-card-solid);
+  }
+
+  .filter-popover__header {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .filter-popover__footer {
+    border-top: 1px solid var(--border-subtle);
+    justify-content: flex-end;
+  }
+
+  .filter-popover__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .filter-popover__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .filter-values {
+    max-height: 152px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 5px;
+    padding-right: 2px;
+  }
+
+  .filter-date-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .filter-popover__range-note {
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
   @media (max-width: 640px) {
-    .toolbar-sticky {
-      position: static;
-      background: none;
-      margin-top: 0;
-      transform: none;
+    .dashboard-filter-sticky {
+      padding-block: 3px 5px;
+    }
+
+    .filter-bar__row {
+      padding-inline: 10px;
+    }
+
+    .filter-bar__chips {
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-bar__chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-bar__clear {
+      display: none;
+    }
+
+    .filter-popover {
+      position: fixed;
+      top: calc(var(--header-offset, 52px) + 48px);
+      left: 10px;
+      right: 10px;
+      width: auto;
+      max-height: calc(100dvh - var(--header-offset, 52px) - 72px);
+    }
+
+    .filter-popover__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-popover__body {
+      padding: 12px;
     }
   }
 

@@ -279,7 +279,37 @@ class TestFailureHandling:
         result = await resolve_columns([_columns()], ai_consent=True)
         assert result.source == SOURCE_FAILED
         assert result.verdicts == {}
-        assert "left for you to map" in (result.notice or "")
+        assert result.reason_code == "timeout"
+
+    async def test_401_unauthorized(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        recorder = _install(monkeypatch, _Recorder([(401, "unauthorized")]))
+        result = await resolve_columns([_columns()], ai_consent=True)
+        assert result.source == SOURCE_FAILED
+        assert result.reason_code == "key_invalid"
+
+    async def test_403_forbidden(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        recorder = _install(monkeypatch, _Recorder([(403, "forbidden")]))
+        result = await resolve_columns([_columns()], ai_consent=True)
+        assert result.source == SOURCE_FAILED
+        assert result.reason_code == "key_invalid"
+
+    async def test_404_model_unavailable(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        # 404 for primary, 404 for fallback
+        recorder = _install(monkeypatch, _Recorder([(404, "not found"), (404, "not found")]))
+        result = await resolve_columns([_columns()], ai_consent=True)
+        assert result.source == SOURCE_FAILED
+        assert result.reason_code == "model_unavailable"
+
+    async def test_fallback_used(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        recorder = _install(monkeypatch, _Recorder([(404, "not found"), (200, _ok_body())]))
+        result = await resolve_columns([_columns()], ai_consent=True)
+        assert result.source == SOURCE_GEMINI
+        assert result.reason_code == "fallback_used"
+
 
     async def test_rate_limit_is_retried_then_succeeds(self, monkeypatch, ai_on):
         monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
@@ -292,6 +322,7 @@ class TestFailureHandling:
 
         assert recorder.call_count == 2
         assert result.source == SOURCE_GEMINI
+        assert result.reason_code is None
 
     async def test_server_error_is_retried(self, monkeypatch, ai_on):
         monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
@@ -300,6 +331,7 @@ class TestFailureHandling:
         result = await resolve_columns([_columns()], ai_consent=True)
         assert recorder.call_count == 2
         assert result.source == SOURCE_GEMINI
+        assert result.reason_code is None
 
     async def test_bad_json_is_retried_once_then_succeeds(self, monkeypatch, ai_on):
         monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
@@ -325,6 +357,47 @@ class TestFailureHandling:
         result = await resolve_columns([_columns()], ai_consent=True)
         assert recorder.call_count == 1
         assert result.source == SOURCE_FAILED
+        assert result.reason_code == "bad_request"
+
+    async def test_rate_limit_exhausted_returns_reason(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, '_BACKOFF_BASE', 0.0)
+        recorder = _install(monkeypatch, _Recorder([(429, 'rate limited')] * 5))
+        result = await tier2_gemini.resolve_columns([_columns()], ai_consent=True)
+        assert result.source == tier2_gemini.SOURCE_FAILED
+        assert result.reason_code == 'rate_limit'
+
+    async def test_server_error_exhausted_returns_reason(self, monkeypatch, ai_on):
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        recorder = _install(monkeypatch, _Recorder([(503, "unavailable")] * 5))
+        result = await tier2_gemini.resolve_columns([_columns()], ai_consent=True)
+        assert result.source == tier2_gemini.SOURCE_FAILED
+        assert result.reason_code == "server_error"
+
+    async def test_strict_budgeting_halts_slow_server(self, monkeypatch, ai_on):
+        # Even if the client timeout is huge (e.g. 100s), the total budget (15s) must win.
+        monkeypatch.setattr(tier2_gemini, "_BACKOFF_BASE", 0.0)
+        monkeypatch.setattr(tier2_gemini, "GEMINI_TOTAL_BUDGET_SECONDS", 1.0)
+        monkeypatch.setattr(tier2_gemini, "GEMINI_TIMEOUT_SECONDS", 10.0)
+        
+        class _SlowClient:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *args): return False
+            async def post(self, url, json=None, timeout=None, **kwargs):
+                import asyncio
+                # Sleep longer than the total budget to simulate a slow response.
+                await asyncio.sleep(1.5)
+                raise httpx.TimeoutException("too slow")
+                
+        monkeypatch.setattr(tier2_gemini.httpx, "AsyncClient", lambda **kwargs: _SlowClient())
+        
+        import time
+        start = time.monotonic()
+        result = await tier2_gemini.resolve_columns([_columns()], ai_consent=True)
+        elapsed = time.monotonic() - start
+        
+        assert result.source == tier2_gemini.SOURCE_FAILED
+        assert result.reason_code == "timeout"
+        assert elapsed < 3.0, f"Took {elapsed}s, meaning it retried despite budget exhaustion"
 
     async def test_exhausted_budget_short_circuits(self, monkeypatch, ai_on):
         """When the deadline has already passed we must not start another

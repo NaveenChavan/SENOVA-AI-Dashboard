@@ -54,6 +54,10 @@ class ColumnGuess(BaseModel):
     confidence_band: Literal["high", "medium", "low"] = Field(
         "low", description="Bucketed confidence, for the badge colour and the 'needs review' highlight."
     )
+    route: Literal["local", "gemini"] = Field(
+        "local",
+        description="Final route after collision resolution: local or Tier 2 Gemini.",
+    )
     margin: float = Field(
         0.0,
         ge=0.0,
@@ -63,11 +67,12 @@ class ColumnGuess(BaseModel):
             "meanings fit about equally well, which is why it escalates even at a high score."
         ),
     )
-    source: Literal["local", "gemini", "fallback"] = Field(
+    source: Literal["local", "gemini", "fallback", "pending"] = Field(
         "local",
         description=(
             "Who decided this column: 'local' = the on-server FastEmbed classifier or the alias "
-            "map, 'gemini' = Gemini Flash, 'fallback' = we could not decide and the user must map it."
+            "map, 'gemini' = Gemini Flash, 'fallback' = we could not decide and the user must map it, "
+            "'pending' = Tier 2 is deferred and will be run asynchronously."
         ),
     )
     semantic_label: str = Field(
@@ -82,6 +87,10 @@ class ColumnGuess(BaseModel):
     needs_review: bool = Field(
         False,
         description="True when the user should look at this row before anything is computed.",
+    )
+    recognised_unused: bool = Field(
+        False,
+        description="True when the column is recognised but intentionally not analysed (e.g. currency).",
     )
 
 
@@ -115,6 +124,8 @@ class AiNotice(BaseModel):
     tone: Literal["info", "warning"] = "info"
     #: How many columns ended up needing manual mapping because of this.
     affected_columns: int = 0
+    #: Short machine-readable code for the reason
+    reason_code: str | None = None
 
 
 class ColumnMappingPreview(BaseModel):
@@ -240,6 +251,7 @@ class AnalyticsResponse(BaseModel):
     Partial success: valid rows are analysed, invalid rows are reported in ``errors``.
     """
     summary: SalesSummary
+    row_count: int = Field(0, description="Number of valid transaction rows in the selected period after filters.")
     top_items: List[TopItem]                    # Top 5 fast-moving items (bar chart data)
     daily_trend: List[DailyTrend]               # Daily revenue & profit trend (line chart data)
     dead_stock: List[DeadStockItem]             # Slow-moving / dead stock items
@@ -426,7 +438,7 @@ MeasureKey = Literal[
 
 #: Hard caps that keep one request from turning into a server-wide slowdown.
 MAX_FILTER_KEYS = 8
-MAX_FILTER_VALUES = 50
+MAX_FILTER_VALUES = 5000
 MAX_FILTER_VALUE_LENGTH = 200
 
 
@@ -571,9 +583,19 @@ class DimensionOption(BaseModel):
     key: str
     label: str
     values: List[str]
+    total: int = Field(0, description="Total selectable values before the display/search limit.")
+    selected_count: int = Field(0, description="How many currently selected values remain valid for this dimension.")
     truncated: bool = Field(
         False, description="True when the file has more distinct values than were returned"
     )
+
+
+class DimensionOptionsRequest(AnalysisQuery):
+    """Request one filter dimension's values using the current staged filters."""
+
+    dimension: DimensionKey
+    search: str = ""
+    limit: int = Field(1000, ge=1, le=5000)
 
 
 class DimensionsResponse(BaseModel):
@@ -795,6 +817,9 @@ class AiInsightsResponse(InsightsResponse):
     )
     ai_notice: str | None = Field(
         None, description="Plain-language explanation when the AI prose stage was skipped or failed"
+    )
+    ai_reason_code: str | None = Field(
+        None, description="Short machine-readable reason code"
     )
     ai_elapsed_ms: float = Field(0.0, description="Time the AI prose stage took")
 

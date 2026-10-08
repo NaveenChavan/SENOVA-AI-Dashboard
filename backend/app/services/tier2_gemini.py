@@ -51,6 +51,7 @@ from app.core.config import (
     GEMINI_API_KEY,
     GEMINI_MAX_RETRIES,
     GEMINI_MODEL,
+    GEMINI_FALLBACK_MODEL,
     GEMINI_TIMEOUT_SECONDS,
     GEMINI_TOTAL_BUDGET_SECONDS,
 )
@@ -84,6 +85,14 @@ Rules:
 - If two meanings are genuinely equally likely, return "other". The caller will
   ask a human, which is a better outcome than a confident wrong answer.
 - Never invent values, figures, or column names that were not given to you.
+
+Output format:
+Return a JSON object with a single key "columns", containing a list of objects.
+Each object must have these exact keys:
+- "column": The column header exactly as it was sent
+- "label": One of: {', '.join(SEMANTIC_LABELS)}
+- "confidence": How sure you are, from 0.0 to 1.0
+- "reason": One short sentence explaining the choice
 """
 
 
@@ -142,6 +151,12 @@ Rules:
   original text.
 - Keep each rewrite to one or two sentences.
 - If a card's original message is already clear, return it unchanged.
+
+Output format:
+Return a JSON object with a single key "rewrites", containing a list of objects.
+Each object must have these exact keys:
+- "id": The insight id this rewrite belongs to
+- "message": A clearer phrasing of the same finding
 """
 
 
@@ -165,6 +180,8 @@ class Tier2Result(BaseModel):
     elapsed_ms: float = 0.0
     #: Plain-language reason when ``source`` is ``skipped`` or ``fallback``.
     notice: str | None = None
+    #: Short machine-readable code for the reason, to surface exact failures in the UI.
+    reason_code: str | None = None
 
 
 def gemini_enabled() -> bool:
@@ -288,6 +305,8 @@ def _is_retryable(status_code: int) -> bool:
 
 async def _call_gemini(
     client: httpx.AsyncClient,
+    model_name: str,
+    max_retries: int,
     columns: list[dict],
     deadline: float,
 ) -> dict[str, dict]:
@@ -301,16 +320,15 @@ async def _call_gemini(
         "contents": [{"role": "user", "parts": [{"text": _build_prompt(columns)}]}],
         "generationConfig": {
             "responseMimeType": "application/json",
-            "responseJsonSchema": GeminiVerdict.model_json_schema(),
             "temperature": 0,
         },
     }
-    url = _ENDPOINT_TEMPLATE.format(model=GEMINI_MODEL)
+    url = _ENDPOINT_TEMPLATE.format(model=model_name)
     expected = [column["name"] for column in columns]
 
     last_error: Exception | None = None
 
-    for attempt in range(GEMINI_MAX_RETRIES + 1):
+    for attempt in range(max_retries + 1):
         # Never start an attempt we have no budget to finish. Without this check a
         # slow upstream could push the request well past the frontend's timeout
         # on the final retry.
@@ -319,7 +337,10 @@ async def _call_gemini(
             raise TimeoutError("Tier 2 budget exhausted before the final attempt.")
 
         try:
-            response = await client.post(url, json=body)
+            # Respect both the per-attempt timeout and the remaining total budget
+            from . import tier2_gemini
+            timeout_for_attempt = min(tier2_gemini.GEMINI_TIMEOUT_SECONDS, remaining)
+            response = await client.post(url, json=body, timeout=timeout_for_attempt)
         except (httpx.TimeoutException, httpx.TransportError) as exc:
             last_error = exc
             logger.warning("Tier 2 attempt %d failed to reach Gemini (%s).", attempt + 1, type(exc).__name__)
@@ -331,12 +352,13 @@ async def _call_gemini(
                 except (ValidationError, ValueError, KeyError, IndexError, TypeError) as exc:
                     # A well-formed HTTP 200 with unusable content. Gemini does
                     # this occasionally, and it is worth one more try.
-                    last_error = exc
+                    last_error = ValueError("invalid_json")
                     logger.warning("Tier 2 attempt %d returned an unusable body (%s).", attempt + 1, type(exc).__name__)
 
             elif _is_retryable(response.status_code):
+                reason = "rate_limit" if response.status_code == 429 else "server_error"
                 last_error = httpx.HTTPStatusError(
-                    f"Gemini returned {response.status_code}",
+                    reason,
                     request=response.request,
                     response=response,
                 )
@@ -344,20 +366,26 @@ async def _call_gemini(
             else:
                 # 400/401/403/404: our request or our key is wrong. Retrying
                 # changes nothing.
+                reason = "bad_request"
+                if response.status_code in (401, 403):
+                    reason = "key_invalid"
+                elif response.status_code == 404:
+                    reason = "model_unavailable"
+                    
                 raise httpx.HTTPStatusError(
-                    f"Gemini rejected the request with HTTP {response.status_code}",
+                    reason,
                     request=response.request,
                     response=response,
                 )
 
-        if attempt < GEMINI_MAX_RETRIES:
+        if attempt < max_retries:
             delay = _BACKOFF_BASE * (2**attempt)
             # Honour the deadline over the backoff schedule.
             if time.monotonic() + delay >= deadline:
                 break
             await asyncio.sleep(delay)
 
-    raise last_error or RuntimeError("Tier 2 exhausted its retries.")
+    raise last_error or RuntimeError("server_error")
 
 
 async def resolve_columns(
@@ -390,6 +418,7 @@ async def resolve_columns(
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI column detection is switched off on this server.",
+            reason_code="disabled"
         )
 
     if not ai_consent:
@@ -397,6 +426,7 @@ async def resolve_columns(
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI column detection was not approved for this upload.",
+            reason_code="no_consent"
         )
 
     if not GEMINI_API_KEY:
@@ -408,6 +438,7 @@ async def resolve_columns(
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI column detection is enabled but no API key is configured on this server.",
+            reason_code="key_missing"
         )
 
     key = cache_key
@@ -423,13 +454,49 @@ async def resolve_columns(
 
     deadline = time.monotonic() + GEMINI_TOTAL_BUDGET_SECONDS
 
+    logger.info(
+        "Tier 2 call starting: model=%s fallback=%s timeout=%ss budget=%ss",
+        GEMINI_MODEL,
+        GEMINI_FALLBACK_MODEL,
+        GEMINI_TIMEOUT_SECONDS,
+        GEMINI_TOTAL_BUDGET_SECONDS,
+    )
+
     try:
         async with httpx.AsyncClient(
             timeout=GEMINI_TIMEOUT_SECONDS,
             headers={"x-goog-api-key": GEMINI_API_KEY, "Content-Type": "application/json"},
         ) as client:
-            verdicts = await _call_gemini(client, columns, deadline)
+            try:
+                verdicts = await _call_gemini(client, GEMINI_MODEL, GEMINI_MAX_RETRIES, columns, deadline)
+            except Exception as primary_exc:
+                is_timeout = isinstance(primary_exc, (httpx.TimeoutException, TimeoutError))
+                is_404 = isinstance(primary_exc, httpx.HTTPStatusError) and str(primary_exc.args[0]) == "model_unavailable"
+                
+                if (is_timeout or is_404) and GEMINI_FALLBACK_MODEL:
+                    logger.warning("Primary model failed (%s), trying fallback %s...", "timeout" if is_timeout else "404", GEMINI_FALLBACK_MODEL)
+                    try:
+                        verdicts = await _call_gemini(client, GEMINI_FALLBACK_MODEL, 0, columns, deadline)
+                        return Tier2Result(
+                            verdicts=verdicts,
+                            source=SOURCE_GEMINI,
+                            elapsed_ms=_elapsed_ms(started),
+                            reason_code="fallback_used",
+                            notice="The primary AI model was unavailable, so a fallback model was used."
+                        )
+                    except Exception:
+                        raise primary_exc
+                else:
+                    raise primary_exc
     except Exception as exc:
+        reason_code = "server_error"
+        if isinstance(exc, httpx.HTTPStatusError):
+            reason_code = str(exc.args[0])
+        elif isinstance(exc, (httpx.TimeoutException, TimeoutError)):
+            reason_code = "timeout"
+        elif isinstance(exc, ValueError) and str(exc) == "invalid_json":
+            reason_code = "invalid_json"
+
         # Deliberately broad. A Tier 2 failure is never allowed to fail the
         # upload, so whatever went wrong becomes a fallback and a notice.
         logger.warning("Tier 2 failed (%s: %s). Falling back to manual mapping.", type(exc).__name__, exc)
@@ -440,6 +507,7 @@ async def resolve_columns(
                 "We couldn't identify some columns automatically, so they've been "
                 "left for you to map. Everything else analysed normally."
             ),
+            reason_code=reason_code
         )
 
     if cache_save is not None and key:
@@ -504,6 +572,7 @@ class NarrativeResult(BaseModel):
     source: str = SOURCE_SKIPPED
     elapsed_ms: float = 0.0
     notice: str | None = None
+    reason_code: str | None = None
 
 
 def _build_narrative_prompt(insights: list[dict]) -> str:
@@ -566,7 +635,6 @@ async def _call_gemini_narrative(
         "contents": [{"role": "user", "parts": [{"text": _build_narrative_prompt(insights)}]}],
         "generationConfig": {
             "responseMimeType": "application/json",
-            "responseJsonSchema": GeminiNarrative.model_json_schema(),
             "temperature": 0,
         },
     }
@@ -581,7 +649,8 @@ async def _call_gemini_narrative(
             raise TimeoutError("Narrative budget exhausted before the final attempt.")
 
         try:
-            response = await client.post(url, json=body)
+            timeout_for_attempt = min(GEMINI_TIMEOUT_SECONDS, remaining)
+            response = await client.post(url, json=body, timeout=timeout_for_attempt)
         except (httpx.TimeoutException, httpx.TransportError) as exc:
             last_error = exc
             logger.warning("Narrative attempt %d failed to reach Gemini (%s).", attempt + 1, type(exc).__name__)
@@ -591,17 +660,24 @@ async def _call_gemini_narrative(
                     payload = _extract_json(response.json()["candidates"][0]["content"]["parts"][0]["text"])
                     return _sanitise_rewrites(payload, expected)
                 except (ValidationError, ValueError, KeyError, IndexError, TypeError) as exc:
-                    last_error = exc
+                    last_error = ValueError("invalid_json")
                     logger.warning("Narrative attempt %d returned an unusable body (%s).", attempt + 1, type(exc).__name__)
 
             elif _is_retryable(response.status_code):
+                reason = "rate_limit" if response.status_code == 429 else "server_error"
                 last_error = httpx.HTTPStatusError(
-                    f"Gemini returned {response.status_code}", request=response.request, response=response
+                    reason, request=response.request, response=response
                 )
                 logger.warning("Narrative attempt %d got HTTP %d.", attempt + 1, response.status_code)
             else:
+                reason = "bad_request"
+                if response.status_code in (401, 403):
+                    reason = "key_invalid"
+                elif response.status_code == 404:
+                    reason = "model_not_found"
+                    
                 raise httpx.HTTPStatusError(
-                    f"Gemini rejected the request with HTTP {response.status_code}",
+                    reason,
                     request=response.request,
                     response=response,
                 )
@@ -612,7 +688,7 @@ async def _call_gemini_narrative(
                 break
             await asyncio.sleep(delay)
 
-    raise last_error or RuntimeError("Narrative stage exhausted its retries.")
+    raise last_error or RuntimeError("server_error")
 
 
 async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeResult:
@@ -639,6 +715,7 @@ async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeR
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI-written explanations are switched off on this server.",
+            reason_code="disabled"
         )
 
     if not ai_consent:
@@ -646,6 +723,7 @@ async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeR
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI-written explanations were not approved.",
+            reason_code="no_consent"
         )
 
     if not GEMINI_API_KEY:
@@ -654,6 +732,7 @@ async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeR
             source=SOURCE_SKIPPED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI-written explanations need an API key configured on this server.",
+            reason_code="key_missing"
         )
 
     deadline = time.monotonic() + GEMINI_TOTAL_BUDGET_SECONDS
@@ -665,6 +744,14 @@ async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeR
         ) as client:
             rewrites = await _call_gemini_narrative(client, insights, deadline)
     except Exception as exc:
+        reason_code = "server_error"
+        if isinstance(exc, httpx.HTTPStatusError):
+            reason_code = str(exc.args[0])
+        elif isinstance(exc, (httpx.TimeoutException, TimeoutError)):
+            reason_code = "timeout"
+        elif isinstance(exc, ValueError) and str(exc) == "invalid_json":
+            reason_code = "invalid_json"
+            
         # Same posture as the column path: a prose failure must never fail the
         # dashboard. The caller keeps every deterministic sentence.
         logger.warning("Narrative stage failed (%s: %s). Keeping original text.", type(exc).__name__, exc)
@@ -672,6 +759,7 @@ async def rewrite_insights(insights: list[dict], ai_consent: bool) -> NarrativeR
             source=SOURCE_FAILED,
             elapsed_ms=_elapsed_ms(started),
             notice="AI-written explanations weren't available, so the original text was kept.",
+            reason_code=reason_code
         )
 
     return NarrativeResult(rewrites=rewrites, source=SOURCE_GEMINI, elapsed_ms=_elapsed_ms(started))

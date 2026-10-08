@@ -77,7 +77,7 @@ export default function ForecastSummary({ forecast, loading, horizon, onHorizonC
         </span>
       </Fact>
 
-      <Fact label="Model check">
+      <Fact label="Model check: back-test on this file">
         {forecast.accuracy_pct != null ? (
           <span className="text-xs font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
             {forecast.accuracy_pct}% accurate
@@ -131,6 +131,11 @@ export default function ForecastSummary({ forecast, loading, horizon, onHorizonC
         {forecast.reason && (
           <p className="text-[12px] max-w-sm lg:text-right" style={{ color: 'var(--text-muted)' }}>
             {forecast.reason}
+          </p>
+        )}
+        {forecast.history_days < 180 && (
+          <p className="text-[12px] max-w-sm lg:text-right" style={{ color: 'var(--text-warning)', marginTop: 4 }}>
+            Based on {forecast.history_days} days of history. A longer history (180+ days) improves accuracy.
           </p>
         )}
       </div>

@@ -217,6 +217,18 @@ SEMANTIC_FIELDS: tuple[SemanticField, ...] = (
         ),
     ),
     SemanticField(
+        label="currency",
+        description=(
+            "The currency code or symbol for the money amounts on this row — "
+            "INR, USD, EUR, Rs, etc."
+        ),
+        synonyms=(
+            "currency", "ccy", "curr",
+            # Hindi / Hinglish
+            "मुद्रा",
+        ),
+    ),
+    SemanticField(
         label="category",
         description=(
             "The group or department a product belongs to — Kurta, Saree, "
@@ -269,7 +281,7 @@ SEMANTIC_FIELDS: tuple[SemanticField, ...] = (
             "cancelled, returned, paid or unpaid."
         ),
         synonyms=(
-            "status", "order status", "payment status", "state", "stage",
+            "status", "order status", "payment status", "fulfilment status", "state", "stage",
             "order state", "delivery status", "invoice status", "condition",
             # Hindi / Hinglish
             "स्थिति", "हालत", "स्टेटस", "status kya", "kya hua",
@@ -283,7 +295,7 @@ SEMANTIC_FIELDS: tuple[SemanticField, ...] = (
             "typed in a remarks or observation box."
         ),
         synonyms=(
-            "notes", "note", "remarks", "remark", "comment", "comments",
+            "notes", "note", "remarks", "remark", "comment", "comments", "narration",
             "observation", "description note", "instructions", "memo",
             # Hindi / Hinglish
             "टिप्पणी", "नोट", "टिप्पणियाँ", "remarks kya", "koi baat",
@@ -368,6 +380,7 @@ SEMANTIC_TO_CANONICAL: dict[str, str | None] = {
     # Recognised, deliberately not analysed.
     "status": None,
     "notes": None,
+    "currency": None,
     # Resolved at call time by ``canonical_field_for`` — a bare "id" is not
     # enough to justify calling something an Invoice No.
     "id": None,

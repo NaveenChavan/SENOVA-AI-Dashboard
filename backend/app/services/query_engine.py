@@ -144,8 +144,20 @@ def resolve_window(df: pd.DataFrame, time_filter: str, start_date: date | None =
     if time_filter == "custom":
         if not start_date or not end_date:
             raise QueryError("A custom range needs both start_date and end_date.")
-        start = pd.Timestamp(start_date).normalize()
-        end = pd.Timestamp(end_date).normalize() + one_day
+        requested_start = pd.Timestamp(start_date).normalize()
+        requested_end = pd.Timestamp(end_date).normalize()
+        if requested_start > requested_end:
+            raise QueryError("From date must be on or before To date.")
+        # Custom ranges are always bounded by the actual data span. Keep the
+        # behaviour deterministic even when the whole requested range sits
+        # outside the file: clamp it to the nearest available day.
+        if requested_end < min_date or requested_start > max_date:
+            start = requested_start
+            end = requested_end + one_day
+        else:
+            start = max(requested_start, min_date)
+            end_day = min(requested_end, max_date)
+            end = end_day + one_day
     elif time_filter == "today":
         start, end = max_date, max_date + one_day
     elif time_filter == "week":
@@ -159,7 +171,11 @@ def resolve_window(df: pd.DataFrame, time_filter: str, start_date: date | None =
         return Window(start, end, start, start, PERIOD_LABELS["all"])
 
     span = end - start
-    return Window(start, end, start - span, start, PERIOD_LABELS.get(time_filter, time_filter))
+    if time_filter == 'today':
+        label = f"Latest day ({max_date.day} {max_date.strftime('%b')})"
+    else:
+        label = PERIOD_LABELS.get(time_filter, time_filter)
+    return Window(start, end, start - span, start, label)
 
 
 def slice_window(df: pd.DataFrame, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
@@ -213,14 +229,18 @@ def build_slice(
     Returns ``(current_rows, previous_rows, window)`` with dimension filters
     applied to **both** periods, so a trend arrow compares like with like.
     """
-    filtered = apply_filters(df, filters or {})
-    window = resolve_window(filtered, time_filter, start_date, end_date)
-    current = slice_window(filtered, window.start, window.end)
-    previous = (
-        slice_window(filtered, window.previous_start, window.previous_end)
+    # Resolve the time window against the FULL file before applying dimension
+    # filters. This is critical for the "Latest day" rule: a category that had
+    # no sale on the file's last day must not silently redefine "latest day".
+    window = resolve_window(df, time_filter, start_date, end_date)
+    current_window = slice_window(df, window.start, window.end)
+    previous_window = (
+        slice_window(df, window.previous_start, window.previous_end)
         if window.previous_end > window.previous_start
-        else filtered.iloc[0:0]
+        else df.iloc[0:0]
     )
+    current = apply_filters(current_window, filters or {})
+    previous = apply_filters(previous_window, filters or {})
     return current, previous, window
 
 
@@ -499,9 +519,9 @@ def dimension_options(df: pd.DataFrame) -> DimensionsResponse:
     actually contains, with its distinct values (capped), plus which optional
     measures are available and the file's real date span.
 
-    The frontend builds its filter chips and dimension dropdown purely from
-    this, which is why a column the user never mapped can never become a
-    filterable dimension.
+    This remains the cheap, file-level metadata call. The staged filter drawer
+    uses :func:`dimension_option` for cascading/searchable Item and Invoice No
+    values so it never needs to download an unbounded list.
     """
     column_to_key = {spec["column"]: key for key, spec in DIMENSIONS.items()}
     options: list[DimensionOption] = []
@@ -516,6 +536,8 @@ def dimension_options(df: pd.DataFrame) -> DimensionsResponse:
                 key=key,
                 label=DIMENSIONS[key]["label"],
                 values=distinct[:MAX_DIMENSION_VALUES],
+                total=len(distinct),
+                selected_count=0,
                 truncated=len(distinct) > MAX_DIMENSION_VALUES,
             )
         )
@@ -524,4 +546,59 @@ def dimension_options(df: pd.DataFrame) -> DimensionsResponse:
         dimensions=options,
         optional_measures=available_measures(df),
         date_range=DataDateRange(**compute_data_date_range(df)),
+    )
+
+
+def dimension_option(
+    df: pd.DataFrame,
+    dimension: str,
+    *,
+    filters: dict[str, list[str]] | None = None,
+    time_filter: str = "all",
+    start_date: date | None = None,
+    end_date: date | None = None,
+    search: str = "",
+    limit: int = MAX_DIMENSION_VALUES,
+) -> DimensionOption:
+    """Return one dimension's currently valid option list.
+
+    The selected dimension's own filter is intentionally excluded from the
+    context, while every other dimension filter and the date window is applied.
+    That gives true Category ↔ Item cascading without making an already-selected
+    value disappear just because it is the dimension currently being edited.
+    """
+    spec = DIMENSIONS.get(dimension)
+    if spec is None:
+        raise QueryError(f"Unknown dimension '{dimension}'.")
+    column = spec["column"]
+    if column.startswith("_time_"):
+        raise QueryError(f"Dimension '{dimension}' cannot be used as a filter option.")
+    if column not in df.columns:
+        raise QueryError(f"This file has no '{spec['label']}' column.")
+    if limit < 1 or limit > 5000:
+        raise QueryError("Option limit must be between 1 and 5000.")
+
+    window = resolve_window(df, time_filter, start_date, end_date)
+    context = slice_window(df, window.start, window.end)
+    context_filters = {
+        key: values
+        for key, values in (filters or {}).items()
+        if key != dimension and values
+    }
+    context = apply_filters(context, context_filters)
+
+    available = sorted(context[column].astype(str).unique().tolist())
+    selected = set((filters or {}).get(dimension, []))
+    selected_count = len(selected.intersection(available))
+
+    needle = str(search or "").strip().casefold()
+    visible = [value for value in available if not needle or needle in value.casefold()]
+
+    return DimensionOption(
+        key=dimension,
+        label=spec["label"],
+        values=visible[:limit],
+        total=len(available),
+        selected_count=selected_count,
+        truncated=len(visible) > limit,
     )

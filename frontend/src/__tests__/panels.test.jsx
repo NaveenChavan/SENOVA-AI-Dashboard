@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import DrillDownPanel from '../components/dashboard/DrillDownPanel'
@@ -146,7 +146,7 @@ describe('InventoryPanel (Feature 3)', () => {
     expect(screen.queryByRole('columnheader', { name: 'Stock' })).toBeNull()
     expect(screen.getByText(/map a stock column/i)).toBeTruthy()
     // Demand ranking is still available.
-    expect(screen.getByRole('heading', { name: 'Reorder priority' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Sales-speed ranking' })).toBeTruthy()
     expect(screen.getByRole('rowheader', { name: /Cotton Kurta/ })).toBeTruthy()
   })
 })
@@ -207,54 +207,106 @@ describe('ForecastSummary (Feature 2)', () => {
   })
 })
 
-describe('FilterPanel (Feature 5)', () => {
+describe('FilterPanel (Feature 5 / C2 filters)', () => {
   const dimensions = [
-    { key: 'category', label: 'Category', values: ['Kurta', 'Saree'], truncated: false },
-    { key: 'branch', label: 'Branch / Store', values: ['MG Road', 'Station Road'], truncated: false },
+    { key: 'category', label: 'Category', values: ['Power', 'Accessories'], total: 2, truncated: false },
+    { key: 'item', label: 'Item', values: ['Power Bank', 'Wireless Mouse'], total: 2, truncated: false },
+    { key: 'payment_mode', label: 'Payment Mode', values: ['COD', 'Prepaid'], total: 2, truncated: false },
+    { key: 'invoice_no', label: 'Invoice No', values: ['#90001', '#90002'], total: 2, truncated: false },
   ]
 
-  it('shows active filters as removable chips', () => {
-    const onChange = vi.fn()
+  const baseProps = {
+    fileId: 'file-1',
+    dimensions,
+    filters: {},
+    timeFilter: 'all',
+    dateRange: { min_date: '2026-03-10', max_date: '2026-06-17', span_days: 100 },
+    customRange: { start: '', end: '' },
+    onApply: vi.fn(),
+    onClear: vi.fn(),
+    fetchDimensionOptions: vi.fn(async (_fileId, request) => {
+      if (request.dimension === 'item' && request.filters.category?.includes('Power')) {
+        return { key: 'item', label: 'Item', values: ['Power Bank'], total: 1, selected_count: 0, truncated: false }
+      }
+      if (request.dimension === 'category' && request.filters.item?.length) {
+        return { key: 'category', label: 'Category', values: ['Power'], total: 1, selected_count: 0, truncated: false }
+      }
+      if (request.dimension === 'invoice_no' && request.search === '90002') {
+        return { key: 'invoice_no', label: 'Invoice No', values: ['#90002'], total: 1, selected_count: 0, truncated: false }
+      }
+      return { key: request.dimension, label: request.dimension, values: ['Power Bank', 'Wireless Mouse'], total: 2, selected_count: 0, truncated: false }
+    }),
+  }
+
+  it('counts active filter GROUPS, not individual selected values', () => {
     render(
       <FilterPanel
-        dimensions={dimensions}
-        filters={{ branch: ['MG Road'] }}
-        onChange={onChange}
-        dateRange={{ min_date: '2026-01-01', max_date: '2026-03-31', span_days: 90 }}
-        customRange={{ start: '', end: '' }}
-        onCustomRangeChange={() => {}}
-        onClear={() => {}}
+        {...baseProps}
+        filters={{ category: ['Power', 'Accessories'], item: ['Power Bank'] }}
+        timeFilter="week"
       />,
     )
 
-    const chip = screen.getByRole('button', { name: 'Remove Branch / Store filter' })
-    expect(chip).toBeTruthy()
-    expect(screen.getByText('MG Road')).toBeTruthy()
-
-    chip.click()
-    expect(onChange).toHaveBeenCalledWith({})
+    expect(screen.getByLabelText('3 active filter groups')).toBeTruthy()
   })
 
-  it('offers the file\'s own dimensions and a custom date range when opened', () => {
-    render(
-      <FilterPanel
-        dimensions={dimensions}
-        filters={{}}
-        onChange={() => {}}
-        dateRange={{ min_date: '2026-01-01', max_date: '2026-03-31', span_days: 90 }}
-        customRange={{ start: '', end: '' }}
-        onCustomRangeChange={() => {}}
-        onClear={() => {}}
-      />,
-    )
-
-    // fireEvent (not node.click) so React's state update is flushed inside act.
+  it('opens a compact drawer with searchable tall Item and Invoice lists', () => {
+    render(<FilterPanel {...baseProps} />)
     fireEvent.click(screen.getByRole('button', { name: /filters/i }))
 
-    expect(screen.getByText('Custom date range')).toBeTruthy()
-    expect(screen.getByText('Category')).toBeTruthy()
-    expect(screen.getByText('Branch / Store')).toBeTruthy()
-    expect(screen.getByText(/data available 2026-01-01/i)).toBeTruthy()
+    expect(screen.getByRole('dialog', { name: 'Filters' })).toBeTruthy()
+    expect(screen.getByRole('searchbox', { name: 'Search Item' })).toBeTruthy()
+    expect(screen.getByRole('searchbox', { name: 'Search Invoice No' })).toBeTruthy()
+    expect(screen.getAllByText('0 of 2 selected').length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('button', { name: 'Select all' }).length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('button', { name: 'Clear' }).length).toBeGreaterThan(0)
+  })
+
+  it('uses the file max date for the Latest day preset', () => {
+    render(<FilterPanel {...baseProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /filters/i }))
+    expect(screen.getByRole('button', { name: 'Latest day (17 Jun)' })).toBeTruthy()
+  })
+
+  it('supports a preset and applies it only when Apply is pressed', () => {
+    const onApply = vi.fn()
+    render(<FilterPanel {...baseProps} onApply={onApply} />)
+    fireEvent.click(screen.getByRole('button', { name: /filters/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Last 7 days' }))
+    expect(onApply).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }))
+    expect(onApply).toHaveBeenCalledWith({
+      filters: {},
+      timeFilter: 'week',
+      startDate: null,
+      endDate: null,
+    })
+  })
+
+  it('cascades Item options from a staged Category selection', async () => {
+    render(<FilterPanel {...baseProps} />)
+    fireEvent.click(screen.getByRole('button', { name: /filters/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Power' }))
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Power Bank' })).toBeTruthy())
+    expect(screen.queryByRole('button', { name: 'Wireless Mouse' })).toBeNull()
+  })
+
+  it('does not show an empty option message while a server option request is loading', async () => {
+    let resolveRequest
+    const fetchDimensionOptions = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveRequest = resolve
+        }),
+    )
+    render(<FilterPanel {...baseProps} fetchDimensionOptions={fetchDimensionOptions} />)
+    fireEvent.click(screen.getByRole('button', { name: /filters/i }))
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Search Invoice No' }), { target: { value: 'abc' } })
+
+    await waitFor(() => expect(screen.getByText('Loading…')).toBeTruthy())
+    expect(screen.queryByText('No matching values.')).toBeNull()
+    resolveRequest?.({ key: 'invoice_no', label: 'Invoice No', values: [], total: 0, selected_count: 0, truncated: false })
   })
 })
 

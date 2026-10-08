@@ -11,6 +11,7 @@ actually understood.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -60,7 +61,7 @@ class TestAiDisabled:
                 "Purchase Rate": [300, 1800],
             }
         )
-        reports, timings, notice = await analyse(frame, ai_consent=False)
+        reports, timings, notice, _ = await analyse(frame, ai_consent=False)
 
         assert notice is None
         assert _by_name(reports)["Bill Date"]["suggested_field"] == "Date"
@@ -86,7 +87,7 @@ class TestAiDisabled:
 
     async def test_unrecognised_column_is_left_for_the_user(self, gemini_off, no_embeddings):
         frame = pd.DataFrame({"Bill Date": ["01-04-2026", "02-04-2026"], "Zorp Factor": ["x", "y"]})
-        reports, _timings, _notice = await analyse(frame, ai_consent=False)
+        reports, _timings, _notice, _ = await analyse(frame, ai_consent=False)
 
         report = _by_name(reports)["Zorp Factor"]
         assert report["suggested_field"] is None
@@ -95,7 +96,7 @@ class TestAiDisabled:
 
     async def test_timings_are_always_reported(self, gemini_off, no_embeddings):
         frame = pd.DataFrame({"Qty.": [1, 2, 3]})
-        _reports, timings, _notice = await analyse(frame)
+        _reports, timings, _notice, _ = await analyse(frame)
         payload = timings.as_dict()
         assert set(payload) == {"tier1_ms", "tier2_ms", "total_ms"}
         assert payload["total_ms"] >= payload["tier1_ms"]
@@ -107,7 +108,7 @@ class TestAiDisabled:
 class TestConsentPropagation:
     async def test_consent_false_leaves_ambiguous_columns_unmapped(self, gemini_on, no_embeddings):
         frame = pd.DataFrame({"Zorp Factor": ["a", "b", "c"]})
-        reports, timings, notice = await analyse(frame, ai_consent=False)
+        reports, timings, notice, _ = await analyse(frame, ai_consent=False)
 
         report = _by_name(reports)["Zorp Factor"]
         assert report["suggested_field"] is None
@@ -145,7 +146,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _timings, _notice = await analyse(frame, ai_consent=True)
+        reports, _timings, _notice, _ = await analyse(frame, ai_consent=True)
 
         report = _by_name(reports)["Zorp Factor"]
         assert report["suggested_field"] == "Quantity"
@@ -168,7 +169,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
         assert _by_name(reports)["Zorp Factor"]["source"] == "gemini"
 
     async def test_failure_marks_the_column_for_review(self, gemini_on, no_embeddings, monkeypatch):
@@ -181,7 +182,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _timings, notice = await analyse(frame, ai_consent=True)
+        reports, _timings, notice, _r = await analyse(frame, ai_consent=True)
 
         report = _by_name(reports)["Zorp Factor"]
         assert report["suggested_field"] is None
@@ -203,7 +204,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
         assert _by_name(reports)["Zorp Factor"]["needs_review"] is False
 
     async def test_collision_demotion_forces_review_on(self, gemini_on, no_embeddings, monkeypatch):
@@ -220,7 +221,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Selling Price": [100, 200], "Rate": [120, 240]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
 
         demoted = [r for r in reports if r["suggested_field"] is None]
         assert len(demoted) == 1
@@ -238,7 +239,7 @@ class TestTier2Merging:
                 "Rate/Unit": [750, 3200],
             }
         )
-        reports, _t, _n = await analyse(frame, ai_consent=False)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=False)
         assert [r["raw_column"] for r in reports if r["needs_review"]] == []
 
     async def test_a_low_confidence_suggestion_still_needs_review(self, gemini_on, no_embeddings, monkeypatch):
@@ -254,7 +255,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
 
         report = _by_name(reports)["Zorp Factor"]
         assert report["suggested_field"] == "Tax"
@@ -272,7 +273,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
         assert _by_name(reports)["Zorp Factor"]["suggested_field"] is None
 
     async def test_mapped_semantics_with_no_canonical_target(self, gemini_on, no_embeddings, monkeypatch):
@@ -289,7 +290,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Remarks": ["ok", "damaged"]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
 
         report = _by_name(reports)["Remarks"]
         assert report["semantic_label"] == "notes"
@@ -320,7 +321,7 @@ class TestTier2Merging:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Zorp Factor": [3, 5, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=True, file_id="abc123")
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True, file_id="abc123")
         assert _by_name(reports)["Zorp Factor"]["suggested_field"] == "Quantity"
 
     async def test_cache_key_is_derived_from_what_was_actually_sent(self, gemini_on, no_embeddings, monkeypatch):
@@ -445,7 +446,7 @@ class TestCollisions:
         monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
 
         frame = pd.DataFrame({"Rate": [100, 200], "MRP": [1200, 1500]})
-        reports, _t, _n = await analyse(frame, ai_consent=True)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=True)
 
         mapped = [r for r in reports if r["suggested_field"] == "Selling Price"]
         assert len(mapped) == 1
@@ -459,7 +460,7 @@ class TestReportShape:
         frame = pd.DataFrame(
             {"Qty.": [1, 2], "Item Name": ["a", "b"], "Weird": ["c", "d"], "Bill Date": ["01-04-2026", "02-04-2026"]}
         )
-        reports, _t, _n = await analyse(frame, ai_consent=False)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=False)
 
         assert [r["raw_column"] for r in reports] == list(frame.columns)
 
@@ -467,7 +468,7 @@ class TestReportShape:
         """The existing API field must keep its original three values so the
         current frontend badge keeps working unchanged."""
         frame = pd.DataFrame({"Qty.": [1, 2], "Mystery": ["x", "y"]})
-        reports, _t, _n = await analyse(frame, ai_consent=False)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=False)
 
         by_name = _by_name(reports)
         assert by_name["Qty."]["confidence"] == "exact"
@@ -475,7 +476,7 @@ class TestReportShape:
 
     async def test_alternatives_are_serialisable(self, gemini_off, no_embeddings):
         frame = pd.DataFrame({"Qty.": [1, 2]})
-        reports, _t, _n = await analyse(frame, ai_consent=False)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=False)
 
         json.dumps(reports)  # must not raise on numpy types
 
@@ -492,7 +493,7 @@ class TestReportShape:
                 "Mystery": ["x", "y"],
             }
         )
-        reports, timings, _n = await analyse(frame, ai_consent=False)
+        reports, timings, _n, _r = await analyse(frame, ai_consent=False)
 
         from app.models.schemas import ColumnGuess, PipelineTimings
 
@@ -502,12 +503,12 @@ class TestReportShape:
         PipelineTimings(**timings.as_dict())
 
     async def test_empty_frame_returns_empty(self, gemini_off, no_embeddings):
-        reports, _t, _n = await analyse(pd.DataFrame())
+        reports, _t, _n, _ = await analyse(pd.DataFrame())
         assert reports == []
 
     async def test_missing_column_value_is_safe(self, gemini_off, no_embeddings):
         frame = pd.DataFrame({"Qty.": [1, None, 3], "Mystery": [None, "b", None]})
-        reports, _t, _n = await analyse(frame, ai_consent=False)
+        reports, _t, _n, _ = await analyse(frame, ai_consent=False)
         assert len(reports) == 2
 
 
@@ -521,3 +522,126 @@ class TestLoggingPrivacy:
         assert "Mystery Notes" in logged
         assert "SECRET-CUSTOMER-VALUE" not in logged
         assert "another" not in logged
+
+# ── Regression fixtures: routing must use final post-collision state ──────────
+
+
+class TestFinalRouteRegression:
+    async def test_ambiguous_headers_calls_gemini_for_price1(self, gemini_on, no_embeddings, monkeypatch):
+        fixture = Path(__file__).parent / 'fixtures' / 'ambiguous_headers.csv'
+        frame = pd.read_csv(fixture)
+        calls = []
+
+        async def _fake_resolve(columns, ai_consent, **kwargs):
+            calls.extend(columns)
+            return tier2_gemini.Tier2Result(
+                verdicts={"Price1": {"label": "unit_price", "confidence": 0.95, "reason": "header is price-like"}},
+                source=tier2_gemini.SOURCE_GEMINI,
+                elapsed_ms=1.0,
+            )
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+
+        reports, _t, _n, _r = await analyse(frame, ai_consent=True, run_tier2=True)
+        price1 = _by_name(reports)["Price1"]
+
+        assert [column["name"] for column in calls] == ["Price1"]
+        assert price1["route"] == tier1_classifier.ROUTE_GEMINI
+        assert price1["source"] == tier2_gemini.SOURCE_GEMINI
+        # Rate already owns Selling Price, so Price1 remains a human-review item
+        # after Gemini confirms the same semantic meaning.
+        assert price1["needs_review"] is True
+
+    async def test_ambiguous_headers_consent_off_makes_zero_calls_and_returns_honest_notice(self, gemini_on, no_embeddings, monkeypatch):
+        fixture = Path(__file__).parent / 'fixtures' / 'ambiguous_headers.csv'
+        frame = pd.read_csv(fixture)
+        called = []
+
+        async def _fake_resolve(*args, **kwargs):
+            called.append(1)
+            return tier2_gemini.Tier2Result(source=tier2_gemini.SOURCE_GEMINI)
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+
+        reports, _t, notice, reason = await analyse(frame, ai_consent=False, run_tier2=True)
+
+        assert called == []
+        assert notice == "AI help was not approved for this upload."
+        assert reason == "no_consent"
+        assert _by_name(reports)["Price1"]["needs_review"] is True
+
+    async def test_clean_electronics_file_makes_zero_calls_and_needs_no_ai(self, gemini_on, no_embeddings, monkeypatch):
+        frame = pd.DataFrame(
+            {
+                "Bill Date": ["2026-04-01", "2026-04-02"],
+                "Category": ["Phone", "Laptop"],
+                "Item Name": ["X", "Y"],
+                "Qty.": [1, 2],
+                "Rate/Unit": [100, 200],
+                "Purchase Rate": [70, 150],
+            }
+        )
+        called = []
+
+        async def _fake_resolve(*args, **kwargs):
+            called.append(1)
+            return tier2_gemini.Tier2Result(source=tier2_gemini.SOURCE_GEMINI)
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+        reports, _t, notice, _r = await analyse(frame, ai_consent=True, run_tier2=True)
+
+        assert called == []
+        assert notice is None
+        assert [r for r in reports if r["needs_review"]] == []
+
+    async def test_collision_demoted_column_gets_gemini_route(self, gemini_on, monkeypatch):
+        """A local match can become unresolved only after collision resolution;
+        the final route must still escalate it when consent and AI are available."""
+        local = tier1_classifier.ColumnGuess(
+            raw_column="Rate", label="unit_price", canonical="Selling Price", score=1.0, margin=1.0,
+            route=tier1_classifier.ROUTE_LOCAL, source=tier1_classifier.SOURCE_LOCAL,
+        )
+        demoted = tier1_classifier.ColumnGuess(
+            raw_column="Price1", label="unit_price", canonical="Selling Price", score=1.0, margin=1.0,
+            route=tier1_classifier.ROUTE_LOCAL, source=tier1_classifier.SOURCE_LOCAL,
+        )
+        monkeypatch.setattr(tier1_classifier, "classify_columns", lambda df, ai_available=True: [local, demoted])
+        calls = []
+
+        async def _fake_resolve(columns, ai_consent, **kwargs):
+            calls.extend(columns)
+            return tier2_gemini.Tier2Result(
+                verdicts={"Price1": {"label": "unit_price", "confidence": 0.9, "reason": "price-like"}},
+                source=tier2_gemini.SOURCE_GEMINI,
+                elapsed_ms=1.0,
+            )
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+        frame = pd.DataFrame({"Rate": [1, 2], "Price1": [1, 2]})
+
+        await analyse(frame, ai_consent=True, run_tier2=False)
+
+        # Re-run the final-state route check through the public pipeline with
+        # Tier 2 enabled; Price1 must be the only described column.
+        reports, _t, _n, _r = await analyse(frame, ai_consent=True, run_tier2=True)
+        assert [c["name"] for c in calls] == ["Price1"]
+        assert _by_name(reports)["Price1"]["route"] == tier1_classifier.ROUTE_GEMINI
+
+    async def test_full_fixture_can_fill_all_required_fields_after_price1_ai(self, gemini_on, no_embeddings, monkeypatch):
+        fixture = Path(__file__).parent / 'fixtures' / 'ambiguous_headers_full.csv'
+        frame = pd.read_csv(fixture)
+
+        async def _fake_resolve(*args, **kwargs):
+            return tier2_gemini.Tier2Result(
+                verdicts={"Price1": {"label": "unit_price", "confidence": 0.95, "reason": "price header"}},
+                source=tier2_gemini.SOURCE_GEMINI,
+                elapsed_ms=1.0,
+            )
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+        reports, _t, _n, _r = await analyse(frame, ai_consent=True, run_tier2=True)
+
+        mapped = {r["suggested_field"] for r in reports if r["suggested_field"]}
+        assert {"Date", "Category", "Item", "Quantity", "Selling Price", "Cost Price"}.issubset(mapped)
+        assert _by_name(reports)["Price1"]["suggested_field"] == "Selling Price"
+        assert _by_name(reports)["Price1"]["needs_review"] is False

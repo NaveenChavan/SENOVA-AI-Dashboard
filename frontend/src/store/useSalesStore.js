@@ -21,8 +21,17 @@ const controllers = new Map()
 function freshSignal(key) {
   controllers.get(key)?.abort()
   const controller = new AbortController()
+  const signal = controller.signal
+  // AbortController cancellation is necessary but not sufficient: a response
+  // can still win the race if it resolves after abort. Tag the signal so every
+  // fetcher can ignore any response that is no longer the newest request.
+  signal.__senovaController = controller
   controllers.set(key, controller)
-  return controller.signal
+  return signal
+}
+
+function isLatestSignal(key, signal) {
+  return Boolean(signal && controllers.get(key) === signal.__senovaController)
 }
 
 /** True for the "request superseded / component unmounted" cases we ignore. */
@@ -235,6 +244,64 @@ const useSalesStore = create((set, get) => ({
   },
 
   /**
+   * Step 1.5: Run Tier 2 asynchronously if needed
+   */
+  runTier2Async: async (fileId) => {
+    try {
+      const currentConsent = useSalesStore.getState().aiConsent
+      const { data: updatedPreview } = await api.post(`/upload/${fileId}/tier2`, {
+        ai_consent: currentConsent
+      })
+      set((state) => {
+        if (!state.mappingPreview || state.fileId !== fileId) return state
+        // Keep the original preview but update the columns and timings
+        return {
+          mappingPreview: {
+            ...state.mappingPreview,
+            detected_columns: updatedPreview.detected_columns,
+            ai_notice: updatedPreview.ai_notice ?? state.mappingPreview.ai_notice,
+            pipeline_timings: updatedPreview.pipeline_timings ?? state.mappingPreview.pipeline_timings
+          },
+          aiNotice: updatedPreview.ai_notice ?? state.aiNotice,
+          pipelineTimings: updatedPreview.pipeline_timings ?? state.pipelineTimings
+        }
+      })
+      return updatedPreview
+    } catch (err) {
+      // Background AI failures shouldn't block the UI, just leave it as manual mapping
+      // but WE MUST show the reason code so it doesn't fail silently.
+      console.warn('Background AI tier failed:', err)
+      
+      const fallbackNotice = {
+        reason_code: err.response?.data?.detail?.reason_code || err.response?.data?.reason_code || 'server_error',
+        message: err.response?.data?.detail?.message || err.response?.data?.message || 'Background AI failed.'
+      }
+      
+      set((state) => {
+        if (!state.mappingPreview || state.fileId !== fileId) return state
+        
+        // Count how many are still pending (which will now fall back to manual mapping)
+        const affected = state.mappingPreview.detected_columns.filter(c => c.source === 'pending').length
+        const notice = { ...fallbackNotice, affected_columns: affected }
+        
+        const fallbackColumns = state.mappingPreview.detected_columns.map(c => 
+          c.source === 'pending' ? { ...c, source: 'fallback' } : c
+        )
+        
+        return {
+          mappingPreview: {
+            ...state.mappingPreview,
+            detected_columns: fallbackColumns,
+            ai_notice: notice
+          },
+          aiNotice: notice
+        }
+      })
+      return null
+    }
+  },
+
+  /**
    * Step 2: send the confirmed mapping. Runs row-level validation server-side
    * and persists the mapping so every later request reuses it.
    */
@@ -295,6 +362,7 @@ const useSalesStore = create((set, get) => ({
       aiNarratives: {},
       aiSource: 'skipped',
       aiInsightNotice: null,
+      aiInsightReasonCode: null,
       query: { ...INITIAL_QUERY },
       dimensions: [],
       chartData: null,
@@ -322,22 +390,42 @@ const useSalesStore = create((set, get) => ({
   dimensionsLoading: false,
 
   fetchDimensions: async (fileId) => {
+    const signal = freshSignal('dimensions')
     set({ dimensionsLoading: true })
     try {
-      const { data } = await api.get(`/analytics/${fileId}/dimensions`, {
-        signal: freshSignal('dimensions'),
-      })
+      const { data } = await api.get(`/analytics/${fileId}/dimensions`, { signal })
+      if (!isLatestSignal('dimensions', signal)) return
       set({
         dimensions: data.dimensions ?? [],
         dateRange: data.date_range ?? get().dateRange,
         optionalFields: data.optional_measures ?? get().optionalFields,
         dimensionsLoading: false,
       })
+      return data
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('dimensions', signal)) return
       // A missing dimensions call must not block the dashboard: the filter panel
       // simply shows nothing to filter on.
       set({ dimensions: [], dimensionsLoading: false })
+    }
+  },
+
+  /**
+   * Search one dimension using the current staged filters. The backend excludes
+   * the dimension being edited from the context, which makes Category ↔ Item
+   * cascading deterministic and makes Invoice No search work beyond the initial
+   * 200-value metadata preview.
+   */
+  fetchDimensionOptions: async (fileId, request) => {
+    const key = `dimension-options:${request?.dimension ?? 'unknown'}`
+    const signal = freshSignal(key)
+    try {
+      const { data } = await api.post(`/analytics/${fileId}/dimensions/options`, request, { signal })
+      if (!isLatestSignal(key, signal)) return null
+      return data
+    } catch (err) {
+      if (isCancelled(err) || !isLatestSignal(key, signal)) return null
+      throw err
     }
   },
 
@@ -347,12 +435,12 @@ const useSalesStore = create((set, get) => ({
    * apply to every number on the page.
    */
   fetchAnalytics: async (fileId, query = get().query) => {
+    const signal = freshSignal('summary')
     set({ isLoading: true, error: null, validationMessage: 'Loading analytics...' })
 
     try {
-      const { data } = await api.post(`/analytics/${fileId}/summary`, buildQueryBody(query), {
-        signal: freshSignal('summary'),
-      })
+      const { data } = await api.post(`/analytics/${fileId}/summary`, buildQueryBody(query), { signal })
+      if (!isLatestSignal('summary', signal)) return
       // A fresh object graph guarantees new references, so memoised chart
       // components actually re-render when the numbers change.
       set((state) => ({
@@ -374,7 +462,7 @@ const useSalesStore = create((set, get) => ({
         validationMessage: '',
       }))
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('summary', signal)) return
       set({
         error: messageFrom(err, 'Failed to load dashboard. Please retry.'),
         isLoading: false,
@@ -389,16 +477,18 @@ const useSalesStore = create((set, get) => ({
   chartError: null,
 
   fetchChartData: async (fileId, query, { dimension, measure, topN = 10 }) => {
+    const signal = freshSignal('chart')
     set({ chartLoading: true, chartError: null })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/chart-data`,
         { ...buildQueryBody(query), dimension, measure, top_n: topN },
-        { signal: freshSignal('chart') },
+        { signal },
       )
+      if (!isLatestSignal('chart', signal)) return
       set({ chartData: data, chartLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('chart', signal)) return
       set({ chartError: messageFrom(err, 'Could not build that chart.'), chartLoading: false })
     }
   },
@@ -407,16 +497,18 @@ const useSalesStore = create((set, get) => ({
   heatmapLoading: false,
 
   fetchHeatmap: async (fileId, query, measure = 'revenue') => {
+    const signal = freshSignal('heatmap')
     set({ heatmapLoading: true })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/heatmap`,
         { ...buildQueryBody(query), measure },
-        { signal: freshSignal('heatmap') },
+        { signal },
       )
+      if (!isLatestSignal('heatmap', signal)) return
       set({ heatmapData: data, heatmapLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('heatmap', signal)) return
       set({ heatmapLoading: false })
     }
   },
@@ -434,14 +526,14 @@ const useSalesStore = create((set, get) => ({
    * numbers are reconciled against.
    */
   fetchInsights: async (fileId, query = get().query) => {
+    const signal = freshSignal('insights')
     set({ insightsLoading: true })
     try {
-      const { data } = await api.post(`/analytics/${fileId}/insights`, buildQueryBody(query), {
-        signal: freshSignal('insights'),
-      })
+      const { data } = await api.post(`/analytics/${fileId}/insights`, buildQueryBody(query), { signal })
+      if (!isLatestSignal('insights', signal)) return
       set({ insights: data, insightsLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('insights', signal)) return
       set({ insights: null, insightsLoading: false })
     }
   },
@@ -450,6 +542,7 @@ const useSalesStore = create((set, get) => ({
   aiNarratives: {},
   aiSource: 'skipped',
   aiInsightNotice: null,
+  aiInsightReasonCode: null,
 
   /**
    * The same findings plus AI-written wording, where every figure in that
@@ -461,25 +554,28 @@ const useSalesStore = create((set, get) => ({
    * engine did not compute is ever shown.
    */
   fetchAiInsights: async (fileId, query = get().query) => {
+    const signal = freshSignal('ai-insights')
     set({ aiInsightLoading: true })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/ai-insights`,
         { ...buildQueryBody(query), ai_consent: get().aiConsent },
-        { signal: freshSignal('ai-insights') },
+        { signal },
       )
+      if (!isLatestSignal('ai-insights', signal)) return
       set({
         aiNarratives: verifiedNarratives(data?.ai_text),
         aiSource: data?.ai_source ?? 'skipped',
         aiInsightNotice: data?.ai_notice ?? null,
+        aiInsightReasonCode: data?.ai_reason_code ?? null,
         aiInsightElapsedMs: data?.ai_elapsed_ms ?? 0,
         aiInsightLoading: false,
       })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('ai-insights', signal)) return
       // Loses wording only. The insights themselves came from the other call
       // and are untouched, so there is nothing to recover here.
-      set({ aiNarratives: {}, aiInsightNotice: null, aiInsightLoading: false })
+      set({ aiNarratives: {}, aiInsightNotice: null, aiInsightReasonCode: null, aiInsightLoading: false })
     }
   },
 
@@ -500,15 +596,15 @@ const useSalesStore = create((set, get) => ({
    * fall over because an optional panel could not load.
    */
   fetchSchema: async (fileId) => {
+    const signal = freshSignal('schema')
     set({ schemaLoading: true })
     try {
-      const { data } = await api.post(`/analytics/${fileId}/schema`, null, {
-        signal: freshSignal('schema'),
-      })
+      const { data } = await api.post(`/analytics/${fileId}/schema`, null, { signal })
+      if (!isLatestSignal('schema', signal)) return null
       set({ dynamicSchema: data, schemaLoading: false })
       return data
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('schema', signal)) return
       set({ dynamicSchema: null, schemaLoading: false })
     }
   },
@@ -518,14 +614,14 @@ const useSalesStore = create((set, get) => ({
   inventoryLoading: false,
 
   fetchInventory: async (fileId, query = get().query) => {
+    const signal = freshSignal('inventory')
     set({ inventoryLoading: true })
     try {
-      const { data } = await api.post(`/analytics/${fileId}/inventory`, buildQueryBody(query), {
-        signal: freshSignal('inventory'),
-      })
+      const { data } = await api.post(`/analytics/${fileId}/inventory`, buildQueryBody(query), { signal })
+      if (!isLatestSignal('inventory', signal)) return
       set({ inventory: data, inventoryLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('inventory', signal)) return
       set({ inventory: null, inventoryLoading: false })
     }
   },
@@ -538,16 +634,18 @@ const useSalesStore = create((set, get) => ({
   setForecastHorizon: (horizon) => set({ forecastHorizon: horizon }),
 
   fetchForecast: async (fileId, query = get().query, horizon = get().forecastHorizon) => {
+    const signal = freshSignal('forecast')
     set({ forecastLoading: true })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/forecast`,
         { ...buildQueryBody(query), horizon },
-        { signal: freshSignal('forecast') },
+        { signal },
       )
+      if (!isLatestSignal('forecast', signal)) return
       set({ forecast: data, forecastLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('forecast', signal)) return
       set({ forecast: null, forecastLoading: false })
     }
   },
@@ -558,14 +656,14 @@ const useSalesStore = create((set, get) => ({
   caReportError: null,
 
   fetchCAReport: async (fileId, query = get().query) => {
+    const signal = freshSignal('report')
     set({ caReportLoading: true, caReportError: null })
     try {
-      const { data } = await api.post(`/analytics/${fileId}/report`, buildQueryBody(query), {
-        signal: freshSignal('report'),
-      })
+      const { data } = await api.post(`/analytics/${fileId}/report`, buildQueryBody(query), { signal })
+      if (!isLatestSignal('report', signal)) return
       set({ caReport: data, caReportLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('report', signal)) return
       set({ caReportError: messageFrom(err, 'Failed to load the financial report.'), caReportLoading: false })
     }
   },
@@ -576,16 +674,18 @@ const useSalesStore = create((set, get) => ({
   ledgerError: null,
 
   fetchLedgerPage: async (fileId, { query = get().query, page = 1, pageSize = 50 } = {}) => {
+    const signal = freshSignal('ledger')
     set({ ledgerLoading: true, ledgerError: null })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/ledger`,
         { ...buildQueryBody(query), page, page_size: pageSize },
-        { signal: freshSignal('ledger') },
+        { signal },
       )
+      if (!isLatestSignal('ledger', signal)) return
       set({ ledgerPage: data, ledgerLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('ledger', signal)) return
       set({ ledgerError: messageFrom(err, 'Failed to load the transaction ledger.'), ledgerLoading: false })
     }
   },
@@ -629,17 +729,19 @@ const useSalesStore = create((set, get) => ({
       query.filters[dimension] = [point.label]
     }
 
+    const signal = freshSignal('drill')
     set({ drillSelection: { ...point, dimension }, drillLoading: true, drillLedger: null })
 
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/ledger`,
         { ...buildQueryBody(query), page, page_size: 25 },
-        { signal: freshSignal('drill') },
+        { signal },
       )
+      if (!isLatestSignal('drill', signal)) return
       set({ drillLedger: data, drillLoading: false })
     } catch (err) {
-      if (isCancelled(err)) return
+      if (isCancelled(err) || !isLatestSignal('drill', signal)) return
       set({ drillLoading: false })
     }
   },

@@ -43,11 +43,11 @@ const DiscountMarginChart = lazy(() => import('../components/dashboard/DiscountM
  */
 
 const DATE_FILTERS = [
-  { value: 'today', label: 'Today', minSpanDays: 1 },
-  { value: 'week', label: '7 Days', minSpanDays: 8 },
-  { value: '30days', label: '30 Days', minSpanDays: 31 },
-  { value: 'month', label: 'This Month', minSpanDays: 8 },
-  { value: 'all', label: 'All Time', minSpanDays: 1 },
+  { value: 'today', label: 'Latest day', minSpanDays: 1 },
+  { value: 'week', label: 'Last 7 days', minSpanDays: 8 },
+  { value: '30days', label: 'Last 30 days', minSpanDays: 31 },
+  { value: 'month', label: 'This month', minSpanDays: 8 },
+  { value: 'all', label: 'All time', minSpanDays: 1 },
 ]
 
 const VIEW_TABS = [
@@ -104,6 +104,7 @@ export default function Dashboard() {
     // wording. Fetched separately so a failure costs wording, not findings.
     aiNarratives,
     aiInsightNotice,
+    aiInsightReasonCode,
     fetchAiInsights,
     dynamicSchema,
     fetchSchema,
@@ -322,27 +323,51 @@ export default function Dashboard() {
   const exportPDF = async () => {
     if (!fileId) return
     setExporting(true)
-    try {
-      // The PDF is generated server-side as real tables (findings, P&L,
-      // forecast, reorder list, ledger) from the same slice shown on screen.
-      const response = await api.post(`/analytics/${fileId}/report.pdf`, buildQueryBody(query), {
-        responseType: 'blob',
-      })
 
-      const blobUrl = URL.createObjectURL(response.data)
+    const downloadBlob = (blob, filename) => {
+      const blobUrl = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = blobUrl
-      link.download = `senova-financial-report-${fileId.slice(0, 8)}.pdf`
+      link.download = filename
       document.body.appendChild(link)
       link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(blobUrl)
+      link.remove()
+      window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
+    }
+
+    try {
+      const body = buildQueryBody(query)
+      // One visible CTA, two separate PDF products, one identical filter state.
+      const [visualResponse, detailedResponse] = await Promise.all([
+        api.post(`/analytics/${fileId}/visual-report.pdf`, body, { responseType: 'blob' }),
+        api.post(`/analytics/${fileId}/report.pdf`, body, { responseType: 'blob' }),
+      ])
+
+      downloadBlob(visualResponse.data, `senova-visual-financial-report-${fileId.slice(0, 8)}.pdf`)
+      window.setTimeout(() => {
+        downloadBlob(detailedResponse.data, `senova-detailed-financial-report-${fileId.slice(0, 8)}.pdf`)
+      }, 150)
     } catch (err) {
       console.error('PDF export failed:', err)
     } finally {
       setExporting(false)
     }
   }
+
+  // Keep date-label helpers above paletteActions. Referencing a later const during
+  // hook initialization triggers a TDZ runtime crash and a blank dashboard.
+  const latestDayLabel = dateRange?.max_date
+    ? (() => {
+        const [year, month, day] = dateRange.max_date.split('-').map(Number)
+        const label = new Date(year, month - 1, day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+        return `Latest day (${label})`
+      })()
+    : 'Latest day'
+  const labelForDateFilter = (filter) => (filter.value === 'today' ? latestDayLabel : filter.label)
+  const periodLabel =
+    query.timeFilter === 'custom'
+      ? `${query.startDate} → ${query.endDate}`
+      : labelForDateFilter(DATE_FILTERS.find((f) => f.value === query.timeFilter) ?? DATE_FILTERS[4])
 
   /**
    * Everything the dashboard can do, as a flat list for the ⌘K palette.
@@ -363,7 +388,7 @@ export default function Dashboard() {
       ...DATE_FILTERS.map((filter) => ({
         id: `range-${filter.value}`,
         group: 'Date range',
-        label: filter.label,
+        label: labelForDateFilter(filter),
         icon: 'calendar',
         run: () => changeTimeFilter(filter.value),
       })),
@@ -461,11 +486,6 @@ export default function Dashboard() {
 
   const isEmpty = data.summary?.revenue?.value === 0 && (data.top_items?.length ?? 0) === 0
   const activeFilterCount = Object.values(query.filters ?? {}).reduce((total, values) => total + values.length, 0)
-  const periodLabel =
-    query.timeFilter === 'custom'
-      ? `${query.startDate} → ${query.endDate}`
-      : DATE_FILTERS.find((f) => f.value === query.timeFilter)?.label
-
   return (
     <section className="space-y-3 sm:space-y-4">
       <Helmet>
@@ -476,13 +496,14 @@ export default function Dashboard() {
         />
       </Helmet>
 
-      {/* ── Toolbar: title · date presets · export ─────────────────────── */}
-      {/* Sticky below the 52px app header: on a long dashboard the date range
-          and filters are the controls people reach for while scrolling. */}
+      {/* ── Toolbar: original compact layout ───────────────────────────── */}
+      {/* The top controls intentionally stay in normal document flow. Only the
+          small filter row is sticky, so scrolling Inventory never leaves a
+          giant reserved block at the top of the page. */}
       <motion.div
-        className="toolbar-sticky space-y-2 sm:space-y-2.5"
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
+        className="dashboard-toolbar space-y-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: EASE }}
       >
         {/* Row 1: title + export. Row 2: date presets.
@@ -541,26 +562,30 @@ export default function Dashboard() {
                     : undefined
                 }
               >
-                {filter.label}
+                {labelForDateFilter(filter)}
               </button>
             )
           })}
         </div>
 
-        {/* ── Filters ──────────────────────────────────────────────────── */}
-        <ErrorBoundary>
-          <FilterPanel
-            dimensions={dimensions}
-            filters={query.filters}
-            onChange={changeFilters}
-            dateRange={dateRange}
-            customRange={{ start: query.startDate ?? '', end: query.endDate ?? '' }}
-            onCustomRangeChange={changeCustomRange}
-            onClear={clearAll}
-          />
-        </ErrorBoundary>
+        {/* ── Filters: only this compact row stays sticky ──────────────── */}
+        <div className="dashboard-filter-sticky">
+          <ErrorBoundary>
+            <FilterPanel
+              dimensions={dimensions}
+              filters={query.filters}
+              onChange={changeFilters}
+              dateRange={dateRange}
+              customRange={{ start: query.startDate ?? '', end: query.endDate ?? '' }}
+              onCustomRangeChange={changeCustomRange}
+              onClear={clearAll}
+            />
+          </ErrorBoundary>
+        </div>
+      </motion.div>
 
-        {/* ── Tabs ─────────────────────────────────────────────────────── */}
+      {/* ── Tabs: normal flow, so tables can never hide underneath them ── */}
+      <div className="dashboard-tabs">
         <div className="seg w-full sm:w-auto min-w-0" role="tablist" aria-label="Dashboard view">
           {VIEW_TABS.map((tab) => (
             <button
@@ -576,7 +601,7 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Short-span explainer — prevents "why are all filters the same?" */}
       {dateRange?.span_days > 0 && dateRange.span_days < 8 && (
@@ -619,7 +644,26 @@ export default function Dashboard() {
                 {/* Only shown when the server explains itself. A deliberately
                     declined or disabled AI tier is silent by design, so there
                     is nothing to say and nothing is said. */}
-                {aiInsightNotice && <p className="panel-hint mt-1">{aiInsightNotice}</p>}
+                {(aiInsightNotice || aiInsightReasonCode) && (
+                  <p className="panel-hint mt-1">
+                    {(() => {
+                      const REASON_MAP = {
+                        key_invalid: 'The provided AI API key is invalid or unauthorised.',
+                        model_not_found: 'The selected AI model could not be found.',
+                        bad_request: 'The AI service rejected the request.',
+                        rate_limit: 'The AI service is currently rate limited.',
+                        timeout: 'The AI service timed out.',
+                        server_error: 'The AI service is currently unavailable.',
+                        invalid_json: 'The AI returned an unusable response.',
+                        number_check: 'AI answer failed the number check; original text kept.',
+                        no_consent: 'AI was not approved for this upload.',
+                        disabled: 'AI is switched off on this server.',
+                        key_missing: 'AI needs an API key configured on this server.',
+                      }
+                      return (aiInsightReasonCode && REASON_MAP[aiInsightReasonCode]) || aiInsightNotice
+                    })()}
+                  </p>
+                )}
               </motion.div>
 
               <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.05 }}>

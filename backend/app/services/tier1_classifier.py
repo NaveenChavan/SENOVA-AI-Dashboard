@@ -424,6 +424,10 @@ def _score_one(
             )
 
     route, reason = _route(top_score, margin, HIGH_CONF_THRESHOLD, AMBIGUITY_MARGIN)
+    if top_label in {"currency", "status", "notes"}:
+        route = ROUTE_LOCAL
+        reason = "Recognised, not analysed. You can still map it by hand."
+
     if not ai_available and route == ROUTE_GEMINI:
         route = ROUTE_LOCAL
         reason += " AI disambiguation is switched off, so this needs your confirmation."
@@ -470,6 +474,14 @@ def _alias_fallback_guess(raw_column: str, ai_available: bool = False) -> Column
             source=SOURCE_LOCAL,
             reason="Matched a known column name exactly.",
         )
+
+    norm = _normalise_header(raw_column).lower()
+    if norm in {"currency", "ccy", "curr"}:
+        return ColumnGuess(raw_column=raw_column, label="currency", canonical=None, score=1.0, margin=1.0, route=ROUTE_LOCAL, source=SOURCE_LOCAL, reason="Recognised, not analysed. You can still map it by hand.")
+    if norm in {"status", "order status", "payment status", "fulfillment status"}:
+        return ColumnGuess(raw_column=raw_column, label="status", canonical=None, score=1.0, margin=1.0, route=ROUTE_LOCAL, source=SOURCE_LOCAL, reason="Recognised, not analysed. You can still map it by hand.")
+    if norm in {"notes", "remarks", "comments", "comment", "remark", "note"}:
+        return ColumnGuess(raw_column=raw_column, label="notes", canonical=None, score=1.0, margin=1.0, route=ROUTE_LOCAL, source=SOURCE_LOCAL, reason="Recognised, not analysed. You can still map it by hand.")
 
     if alias_confidence == "fuzzy" and alias_canonical:
         escalating = ai_available

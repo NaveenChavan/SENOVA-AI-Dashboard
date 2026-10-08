@@ -110,7 +110,7 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
           transition={{ duration: 0.3, delay: inventory.abc_buckets.length * 0.04, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-[11px] uppercase tracking-wider font-semibold mb-1 truncate" style={{ color: 'var(--text-muted)' }}>
-            {inventory.stock_aware ? 'Capital in stock' : 'Reorder candidates'}
+            {inventory.stock_aware ? 'Capital in stock' : 'Fast sellers'}
           </p>
           <p className="text-base font-bold font-mono leading-none" style={{ color: 'var(--text-primary)' }}>
             {inventory.stock_aware
@@ -120,7 +120,7 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
           <p className="text-[12px] mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
             {inventory.stock_aware
               ? `${formatNumber(inventory.reorder_count)} below 7 days cover`
-              : `Priority 50+ over ${inventory.window_days} day(s)`}
+              : `Sales speed only, no stock data`}
           </p>
         </motion.div>
       </div>
@@ -148,7 +148,7 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
 
       {/* ── Reorder table ──────────────────────────────────────────────── */}
       <Card
-        title="Reorder priority"
+        title={inventory.stock_aware ? "Reorder priority" : "Sales-speed ranking"}
         hint={`Sales speed, trend and recency over ${inventory.window_days} day(s)`}
         action={
           <select
@@ -159,7 +159,7 @@ export default function InventoryPanel({ inventory, loading, forecast }) {
           >
             {SORTS.map((option) => (
               <option key={option.value} value={option.value}>
-                {option.label}
+                {option.value === 'reorder_priority' && !inventory.stock_aware ? 'Sales-speed ranking' : option.label}
               </option>
             ))}
           </select>

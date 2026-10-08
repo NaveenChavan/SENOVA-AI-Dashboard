@@ -120,12 +120,12 @@ def test_mover_card_appears_when_periods_differ(normalized):
 @pytest.mark.parametrize(
     "amount,expected",
     [
-        (0, "₹0"),
-        (999, "₹999"),
-        (1240, "₹1,240"),
-        (234567, "₹2.35L"),
-        (12345678, "₹1.23Cr"),
-        (-1500, "-₹1,500"),
+        (0, "Rs 0"),
+        (999, "Rs 999"),
+        (1240, "Rs 1,240"),
+        (234567, "Rs 2,34,567"),
+        (12345678, "Rs 1,23,45,678"),
+        (-1500, "-Rs 1,500"),
     ],
 )
 def test_indian_number_formatting(amount, expected):

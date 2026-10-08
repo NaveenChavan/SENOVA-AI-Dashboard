@@ -135,7 +135,8 @@ GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 #: headers, which is not a reasoning-heavy job. Note gemini-2.0-flash needs an
 #: explicit ``propertyOrdering`` to produce well-formed structured output, so
 #: prefer 2.5+ here.
-GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+GEMINI_FALLBACK_MODEL: str = os.getenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash")
 
 #: Per-attempt HTTP timeout for a Gemini call, in seconds.
 GEMINI_TIMEOUT_SECONDS: float = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "10"))
@@ -200,3 +201,21 @@ AMBIGUITY_MARGIN: float = float(os.getenv("AMBIGUITY_MARGIN", "0.05"))
 #: value-shape statistics. They must sum to 1.
 TIER1_HEADER_WEIGHT: float = float(os.getenv("TIER1_HEADER_WEIGHT", "0.7"))
 TIER1_STATS_WEIGHT: float = float(os.getenv("TIER1_STATS_WEIGHT", "0.3"))
+
+# --- Insights ---
+DISCOUNT_LEADER_MARGIN_PP: float = float(os.getenv("DISCOUNT_LEADER_MARGIN_PP", "3"))
+MARGIN_GAP_PP: float = float(os.getenv("MARGIN_GAP_PP", "5"))
+TOP_N_REVENUE: int = int(os.getenv("TOP_N_REVENUE", "3"))
+PAYMENT_SHARE_MIN_PCT: float = float(os.getenv("PAYMENT_SHARE_MIN_PCT", "50"))
+MIN_ROWS: int = int(os.getenv("MIN_ROWS", "30"))
+
+import logging
+logger = logging.getLogger(__name__)
+
+if AI_ASSIST_ENABLED and not GEMINI_API_KEY:
+    logger.warning("AI_ASSIST_ENABLED is true but no GEMINI_API_KEY is configured. AI features will fail.")
+
+logger.info(
+    "Tier 2 config: model=%s fallback=%s timeout=%ss budget=%ss",
+    GEMINI_MODEL, GEMINI_FALLBACK_MODEL, GEMINI_TIMEOUT_SECONDS, GEMINI_TOTAL_BUDGET_SECONDS
+)

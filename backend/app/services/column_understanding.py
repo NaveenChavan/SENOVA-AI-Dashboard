@@ -13,8 +13,9 @@ Flow
                        ├─ verdict ──────────────► keep (source="gemini")
                        └─ anything else ─────────► mark unmapped (source="fallback")
     merged
-        └─ translate semantic → canonical, resolve collisions
-            └─ ColumnMappingPreview (the existing API shape, plus new fields)
+        └─ translate semantic → canonical, resolve collisions, flag review, choose final route
+            ├─ Tier 2 pending/run ──► recompute final state
+            └─ ColumnMappingPreview (existing API shape, plus route/review fields)
 
 Guarantees
 ----------
@@ -52,6 +53,7 @@ from app.services.column_catalog import (
 )
 from app.services.tier1_classifier import (
     ROUTE_GEMINI,
+    ROUTE_LOCAL,
     SOURCE_FALLBACK,
     SOURCE_GEMINI,
     SOURCE_LOCAL,
@@ -83,17 +85,16 @@ async def analyse(
     df: pd.DataFrame,
     ai_consent: bool = False,
     file_id: str | None = None,
-) -> tuple[list[dict], PipelineTimings, str | None]:
+    run_tier2: bool = True,
+) -> tuple[list[dict], PipelineTimings, str | None, str | None]:
     """
     Understand every column in ``df`` and return a mapping report.
 
-    Returns ``(reports, timings, notice)`` where each report is the dict shape
-    the upload endpoint already returns for a column, extended with the new
-    confidence/source fields. ``notice`` is non-``None`` only when something went
-    wrong that the user should know about.
-
-    ``file_id`` enables the Tier 2 disk cache; omit it and Tier 2 still runs, it
-    just won't be able to reuse a previous answer.
+    Routing is deliberately computed from the *final pre-Tier-2 state*: Tier 1
+    proposes a meaning, collision resolution can demote a previously-local
+    suggestion, and only then do we decide whether Gemini should get a second
+    look. This is important because a collision is itself a reason to review the
+    column.
     """
     overall = time.perf_counter()
     timings = PipelineTimings()
@@ -108,14 +109,44 @@ async def analyse(
         guess.raw_column: _report(guess) for guess in guesses
     }
 
-    # ── Tier 2, only for columns Tier 1 declined to settle ───────────────────
-    notice: str | None = None
-    escalated = [guess for guess in guesses if guess.route == ROUTE_GEMINI and guess.canonical is None]
+    # Collision resolution and review flags MUST happen before the final route is
+    # chosen. A local suggestion may become unresolved here.
+    ordered = [reports[str(column)] for column in df.columns]
+    _resolve_collisions(ordered)
+    _flag_for_review(ordered)
+    _set_final_routes(ordered, ai_available=ai_available, ai_consent=ai_consent)
 
-    if escalated:
+    # ── Tier 2 ──────────────────────────────────────────────────────────────
+    notice: str | None = None
+    reason_code: str | None = None
+    review_candidates = [
+        report for report in ordered
+        if report.get("needs_review") and not report.get("recognised_unused")
+    ]
+
+    # Even when AI cannot run, a row that needs review must never be described as
+    # "AI not needed". The API carries the honest reason for the frontend banner.
+    if review_candidates and not ai_available:
+        notice = "AI help is off."
+        reason_code = "disabled"
+    elif review_candidates and not ai_consent:
+        notice = "AI help was not approved for this upload."
+        reason_code = "no_consent"
+
+    escalated = [
+        report for report in ordered
+        if report.get("route") == ROUTE_GEMINI
+        and not report.get("recognised_unused")
+    ]
+
+    if escalated and run_tier2:
         columns = [
-            tier2_gemini.describe_column(df[guess.raw_column], guess.raw_column, guess.label)
-            for guess in escalated
+            tier2_gemini.describe_column(
+                df[report["raw_column"]],
+                report["raw_column"],
+                report.get("semantic_label", UNKNOWN_LABEL),
+            )
+            for report in escalated
         ]
 
         cache_key = ai_cache.build_key(columns) if file_id else None
@@ -131,61 +162,61 @@ async def analyse(
         )
         timings.tier2_ms = result.elapsed_ms
         notice = result.notice
+        reason_code = result.reason_code
 
-        _apply_tier2(reports, escalated, result)
+        _apply_tier2_reports(ordered, result)
+
+        # Gemini may introduce a second collision or clear the review. Recompute
+        # the final state and route once more so the response is self-consistent.
+        _resolve_collisions(ordered)
+        _flag_for_review(ordered)
+        _set_final_routes(ordered, ai_available=ai_available, ai_consent=ai_consent)
+    elif escalated:
+        # Upload step intentionally defers Tier 2. Mark the final route so the
+        # frontend can make the background request.
+        for report in escalated:
+            report["source"] = "pending"
+
+    elif not run_tier2:
+        # Nothing needs Tier 2 and no notice is necessary.
+        pass
 
     timings.total_ms = (time.perf_counter() - overall) * 1000.0
 
-    # Collisions are resolved last, once both tiers have spoken: either tier can
-    # be the one that claims a field twice.
-    ordered = [reports[str(column)] for column in df.columns]
-    _resolve_collisions(ordered)
-    _flag_for_review(ordered)
-
     _log_summary(ordered, timings, ai_consent, ai_available)
-    return ordered, timings, notice
+    return ordered, timings, notice, reason_code
 
 
-def _apply_tier2(
-    reports: dict[str, dict],
-    escalated: list[ColumnGuess],
+def _apply_tier2_reports(
+    reports: list[dict],
     result: tier2_gemini.Tier2Result,
 ) -> None:
-    """
-    Fold Tier 2's verdicts into the reports.
+    """Fold Tier 2 verdicts into the already collision-resolved reports."""
+    for report in reports:
+        if report.get("route") != ROUTE_GEMINI or report.get("recognised_unused"):
+            continue
 
-    A column Gemini answered for gets the model's label and score. A column it
-    didn't — because of a failure, or because the model declined to guess — is
-    explicitly marked ``fallback`` and unmapped, so the UI can highlight it and
-    the user knows to look at it. Silence would be worse: an unmapped column
-    that looks confident is exactly the failure this feature is meant to remove.
-    """
-    for guess in escalated:
-        report = reports[guess.raw_column]
-        verdict = result.verdicts.get(guess.raw_column)
-
-        if not verdict or result.source == tier2_gemini.SOURCE_FAILED:
+        verdict = result.verdicts.get(report["raw_column"])
+        if not verdict or result.source in (tier2_gemini.SOURCE_FAILED, "local"):
             report["semantic_label"] = UNKNOWN_LABEL
-            report["source"] = SOURCE_FALLBACK
+            report["suggested_field"] = None
+            report["source"] = "local" if result.source == "local" else SOURCE_FALLBACK
             report["confidence_band"] = "low"
             report["confidence_score"] = 0.0
-            report["reason"] = (
-                "We couldn't identify this column automatically — please choose what it is."
-            )
+            if result.source == "local":
+                report["reason"] = "AI was not approved for this upload, so we left this for you to map."
+            else:
+                report["reason"] = "We couldn't identify this column automatically — please choose what it is."
             continue
 
         label = verdict["label"]
-        canonical = canonical_field_for(label, raw_header=guess.raw_column)
+        canonical = canonical_field_for(label, raw_header=report["raw_column"])
         score = float(verdict.get("confidence", 0.0))
 
         report["semantic_label"] = label
         report["suggested_field"] = canonical
         report["confidence_score"] = round(score, 4)
         report["confidence_band"] = _band(score)
-        # ``SOURCE_CACHE`` is a Gemini verdict this process did not fetch, but it
-        # is still Gemini's answer rather than a local decision, so it reports as
-        # ``gemini``. Anything else that carries a verdict has been sanitised and
-        # accepted upstream, so ``local`` is the honest floor.
         report["source"] = (
             SOURCE_GEMINI
             if result.source in (tier2_gemini.SOURCE_GEMINI, tier2_gemini.SOURCE_CACHE)
@@ -196,11 +227,34 @@ def _apply_tier2(
             + (f" — {verdict['reason']}" if verdict.get("reason") else "")
         )[:200]
 
-        # Gemini can resolve a column Tier 1 thought was fine (or vice versa).
-        # If it also *unmapped* something, that is a real answer too.
         if label == UNKNOWN_LABEL or not is_known_label(label):
             report["suggested_field"] = None
             report["confidence_band"] = "low"
+
+
+
+
+def _set_final_routes(
+    reports: list[dict],
+    *,
+    ai_available: bool,
+    ai_consent: bool,
+) -> None:
+    """Compute Tier 2 routing from the final post-collision review state."""
+    for report in reports:
+        if report.get("recognised_unused"):
+            report["route"] = ROUTE_LOCAL
+            continue
+
+        needs_review = bool(report.get("needs_review"))
+        if needs_review and ai_available and ai_consent:
+            report["route"] = ROUTE_GEMINI
+            if report.get("source") == SOURCE_LOCAL:
+                report["reason"] = (
+                    report.get("reason") or "Needs a second opinion."
+                ) + " AI can take a second look."
+        else:
+            report["route"] = ROUTE_LOCAL
 
 
 def _resolve_collisions(reports: list[dict]) -> list[dict]:
@@ -240,10 +294,14 @@ def _flag_for_review(reports: list[dict]) -> None:
     the "unmapped but looks settled" failure this pipeline exists to prevent.
     """
     for report in reports:
+        recognised_unused = report.get("semantic_label") in {"currency", "status", "notes"}
+        report["recognised_unused"] = recognised_unused
         report["needs_review"] = (
-            not report.get("suggested_field")
-            or report.get("confidence_band") == "low"
-            or report.get("source") == SOURCE_FALLBACK
+            not recognised_unused and (
+                not report.get("suggested_field")
+                or report.get("confidence_band") == "low"
+                or report.get("source") == SOURCE_FALLBACK
+            )
         )
 
 
@@ -282,6 +340,7 @@ def _report(guess: ColumnGuess) -> dict:
         "confidence_score": round(float(guess.score), 4),
         "confidence_band": _band(float(guess.score)),
         "margin": round(float(guess.margin), 4),
+        "route": guess.route,
         "source": guess.source,
         "semantic_label": guess.label,
         "reason": guess.reason,

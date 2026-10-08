@@ -1,368 +1,63 @@
-# SENOVA AI Dashboard
+# SENOVA C2 — Filters & UI package
 
-AI-powered retail sales analytics dashboard for Indian MSMEs and garment
-shops. Upload a daily sales CSV/Excel file — SENOVA validates every row,
-lets you confirm your own column layout (every shop's export format is
-different), and then produces automated findings, revenue forecasts,
-reorder intelligence, eight ways to chart the same data, a CA-style
-financial report (P&L statement + transaction ledger), and a downloadable
-PDF report.
+This folder contains the complete **C2 Filters & UI scope** for the supplied SENOVA code bundle, merged on top of the working C1 column-routing fix dependencies that were available in the uploaded source.
 
-Every calculation is done in-house with Pandas/NumPy. No language model,
-no third-party analytics service — your sales data never leaves your
-backend, and no figure in the app is ever generated rather than computed.
+## What is included
 
-## What it does
+- Compact filter bar + fixed/portalled filter drawer.
+- Group-count badge (Category / Item / Payment Mode / Date range, not individual values).
+- Searchable Item and Invoice No selectors with tall scroll areas, `N of M selected`, Select all and Clear.
+- Server-side searchable/cascade-aware dimension options to avoid the legacy 200-value UI limitation.
+- Category ↔ Item cascading and impossible-combination pruning.
+- Friendly zero-result state: `No rows match these filters` with Clear.
+- Latest-day semantics from the uploaded file's max date, not the computer clock.
+- Quick date presets plus custom range validation and backend clamping to the actual data range.
+- Loading-safe overview state and request sequence guards so stale responses cannot overwrite newer results.
+- Sticky tabs/table offsets coordinated to prevent overlap.
+- Mobile-safe drawer with no horizontal overflow.
+- No intentional colour/font changes and no unrelated screen changes.
+- Backend regression tests and frontend regression tests requested for C2.
+- `validation/verify_fixture.py` independently checks the required fixture numbers without importing the incomplete backend bundle.
+- `apply_c2.sh` backs up only the files in this package before copying them into a real project tree.
 
-### Automated insights
-A row of plain-language findings sits above the charts, each one written
-from a template filled with computed numbers:
+## Important scope note
 
-- **Revenue anomalies** — robust z-score (`0.6745 × (x − median) / MAD`) on
-  the zero-filled daily series. MAD is used instead of standard deviation
-  because a single freak day inflates a std-dev enough to hide itself.
-  Flagged days are also ringed in red on the trend chart.
-- **Movers** — the biggest gainer and decliner versus the previous period,
-  ranked by rupee change (not %) so a 300% jump on a ₹50 item can't outrank
-  a ₹40,000 collapse.
-- **Margin leaks** — high-revenue items whose margin sits far below their
-  category median, or below zero.
-- **Concentration** — the Pareto check: how few items make 80% of revenue.
-- **Timing** — best versus worst weekday, once each weekday has enough
-  observations to mean anything.
-- **Dead stock** — items with no sale for 30+ days.
+The uploaded repository archive is **partial**. It does not contain the complete application source tree or the normal package/test configuration (`package.json`, pytest config, and several backend modules are absent). Therefore this package is complete for the **C2 files changed/supplied here**, but it is not a standalone replacement for the user's entire SENOVA repository.
 
-Checks that the data is too small to support are skipped and reported as
-skipped, rather than computed on noise.
+## C2 design decisions
 
-### Forecasting
-Revenue projection for the next 7/14/30 days: a recency-weighted
-least-squares trend (14-day half-life) multiplied by weekday seasonal
-indices (median of `actual ÷ trend`, normalised and clamped). The chart
-shows a solid actual line, a dashed forecast continuation and an 80%
-confidence band (`ŷ ± 1.28σ√(1 + h/n)`).
+1. Analytics calculations remain on the same aggregation path; filter selection is staged in the drawer and only `Apply` commits a new query.
+2. The time window is resolved against the full file before dimension filters are applied. This preserves the meaning of `Latest day` even when the selected category has no sale on the file's final date.
+3. Item and Invoice No options are loaded through a dedicated POST endpoint so search works beyond the legacy static 200-value metadata cap.
+4. Category and Item option queries exclude the dimension currently being edited, while keeping the other staged filters. This is what creates true bidirectional cascading.
+5. Empty-state UI is driven by explicit `row_count`, not inferred from revenue being zero.
+6. Request cancellation is paired with a latest-request/sequence guard because abort alone is not a complete stale-response guarantee.
+7. The drawer is rendered through a portal so `position: fixed` is not trapped by sticky/transformed ancestors.
 
-Accuracy is backtested on a 7-day holdout and shown as `100 − MAPE`, so
-you can see how much to trust it. Under 14 days of history the endpoint
-refuses to forecast and says why; under 21 days it uses the trend alone
-without weekday seasonality.
+## Required fixture numbers
 
-### Inventory & reorder intelligence
-Per item: sales velocity (per calendar day and per active day), trend
-factor (late-window speed ÷ early-window speed), ABC class (A = the items
-making the first 80% of revenue, B = the next 15%, C = the tail), ageing
-bucket, and a 0–100 reorder-priority score blending velocity, trend and
-recency.
+Using `testing2/03_electronics_shopify_orders.csv`:
 
-If your file maps a stock column (`Stock`, `Closing Stock`, `Balance Qty`,
-`On Hand`), it also computes real days-of-cover, reorder alerts and the
-working capital locked in each item. Without it those columns are absent
-and the panel explains how to unlock them — a guessed days-of-cover would
-be worse than none.
+- Latest day (17 Jun 2026): 7 transactions, revenue 49,180, cost 29,430, profit 19,750.
+- Latest day + Category Power: 2 transactions, revenue 13,893.
+- 2026-03-19 → 2026-04-17 + Category Power: 60 transactions, revenue 510,327, cost 301,950, profit 208,377, units 273.
 
-### Chart studio — eight views, one payload
-Pick any measure (revenue, profit, cost, units, transactions, margin %,
-average price, discount) against any dimension the file contains, then
-switch freely between:
+Run `python validation/verify_fixture.py` from this folder to independently verify those numbers.
 
-| View | Question it answers |
-|------|--------------------|
-| Bars | How do groups compare? |
-| Ranking (horizontal bars) | Same, when names are long |
-| Donut | What is the whole made of? (top 6, rest folded into "Other") |
-| Combo | Where is revenue high but margin thin? |
-| Pareto | How concentrated is the business? |
-| Bubble | How do price and volume relate? (size = revenue) |
-| Treemap | Which groups dominate, at a glance? |
-| Heatmap | Which weekdays actually sell? |
+## Applying to the real project
 
-The API pre-computes every measure per group, so switching view or chart
-type never triggers a new request. Every view has a **Table** toggle,
-since scatter/treemap/heatmap are poor for screen readers, and clicking any
-bar, slice, tile or table row drills into the transactions behind it.
-
-### Filters and drill-down
-Multi-select filters on any dimension the file contains, plus a custom
-date range alongside the five presets. Filters are applied server-side
-*before* aggregation, so the KPI cards, charts, insights, inventory table,
-P&L and the exported PDF always describe the same slice. The whole view
-state (tab, date window, filters) lives in the URL, so a filtered view can
-be refreshed or shared with your accountant.
-
-### Column mapping — built for real shop exports
-The alias map covers the headers real Indian retail software produces —
-Tally (`Voucher Date`, `Particulars`, `Stock Group`), Vyapar/Marg/Busy
-(`Bill Date`, `Item Name`, `Rate/Unit`, `Taxable Value`, `Purchase Rate`),
-GST invoice registers, and Shopify/Amazon/Flipkart order dumps — plus
-optional fields that unlock extra analysis:
-
-- **Extra amounts:** `Line Total`, `Discount`, `Tax`, `Stock On Hand`
-- **Extra breakdowns:** `Branch`, `Payment Mode`, `Customer`,
-  `Salesperson`, `Brand`, `Size`, `Colour`, `Invoice No`
-
-One correctness note worth knowing: an `Amount` / `Net Amount` /
-`Taxable Value` column holds a **line total**, not a unit price, so it maps
-to `Line Total` and the unit price is derived as `Line Total ÷ Quantity`.
-Mapping it to `Selling Price` would inflate revenue by the quantity factor
-on every row.
-
-## Project structure
-
-```
-senova-ai-dashboard/
-├── frontend/   React 18 + Vite + Tailwind CSS + Firebase Auth + Recharts + Zustand
-├── backend/    FastAPI + Pandas + NumPy + ReportLab (PDF generation)
-├── docs/       Architecture, changelogs and session notes (see docs/README.md)
-└── testing/    Sample CSV files for manual testing
-```
-
-Frontend and backend are deployed **separately** — frontend to Vercel,
-backend to any Python host (Railway, Render, Fly.io, etc.).
-
-## Documentation
-
-Deeper technical docs, changelogs and past session notes live in
-[`docs/`](docs/README.md) — start there for architecture, the Pro
-upgrade feature reference, and the UI/accuracy audit.
-
-## API
-
-All routes require a verified Firebase ID token, and every file is bound
-to the user who uploaded it — another signed-in user asking for your
-`file_id` gets a 404.
-
-### Upload (two steps, because every export differs)
-
-| Method | Path | Purpose |
-|--------|------|---------|
-| `POST` | `/upload/` | Save the file, return the guessed column mapping, the optional fields available, and sample rows |
-| `POST` | `/upload/{file_id}/confirm-mapping` | Apply the confirmed mapping, validate every row, report the data's real date span |
-
-### Analytics — Pro (`POST`, shared `AnalysisQuery` body)
-
-Body: `{ "time_filter": "all|today|week|30days|month|custom", "start_date": …, "end_date": …, "filters": { "branch": ["MG Road"] } }`
-
-| Path | Returns |
-|------|---------|
-| `/analytics/{id}/summary` | KPIs with trend arrows, top items, category split, daily trend, dead stock |
-| `/analytics/{id}/chart-data` | Chart-ready points (+ `dimension`, `measure`, `top_n`) with every measure precomputed |
-| `/analytics/{id}/heatmap` | Weekday × week intensity grid with a numeric legend range |
-| `/analytics/{id}/insights` | Automated findings + the dates flagged as anomalies |
-| `/analytics/{id}/inventory` | Velocity, ABC, ageing, reorder priority (+ cover/capital when stock is mapped) |
-| `/analytics/{id}/forecast` | Projection with confidence band and backtested accuracy (+ `horizon`) |
-| `/analytics/{id}/report` | CA-style P&L + category ledger |
-| `/analytics/{id}/ledger` | Paginated transaction register (+ `page`, `page_size`) — also powers drill-down |
-| `/analytics/{id}/report.pdf` | Full PDF: findings, P&L, category ledger, forecast, reorder list, register |
-| `GET /analytics/{id}/dimensions` | Which dimensions this file supports, their values, and its date range |
-
-### Analytics — classic (`GET`, unchanged for existing consumers)
-
-`GET /process/{id}`, `GET /analytics/{id}?time_filter=`,
-`/analytics/{id}/report`, `/analytics/{id}/ledger`,
-`/analytics/{id}/report.pdf`, and `GET /health`.
-
-## Security
-
-- **Firebase ID token** verified on every route (signature, expiry,
-  revocation).
-- **Ownership check on every read.** The uploader's identity is stored in a
-  `{file_id}.meta.json` sidecar and re-checked on every request; a mismatch
-  returns 404, not 403, so the API never confirms that another user's file
-  exists.
-- **`file_id` format validation** (`^[0-9a-f]{32}$`) before any filesystem
-  access.
-- **No dynamic query construction.** Dimensions and measures are closed
-  enums; filter values are applied with `Series.isin`. Nothing user-supplied
-  ever reaches `DataFrame.query`, `eval` or a string-built expression.
-- **Bounded inputs:** ≤8 filter keys, ≤50 values each, `top_n` ≤ 50,
-  `page_size` ≤ 1000, forecast horizon ≤ 90 days, ≤100 columns per upload,
-  upload size capped by `MAX_UPLOAD_SIZE_MB`.
-- **Bounded compute:** normalised frames are cached in a small LRU
-  (`FRAME_CACHE_MAX_ENTRIES` entries, `FRAME_CACHE_MAX_ROWS` rows max)
-  keyed on file mtime + mapping, so repeated filter changes don't re-parse
-  a 50k-row Excel file — and an unbounded cache can't become a memory DoS.
-  Defaults are sized for a 512 MB host; a per-key parse lock means several
-  concurrent requests for the same file cause one parse, not one each.
-- **NaN/Infinity are never serialised.** Every number leaving the API goes
-  through `safe_float`/`safe_int`, because bare `NaN` is invalid JSON and
-  would break `JSON.parse` in the browser.
-- **Uploads are temporary** — a TTL sweep removes files and both sidecars
-  after `UPLOAD_TTL_MINUTES`.
-- **One new frontend dependency, pinned exactly.** The UI redesign added
-  [`motion`](https://motion.dev) (the actively-maintained successor to
-  Framer Motion) at an exact pinned version (`12.42.2`, no `^`/`~` range) for
-  entrance/exit animation and the drill-down panel's slide-over transition.
-  It ships no network calls and has no access to sales data — it only
-  animates DOM nodes already rendered by React. This is intentionally the
-  **only** new third-party runtime dependency introduced by the redesign; no
-  icon libraries, animation-adjacent utility packages, or CSS frameworks
-  were added beyond it. The backend added nothing.
-
-## Accessibility & UX
-
-Built against the [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
-design guidance (installed at `.kiro/steering/ui-ux-pro-max/`), resolved
-for this project as a **Data-Dense Dashboard**:
-
-- SVG icons only — no emoji as icons.
-- Visible `:focus-visible` rings everywhere; `prefers-reduced-motion` is
-  honoured; chart animations are off so filter changes are instant.
-- Severity, trend and class are conveyed by text/icon *and* colour, never
-  colour alone; heatmaps ship a numeric legend; scatter/treemap/heatmap all
-  have a table alternative.
-- Every table scrolls horizontally instead of breaking the layout; every
-  empty state offers the action that fixes it; skeletons reserve real
-  layout height so nothing jumps.
-- Deep-linkable view state, keyboard-navigable tabs, and a drill-down
-  dialog with focus management and Escape-to-close.
-
-## Local development
-
-### Backend
+From the real project root, run:
 
 ```bash
-cd backend
-pip install -r requirements.txt
-cp .env.example .env      # fill in Firebase service-account path, or set DISABLE_AUTH=true for local testing
-uvicorn app.main:app --reload
+bash /path/to/senova-c2-complete/apply_c2.sh /path/to/your/senova-project
 ```
 
-Runs on `http://127.0.0.1:8000`.
+The script creates a timestamped backup of every existing target file before replacing it. It does not touch files outside the C2 manifest.
 
-Tests (132 of them, covering the alias map, window/filter logic,
-aggregation, insight maths, inventory, forecasting, and the API's security
-rules):
+## Test execution honesty
 
-```bash
-pip install -r requirements-dev.txt
-pytest
-```
+Static syntax validation was performed on all supplied backend Python files, all supplied frontend JS/JSX files, and the supplied CSS. The independent fixture-number validation passes.
 
-### Frontend
+The C2 pytest file cannot be collected against this extracted bundle because the archive is missing backend modules such as `app.services.sales_calculations`. A full Vitest run likewise requires the real repository's frontend package/test setup, which is not present in this bundle. Do not treat this folder's static validation as a full-repository suite result.
 
-```bash
-cd frontend
-npm install
-cp .env.example .env      # fill in your Firebase web config + leave VITE_API_URL empty for local dev
-npm run dev
-```
-
-Runs on `http://localhost:5173`. The Vite dev server proxies `/api/*` to the
-backend at `127.0.0.1:8000`, stripping the `/api` prefix (see
-`frontend/vite.config.js`) — no extra setup needed locally. The prefix exists
-so API traffic can't collide with the SPA's own client-side routes: proxying
-`/upload` directly meant a page reload at `/upload` was forwarded to the
-backend instead of serving the app.
-
-Component tests (all eight chart views plus the four feature panels):
-
-```bash
-npm test
-```
-
-## Deploying the frontend to Vercel
-
-**Important — Root Directory setting:** this is a monorepo (frontend +
-backend in one repo). When creating the Vercel project:
-
-1. Import the GitHub repo into Vercel.
-2. In **Project Settings → General → Root Directory**, set it to
-   `frontend` (not the repo root). This is required — without it, Vercel
-   can't find `frontend/package.json` and may fall back to a wrong
-   auto-detected framework/build command.
-3. Vercel should auto-detect **Vite** as the framework once Root
-   Directory is set (confirmed by `frontend/vercel.json`, which also sets
-   `buildCommand`, `outputDirectory`, and `framework` explicitly as a
-   safety net).
-4. Add these Environment Variables in Vercel (Project Settings →
-   Environment Variables) — copy values from `frontend/.env.example`:
-   - `VITE_FIREBASE_API_KEY`
-   - `VITE_FIREBASE_AUTH_DOMAIN`
-   - `VITE_FIREBASE_PROJECT_ID`
-   - `VITE_FIREBASE_STORAGE_BUCKET`
-   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
-   - `VITE_FIREBASE_APP_ID`
-   - `VITE_API_URL` — your deployed backend's full URL (e.g.
-     `https://your-backend.onrender.com`, no trailing slash). The frontend
-     calls the backend directly at this origin, so the backend's
-     `CORS_ORIGINS` must include your Vercel domain. Left empty, the app
-     falls back to the `/api` prefix that only exists on the local Vite
-     dev proxy — so in production this must be set.
-5. Deploy. If a build still fails with a `react-scripts` or other
-   Create-React-App-related error, it means Root Directory (step 2) is
-   not actually saved — re-check that setting; it's the most common cause
-   of this specific error, since nothing in this codebase uses CRA.
-
-`frontend/vercel.json` deliberately contains **only** the SPA fallback
-rewrite (`/(.*)` → `/index.html`). It must not proxy API paths: rules like
-`/upload/*` → backend would swallow the app's own `/upload` client-side
-route, so a reload on that page hit the API instead of the app. API traffic
-goes to `VITE_API_URL` instead.
-
-## Deploying the backend
-
-Any host that runs a Python ASGI app works (Render, Railway, Fly.io,
-etc.). Start command:
-
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
-
-Set these environment variables on the host (see `backend/.env.example`
-for the full list and explanations):
-
-- `ENV=production` — startup refuses to boot if `DISABLE_AUTH=true` while
-  this is `production`, so a stray dev flag can't silently expose an
-  unauthenticated API
-- `CORS_ORIGINS` — include your Vercel production domain here, e.g.
-  `https://your-app.vercel.app`
-- `FIREBASE_SERVICE_ACCOUNT_JSON` — the whole service-account JSON as one
-  env var, plus `FIREBASE_PROJECT_ID`. Use this rather than
-  `FIREBASE_SERVICE_ACCOUNT_PATH` on a managed host: the key file is
-  gitignored (it holds a private key), so it can't travel with the repo.
-  A `private_key` whose newlines arrived escaped as literal `\n` is
-  repaired automatically.
-- `APP_DOMAIN` — your Vercel domain, used to build the password-reset link
-- `SENDGRID_API_KEY`, `SENDER_EMAIL` — password-reset email delivery. Left
-  unset, the frontend falls back to Firebase's own reset email (which
-  works, but frequently lands in Spam)
-- `UPLOAD_DIR`, `MAX_UPLOAD_SIZE_MB`, `UPLOAD_TTL_MINUTES`,
-  `UPLOAD_SWEEP_INTERVAL_MINUTES` — upload storage tuning, sensible
-  defaults are already set
-- `FRAME_CACHE_MAX_ENTRIES`, `FRAME_CACHE_MAX_ROWS` — memory ceiling for
-  the parsed-frame cache
-
-### Render free tier — what to expect
-
-The free instance type works, with three real constraints worth knowing
-before you rely on it:
-
-- **Ephemeral disk.** `UPLOAD_DIR` does not survive a restart or a
-  redeploy, and free instances spin down when idle. An uploaded file can
-  disappear before its TTL expires, and the dashboard will report the file
-  as missing. Uploads are already designed to be temporary, so this
-  degrades the experience rather than corrupting anything.
-- **Cold starts.** The first request after an idle period waits for the
-  instance to wake (tens of seconds). The frontend's request timeout is
-  60s, which absorbs this, but the first dashboard load after idle is slow.
-- **512 MB RAM,** shared with pandas/numpy and every in-flight request.
-  The frame-cache defaults (`FRAME_CACHE_MAX_ENTRIES=3`,
-  `FRAME_CACHE_MAX_ROWS=120000`) are chosen for this ceiling. Raising them
-  on the free tier risks the host's OOM reaper killing the process
-  mid-request.
-
-## Note on GitHub Pages
-
-This app is **not** configured for GitHub Pages and won't work there —
-it's a client-side-routed React SPA that needs a backend API, which
-GitHub Pages (static hosting only) can't provide. Use Vercel (frontend)
-+ a Python host (backend) as described above.
-
-## Tech stack
-
-- **Frontend:** React 18, Vite, Tailwind CSS, Zustand, Firebase Auth,
-  Recharts, React Router, [Motion](https://motion.dev) (animation), Space
-  Grotesk (display typeface, headlines only — body/UI text stays on Plus
-  Jakarta Sans) (tests: Vitest + Testing Library)
-- **Backend:** FastAPI, Pandas, NumPy, ReportLab (PDF), Firebase Admin SDK
-  (token verification) (tests: pytest)
+C2 deployment/production start is not performed by this package.

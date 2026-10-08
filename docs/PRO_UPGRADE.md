@@ -12,6 +12,10 @@ rules, and how it was verified.
 - **Companion document:** the later UI/UX rebuild and accuracy audit (design
   tokens, density switch, command palette, and four numerical bugs found and
   fixed) live in **[`UI_ACCURACY_PASS.md`](./UI_ACCURACY_PASS.md)**.
+- **Superseded in part:** the opt-in 2-tier column-understanding pipeline and
+  the AI wording for insight cards shipped after this document. They do not
+  change any number computed here, but they do change two claims made below —
+  see [§17](#17-addendum-opt-in-ai-column-understanding).
 
 ---
 
@@ -32,6 +36,7 @@ rules, and how it was verified.
 13. [Verification](#14-verification)
 14. [Known limitations](#15-known-limitations)
 15. [Suggested next steps](#16-suggested-next-steps)
+16. [Addendum — opt-in AI column understanding](#17-addendum--opt-in-ai-column-understanding)
 
 ---
 
@@ -49,9 +54,15 @@ rules, and how it was verified.
 | Ownership check | **missing (IDOR)** | enforced on every read, 404 on mismatch |
 | Tests | none | 132 backend + 27 frontend for the feature work (the later passes took the repo to 177 + 55) |
 
-Everything is computed in-house with Pandas/NumPy. No language model, no
-third-party analytics service — sales data never leaves the backend, and no
-number shown in the app is generated rather than calculated.
+Everything is computed in-house with Pandas/NumPy. No language model computes
+anything, no third-party analytics service is involved, and no number shown in
+the app is generated rather than calculated.
+
+Sales data left the backend only in one respect — and only if you turned it on
+and the user agreed per request: a language model may reword an insight
+sentence or name an ambiguous column. That arrived later than this document and
+is **off by default**; see [§17](#17-addendum-opt-in-ai-column-understanding).
+The figures are identical in both modes.
 
 ---
 
@@ -90,6 +101,13 @@ therefore cannot hallucinate a figure, costs nothing per request, works
 offline, and keeps the shop's data on the server. Each card also carries a
 machine-readable `metrics` object so the UI formats the numbers itself
 (₹1,84,000 — Indian grouping, with L/Cr above a lakh).
+
+This remains the mechanism that produces every finding and every number. What
+changed later is that a language model may optionally *rephrase* an
+already-computed sentence — never compute, never add a figure, never choose a
+severity. That path is off by default, double-gated, and every figure it writes
+is checked against this module's own `metrics` before it can be displayed; see
+[§17](#17-addendum-opt-in-ai-column-understanding).
 
 ### Honesty rule
 
@@ -661,3 +679,77 @@ Not built — from the original options list, in the order I'd tackle them:
    plus a per-user file list; a prerequisite for (2).
 5. **Basket analysis** — items bought together, only meaningful when
    `Invoice No` is mapped; note the pairwise cost needs bounding.
+
+---
+
+## 17. Addendum — opt-in AI column understanding
+
+Shipped after this document. It is worth reading alongside §2 and §3, because
+it qualifies two claims made there without invalidating the maths.
+
+### What it is
+
+Two tiers behind the column-mapping screen:
+
+| Tier | Runs on | Can leave the server | Decides |
+|------|---------|---------------------|---------|
+| 1 — local classifier | Your server, always | **Never** | Whether a column is clearly identified |
+| 2 — Gemini Flash | Google, **opt-in** | Column headers, aggregate shape stats, ≤5 masked samples | What an ambiguous column means |
+
+Tier 2 runs only for columns Tier 1 could not settle, and only when **both**
+gates are open: the operator's `AI_ASSIST_ENABLED` switch, and an explicit
+`ai_consent` on that specific request. Either one closed means no outbound call
+is constructed at all.
+
+### Why the guarantee is unchanged
+
+The property this document cares about — no number in the app is generated
+rather than calculated — survives the addition intact, and by design rather
+than by luck:
+
+- **Insight figures.** A rewrite is checked token by token against that
+  insight's own `metrics` and `evidence`. Dates, years and small ranking
+  ordinals are exempt because they are legitimate prose, not figures; every
+  other number must trace back or the rewrite is discarded and the computed
+  sentence is shown. A rewrite cannot introduce a statistic, a severity or a
+  card type, because the model is never asked for one.
+- **Dashboard numbers.** Untouched. Summary, inventory, forecast, P&L and PDF
+  come from the same code as before; the AI tier does not appear in any of
+  those paths.
+- **Column mapping.** An AI answer is a *label*, not a figure, and every
+  candidate still has to clear the same normalisation and row validation as a
+  guessed one. An unresolved column is left visibly unmapped rather than
+  guessed at.
+
+### What it changes in the UI
+
+- Confidence gains a band (`Confident` / `Likely` / `Check this`), the score
+  behind it, who decided it, and a sentence explaining it. `confidence` itself
+  is still the original `exact|fuzzy|none` string, so the pre-existing badge
+  contract is unchanged.
+- A new panel states **what this particular file can be asked** — cards,
+  charts, dimensions and measures, each flagged unavailable with the action
+  that unlocks it. It exists to stop "not computable from this file" looking
+  like "zero".
+- Stage timings and any AI failure surface on the mapping screen instead of
+  failing quietly.
+
+### One behaviour change to be aware of
+
+`MRP` no longer auto-fills `Selling Price`. It is a list price, not a realised
+selling price, and treating it as one inflates revenue. A file whose only price
+column is `MRP` now asks the user to confirm instead of guessing — correct,
+but a change to a previously working path.
+
+### Honest limitations
+
+- The number check exempts dates, years and ranking ordinals, so a hallucinated
+  *date* would pass. The post-check is a safety net, not a proof.
+- Collision resolution still resolves by file order, not confidence, so a vague
+  `Rate` can beat an exact `Purchase Rate`. Preserved deliberately from
+  `detect_column_mapping`.
+- Gemini cost and quota are unbounded by design. `AI_ASSIST_ENABLED=false` is
+  the switch.
+- The local embedding model is ~0.5 GB and re-downloads on every cold start on
+  ephemeral disk. Set `FASTEMBED_ENABLED=false` on a small host; Hindi headers
+  then fall back to the alias map and, if enabled, Tier 2.

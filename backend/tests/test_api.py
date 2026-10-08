@@ -103,7 +103,7 @@ def test_upload_carries_the_legacy_confidence_string(client, raw_sales_frame):
     # The additive fields arrive alongside it.
     assert by_name["Bill Date"]["confidence_score"] == 1.0
     assert by_name["Bill Date"]["confidence_band"] in {"high", "medium", "low"}
-    assert by_name["Bill Date"]["source"] in {"local", "gemini", "fallback"}
+    assert by_name["Bill Date"]["source"] in {"local", "gemini", "fallback", "pending"}
     assert isinstance(by_name["Bill Date"]["needs_review"], bool)
 
 
@@ -214,7 +214,7 @@ def test_consent_false_makes_zero_gemini_calls(client, gemini_reachable):
     # The degradation is honest, not silent: these columns are visibly unmapped.
     rows = response.json()["detected_columns"]
     assert all(row["suggested_field"] is None for row in rows)
-    assert all(row["source"] == "fallback" for row in rows)
+    assert all(row["source"] == "local" for row in rows)
     assert all(row["needs_review"] is True for row in rows)
 
 
@@ -249,6 +249,84 @@ def test_unsupported_file_type_is_rejected(client):
         "/upload/", files={"file": ("notes.txt", io.BytesIO(b"hello"), "text/plain")}
     )
     assert response.status_code == 400
+
+
+def test_tier2_enforces_ai_consent(client, gemini_reachable, uploaded):
+    """The /tier2 endpoint must respect ai_consent in its body."""
+    response = client.post(
+        f"/upload/{uploaded}/tier2",
+        json={"ai_consent": False},
+        headers={"Authorization": "Bearer test-token"},
+    )
+    assert response.status_code == 200
+    assert gemini_reachable == []
+    
+    rows = response.json()["detected_columns"]
+    # Still unmapped, reason says AI wasn't approved.
+    assert all(row["suggested_field"] is None for row in rows if row["raw_column"] == "Zorp Factor")
+    assert all(row["source"] == "local" for row in rows if row["raw_column"] == "Zorp Factor")
+
+def test_tier2_enforces_file_ownership(client, uploaded):
+    """A user cannot run tier2 on another user's file."""
+    _act_as(INTRUDER)
+    response = client.post(
+        f"/upload/{uploaded}/tier2",
+        json={"ai_consent": True},
+    )
+    assert response.status_code == 404
+
+def test_tier2_respects_total_budget(client, monkeypatch, uploaded):
+    """The total budget is enforced across all retries and fallbacks."""
+    import httpx
+    import asyncio
+    import time
+    
+    async def mock_call_gemini(client, model, retries, columns, deadline, *args, **kwargs):
+        import time
+        start = time.monotonic()
+        if start >= deadline:
+            raise TimeoutError("Tier 2 budget exhausted before the final attempt.")
+        await asyncio.sleep(0.6)
+        raise TimeoutError("mock timeout")
+    
+    from app.services import tier2_gemini
+    monkeypatch.setattr(tier2_gemini, "_call_gemini", mock_call_gemini)
+    monkeypatch.setattr(tier2_gemini, "GEMINI_TOTAL_BUDGET_SECONDS", 0.5)
+    monkeypatch.setattr(tier2_gemini, "GEMINI_MAX_RETRIES", 1)
+    
+    monkeypatch.setattr(tier2_gemini, "AI_ASSIST_ENABLED", True)
+    monkeypatch.setattr(tier2_gemini, "GEMINI_API_KEY", "test")
+    
+    from app.services import tier1_classifier
+    from app.services.tier1_classifier import ROUTE_GEMINI
+    
+    original_classify = tier1_classifier.classify_columns
+    
+    def mock_classify(*args, **kwargs):
+        guesses = original_classify(*args, **kwargs)
+        for g in guesses:
+            if g.raw_column == "Remarks":
+                g.route = ROUTE_GEMINI
+                g.canonical = None
+                g.label = "unknown"
+        return guesses
+        
+    monkeypatch.setattr(tier1_classifier, "classify_columns", mock_classify)
+    
+    start = time.perf_counter()
+    response = client.post(
+        f"/upload/{uploaded}/tier2",
+        json={"ai_consent": True},
+    )
+    elapsed = time.perf_counter() - start
+    
+    # Must return gracefully instead of hanging
+    assert response.status_code == 200
+    
+    body = response.json()
+    assert body["ai_notice"] is not None, f"Body was: {body}"
+    assert body["ai_notice"]["reason_code"] == "timeout"
+    assert elapsed < 2.5, f"Call took {elapsed}s which exceeds the 0.5s budget + margin"
 
 
 # ── Dynamic schema endpoint ──────────────────────────────────────────────────
@@ -420,7 +498,7 @@ def test_oversized_filter_payload_is_rejected(client, uploaded):
     """Bounded filters keep one request from becoming a server-wide problem."""
     response = client.post(
         f"/analytics/{uploaded}/summary",
-        json={"time_filter": "all", "filters": {"category": [f"c{i}" for i in range(200)]}},
+        json={"time_filter": "all", "filters": {"category": [f"c{i}" for i in range(5001)]}},
     )
     assert response.status_code == 422
 

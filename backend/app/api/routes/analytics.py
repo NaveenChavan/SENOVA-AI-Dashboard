@@ -46,6 +46,8 @@ from app.models.schemas import (
     ChartDataResponse,
     ChartQuery,
     DimensionsResponse,
+    DimensionOption,
+    DimensionOptionsRequest,
     DynamicSchema,
     ForecastQuery,
     ForecastResponse,
@@ -68,12 +70,17 @@ from app.services.file_handler import (
 from app.services.forecasting import compute_forecast
 from app.services.insights_engine import compute_insights
 from app.services.inventory_intel import compute_inventory_intelligence
-from app.services.pdf_report import MAX_LEDGER_ROWS_IN_PDF, generate_ca_report_pdf
+from app.services.pdf_report import (
+    MAX_LEDGER_ROWS_IN_PDF,
+    generate_ca_report_pdf,
+    generate_visual_financial_pdf,
+)
 from app.services.query_engine import QueryError
 from app.services.discount_calculations import compute_discount, compute_discount_vs_margin
 from app.services.sales_calculations import (
     build_ledger_page,
     compute_daily_trend_between,
+    compute_daily_financial_summary,
     compute_dead_stock,
     compute_pnl_report,
     compute_revenue_by_category,
@@ -161,11 +168,12 @@ def _slice(file_id: str, user: str, query: AnalysisQuery):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
-def _empty_analytics(errors: list[RowError]) -> AnalyticsResponse:
+def _empty_analytics(errors: list[RowError], row_count: int = 0) -> AnalyticsResponse:
     """A zero-valued payload, so an empty filter result still renders cleanly."""
     from app.models.schemas import MetricValue, SalesSummary
 
     return AnalyticsResponse(
+        row_count=row_count,
         summary=SalesSummary(
             revenue=MetricValue(value=0.0),
             profit=MetricValue(value=0.0),
@@ -186,11 +194,12 @@ def _empty_analytics(errors: list[RowError]) -> AnalyticsResponse:
 def _build_analytics(current, previous, window, errors: list[RowError]) -> AnalyticsResponse:
     """Assemble the standard dashboard payload from a resolved slice."""
     if current.empty:
-        return _empty_analytics(errors)
+        return _empty_analytics(errors, row_count=0)
 
     # The window's end is exclusive; the trend chart wants the last included day.
     trend_end = window.end - timedelta(days=1)
     return AnalyticsResponse(
+        row_count=len(current),
         summary=compute_summary_between(current, previous, window.start, trend_end),
         top_items=compute_top_items(current),
         daily_trend=compute_daily_trend_between(current, window.start, trend_end),
@@ -279,6 +288,25 @@ def get_dimensions(file_id: str, user: str = Depends(get_current_user)):
     return query_engine.dimension_options(frame)
 
 
+@analytics_router.post("/{file_id}/dimensions/options", response_model=DimensionOption)
+def post_dimension_options(file_id: str, request: DimensionOptionsRequest, user: str = Depends(get_current_user)):
+    """Return searchable, cascade-aware values for one filter dimension."""
+    frame = _load_frame(file_id, user)
+    try:
+        return query_engine.dimension_option(
+            frame,
+            request.dimension,
+            filters=request.filters,
+            time_filter=request.time_filter,
+            start_date=request.start_date,
+            end_date=request.end_date,
+            search=request.search,
+            limit=request.limit,
+        )
+    except QueryError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
 @analytics_router.post("/{file_id}/schema", response_model=DynamicSchema)
 def post_schema(file_id: str, user: str = Depends(get_current_user)):
     """
@@ -325,6 +353,7 @@ async def post_ai_insights(file_id: str, body: AiInsightsRequest, user: str = De
 
     candidates: dict[str, str] = {}
     notice: str | None = None
+    reason_code: str | None = None
     source = "skipped"
     elapsed_ms = 0.0
 
@@ -346,6 +375,7 @@ async def post_ai_insights(file_id: str, body: AiInsightsRequest, user: str = De
         candidates = result.rewrites
         source = result.source
         notice = result.notice
+        reason_code = result.reason_code
         elapsed_ms = result.elapsed_ms
 
     ai_text: list[AiNarrative] = []
@@ -373,6 +403,8 @@ async def post_ai_insights(file_id: str, body: AiInsightsRequest, user: str = De
         # Every rewrite failed the check. Say so rather than shipping a response
         # where nothing is renderable and the failure looks like silence.
         logger.warning("All %d AI rewrite(s) failed the number check.", len(candidates))
+        reason_code = "number_check"
+        notice = "AI answer failed the number check; original text kept."
 
     logger.info(
         "AI insights: source=%s cards=%d rewrites=%d verified=%d elapsed=%.1fms",
@@ -387,6 +419,7 @@ async def post_ai_insights(file_id: str, body: AiInsightsRequest, user: str = De
         ai_text=ai_text,
         ai_source=source,
         ai_notice=notice,
+        ai_reason_code=reason_code,
         ai_elapsed_ms=elapsed_ms,
     )
 
@@ -464,11 +497,75 @@ def post_ledger(file_id: str, query: LedgerQuery, user: str = Depends(get_curren
 
 @analytics_router.post("/{file_id}/report.pdf")
 def post_ca_report_pdf(file_id: str, query: AnalysisQuery, user: str = Depends(get_current_user)):
-    """PDF report for a filtered slice, including insights, forecast and reorder pages."""
+    """Detailed Financial Report PDF for the filtered slice."""
     return _render_pdf(file_id, user, query)
 
 
+@analytics_router.post("/{file_id}/visual-report.pdf")
+def post_visual_report_pdf(file_id: str, query: AnalysisQuery, user: str = Depends(get_current_user)):
+    """One-page Visual Financial Report PDF for the filtered slice."""
+    return _render_visual_pdf(file_id, user, query)
+
+
+def _assert_report_consistency(analytics, ca_report, daily_summary: list[dict]) -> None:
+    """Fail closed if the report's independent sections disagree."""
+    revenue = round(float(analytics.summary.revenue.value), 2)
+    profit = round(float(analytics.summary.profit.value), 2)
+    cost = round(float(analytics.summary.cost.value), 2)
+    units = int(analytics.summary.units_sold.value)
+
+    pnl = {line.label: round(float(line.amount), 2) for line in ca_report.pnl}
+    revenue_from_pnl = pnl.get("Net Revenue", pnl.get("Gross Revenue"))
+    profit_from_pnl = pnl.get("Gross Profit")
+    cost_from_pnl = pnl.get("Cost of Goods Sold (COGS)")
+
+    if revenue_from_pnl != revenue or profit_from_pnl != profit or cost_from_pnl != cost:
+        raise HTTPException(status_code=500, detail="Report generation stopped because dashboard and report values do not match.")
+
+    category_revenue = round(sum(float(r.revenue) for r in ca_report.category_ledger), 2)
+    category_cost = round(sum(float(r.cost) for r in ca_report.category_ledger), 2)
+    category_profit = round(sum(float(r.profit) for r in ca_report.category_ledger), 2)
+    category_units = sum(int(r.units_sold) for r in ca_report.category_ledger)
+    if (category_revenue, category_cost, category_profit, category_units) != (revenue, cost, profit, units):
+        raise HTTPException(status_code=500, detail="Report generation stopped because category totals do not reconcile with dashboard totals.")
+
+    daily_revenue = round(sum(float(r["revenue"]) for r in daily_summary), 2)
+    daily_cost = round(sum(float(r["cost"]) for r in daily_summary), 2)
+    daily_profit = round(sum(float(r["profit"]) for r in daily_summary), 2)
+    daily_units = sum(int(r["units_sold"]) for r in daily_summary)
+    if (daily_revenue, daily_cost, daily_profit, daily_units) != (revenue, cost, profit, units):
+        raise HTTPException(status_code=500, detail="Report generation stopped because daily totals do not reconcile with dashboard totals.")
+
+
 # ── PDF assembly (shared by the classic GET and the Pro POST) ───────────────
+
+
+def _render_visual_pdf(file_id: str, user: str, query: AnalysisQuery) -> Response:
+    current, previous, window = _slice(file_id, user, query)
+    analytics = _build_analytics(current, previous, window, _row_errors(file_id, user))
+    ca_report = compute_pnl_report(current, window.label)
+    daily_summary = compute_daily_financial_summary(current, window.start, window.end - timedelta(days=1))
+    insights = compute_insights(current, previous, period_label=window.label)
+    inventory = compute_inventory_intelligence(current, top_n=15)
+    forecast = compute_forecast(current)
+
+    _assert_report_consistency(analytics, ca_report, daily_summary)
+
+    pdf_bytes = generate_visual_financial_pdf(
+        filename=get_original_filename(file_id, fallback=file_id),
+        analytics=analytics,
+        ca_report=ca_report,
+        daily_summary=daily_summary,
+        insights=insights,
+        inventory=inventory,
+        forecast=forecast,
+    )
+    download_name = f"senova-visual-financial-report-{file_id[:8]}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{download_name}"'},
+    )
 
 
 def _render_pdf(file_id: str, user: str, query: AnalysisQuery) -> Response:
@@ -483,10 +580,15 @@ def _render_pdf(file_id: str, user: str, query: AnalysisQuery) -> Response:
 
     analytics = _build_analytics(current, previous, window, _row_errors(file_id, user))
     ca_report = compute_pnl_report(current, window.label)
-    ledger_page = build_ledger_page(current, page=1, page_size=MAX_LEDGER_ROWS_IN_PDF)
+    # The PDF export is complete for the selected slice. The UI ledger remains
+    # paginated, but the downloadable detailed report contains every selected row.
+    ledger_page = build_ledger_page(current, page=1, page_size=max(1, len(current)))
+    daily_summary = compute_daily_financial_summary(current, window.start, window.end - timedelta(days=1))
     insights = compute_insights(current, previous, period_label=window.label)
     inventory = compute_inventory_intelligence(current, top_n=15)
     forecast = compute_forecast(current)
+
+    _assert_report_consistency(analytics, ca_report, daily_summary)
 
     pdf_bytes = generate_ca_report_pdf(
         filename=get_original_filename(file_id, fallback=file_id),
@@ -497,9 +599,10 @@ def _render_pdf(file_id: str, user: str, query: AnalysisQuery) -> Response:
         insights=insights,
         inventory=inventory,
         forecast=forecast,
+        daily_summary=daily_summary,
     )
 
-    download_name = f"senova-financial-report-{file_id[:8]}.pdf"
+    download_name = f"senova-detailed-financial-report-{file_id[:8]}.pdf"
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",

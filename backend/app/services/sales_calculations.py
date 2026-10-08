@@ -460,3 +460,60 @@ def build_ledger_page(df: pd.DataFrame, page: int, page_size: int) -> LedgerPage
         total_rows=total_rows,
         total_pages=total_pages,
     )
+
+
+def compute_daily_financial_summary(df: pd.DataFrame, start=None, end=None) -> list[dict]:
+    """Return one financially reconciled row for every calendar day in a slice.
+
+    This is a report presentation helper built from ``_prepare()``, the same
+    row-level derivations used by the dashboard's KPI/P&L calculations.  It
+    zero-fills missing calendar days so a report really does cover every date
+    in the selected range.
+    """
+    if df.empty and (start is None or end is None):
+        return []
+
+    prepped = _prepare(df)
+    if start is None:
+        start = prepped["Date"].min()
+    if end is None:
+        end = prepped["Date"].max()
+    start = pd.Timestamp(start).normalize()
+    end = pd.Timestamp(end).normalize()
+    if start > end:
+        return []
+
+    if prepped.empty:
+        daily = pd.DataFrame(columns=["_day", "transactions", "units_sold", "revenue", "cost", "profit"])
+    else:
+        daily = (
+            prepped.assign(_day=prepped["Date"].dt.normalize())
+            .groupby("_day", as_index=False)
+            .agg(
+                transactions=("Quantity", "size"),
+                units_sold=("Quantity", "sum"),
+                revenue=("_row_revenue", "sum"),
+                cost=("_row_cost", "sum"),
+                profit=("_row_profit", "sum"),
+            )
+        )
+
+    calendar = pd.DataFrame({"_day": pd.date_range(start, end, freq="D")})
+    merged = calendar.merge(daily, on="_day", how="left")
+    for col in ["transactions", "units_sold", "revenue", "cost", "profit"]:
+        merged[col] = merged[col].fillna(0)
+
+    result = []
+    for _, row in merged.iterrows():
+        revenue = float(row["revenue"])
+        profit = float(row["profit"])
+        result.append({
+            "date": pd.Timestamp(row["_day"]).date().isoformat(),
+            "transactions": int(row["transactions"]),
+            "units_sold": int(row["units_sold"]),
+            "revenue": round(revenue, 2),
+            "cost": round(float(row["cost"]), 2),
+            "profit": round(profit, 2),
+            "margin_percentage": round((profit / revenue) * 100, 2) if revenue else None,
+        })
+    return result

@@ -1,0 +1,18 @@
+SENOVA - DUAL PDF REPORT REPLACEMENT
+
+This ZIP intentionally preserves original project-relative paths.
+
+Before applying:
+1. Make a Git commit or copy of the current working project.
+2. Extract this ZIP directly into the EXISTING SENOVA project root.
+3. When Windows asks whether to replace existing files, choose "Replace the files in the destination" / "Replace All".
+
+Only these source files are intended to be overwritten:
+- backend/app/services/pdf_report.py
+- backend/app/services/sales_calculations.py
+- backend/app/api/routes/analytics.py
+- frontend/src/pages/Dashboard.jsx
+
+The test/doc files are additive and will be created if they do not already exist.
+
+Do NOT extract into a new nested project folder and do NOT rename the files.

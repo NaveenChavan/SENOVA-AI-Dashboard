@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import useSalesStore from '../../store/useSalesStore'
 
 import Button from '../common/Button'
 import { formatNumber } from '../charts/chartFormat'
@@ -26,6 +27,15 @@ const FALLBACK_OPTIONAL = []
 /** Optional fields that are numbers rather than dimensions, for grouping. */
 const MEASURE_FIELDS = new Set(['Line Total', 'Discount', 'Tax', 'Stock On Hand', 'MRP'])
 
+
+export function shouldStartTier2(preview, aiConsent) {
+  return Boolean(
+    preview?.ai_enabled &&
+    aiConsent &&
+    preview?.detected_columns?.some((column) => column?.route === 'gemini'),
+  )
+}
+
 export default function ColumnMappingScreen({ preview, onConfirm, onCancel, submitting }) {
   const requiredFields = preview.required_fields?.length ? preview.required_fields : FALLBACK_REQUIRED
   const optionalFields = preview.optional_fields?.length ? preview.optional_fields : FALLBACK_OPTIONAL
@@ -38,6 +48,36 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
     }
     return initial
   })
+
+  const aiConsent = useSalesStore((state) => state.aiConsent)
+  const runTier2Async = useSalesStore((state) => state.runTier2Async)
+
+  // Track if we're actively waiting for the background AI to finish
+  const [checkingAi, setCheckingAi] = useState(() => {
+    return shouldStartTier2(preview, aiConsent)
+  })
+
+  useEffect(() => {
+    if (!checkingAi) return
+    runTier2Async(preview.file_id).finally(() => {
+      setCheckingAi(false)
+    })
+  }, [checkingAi, preview.file_id, runTier2Async])
+
+  // Update mapping state when preview.detected_columns updates (from Tier 2 response)
+  useEffect(() => {
+    setMapping((previous) => {
+      const next = { ...previous }
+      let changed = false
+      for (const column of preview.detected_columns) {
+        if (column.suggested_field && !previous[column.raw_column]) {
+          next[column.raw_column] = column.suggested_field
+          changed = true
+        }
+      }
+      return changed ? next : previous
+    })
+  }, [preview.detected_columns])
 
   /**
    * Columns the user has personally picked a field for.
@@ -85,9 +125,16 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
         <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
           Every shop's spreadsheet is a little different. Check the guesses below and fix anything that's wrong.
         </p>
-        <p className="text-[12px] mt-1" style={{ color: 'var(--text-muted)' }}>
-          {formatNumber(preview.row_count)} row{preview.row_count === 1 ? '' : 's'} detected in{' '}
-          <span className="font-medium">{preview.filename}</span>
+        <p className="text-[12px] mt-1 flex items-center justify-between" style={{ color: 'var(--text-muted)' }}>
+          <span>
+            {formatNumber(preview.row_count)} row{preview.row_count === 1 ? '' : 's'} detected in{' '}
+            <span className="font-medium">{preview.filename}</span>
+          </span>
+          {checkingAi && (
+            <span className="text-xs font-medium" style={{ color: 'var(--accent-blue)' }}>
+              AI is checking {preview.detected_columns.filter(c => c.route === 'gemini').length} column(s)...
+            </span>
+          )}
         </p>
       </header>
 
@@ -274,11 +321,19 @@ const SOURCE_LABEL = {
 
 function ConfidenceBadge({ column }) {
   const legacy = LEGACY_TONE[column?.confidence] ?? LEGACY_TONE.none
-  const tone = BAND_TONE[column?.confidence_band] ?? legacy
+  let tone = BAND_TONE[column?.confidence_band] ?? legacy
+
+  if (column?.recognised_unused) {
+    tone = { colour: 'var(--text-muted)', label: 'Recognised, not analysed' }
+  }
 
   const score = Number(column?.confidence_score)
   const hasScore = Number.isFinite(score) && score > 0
   const source = SOURCE_LABEL[column?.source]
+
+  const reason = column?.recognised_unused
+    ? 'We know what this is. It is not used in the numbers. You can still map it by hand.'
+    : column?.reason
 
   return (
     <span className="inline-flex flex-wrap items-center gap-1 align-middle">
@@ -291,21 +346,21 @@ function ConfidenceBadge({ column }) {
 
       {/* The score is a refinement of the word beside it, never a replacement:
           0.95 and the next one below it both read as "Confident" here. */}
-      {hasScore && (
+      {hasScore && !column?.recognised_unused && (
         <span className="text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
           {Math.round(score * 100)}%
         </span>
       )}
 
-      {source && (
+      {source && !column?.recognised_unused && (
         <span className="text-[11px]" style={{ color: 'var(--text-muted)' }} title={`Decided by: ${column.source}`}>
           {source}
         </span>
       )}
 
-      {column?.reason && (
+      {reason && (
         <span className="block w-full text-[11.5px] leading-snug mt-0.5" style={{ color: 'var(--text-muted)' }}>
-          {column.reason}
+          {reason}
         </span>
       )}
     </span>

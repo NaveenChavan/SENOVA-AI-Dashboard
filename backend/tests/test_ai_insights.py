@@ -202,6 +202,7 @@ class TestNumberCheckEndToEnd:
         narrative = next(n for n in body["ai_text"] if n["id"] == target)
         assert narrative["verified"] is False
         assert narrative["rejected_numbers"]
+        assert body["ai_reason_code"] == "number_check"
 
         # The deterministic sentence is still there for the UI to fall back to.
         rewritten = next(i for i in body["insights"] if i["id"] == target)

@@ -9,6 +9,8 @@ import DensityToggle from '../components/common/DensityToggle'
 import ForecastSummary from '../components/dashboard/ForecastSummary'
 import TrendChart from '../components/charts/TrendChart'
 import { resolveChartRequest } from '../components/charts/chartView'
+import api from '../services/api'
+import useSalesStore from '../store/useSalesStore'
 
 /**
  * Interaction and consistency tests for the pieces added in the polish pass:
@@ -16,6 +18,13 @@ import { resolveChartRequest } from '../components/charts/chartView'
  * 7-day average line, honest accuracy labelling, and the one house rule that
  * keeps currency consistent across the whole app.
  */
+
+vi.mock('../services/api', () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(),
+  },
+}))
 
 vi.mock('recharts', async () => {
   const actual = await vi.importActual('recharts')
@@ -28,6 +37,37 @@ vi.mock('recharts', async () => {
       </div>
     ),
   }
+})
+
+describe('C2 async filter loading safety', () => {
+  function deferred() {
+    let resolve
+    const promise = new Promise((res) => {
+      resolve = res
+    })
+    return { promise, resolve }
+  }
+
+  it('ignores a stale analytics response when a newer filter request has already won', async () => {
+    const first = deferred()
+    const second = deferred()
+    api.post.mockReset()
+    api.post.mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise)
+
+    const latestData = { row_count: 7, summary: { revenue: { value: 49180 }, profit: { value: 19750 } } }
+    const staleData = { row_count: 99, summary: { revenue: { value: 1 }, profit: { value: 1 } } }
+
+    const firstCall = useSalesStore.getState().fetchAnalytics('file-1', { timeFilter: 'today', filters: {} })
+    const secondCall = useSalesStore.getState().fetchAnalytics('file-1', { timeFilter: 'all', filters: { category: ['Power'] } })
+
+    second.resolve({ data: latestData })
+    await secondCall
+    first.resolve({ data: staleData })
+    await firstCall
+
+    expect(useSalesStore.getState().data.row_count).toBe(7)
+    expect(useSalesStore.getState().data.summary.revenue.value).toBe(49180)
+  })
 })
 
 describe('CommandPalette', () => {

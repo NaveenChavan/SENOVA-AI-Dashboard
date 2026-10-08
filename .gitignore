@@ -1,29 +1,53 @@
+# --- Security & Secrets (Never commit credentials) ---
+.env
+.env.*
+*.env
+*.env.*
+*.pem
+*.key
+*.cert
+backend/firebase-service-account.json
+!*.env.example
+!**/*.env.example
+
 # --- Backend (Python) ---
 backend/temp_uploads/*
 !backend/temp_uploads/.gitkeep
 backend/__pycache__/
 backend/**/__pycache__/
 *.pyc
-backend/.env
-backend/firebase-service-account.json
 backend/*.egg-info/
 backend/venv/
 backend/.venv/
 # FastEmbed's downloaded ONNX model (~0.5 GB binary, re-fetched on demand).
 backend/fastembed_cache/
 fastembed_cache/
+backend/pytest_output.txt
+backend/bisect_*.py
+scratch/
+backend/scratch/
 
 # --- Frontend (Node) ---
 frontend/node_modules/
 frontend/dist/
-frontend/.env
-frontend/.env.local
 frontend/*.log
 frontend/.vercel/
 npm-debug.log*
+*.timestamp-*.mjs
+
+# --- Temporary backups & archives ---
+.*-backup*
+_backup*
+senova-c2-ui-restored-fixed/
+senova-column-routing-fix/
+*.zip
+*.docx
+*.pptx
+backend/grocery_visual_preview.png
 
 # --- Editor / OS ---
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+

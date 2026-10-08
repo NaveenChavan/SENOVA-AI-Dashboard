@@ -1,0 +1,13 @@
+C2 UI restore patch — runtime crash corrected.
+
+Replace only:
+- frontend/src/pages/Dashboard.jsx
+- frontend/src/components/dashboard/FilterPanel.jsx
+- frontend/src/index.css
+
+The previous UI patch had a React TDZ bug: paletteActions used labelForDateFilter
+before that const was initialized, causing "Cannot access 'labelForDateFilter' before
+initialization" and a blank white dashboard. The helpers are now initialized before
+paletteActions.
+
+No backend, AI routing, analytics calculation, or numerical logic is changed.

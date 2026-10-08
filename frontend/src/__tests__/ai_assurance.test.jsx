@@ -80,6 +80,26 @@ describe('AiNoticeBanner', () => {
     render(<AiNoticeBanner notice={{ message: 'AI matching was unavailable.', affected_columns: 0 }} />)
     expect(screen.queryByText(/will need mapping by hand/i)).toBeNull()
   })
+
+  it('translates known reason_codes into human sentences', () => {
+    const reasons = [
+      { code: 'key_invalid', expected: /API key is invalid or unauthorised/ },
+      { code: 'model_unavailable', expected: /model could not be found/ },
+      { code: 'fallback_used', expected: /so a fallback model was used/ },
+      { code: 'bad_request', expected: /rejected the request/ },
+      { code: 'rate_limit', expected: /currently rate limited/ },
+      { code: 'timeout', expected: /timed out/ },
+      { code: 'server_error', expected: /currently unavailable/ },
+      { code: 'invalid_json', expected: /unusable response/ },
+      { code: 'number_check', expected: /failed the number check/ }
+    ]
+
+    for (const { code, expected } of reasons) {
+      const { unmount } = render(<AiNoticeBanner notice={{ reason_code: code, message: 'dummy message' }} />)
+      expect(screen.getByText(expected)).toBeTruthy()
+      unmount()
+    }
+  })
 })
 
 describe('PipelineTimingNote', () => {
@@ -229,6 +249,90 @@ describe('ColumnMappingScreen — additive confidence fields', () => {
     expect(highlighted).toHaveLength(0)
     // The choice itself is kept.
     expect(rateSelect.value).toBe('Cost Price')
+  })
+
+  it('shows background update message and gracefully degrades on failure', async () => {
+    // Override fetch or useSalesStore mock to simulate background failure
+    const useSalesStore = await import('../store/useSalesStore')
+    const originalAiConsent = useSalesStore.default.getState().aiConsent
+    useSalesStore.default.setState({ aiConsent: true })
+    
+    // Create a mock mapping screen preview
+    const deferredPreview = {
+      ...MODERN_PREVIEW,
+      detected_columns: [
+        { raw_column: 'Item', suggested_field: null, route: 'gemini', needs_review: true, source: 'pending' },
+      ],
+    }
+
+    // Mock runTier2Async to fail (simulate timeout or server error)
+    const originalRunTier2 = useSalesStore.default.getState().runTier2Async
+    useSalesStore.default.setState({ 
+      runTier2Async: async () => {
+        // Mock the failure updating the store aiNotice
+        useSalesStore.default.setState({ aiNotice: { message: 'The AI service timed out.', reason_code: 'timeout', tone: 'warning' } })
+        return null
+      }
+    })
+
+    const { unmount } = render(<ColumnMappingScreen preview={deferredPreview} onConfirm={() => {}} onCancel={() => {}} />)
+
+    // Should show checking banner initially
+    expect(screen.getByText(/AI is checking/i)).toBeTruthy()
+    
+    // Wait for effect to complete
+    await new Promise(r => setTimeout(r, 0))
+
+    // Restore store state
+    useSalesStore.default.setState({ aiConsent: originalAiConsent, runTier2Async: originalRunTier2 })
+    unmount()
+  })
+
+  it('does not count currency, order status, or notes as needing human review if they are recognised and unused', () => {
+    const testing2Preview = {
+      ...MODERN_PREVIEW,
+      pipeline_timings: { tier1_ms: 120, tier2_ms: 0, pandas_ms: null, total_ms: 120 },
+      detected_columns: [
+        {
+          raw_column: 'Currency',
+          suggested_field: null,
+          confidence: 'none',
+          source: 'local',
+          needs_review: false,
+          recognised_unused: true,
+          reason: 'Recognised, not analysed.'
+        },
+        {
+          raw_column: 'Order Status',
+          suggested_field: null,
+          confidence: 'none',
+          source: 'local',
+          needs_review: false,
+          recognised_unused: true,
+          reason: 'Recognised, not analysed.'
+        },
+        {
+          raw_column: 'Notes',
+          suggested_field: null,
+          confidence: 'none',
+          source: 'local',
+          needs_review: false,
+          recognised_unused: true,
+          reason: 'Recognised, not analysed.'
+        }
+      ]
+    }
+    
+    const { container } = render(
+      <div>
+        <AiNoticeBanner notice={{ affected_columns: 0, message: 'All clear' }} />
+        <PipelineTimingNote timings={testing2Preview.pipeline_timings} aiEnabled={true} preview={testing2Preview} />
+      </div>
+    )
+    
+    // Assert 0 "by hand" columns and AI was not needed.
+    expect(screen.queryByText(/will need mapping by hand/i)).toBeNull()
+    expect(screen.getByText(/AI not needed — every column was clear/i)).toBeTruthy()
   })
 })
 

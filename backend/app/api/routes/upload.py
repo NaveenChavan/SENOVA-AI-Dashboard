@@ -41,6 +41,11 @@ from app.models.schemas import (
     RowError,
     UploadResponse,
 )
+
+class Tier2Response(BaseModel):
+    detected_columns: list[ColumnGuess]
+    ai_notice: AiNotice | None = None
+    pipeline_timings: PipelineTimings
 from app.services import column_understanding, frame_cache, tier2_gemini
 from app.services.file_handler import (
     assert_owner,
@@ -159,11 +164,10 @@ async def upload_file(
         )
 
     # The 2-tier column-understanding pipeline: Tier 1 classifies locally,
-    # escalating only the columns it can't settle to Tier 2 (and only with
-    # consent). Falls back to the alias map when the embedding model is
-    # unavailable, and never raises — see column_understanding.analyse.
-    reports, timings, ai_notice = await column_understanding.analyse(
-        df, ai_consent=ai_consent, file_id=file_id
+    # escalating only the columns it can't settle to Tier 2. To avoid blocking the upload,
+    # we explicitly skip Tier 2 here. The frontend will request it asynchronously if needed.
+    reports, timings, ai_notice, reason_code = await column_understanding.analyse(
+        df, ai_consent=ai_consent, file_id=file_id, run_tier2=False
     )
 
     # Sample rows for the live preview: NaN → None so the JSON stays valid, and
@@ -173,7 +177,10 @@ async def upload_file(
         for row in df.head(_SAMPLE_ROW_COUNT).to_dict(orient="records")
     ]
 
-    unresolved = sum(1 for report in reports if not report.get("suggested_field"))
+    unresolved = sum(
+        1 for report in reports
+        if report.get("needs_review") and not report.get("recognised_unused")
+    )
 
     return ColumnMappingPreview(
         file_id=file_id,
@@ -186,11 +193,48 @@ async def upload_file(
         sample_rows=sample_rows,
         pipeline_timings=PipelineTimings(**timings.as_dict()),
         ai_notice=(
-            AiNotice(message=ai_notice, tone="info", affected_columns=unresolved)
+            AiNotice(message=ai_notice, tone="info", affected_columns=unresolved, reason_code=reason_code)
             if ai_notice
             else None
         ),
         ai_enabled=tier2_gemini.gemini_enabled(),
+    )
+
+class Tier2Request(BaseModel):
+    ai_consent: bool = False
+
+
+@router.post("/{file_id}/tier2", response_model=Tier2Response)
+async def run_tier2(
+    file_id: str,
+    body: Tier2Request,
+    user: str = Depends(get_current_user)
+):
+    """
+    Run Tier 2 asynchronously.
+    """
+    try:
+        assert_owner(file_id, user)
+        df = read_to_dataframe(file_id)
+    except Exception as exc:
+        raise HTTPException(status_code=404, detail="File not found or invalid.")
+
+    reports, timings, ai_notice, reason_code = await column_understanding.analyse(
+        df, ai_consent=body.ai_consent, file_id=file_id, run_tier2=True
+    )
+    unresolved = sum(
+        1 for report in reports
+        if report.get("needs_review") and not report.get("recognised_unused")
+    )
+
+    return Tier2Response(
+        detected_columns=[ColumnGuess(**report) for report in reports],
+        ai_notice=(
+            AiNotice(message=ai_notice, tone="info", affected_columns=unresolved, reason_code=reason_code)
+            if ai_notice
+            else None
+        ),
+        pipeline_timings=PipelineTimings(**timings.as_dict()),
     )
 
 

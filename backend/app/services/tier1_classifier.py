@@ -248,15 +248,20 @@ def _header_scores(headers: list[str]) -> dict[str, dict[str, float]] | None:
     # Both matrices are unit-length, so the dot product is cosine similarity.
     similarity = header_vectors @ matrix.T
 
-    # Collapse per-anchor scores down to a best score per semantic label.
-    per_label: dict[str, list[float]] = {}
-    for column_index, anchor_label in enumerate(labels):
-        per_label.setdefault(anchor_label, []).append(float(similarity[:, column_index].max()))
-
+    labels_arr = np.array(labels)
     results: dict[str, dict[str, float]] = {}
+
+    label_maxes: dict[str, np.ndarray] = {}
+    for label in SEMANTIC_LABELS:
+        indices = np.where(labels_arr == label)[0]
+        if len(indices) > 0:
+            label_maxes[label] = similarity[:, indices].max(axis=1)
+
     for row_index, header in enumerate(headers):
         results[header] = {
-            label: scores[row_index] for label, scores in per_label.items() if label in SEMANTIC_LABELS
+            label: float(label_maxes[label][row_index])
+            for label in SEMANTIC_LABELS
+            if label in label_maxes
         }
     return results
 

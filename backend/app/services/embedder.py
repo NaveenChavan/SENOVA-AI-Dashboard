@@ -183,6 +183,32 @@ def catalog_embeddings() -> tuple[np.ndarray | None, list[str] | None]:
         if _anchor_matrix is not None:
             return _anchor_matrix, _anchor_labels
 
+        from pathlib import Path
+
+        # If a precomputed static embedding cache exists and matches the model,
+        # load it instantly (100ms) instead of spending 45s encoding 376 texts on CPU.
+        precomputed_path = Path(__file__).resolve().parent / "catalog_embeddings.npz"
+        model = _load_model()
+        if (
+            model is not None
+            and getattr(model, "model_name", None) == FASTEMBED_MODEL
+            and precomputed_path.exists()
+        ):
+            try:
+                data = np.load(precomputed_path)
+                mat = data["matrix"]
+                lbls = data["labels"].tolist()
+                _anchor_matrix = mat
+                _anchor_labels = lbls
+                logger.info(
+                    "Tier 1 precomputed catalog loaded: %d anchors across %d labels.",
+                    _anchor_matrix.shape[0],
+                    len(set(_anchor_labels)),
+                )
+                return _anchor_matrix, _anchor_labels
+            except Exception as exc:
+                logger.warning("Failed loading precomputed catalog (%s: %s).", type(exc).__name__, exc)
+
         pairs = catalog_anchors()
         matrix = encode([text for _label, text in pairs])
         if matrix is None:

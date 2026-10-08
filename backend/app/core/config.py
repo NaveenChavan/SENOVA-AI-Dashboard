@@ -19,7 +19,7 @@ ALLOWED_ORIGINS: list[str] = [
     o.strip()
     for o in os.getenv(
         "CORS_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
+        "http://localhost:5173,http://127.0.0.1:5173,https://senova-ai-dashboard.vercel.app",
     ).split(",")
     if o.strip()
 ]
@@ -157,7 +157,9 @@ GEMINI_TOTAL_BUDGET_SECONDS: float = float(os.getenv("GEMINI_TOTAL_BUDGET_SECOND
 #: Set this to false on a memory-constrained host: onnxruntime plus a
 #: multilingual model is a large native allocation, and the Render free tier
 #: has 512 MB shared with pandas/numpy and every in-flight request.
-FASTEMBED_ENABLED: bool = os.getenv("FASTEMBED_ENABLED", "true").lower() == "true"
+_is_render: bool = bool(os.getenv("RENDER"))
+_fastembed_default: str = "false" if _is_render else "true"
+FASTEMBED_ENABLED: bool = os.getenv("FASTEMBED_ENABLED", _fastembed_default).lower() == "true"
 
 #: FastEmbed model id. Defaults to the multilingual one because shop headers
 #: are routinely Hindi or Hinglish.

@@ -7,7 +7,8 @@ file and the same sales_calculations module used by the dashboard.
 
 from pathlib import Path
 
-import pandas as pd
+import pytest
+pypdf = pytest.importorskip("pypdf")
 from pypdf import PdfReader
 
 from app.models.schemas import AnalyticsResponse

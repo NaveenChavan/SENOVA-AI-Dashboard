@@ -27,8 +27,14 @@ import logging
 from urllib.parse import parse_qs, quote, urlparse
 
 from firebase_admin import auth as firebase_auth
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+try:
+    from sendgrid import SendGridAPIClient
+    from sendgrid.helpers.mail import Mail
+    SENDGRID_AVAILABLE = True
+except ImportError:
+    SendGridAPIClient = None
+    Mail = None
+    SENDGRID_AVAILABLE = False
 
 from app.core.config import APP_DOMAIN, SENDER_EMAIL, SENDGRID_API_KEY
 from app.utils.auth_verifier import get_firebase_app
@@ -86,6 +92,10 @@ def _build_reset_link(email: str) -> str:
 
 
 def _send_via_sendgrid(to_email: str, reset_link: str) -> None:
+    if not SENDGRID_AVAILABLE:
+        raise EmailServiceError(
+            "SendGrid package is not installed — cannot send password reset email."
+        )
     if not SENDGRID_API_KEY:
         raise EmailServiceError(
             "SENDGRID_API_KEY is not configured — cannot send password reset email."
@@ -124,7 +134,7 @@ def is_email_delivery_configured() -> bool:
     Firebase's own (deliverability-poor but functional) email sender while
     SendGrid domain authentication is still pending.
     """
-    return bool(SENDGRID_API_KEY)
+    return SENDGRID_AVAILABLE and bool(SENDGRID_API_KEY)
 
 
 def send_password_reset_email(email: str) -> None:

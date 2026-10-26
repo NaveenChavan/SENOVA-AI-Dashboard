@@ -81,6 +81,53 @@ MEASURES: dict[str, dict] = {
     "avg_price": {"label": "Avg Selling Price", "format": "currency", "additive": False},
 }
 
+
+MEASURE_REQUIRED_COLUMNS: dict[str, set[str]] = {
+    "revenue": set(),
+    "profit": {"Quantity", "Cost Price"},
+    "cost": {"Quantity", "Cost Price"},
+    "units": {"Quantity"},
+    "transactions": set(),
+    "discount": {"Discount"},
+    "margin_pct": {"Quantity", "Cost Price"},
+    "avg_price": {"Quantity"},
+}
+
+
+def measure_unavailable_reason(df: pd.DataFrame, measure: str) -> str | None:
+    """Return a user-facing reason when a built-in chart measure is unsupported.
+
+    Column presence alone is not enough for optional fields: a partly blank
+    quantity column must not turn unknown units/cost into a zero-valued chart.
+    Extra measures are authorized by the file-specific registry and are handled
+    by the route layer before reaching this helper.
+    """
+    if measure not in MEASURES:
+        if measure.startswith("x_meas:") and measure in df.columns:
+            return None
+        return f"Measure '{measure}' is not available for this file."
+
+    required = MEASURE_REQUIRED_COLUMNS[measure]
+    # Discount can be supplied directly, or derived from MRP - Selling Price
+    # multiplied by Quantity. An MRP column by itself is not enough to calculate it.
+    if measure == "discount" and "Discount" not in df.columns:
+        alternative = {"MRP", "Selling Price", "Quantity"}
+        missing_alternative = sorted(alternative - set(df.columns))
+        if missing_alternative:
+            return "Measure 'Discount Given' needs Discount, or MRP + Selling Price + Quantity."
+        if not df.empty:
+            incomplete = [column for column in sorted(alternative) if df[column].isna().any()]
+            if incomplete:
+                return "Measure 'Discount Given' is unavailable because some rows have blank " + ", ".join(incomplete) + "."
+        return None
+
+    for column in sorted(required):
+        if column not in df.columns:
+            return f"Measure '{MEASURES[measure]['label']}' needs {column}."
+        if not df.empty and df[column].isna().any():
+            return f"Measure '{MEASURES[measure]['label']}' is unavailable because some rows have blank {column} values."
+    return None
+
 #: Human-readable labels for the preset windows (used in report headers).
 PERIOD_LABELS: dict[str, str] = {
     "all": "All Time",
@@ -204,6 +251,13 @@ def apply_filters(df: pd.DataFrame, filters: dict[str, list[str]]) -> pd.DataFra
     for key, values in filters.items():
         if not values:
             continue  # an empty selection means "no restriction"
+
+        if key.startswith("x_dim:"):
+            if key not in out.columns:
+                raise QueryError(f"This file has no '{key}' column to filter on.")
+            out = out[out[key].astype(str).isin(set(values))]
+            continue
+
         spec = DIMENSIONS.get(key)
         if spec is None:
             raise QueryError(f"Unknown filter dimension '{key}'.")
@@ -240,7 +294,9 @@ def build_slice(
         else df.iloc[0:0]
     )
     current = apply_filters(current_window, filters or {})
+    current.attrs = dict(df.attrs)
     previous = apply_filters(previous_window, filters or {})
+    previous.attrs = dict(df.attrs)
     return current, previous, window
 
 
@@ -253,19 +309,24 @@ def _dimension_series(prepped: pd.DataFrame, dimension: str) -> pd.Series:
     from ``Date`` for the three time dimensions.
     """
     spec = DIMENSIONS.get(dimension)
-    if spec is None:
-        raise QueryError(f"Unknown dimension '{dimension}'.")
+    if spec is not None:
+        column = spec["column"]
+        if column == "_time_day":
+            return prepped["Date"].dt.strftime("%Y-%m-%d")
+        if column == "_time_weekday":
+            return prepped["Date"].dt.strftime("%a")
+        if column == "_time_month":
+            return prepped["Date"].dt.strftime("%Y-%m")
+        if column not in prepped.columns:
+            raise QueryError(f"This file has no '{spec['label']}' column.")
+        return prepped[column].astype(str)
 
-    column = spec["column"]
-    if column == "_time_day":
-        return prepped["Date"].dt.strftime("%Y-%m-%d")
-    if column == "_time_weekday":
-        return prepped["Date"].dt.strftime("%a")
-    if column == "_time_month":
-        return prepped["Date"].dt.strftime("%Y-%m")
-    if column not in prepped.columns:
-        raise QueryError(f"This file has no '{spec['label']}' column.")
-    return prepped[column].astype(str)
+    if dimension.startswith("x_dim:"):
+        if dimension not in prepped.columns:
+            raise QueryError(f"This file has no '{dimension}' column.")
+        return prepped[dimension].astype(str)
+
+    raise QueryError(f"Unknown dimension '{dimension}'.")
 
 
 def _measure_value(row: pd.Series, measure: str) -> float:
@@ -298,33 +359,42 @@ def aggregate(
     """
     Group ``df`` by ``dimension`` and return chart-ready points.
 
-    Behaviour worth knowing:
-
-    * Every point carries all measures, so the frontend can switch chart type
-      (and combo charts can plot revenue bars against a margin-% line)
-      without another request.
-    * Non-time dimensions are sorted by the requested measure, descending,
-      then everything past ``top_n`` is folded into a single "Other" bucket —
-      that keeps a donut readable (the design guidance caps a pie at 5–6
-      slices) without hiding revenue from the totals.
-    * Time dimensions stay in chronological order and are never folded;
-      weekdays are ordered Mon→Sun rather than by size.
-    * ``cumulative_pct`` is the Pareto curve, and ``pareto_group_count`` is
-      how many groups make up the first 80% — the concentration-risk number.
+    Supports built-in dimensions/measures and deterministic extra dimensions/measures.
     """
-    if measure not in MEASURES:
-        raise QueryError(f"Unknown measure '{measure}'.")
-    meta = MEASURES[measure]
-    dim_meta = DIMENSIONS.get(dimension)
-    if dim_meta is None:
+    extra_reg = getattr(df, "attrs", {}).get("extra_registry", {})
+
+    # Resolve dimension metadata
+    if dimension in DIMENSIONS:
+        dim_label = DIMENSIONS[dimension]["label"]
+    elif dimension.startswith("x_dim:") and dimension in df.columns:
+        dim_label = extra_reg.get(dimension, {}).get("display_label", dimension)
+    else:
         raise QueryError(f"Unknown dimension '{dimension}'.")
+
+    # Resolve measure metadata
+    if measure in MEASURES:
+        meta = MEASURES[measure]
+        meas_label = meta["label"]
+        meas_format = meta["format"]
+        additive = bool(meta["additive"])
+        is_extra_meas = False
+        extra_agg = None
+    elif measure.startswith("x_meas:") and measure in df.columns:
+        meas_info = extra_reg.get(measure, {})
+        meas_label = meas_info.get("display_label", measure)
+        meas_format = "number"
+        extra_agg = meas_info.get("aggregation", "sum")
+        additive = (extra_agg not in ("average", "avg"))
+        is_extra_meas = True
+    else:
+        raise QueryError(f"Unknown measure '{measure}'.")
 
     empty = ChartDataResponse(
         dimension=dimension,
-        dimension_label=dim_meta["label"],
+        dimension_label=dim_label,
         measure=measure,
-        measure_label=meta["label"],
-        measure_format=meta["format"],
+        measure_label=meas_label,
+        measure_format=meas_format,
         points=[],
         total=0.0,
         group_count=0,
@@ -332,25 +402,72 @@ def aggregate(
     if df.empty:
         return empty
 
+    if not is_extra_meas:
+        unavailable_reason = measure_unavailable_reason(df, measure)
+        if unavailable_reason:
+            raise QueryError(unavailable_reason)
+    elif df[measure].isna().any():
+        missing_count = int(df[measure].isna().sum())
+        raise QueryError(
+            f"Not available: {meas_label} has {missing_count} blank or non-numeric value(s). "
+            "Correct those cells before using this extra measure."
+        )
+
     prepped = _prepare(df)
     keys = _dimension_series(prepped, dimension)
+
+    has_quantity = "Quantity" in prepped.columns and prepped["Quantity"].notna().all()
+    has_cost = (
+        has_quantity
+        and "Cost Price" in prepped.columns
+        and prepped["Cost Price"].notna().all()
+    )
+    has_discount = "Discount" in prepped.columns
+
+    agg_dict = {
+        "revenue": ("_row_revenue", "sum"),
+    }
+    if has_cost:
+        agg_dict["cost"] = ("_row_cost", "sum")
+        agg_dict["profit"] = ("_row_profit", "sum")
+    else:
+        prepped["_dummy_cost"] = 0.0
+        prepped["_dummy_profit"] = 0.0
+        agg_dict["cost"] = ("_dummy_cost", "sum")
+        agg_dict["profit"] = ("_dummy_profit", "sum")
+
+    if has_discount:
+        agg_dict["discount"] = ("_row_discount", "sum")
+    else:
+        prepped["_dummy_discount"] = 0.0
+        agg_dict["discount"] = ("_dummy_discount", "sum")
+
+    if has_quantity:
+        agg_dict["units"] = ("Quantity", "sum")
+        agg_dict["transactions"] = ("Quantity", "size")
+    else:
+        prepped["_dummy_units"] = 0
+        agg_dict["units"] = ("_dummy_units", "sum")
+        agg_dict["transactions"] = ("_row_revenue", "size")
+
+    if is_extra_meas:
+        agg_func = "mean" if extra_agg in ("average", "avg") else "sum"
+        agg_dict["_extra_val"] = (measure, agg_func)
+        if agg_func == "mean":
+            agg_dict["_extra_count"] = (measure, "count")
 
     grouped = (
         prepped.assign(_group=keys)
         .groupby("_group", as_index=False)
-        .agg(
-            revenue=("_row_revenue", "sum"),
-            cost=("_row_cost", "sum"),
-            profit=("_row_profit", "sum"),
-            discount=("_row_discount", "sum"),
-            units=("Quantity", "sum"),
-            transactions=("Quantity", "size"),
-        )
+        .agg(**agg_dict)
     )
     if grouped.empty:
         return empty
 
-    grouped["_value"] = grouped.apply(lambda r: _measure_value(r, measure), axis=1)
+    if is_extra_meas:
+        grouped["_value"] = grouped["_extra_val"]
+    else:
+        grouped["_value"] = grouped.apply(lambda r: _measure_value(r, measure), axis=1)
 
     # Ordering: chronological / weekday order for time dimensions, biggest
     # first for everything else.
@@ -363,10 +480,15 @@ def aggregate(
         grouped = grouped.sort_values("_value", ascending=False)
 
     group_count = len(grouped)
-    additive = bool(meta["additive"])
-    total = float(grouped["_value"].sum()) if additive else _measure_value(
-        grouped[["revenue", "cost", "profit", "discount", "units", "transactions"]].sum(), measure
-    )
+    if is_extra_meas:
+        if extra_agg in ("average", "avg"):
+            total = float(df[measure].mean())
+        else:
+            total = float(df[measure].sum())
+    else:
+        total = float(grouped["_value"].sum()) if additive else _measure_value(
+            grouped[["revenue", "cost", "profit", "discount", "units", "transactions"]].sum(), measure
+        )
 
     # Pareto / concentration is only meaningful for additive measures and
     # non-time dimensions ("80% of revenue comes from N items").
@@ -390,23 +512,44 @@ def aggregate(
         value = float(row["_value"])
         if additive:
             running += value
-        points.append(_build_point(row, value, total, running if additive else None, additive))
+        points.append(
+            _build_point(row, value, total, running if additive else None, additive,
+                         has_cost=has_cost, has_quantity=has_quantity)
+        )
 
     if tail is not None and not tail.empty:
-        folded = tail[["revenue", "cost", "profit", "discount", "units", "transactions"]].sum()
+        folded_cols = ["revenue", "cost", "profit", "discount", "units", "transactions"]
+        if is_extra_meas:
+            folded_cols.append("_extra_val")
+            if "_extra_count" in tail.columns:
+                folded_cols.append("_extra_count")
+        folded = tail[folded_cols].sum(numeric_only=True)
         folded["_group"] = f"Other ({len(tail)})"
-        value = _measure_value(folded, measure)
+        if is_extra_meas:
+            if extra_agg in ("average", "avg"):
+                denominator = float(tail["_extra_count"].sum()) if "_extra_count" in tail else 0.0
+                value = (
+                    float((tail["_extra_val"] * tail["_extra_count"]).sum() / denominator)
+                    if denominator else 0.0
+                )
+            else:
+                value = float(tail["_extra_val"].sum())
+        else:
+            value = _measure_value(folded, measure)
         if additive:
             running += value
-        point = _build_point(folded, value, total, running if additive else None, additive)
+        point = _build_point(
+            folded, value, total, running if additive else None, additive,
+            has_cost=has_cost, has_quantity=has_quantity
+        )
         points.append(point.model_copy(update={"is_other": True}))
 
     return ChartDataResponse(
         dimension=dimension,
-        dimension_label=dim_meta["label"],
+        dimension_label=dim_label,
         measure=measure,
-        measure_label=meta["label"],
-        measure_format=meta["format"],
+        measure_label=meas_label,
+        measure_format=meas_format,
         points=points,
         total=safe_float(total, default=0.0) or 0.0,
         group_count=group_count,
@@ -414,21 +557,34 @@ def aggregate(
     )
 
 
-def _build_point(row, value: float, total: float, running: float | None, additive: bool) -> ChartPoint:
-    """Assemble one ``ChartPoint`` with every measure and its share/cumulative share."""
+def _build_point(
+    row,
+    value: float,
+    total: float,
+    running: float | None,
+    additive: bool,
+    *,
+    has_cost: bool,
+    has_quantity: bool,
+) -> ChartPoint:
+    """Assemble one ``ChartPoint`` without turning unavailable metrics into zero."""
     revenue = float(row["revenue"])
-    units = int(row["units"])
+    units = int(row["units"]) if has_quantity and "units" in row and pd.notna(row["units"]) else None
+    cost = float(row["cost"]) if has_cost and "cost" in row and pd.notna(row["cost"]) else None
+    profit = float(row["profit"]) if has_cost and "profit" in row and pd.notna(row["profit"]) else None
+    transactions = safe_int(row["transactions"]) if "transactions" in row and pd.notna(row["transactions"]) else 0
+    discount = float(row["discount"]) if "discount" in row and pd.notna(row["discount"]) else 0.0
     return ChartPoint(
         label=str(row["_group"]),
         value=safe_float(value, default=0.0) or 0.0,
         revenue=safe_float(revenue, default=0.0) or 0.0,
-        cost=safe_float(row["cost"], default=0.0) or 0.0,
-        profit=safe_float(row["profit"], default=0.0) or 0.0,
+        cost=safe_float(cost) if cost is not None else None,
+        profit=safe_float(profit) if profit is not None else None,
         units=units,
-        transactions=safe_int(row["transactions"]),
-        discount=safe_float(row["discount"], default=0.0) or 0.0,
-        margin_pct=safe_percentage(row["profit"], revenue),
-        avg_price=safe_float(revenue / units) if units else None,
+        transactions=transactions,
+        discount=safe_float(discount, default=0.0) or 0.0,
+        margin_pct=safe_percentage(profit, revenue) if profit is not None else None,
+        avg_price=safe_float(revenue / units) if units is not None and units else None,
         share_pct=safe_percentage(value, total) if additive else None,
         cumulative_pct=safe_percentage(running, total) if (additive and running is not None) else None,
     )
@@ -441,14 +597,19 @@ def heatmap(df: pd.DataFrame, measure: str = "revenue") -> HeatmapResponse:
     """
     Build the weekday × week intensity grid — "which days of the week actually
     sell, and is that changing?".
-
-    Columns are ISO weeks labelled with their Monday date so the legend can
-    show real dates instead of an opaque week number. ``min_value`` /
-    ``max_value`` ship with the payload so the UI can render a numeric legend
-    rather than relying on colour alone (accessibility guidance).
     """
-    meta = MEASURES.get(measure)
-    if meta is None:
+    extra_reg = getattr(df, "attrs", {}).get("extra_registry", {})
+    if measure in MEASURES:
+        meta = MEASURES[measure]
+        measure_label = meta["label"]
+        is_extra = False
+        extra_agg = None
+    elif measure.startswith("x_meas:") and measure in df.columns:
+        meas_info = extra_reg.get(measure, {})
+        measure_label = meas_info.get("display_label", measure)
+        is_extra = True
+        extra_agg = meas_info.get("aggregation", "sum")
+    else:
         raise QueryError(f"Unknown measure '{measure}'.")
 
     empty = HeatmapResponse(
@@ -456,25 +617,66 @@ def heatmap(df: pd.DataFrame, measure: str = "revenue") -> HeatmapResponse:
         columns=[],
         cells=[],
         measure=measure,
-        measure_label=meta["label"],
+        measure_label=measure_label,
     )
     if df.empty:
         return empty
 
+    if not is_extra:
+        unavailable_reason = measure_unavailable_reason(df, measure)
+        if unavailable_reason:
+            raise QueryError(unavailable_reason)
+    elif df[measure].isna().any():
+        missing_count = int(df[measure].isna().sum())
+        raise QueryError(
+            f"Not available: {measure_label} has {missing_count} blank or non-numeric value(s). "
+            "Correct those cells before using this extra measure."
+        )
+
     prepped = _prepare(df)
-    # Monday of each row's week — the stable key for a "week" column.
     week_start = prepped["Date"].dt.to_period("W").dt.start_time
+
+    has_quantity = "Quantity" in prepped.columns and prepped["Quantity"].notna().all()
+    has_cost = (
+        has_quantity
+        and "Cost Price" in prepped.columns
+        and prepped["Cost Price"].notna().all()
+    )
+    has_discount = "Discount" in prepped.columns
+
+    agg_dict = {
+        "revenue": ("_row_revenue", "sum"),
+    }
+    if has_cost:
+        agg_dict["cost"] = ("_row_cost", "sum")
+        agg_dict["profit"] = ("_row_profit", "sum")
+    else:
+        prepped["_dummy_cost"] = 0.0
+        prepped["_dummy_profit"] = 0.0
+        agg_dict["cost"] = ("_dummy_cost", "sum")
+        agg_dict["profit"] = ("_dummy_profit", "sum")
+
+    if has_discount:
+        agg_dict["discount"] = ("_row_discount", "sum")
+    else:
+        prepped["_dummy_discount"] = 0.0
+        agg_dict["discount"] = ("_dummy_discount", "sum")
+
+    if has_quantity:
+        agg_dict["units"] = ("Quantity", "sum")
+        agg_dict["transactions"] = ("Quantity", "size")
+    else:
+        prepped["_dummy_units"] = 0
+        agg_dict["units"] = ("_dummy_units", "sum")
+        agg_dict["transactions"] = ("_row_revenue", "size")
+
+    if is_extra:
+        agg_dict["_extra_val"] = (measure, "mean" if extra_agg in ("average", "avg") else "sum")
+
     grouped = (
         prepped.assign(_week=week_start, _weekday=prepped["Date"].dt.strftime("%a"))
         .groupby(["_week", "_weekday"], as_index=False)
-        .agg(
-            revenue=("_row_revenue", "sum"),
-            cost=("_row_cost", "sum"),
-            profit=("_row_profit", "sum"),
-            discount=("_row_discount", "sum"),
-            units=("Quantity", "sum"),
-            transactions=("Quantity", "size"),
-        )
+        .agg(**agg_dict)
     )
     if grouped.empty:
         return empty
@@ -487,7 +689,10 @@ def heatmap(df: pd.DataFrame, measure: str = "revenue") -> HeatmapResponse:
     cells: list[HeatmapCell] = []
     values: list[float] = []
     for _, row in grouped.iterrows():
-        value = _measure_value(row, measure)
+        if is_extra:
+            value = float(row["_extra_val"])
+        else:
+            value = _measure_value(row, measure)
         values.append(value)
         cells.append(
             HeatmapCell(
@@ -504,7 +709,7 @@ def heatmap(df: pd.DataFrame, measure: str = "revenue") -> HeatmapResponse:
         column_dates=column_dates,
         cells=cells,
         measure=measure,
-        measure_label=meta["label"],
+        measure_label=measure_label,
         min_value=safe_float(min(values), default=0.0) or 0.0,
         max_value=safe_float(max(values), default=0.0) or 0.0,
     )
@@ -515,13 +720,9 @@ def heatmap(df: pd.DataFrame, measure: str = "revenue") -> HeatmapResponse:
 
 def dimension_options(df: pd.DataFrame) -> DimensionsResponse:
     """
-    Describe what this file can be sliced by: every canonical dimension it
+    Describe what this file can be sliced by: every canonical and extra dimension it
     actually contains, with its distinct values (capped), plus which optional
-    measures are available and the file's real date span.
-
-    This remains the cheap, file-level metadata call. The staged filter drawer
-    uses :func:`dimension_option` for cascading/searchable Item and Invoice No
-    values so it never needs to download an unbounded list.
+    and extra measures are available and the file's real date span.
     """
     column_to_key = {spec["column"]: key for key, spec in DIMENSIONS.items()}
     options: list[DimensionOption] = []
@@ -542,10 +743,32 @@ def dimension_options(df: pd.DataFrame) -> DimensionsResponse:
             )
         )
 
+    # Include extra dimensions and extra measures from registry
+    extra_reg = getattr(df, "attrs", {}).get("extra_registry", {})
+    extra_measures = []
+    for key, info in extra_reg.items():
+        role = info.get("role")
+        if role == "extra_dimension" and key in df.columns:
+            distinct = sorted(df[key].astype(str).unique().tolist())
+            options.append(
+                DimensionOption(
+                    key=key,
+                    label=info.get("display_label", key),
+                    values=distinct[:MAX_DIMENSION_VALUES],
+                    total=len(distinct),
+                    selected_count=0,
+                    truncated=len(distinct) > MAX_DIMENSION_VALUES,
+                )
+            )
+        elif role == "extra_measure" and key in df.columns:
+            extra_measures.append(info)
+
     return DimensionsResponse(
         dimensions=options,
         optional_measures=available_measures(df),
         date_range=DataDateRange(**compute_data_date_range(df)),
+        extra_measures=extra_measures,
+        extra_registry=extra_reg,
     )
 
 
@@ -560,21 +783,22 @@ def dimension_option(
     search: str = "",
     limit: int = MAX_DIMENSION_VALUES,
 ) -> DimensionOption:
-    """Return one dimension's currently valid option list.
-
-    The selected dimension's own filter is intentionally excluded from the
-    context, while every other dimension filter and the date window is applied.
-    That gives true Category ↔ Item cascading without making an already-selected
-    value disappear just because it is the dimension currently being edited.
-    """
-    spec = DIMENSIONS.get(dimension)
-    if spec is None:
+    """Return one dimension's currently valid option list."""
+    extra_reg = getattr(df, "attrs", {}).get("extra_registry", {})
+    if dimension in DIMENSIONS:
+        spec = DIMENSIONS[dimension]
+        column = spec["column"]
+        label = spec["label"]
+        if column.startswith("_time_"):
+            raise QueryError(f"Dimension '{dimension}' cannot be used as a filter option.")
+    elif dimension.startswith("x_dim:") and dimension in df.columns:
+        column = dimension
+        label = extra_reg.get(dimension, {}).get("display_label", dimension)
+    else:
         raise QueryError(f"Unknown dimension '{dimension}'.")
-    column = spec["column"]
-    if column.startswith("_time_"):
-        raise QueryError(f"Dimension '{dimension}' cannot be used as a filter option.")
+
     if column not in df.columns:
-        raise QueryError(f"This file has no '{spec['label']}' column.")
+        raise QueryError(f"This file has no '{label}' column.")
     if limit < 1 or limit > 5000:
         raise QueryError("Option limit must be between 1 and 5000.")
 
@@ -596,7 +820,7 @@ def dimension_option(
 
     return DimensionOption(
         key=dimension,
-        label=spec["label"],
+        label=label,
         values=visible[:limit],
         total=len(available),
         selected_count=selected_count,

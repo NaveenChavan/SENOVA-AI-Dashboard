@@ -362,6 +362,20 @@ def _score_one(
     ai_available: bool = False,
 ) -> ColumnGuess:
     """Score a single column against the header similarities and its value shape."""
+    from app.services.extra_columns import is_personal_pii
+
+    if is_personal_pii(raw_column, series):
+        return ColumnGuess(
+            raw_column=raw_column,
+            label="personal",
+            canonical=None,
+            score=0.0,
+            margin=0.0,
+            route=ROUTE_LOCAL,
+            source=SOURCE_LOCAL,
+            reason="Personal / contact data (PII) preserved as stored-only; values redacted and never offered as filter or axis.",
+        )
+
     stats = shape_stats(series)
 
     best_header_similarity = max(scores.values()) if scores else 0.0
@@ -464,6 +478,20 @@ def _alias_fallback_guess(raw_column: str, ai_available: bool = False) -> Column
     escalated with nothing committed, because a keyword substring match is
     precisely the heuristic that mis-reads ``MRP`` as a selling price.
     """
+    from app.services.extra_columns import is_personal_pii
+
+    if is_personal_pii(raw_column, pd.Series(dtype=object)):
+        return ColumnGuess(
+            raw_column=raw_column,
+            label="personal",
+            canonical=None,
+            score=0.0,
+            margin=0.0,
+            route=ROUTE_LOCAL,
+            source=SOURCE_LOCAL,
+            reason="Personal / contact data (PII) preserved as stored-only; values redacted and never offered as filter or axis.",
+        )
+
     alias_canonical, alias_confidence = guess_canonical_column(raw_column)
     conflicted = _normalise_header(raw_column).lower() in _ALIAS_MAP_CONFLICTS
 

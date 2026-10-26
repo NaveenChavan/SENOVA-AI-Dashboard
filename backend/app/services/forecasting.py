@@ -343,7 +343,17 @@ def _item_forecasts(prepped: pd.DataFrame, horizon: int) -> list[ItemForecast]:
     Expected units per item over the horizon: recent velocity × trend factor,
     capped to the busiest ``MAX_ITEM_FORECASTS`` items so the payload and the
     compute both stay bounded. This is what the reorder table consumes.
+
+    An accepted Date + Line Total upload has no obligation to contain Item or
+    Quantity. Revenue forecasting still works for that file, while item-demand
+    forecasting is simply unavailable. Never turn missing item/quantity inputs
+    into an endpoint crash or a fabricated zero-demand forecast.
     """
+    if prepped.empty or not {"Date", "Item", "Quantity"}.issubset(prepped.columns):
+        return []
+    if prepped["Quantity"].isna().any():
+        return []
+
     window_days = max(int((prepped["Date"].max() - prepped["Date"].min()).days) + 1, 1)
     third = max(window_days // 3, 1)
     early_end = prepped["Date"].min() + pd.Timedelta(days=third)

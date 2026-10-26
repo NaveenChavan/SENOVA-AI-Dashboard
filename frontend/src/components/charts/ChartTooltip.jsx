@@ -43,7 +43,7 @@ export function StudioTooltip({ active, payload, measureFormat = 'currency' }) {
       <div className="mt-1.5 pt-1.5" style={{ borderTop: '1px solid var(--border-subtle)' }}>
         <p className="flex justify-between gap-4" style={{ color: 'var(--text-muted)' }}>
           <span>Units</span>
-          <span className="font-mono">{formatNumber(point.units)}</span>
+          <span className="font-mono">{point.units == null ? '—' : formatNumber(point.units)}</span>
         </p>
         <p className="flex justify-between gap-4" style={{ color: 'var(--text-muted)' }}>
           <span>Margin</span>

@@ -146,6 +146,29 @@ def _mapping_path(file_id: str) -> Path:
     return _ensure_upload_dir() / f"{validate_file_id(file_id)}.mapping.json"
 
 
+def _registry_path(file_id: str) -> Path:
+    """Sidecar JSON storing the extra columns registry for a file."""
+    return _ensure_upload_dir() / f"{validate_file_id(file_id)}.registry.json"
+
+
+def save_extra_registry(file_id: str, registry: dict) -> None:
+    """Persist the per-file extra columns registry."""
+    validate_file_id(file_id)
+    _registry_path(file_id).write_text(json.dumps(registry), encoding="utf-8")
+
+
+def load_extra_registry(file_id: str) -> dict | None:
+    """Return the per-file extra columns registry, or None if not found."""
+    path = _registry_path(file_id)
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else None
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
 def _meta_path(file_id: str) -> Path:
     """Sidecar JSON storing owner + original filename for a file."""
     return _ensure_upload_dir() / f"{validate_file_id(file_id)}.meta.json"
@@ -265,11 +288,40 @@ def read_to_dataframe(file_id: str) -> pd.DataFrame:
     if path.suffix == ".csv":
         sep = _sniff_delimiter(path)
         try:
-            df = pd.read_csv(path, sep=sep, encoding="utf-8-sig", engine="python")
+            # Read source cells as text first. This preserves IDs such as
+            # "00123" and avoids irreversible identifier mangling before the
+            # deterministic column classifier has decided how a column is used.
+            df = pd.read_csv(path, sep=sep, encoding="utf-8-sig", engine="python", dtype=str)
         except UnicodeDecodeError:
-            df = pd.read_csv(path, sep=sep, encoding="latin-1", engine="python")
+            df = pd.read_csv(path, sep=sep, encoding="latin-1", engine="python", dtype=str)
     elif path.suffix == ".xlsx":
-        df = pd.read_excel(path, engine="openpyxl")
+        # Keep workbook identifiers as objects, then restore Excel's explicit
+        # zero-padding display format (e.g. numeric 101 with format 00000 ->
+        # "00101"). Pandas alone discards that formatting, which silently
+        # changes IDs before the column classifier sees them.
+        df = pd.read_excel(path, engine="openpyxl", dtype=object)
+        try:
+            from openpyxl import load_workbook
+
+            workbook = load_workbook(path, read_only=False, data_only=True)
+            worksheet = workbook.active
+            for column_index, header in enumerate(df.columns, start=1):
+                for row_index in range(2, len(df) + 2):
+                    cell = worksheet.cell(row=row_index, column=column_index)
+                    number_format = (cell.number_format or "").split(";")[0].strip()
+                    if (
+                        isinstance(cell.value, (int, float))
+                        and not isinstance(cell.value, bool)
+                        and float(cell.value).is_integer()
+                        and re.fullmatch(r"0{2,}", number_format)
+                    ):
+                        df.iat[row_index - 2, column_index - 1] = str(int(cell.value)).zfill(len(number_format))
+            workbook.close()
+        except Exception:
+            # A malformed style table must not block a valid workbook upload.
+            # The underlying value remains available even if display padding
+            # could not be recovered.
+            pass
     else:
         raise ValueError(f"Unsupported file extension: {path.suffix}")
 
@@ -280,7 +332,7 @@ def read_to_dataframe(file_id: str) -> pd.DataFrame:
 
 
 def cleanup(file_id: str) -> None:
-    """Remove an upload and all of its sidecars (mapping + metadata + AI cache) from disk."""
+    """Remove an upload and all sidecars (mapping, metadata, AI cache, and extra registry)."""
     try:
         path = _resolve_path(file_id)
     except (FileNotFoundError, ValueError):
@@ -289,7 +341,7 @@ def cleanup(file_id: str) -> None:
         if path.exists():
             path.unlink()
 
-    for sidecar in (_mapping_path(file_id), _meta_path(file_id), _aicache_path(file_id)):
+    for sidecar in (_mapping_path(file_id), _meta_path(file_id), _aicache_path(file_id), _registry_path(file_id)):
         if sidecar.exists():
             sidecar.unlink()
 

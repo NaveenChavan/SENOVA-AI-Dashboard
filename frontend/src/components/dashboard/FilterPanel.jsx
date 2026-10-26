@@ -4,27 +4,84 @@ import { motion, AnimatePresence } from 'motion/react'
 import Icon from '../common/Icon'
 
 /**
- * Compact filter row restored to the original dashboard visual language.
- * The row itself remains visible while scrolling Inventory, but the opened
- * filter controls float above the page instead of expanding the document.
+ * Format a YYYY-MM-DD string into 'Latest day (DD Mon)' e.g. 'Latest day (17 Jun)'
+ */
+function formatLatestDay(maxDateStr) {
+  if (!maxDateStr) return 'Latest day'
+  try {
+    const parts = maxDateStr.split('-')
+    if (parts.length === 3) {
+      const year = Number(parts[0])
+      const month = Number(parts[1])
+      const day = Number(parts[2])
+      const date = new Date(Date.UTC(year, month - 1, day))
+      const monthShort = date.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' })
+      return `Latest day (${day} ${monthShort})`
+    }
+  } catch {}
+  return 'Latest day'
+}
+
+/**
+ * FilterPanel supporting both drawer and popover modes.
+ *
+ * Implements:
+ * - Active filter groups count badge (including time preset / custom range).
+ * - Staged filtering: options & presets update in memory until Apply is pressed.
+ * - Searchable tall dimensions (Item, Invoice No, etc.).
+ * - Dimension header with 'X of Y selected', 'Select all', and 'Clear' buttons.
+ * - Cascading dimension options via fetchDimensionOptions.
+ * - Non-empty loading indicator ('Loading…') without flashing 'No matching values.'.
+ * - Support for extra dimensions (x_dim:) passed in dimensions list.
  */
 export default function FilterPanel({
+  fileId,
   dimensions = [],
   filters = {},
+  timeFilter = 'all',
   onChange,
   dateRange,
   customRange,
   onCustomRangeChange,
+  onApply,
   onClear,
+  fetchDimensionOptions,
 }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef(null)
 
+  // Staged states for drawer modal
+  const [stagedFilters, setStagedFilters] = useState(filters ?? {})
+  const [stagedTimeFilter, setStagedTimeFilter] = useState(timeFilter ?? 'all')
+  const [stagedCustomRange, setStagedCustomRange] = useState(customRange ?? { start: '', end: '' })
+
+  // Search terms and remote options by dimension key
+  const [searches, setSearches] = useState({})
+  const [remoteOptions, setRemoteOptions] = useState({})
+  const [loadingMap, setLoadingMap] = useState({})
+
   const hasCustomRange = Boolean(customRange?.start && customRange?.end)
-  const activeGroupCount = useMemo(
-    () => Object.keys(filters ?? {}).filter((key) => Array.isArray(filters?.[key]) && filters[key].length > 0).length + (hasCustomRange ? 1 : 0),
-    [filters, hasCustomRange],
-  )
+  const hasTimeFilter = Boolean(timeFilter && timeFilter !== 'all')
+
+  const activeGroupCount = useMemo(() => {
+    const dimensionCount = Object.keys(filters ?? {}).filter(
+      (key) => Array.isArray(filters?.[key]) && filters[key].length > 0,
+    ).length
+    const timeCount = (hasCustomRange || hasTimeFilter) ? 1 : 0
+    return dimensionCount + timeCount
+  }, [filters, hasCustomRange, hasTimeFilter])
+
+  // Sync staged state when opening
+  useEffect(() => {
+    if (open) {
+      setStagedFilters(filters ?? {})
+      setStagedTimeFilter(timeFilter ?? 'all')
+      setStagedCustomRange(customRange ?? { start: '', end: '' })
+      setSearches({})
+      setRemoteOptions({})
+      setLoadingMap({})
+    }
+  }, [open, filters, timeFilter, customRange])
 
   useEffect(() => {
     if (!open) return undefined
@@ -44,23 +101,129 @@ export default function FilterPanel({
     }
   }, [open])
 
-  const toggleValue = (key, value) => {
-    const current = filters[key] ?? []
+  // Fetch cascading options when stagedFilters change
+  const triggerFetchOptions = (dimKey, nextFilters, searchVal = '') => {
+    if (!fetchDimensionOptions || !fileId) return
+    setLoadingMap((prev) => ({ ...prev, [dimKey]: true }))
+    fetchDimensionOptions(fileId, {
+      dimension: dimKey,
+      filters: nextFilters,
+      search: searchVal,
+    })
+      .then((res) => {
+        if (res) {
+          setRemoteOptions((prev) => ({
+            ...prev,
+            [dimKey]: {
+              values: res.values || [],
+              total: res.total ?? res.values?.length ?? 0,
+            },
+          }))
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoadingMap((prev) => ({ ...prev, [dimKey]: false }))
+      })
+  }
+
+  const toggleStagedValue = (key, value) => {
+    const current = stagedFilters[key] ?? []
     const next = current.includes(value)
       ? current.filter((entry) => entry !== value)
       : [...current, value]
 
-    const updated = { ...filters }
+    const updated = { ...stagedFilters }
     if (next.length) updated[key] = next
     else delete updated[key]
-    onChange?.(updated)
+
+    setStagedFilters(updated)
+
+    // Cascade dependent dimensions if fetchDimensionOptions is available
+    if (fetchDimensionOptions && fileId) {
+      if (key === 'category') {
+        triggerFetchOptions('item', updated, searches['item'] || '')
+      } else if (key === 'item') {
+        triggerFetchOptions('category', updated, searches['category'] || '')
+      }
+    }
+  }
+
+  const handleSelectAll = (key, values) => {
+    const updated = { ...stagedFilters, [key]: [...values] }
+    setStagedFilters(updated)
+    if (fetchDimensionOptions && fileId) {
+      if (key === 'category') {
+        triggerFetchOptions('item', updated, searches['item'] || '')
+      } else if (key === 'item') {
+        triggerFetchOptions('category', updated, searches['category'] || '')
+      }
+    }
+  }
+
+  const handleClearDimension = (key) => {
+    const updated = { ...stagedFilters }
+    delete updated[key]
+    setStagedFilters(updated)
+    if (fetchDimensionOptions && fileId) {
+      if (key === 'category') {
+        triggerFetchOptions('item', updated, searches['item'] || '')
+      } else if (key === 'item') {
+        triggerFetchOptions('category', updated, searches['category'] || '')
+      }
+    }
+  }
+
+  const handleSearch = (key, text) => {
+    setSearches((prev) => ({ ...prev, [key]: text }))
+    if (fetchDimensionOptions && fileId) {
+      triggerFetchOptions(key, stagedFilters, text)
+    }
   }
 
   const removeDimension = (key) => {
     const updated = { ...filters }
     delete updated[key]
-    onChange?.(updated)
+    if (onApply) {
+      onApply({
+        filters: updated,
+        timeFilter,
+        startDate: customRange?.start || null,
+        endDate: customRange?.end || null,
+      })
+    } else {
+      onChange?.(updated)
+    }
   }
+
+  const handleApply = () => {
+    if (onApply) {
+      onApply({
+        filters: stagedFilters,
+        timeFilter: stagedTimeFilter,
+        startDate: stagedCustomRange?.start || null,
+        endDate: stagedCustomRange?.end || null,
+      })
+    } else {
+      onChange?.(stagedFilters)
+      if (onCustomRangeChange && stagedCustomRange) {
+        onCustomRangeChange(stagedCustomRange)
+      }
+    }
+    setOpen(false)
+  }
+
+  const handleClearAll = () => {
+    setStagedFilters({})
+    setStagedTimeFilter('all')
+    setStagedCustomRange({ start: '', end: '' })
+    onClear?.()
+  }
+
+  const latestDayButtonLabel = useMemo(
+    () => formatLatestDay(dateRange?.max_date),
+    [dateRange?.max_date],
+  )
 
   return (
     <section ref={rootRef} className="filter-bar" aria-label="Filters">
@@ -109,7 +272,7 @@ export default function FilterPanel({
           )}
         </div>
 
-        {(activeGroupCount > 0) && (
+        {activeGroupCount > 0 && (
           <button
             type="button"
             onClick={onClear}
@@ -125,7 +288,7 @@ export default function FilterPanel({
           <motion.div
             className="filter-popover"
             role="dialog"
-            aria-label="Filter options"
+            aria-label="Filters"
             initial={{ opacity: 0, y: -4, scale: 0.995 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.995 }}
@@ -134,7 +297,7 @@ export default function FilterPanel({
             <div className="filter-popover__header">
               <div>
                 <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Filters</p>
-                <p className="panel-hint">Choose what you want to see, then close the panel.</p>
+                <p className="panel-hint">Choose what you want to see, then apply changes.</p>
               </div>
               <button type="button" className="btn-icon" onClick={() => setOpen(false)} aria-label="Close filters">
                 <Icon name="close" className="w-4 h-4" />
@@ -142,27 +305,75 @@ export default function FilterPanel({
             </div>
 
             <div className="filter-popover__body">
+              {/* Presets and Date Controls */}
               <fieldset>
-                <legend className="panel-title mb-1.5">Custom date range</legend>
+                <legend className="panel-title mb-1.5">Date presets</legend>
+                <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+                  <button
+                    type="button"
+                    className={`chip ${stagedTimeFilter === 'today' ? 'chip--active' : ''}`}
+                    onClick={() => {
+                      setStagedTimeFilter('today')
+                      setStagedCustomRange({ start: '', end: '' })
+                    }}
+                  >
+                    {latestDayButtonLabel}
+                  </button>
+                  <button
+                    type="button"
+                    className={`chip ${stagedTimeFilter === 'week' ? 'chip--active' : ''}`}
+                    onClick={() => {
+                      setStagedTimeFilter('week')
+                      setStagedCustomRange({ start: '', end: '' })
+                    }}
+                  >
+                    Last 7 days
+                  </button>
+                  <button
+                    type="button"
+                    className={`chip ${stagedTimeFilter === '30days' ? 'chip--active' : ''}`}
+                    onClick={() => {
+                      setStagedTimeFilter('30days')
+                      setStagedCustomRange({ start: '', end: '' })
+                    }}
+                  >
+                    Last 30 days
+                  </button>
+                  <button
+                    type="button"
+                    className={`chip ${stagedTimeFilter === 'all' && !stagedCustomRange?.start ? 'chip--active' : ''}`}
+                    onClick={() => {
+                      setStagedTimeFilter('all')
+                      setStagedCustomRange({ start: '', end: '' })
+                    }}
+                  >
+                    All time
+                  </button>
+                </div>
+
                 <div className="flex flex-wrap items-center gap-2">
                   <label className="filter-date-field">
                     <span>From</span>
                     <input
                       type="date"
-                      value={customRange?.start ?? ''}
+                      value={stagedCustomRange?.start ?? ''}
                       min={dateRange?.min_date ?? undefined}
                       max={dateRange?.max_date ?? undefined}
-                      onChange={(event) => onCustomRangeChange?.({ ...customRange, start: event.target.value })}
+                      onChange={(event) =>
+                        setStagedCustomRange((prev) => ({ ...prev, start: event.target.value }))
+                      }
                     />
                   </label>
                   <label className="filter-date-field">
                     <span>To</span>
                     <input
                       type="date"
-                      value={customRange?.end ?? ''}
-                      min={customRange?.start ?? dateRange?.min_date ?? undefined}
+                      value={stagedCustomRange?.end ?? ''}
+                      min={stagedCustomRange?.start ?? dateRange?.min_date ?? undefined}
                       max={dateRange?.max_date ?? undefined}
-                      onChange={(event) => onCustomRangeChange?.({ ...customRange, end: event.target.value })}
+                      onChange={(event) =>
+                        setStagedCustomRange((prev) => ({ ...prev, end: event.target.value }))
+                      }
                     />
                   </label>
                   {dateRange?.min_date && (
@@ -177,38 +388,118 @@ export default function FilterPanel({
                 <p className="panel-hint">No filterable columns detected in this file.</p>
               ) : (
                 <div className="filter-popover__grid">
-                  {dimensions.map((dimension) => (
-                    <fieldset key={dimension.key} className="min-w-0">
-                      <legend className="panel-title mb-1.5">
-                        {dimension.label}
-                        {dimension.truncated && (
-                          <span className="font-normal normal-case" style={{ color: 'var(--text-muted)' }}>
-                            {' '}(first {dimension.values.length})
+                  {dimensions.map((dimension) => {
+                    const isTall =
+                      ['item', 'invoice_no', 'customer'].includes(dimension.key.toLowerCase()) ||
+                      (dimension.total && dimension.total > 10) ||
+                      dimension.searchable
+
+                    const optionsData = remoteOptions[dimension.key] || {
+                      values: dimension.values || [],
+                      total: dimension.total ?? dimension.values?.length ?? 0,
+                    }
+
+                    const rawValues = optionsData.values
+                    const totalCount = optionsData.total
+                    const searchStr = searches[dimension.key] || ''
+
+                    // Client-side fallback search if not remote-fetched
+                    const filteredValues =
+                      !fetchDimensionOptions && searchStr
+                        ? rawValues.filter((v) =>
+                            String(v).toLowerCase().includes(searchStr.toLowerCase()),
+                          )
+                        : rawValues
+
+                    const selectedList = stagedFilters[dimension.key] ?? []
+                    const selectedCount = selectedList.length
+                    const isLoading = Boolean(loadingMap[dimension.key])
+
+                    return (
+                      <fieldset key={dimension.key} className="min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <legend className="panel-title mb-0">{dimension.label}</legend>
+                          <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                            {selectedCount} of {totalCount} selected
                           </span>
-                        )}
-                      </legend>
-                      <div className="filter-values" role="listbox" aria-label={dimension.label}>
-                        {dimension.values.map((value) => (
+                        </div>
+
+                        <div className="flex items-center gap-2 mb-1.5">
                           <button
-                            key={value}
                             type="button"
-                            onClick={() => toggleValue(dimension.key, value)}
-                            aria-pressed={(filters[dimension.key] ?? []).includes(value)}
-                            className="chip"
+                            className="text-[11px] underline hover:no-underline"
+                            style={{ color: 'var(--text-secondary)' }}
+                            onClick={() => handleSelectAll(dimension.key, filteredValues)}
                           >
-                            {value}
+                            Select all
                           </button>
-                        ))}
-                      </div>
-                    </fieldset>
-                  ))}
+                          <button
+                            type="button"
+                            className="text-[11px] underline hover:no-underline"
+                            style={{ color: 'var(--text-secondary)' }}
+                            onClick={() => handleClearDimension(dimension.key)}
+                          >
+                            Clear
+                          </button>
+                        </div>
+
+                        {isTall && (
+                          <input
+                            type="search"
+                            role="searchbox"
+                            aria-label={`Search ${dimension.label}`}
+                            placeholder={`Search ${dimension.label}...`}
+                            value={searchStr}
+                            onChange={(e) => handleSearch(dimension.key, e.target.value)}
+                            className="filter-search-input mb-1.5 w-full text-xs px-2 py-1 rounded"
+                            style={{
+                              border: '1px solid var(--border-subtle)',
+                              background: 'var(--bg-canvas)',
+                              color: 'var(--text-primary)',
+                            }}
+                          />
+                        )}
+
+                        <div className="filter-values" role="listbox" aria-label={dimension.label}>
+                          {isLoading ? (
+                            <div className="text-xs py-1.5 font-medium" style={{ color: 'var(--text-muted)' }}>
+                              Loading…
+                            </div>
+                          ) : filteredValues.length === 0 ? (
+                            <div className="text-xs py-1.5" style={{ color: 'var(--text-muted)' }}>
+                              No matching values.
+                            </div>
+                          ) : (
+                            filteredValues.map((value) => {
+                              const isSelected = selectedList.includes(value)
+                              return (
+                                <button
+                                  key={value}
+                                  type="button"
+                                  onClick={() => toggleStagedValue(dimension.key, value)}
+                                  aria-pressed={isSelected}
+                                  className={`chip ${isSelected ? 'chip--active' : ''}`}
+                                >
+                                  {value}
+                                </button>
+                              )
+                            })
+                          )}
+                        </div>
+                      </fieldset>
+                    )
+                  })}
                 </div>
               )}
             </div>
 
             <div className="filter-popover__footer">
-              <button type="button" className="btn" onClick={onClear}>Clear all</button>
-              <button type="button" className="btn-primary" onClick={() => setOpen(false)}>Done</button>
+              <button type="button" className="btn" onClick={handleClearAll}>
+                Clear all
+              </button>
+              <button type="button" className="btn-primary" onClick={handleApply}>
+                Apply
+              </button>
             </div>
           </motion.div>
         )}

@@ -141,6 +141,15 @@ const useSalesStore = create((set, get) => ({
    */
   mappingPreview: null,
 
+  /**
+   * Module 2.4 — non-blocking invoice-total warning state. When confirm-mapping
+   * returns HTTP 409 (requires_acknowledgement), the mapping screen stays
+   * mounted and these hold the advisory plus the exact payload to retry with
+   * ``acknowledge_warnings: true`` once the user intentionally proceeds.
+   */
+  mappingWarnings: [],
+  pendingMapping: null,
+
   /** Actual date span of the uploaded data (set once mapping is confirmed). */
   dateRange: null,
 
@@ -305,11 +314,19 @@ const useSalesStore = create((set, get) => ({
    * Step 2: send the confirmed mapping. Runs row-level validation server-side
    * and persists the mapping so every later request reuses it.
    */
-  confirmMapping: async (fileId, mapping) => {
+  confirmMapping: async (fileId, mapping, userSelectedColumns = [], rememberMapping = false, acknowledgeWarnings = false) => {
+    // Guard against duplicate submissions: ignore a new confirm while one is
+    // already in flight (the UI also disables the buttons, this is defence).
+    if (get().isLoading) return null
     set({ isLoading: true, error: null, validationMessage: 'Validating your data...' })
 
     try {
-      const { data: uploadRes } = await api.post(`/upload/${fileId}/confirm-mapping`, { mapping })
+      const { data: uploadRes } = await api.post(`/upload/${fileId}/confirm-mapping`, {
+        mapping,
+        user_selected_columns: userSelectedColumns,
+        remember_mapping: rememberMapping,
+        acknowledge_warnings: acknowledgeWarnings,
+      })
 
       if (uploadRes.valid_count === 0) {
         const msg = 'No valid rows found after mapping. Check your column choices and try again.'
@@ -326,12 +343,36 @@ const useSalesStore = create((set, get) => ({
         uploadErrors: uploadRes.errors || [],
         validationMessage: '',
         mappingPreview: null,
+        mappingWarnings: [],
+        pendingMapping: null,
         dateRange: uploadRes.date_range || null,
         optionalFields: uploadRes.optional_fields || [],
       })
 
       return uploadRes
     } catch (err) {
+      // Module 2.4: a 409 with requires_acknowledgement is a non-blocking
+      // advisory, NOT a hard error. Keep the mapping screen mounted (so the
+      // user's selections are preserved), stash the exact payload to retry, and
+      // surface the warning. A 400 strong-evidence rejection is a real blocking
+      // error and falls through to the error branch below.
+      const detail = err?.response?.data?.detail
+      if (
+        err?.response?.status === 409 &&
+        detail &&
+        typeof detail === 'object' &&
+        detail.requires_acknowledgement
+      ) {
+        set({
+          mappingWarnings: Array.isArray(detail.warnings) ? detail.warnings : [],
+          pendingMapping: { mapping, userSelectedColumns, rememberMapping },
+          validationMessage: '',
+          error: null,
+        })
+        // Signal the caller not to navigate, without raising a visible error.
+        return null
+      }
+
       set({ error: messageFrom(err, 'Could not validate your data. Please try again.'), validationMessage: '' })
       throw err
     } finally {
@@ -339,7 +380,22 @@ const useSalesStore = create((set, get) => ({
     }
   },
 
-  cancelMapping: () => set({ mappingPreview: null, fileId: null, filename: '' }),
+  /**
+   * Module 2.4 — retry the pending confirmation with acknowledge_warnings=true
+   * after the user has intentionally confirmed a single-invoice advisory.
+   * Preserves the uploaded file and the exact mapping that triggered the warning.
+   */
+  acknowledgeMappingWarnings: async () => {
+    const { pendingMapping, fileId } = get()
+    if (!pendingMapping || !fileId) return null
+    const { mapping, userSelectedColumns, rememberMapping } = pendingMapping
+    return get().confirmMapping(fileId, mapping, userSelectedColumns, rememberMapping, true)
+  },
+
+  /** Module 2.4 — dismiss the advisory and return to the mapping screen. */
+  dismissMappingWarnings: () => set({ mappingWarnings: [], pendingMapping: null }),
+
+  cancelMapping: () => set({ mappingPreview: null, fileId: null, filename: '', mappingWarnings: [], pendingMapping: null }),
 
   clearUploadErrors: () => set({ uploadErrors: [] }),
 
@@ -387,6 +443,8 @@ const useSalesStore = create((set, get) => ({
 
   // ── Dimensions available in the current file ───────────────────────────
   dimensions: [],
+  extraMeasures: [],
+  extraRegistry: {},
   dimensionsLoading: false,
 
   fetchDimensions: async (fileId) => {
@@ -399,6 +457,8 @@ const useSalesStore = create((set, get) => ({
         dimensions: data.dimensions ?? [],
         dateRange: data.date_range ?? get().dateRange,
         optionalFields: data.optional_measures ?? get().optionalFields,
+        extraMeasures: data.extra_measures ?? [],
+        extraRegistry: data.extra_registry ?? {},
         dimensionsLoading: false,
       })
       return data
@@ -406,7 +466,7 @@ const useSalesStore = create((set, get) => ({
       if (isCancelled(err) || !isLatestSignal('dimensions', signal)) return
       // A missing dimensions call must not block the dashboard: the filter panel
       // simply shows nothing to filter on.
-      set({ dimensions: [], dimensionsLoading: false })
+      set({ dimensions: [], extraMeasures: [], extraRegistry: {}, dimensionsLoading: false })
     }
   },
 
@@ -527,7 +587,7 @@ const useSalesStore = create((set, get) => ({
    */
   fetchInsights: async (fileId, query = get().query) => {
     const signal = freshSignal('insights')
-    set({ insightsLoading: true })
+    set({ insightsLoading: true, insights: null })
     try {
       const { data } = await api.post(`/analytics/${fileId}/insights`, buildQueryBody(query), { signal })
       if (!isLatestSignal('insights', signal)) return
@@ -555,7 +615,7 @@ const useSalesStore = create((set, get) => ({
    */
   fetchAiInsights: async (fileId, query = get().query) => {
     const signal = freshSignal('ai-insights')
-    set({ aiInsightLoading: true })
+    set({ aiInsightLoading: true, aiNarratives: {} })
     try {
       const { data } = await api.post(
         `/analytics/${fileId}/ai-insights`,

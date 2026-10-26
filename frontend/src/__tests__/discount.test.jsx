@@ -55,6 +55,56 @@ describe('Discount KPI', () => {
     render(<SchemaOverviewPanel schema={dynamicSchema} />)
     expect(screen.getAllByText(/Needs an MRP column/i).length).toBeGreaterThan(0)
   })
+
+  it('renders em dash and missing reason instead of fabricated ₹0 when discount is unavailable', () => {
+    const discountAvailability = {
+      key: 'discount',
+      available: false,
+      reason: 'Map Discount, or map MRP + Selling Price + Quantity, to calculate this metric.',
+    }
+    const discountPctAvailability = {
+      key: 'discount_pct',
+      available: false,
+      reason: 'Map MRP, Selling Price and Quantity to calculate this metric.',
+    }
+    render(
+      <SummaryStats
+        summary={summary}
+        discountMetrics={null}
+        discountAvailability={discountAvailability}
+        discountPctAvailability={discountPctAvailability}
+      />
+    )
+    expect(screen.getByText('Discount Given')).toBeTruthy()
+    expect(screen.getAllByText('—').length).toBeGreaterThan(0)
+    expect(
+      screen.getByText('Map Discount, or map MRP + Selling Price + Quantity, to calculate this metric.')
+    ).toBeTruthy()
+    expect(screen.queryByText('₹0')).toBeNull()
+  })
+
+  it('preserves genuine zero discount when valid discount field is present and value is zero', () => {
+    const discountAvailability = {
+      key: 'discount',
+      available: true,
+      reason: null,
+    }
+    const discountPctAvailability = {
+      key: 'discount_pct',
+      available: false,
+      reason: 'Needs MRP',
+    }
+    render(
+      <SummaryStats
+        summary={summary}
+        discountMetrics={{ discount_given: 0, discount_pct: null, valid_discount_rows: 10 }}
+        discountAvailability={discountAvailability}
+        discountPctAvailability={discountPctAvailability}
+      />
+    )
+    expect(screen.getByText('Discount Given')).toBeTruthy()
+    expect(screen.getByText('₹0')).toBeTruthy()
+  })
 })
 
 describe('Discount vs Margin Chart', () => {

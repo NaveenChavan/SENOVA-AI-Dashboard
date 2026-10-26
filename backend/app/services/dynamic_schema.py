@@ -49,7 +49,7 @@ from app.services.query_engine import (
     available_measures,
 )
 from app.services.sales_calculations import compute_data_date_range
-from app.utils.data_validator import REQUIRED_COLUMNS
+from app.utils.data_validator import check_required_columns
 
 # ── KPI cards ────────────────────────────────────────────────────────────────
 #
@@ -74,7 +74,7 @@ _KPI_CARDS: list[dict] = [
         "key": "profit",
         "label": "Profit",
         "description": "Revenue minus cost of goods sold.",
-        "requires": {"Cost Price"},
+        "requires": {"Cost Price", "Quantity"},
         "blocks": ["margin_pct", "pnl"],
         "formats": ["currency"],
     },
@@ -82,7 +82,7 @@ _KPI_CARDS: list[dict] = [
         "key": "margin_pct",
         "label": "Margin",
         "description": "Profit as a percentage of revenue.",
-        "requires": {"Cost Price"},
+        "requires": {"Cost Price", "Quantity"},
         "formats": ["percent"],
     },
     {
@@ -110,7 +110,7 @@ _KPI_CARDS: list[dict] = [
         "key": "discount_pct",
         "label": "Discount %",
         "description": "Discount as a percentage of total MRP.",
-        "requires": {"MRP"},
+        "requires": {"MRP", "Selling Price", "Quantity"},
         "formats": ["percent"],
     },
     {
@@ -189,7 +189,7 @@ _CHARTS: list[dict] = [
         "key": "pnl",
         "label": "P&L Statement",
         "description": "Revenue, cost, profit and tax for the period.",
-        "requires": {"Cost Price"},
+        "requires": {"Cost Price", "Quantity"},
         "dimension_any_of": set(),
         "min_categories": 0,
     },
@@ -197,7 +197,7 @@ _CHARTS: list[dict] = [
         "key": "discount_vs_margin",
         "label": "Discount vs Margin",
         "description": "Item-wise comparison of discount depth vs profit margin.",
-        "requires": {"MRP", "Cost Price"},
+        "requires": {"MRP", "Selling Price", "Cost Price", "Quantity"},
         "dimension_any_of": {"Item"},
         "min_categories": 1,
     },
@@ -210,12 +210,12 @@ _CHARTS: list[dict] = [
 #: on a perfectly good file, because "Revenue" is not a column — it is computed.
 _MEASURE_REQUIRES: dict[str, set[str]] = {
     "revenue": set(),
-    "profit": {"Cost Price"},
-    "cost": {"Cost Price"},
+    "profit": {"Cost Price", "Quantity"},
+    "cost": {"Cost Price", "Quantity"},
     "units": {"Quantity"},
     "transactions": set(),
     "discount": {"Discount"},
-    "margin_pct": {"Cost Price"},
+    "margin_pct": {"Cost Price", "Quantity"},
     "avg_price": {"Quantity"},
 }
 
@@ -273,8 +273,7 @@ def build(frame: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict:
     # therefore its own reason, distinct from absence of columns.
     has_rows = len(frame) > 0
 
-    kpi_cards = [_kpi_entry(card, present) for card in _KPI_CARDS]
-    charts = [_chart_entry(chart, frame, present) for chart in _CHARTS]
+    # Availability includes data completeness, not just a matching column name.
 
     # ``available_dimensions`` returns canonical *column* names while ``DIMENSIONS``
     # is keyed by API keys, so availability is resolved through the registry's own
@@ -309,15 +308,43 @@ def build(frame: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict:
     present_measure_columns = set(available_measures(frame))
 
     measures = []
+    all_present = present_measure_columns | present
     for key, meta in MEASURES.items():
         required = _MEASURE_REQUIRES[key]
-        missing = _missing(present_measure_columns | present, required)
-        
-        if key == "discount" and "Discount" in missing:
-            if "MRP" in (present_measure_columns | present):
+        missing = _missing(all_present, required)
+
+        if key == "discount" and "Discount" not in all_present:
+            # Discount can be mapped directly or derived from MRP, unit price
+            # and quantity. MRP alone is not enough to claim this measure works.
+            alternative = {"MRP", "Selling Price", "Quantity"}
+            missing_alternative = _missing(all_present, alternative)
+            if not missing_alternative:
                 missing = []
-                
-        available = not missing
+                required_for_completeness = alternative
+            else:
+                missing = list(missing_alternative)
+                required_for_completeness = set()
+        else:
+            required_for_completeness = required
+
+        incomplete = []
+        if has_rows:
+            for column in sorted(required_for_completeness):
+                if column in frame.columns and frame[column].isna().any():
+                    incomplete.append(column)
+
+        available = not missing and not incomplete
+        reason = None
+        if key == "discount" and "Discount" not in all_present and missing_alternative:
+            reason = "Map Discount, or map MRP + Selling Price + Quantity, to calculate this measure."
+            available = False
+        elif missing:
+            reason = _reason_for(missing, 0, None)
+        elif incomplete:
+            reason = "Some rows have blank " + ", ".join(incomplete) + "; complete those values to calculate this measure reliably."
+        blocked_by = list(missing or incomplete)
+        if key == "discount" and not available and "Discount" not in all_present and missing_alternative:
+            blocked_by = ["Discount or MRP + Selling Price + Quantity"]
         measures.append(
             {
                 "key": key,
@@ -325,12 +352,15 @@ def build(frame: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict:
                 "available": available,
                 "format": meta["format"],
                 "additive": bool(meta["additive"]),
-                "reason": None if available else _reason_for(missing, 0, None),
-                "blocked_by": [] if available else list(missing),
+                "reason": reason,
+                "blocked_by": blocked_by if not available else [],
             }
         )
 
-    missing_required = _missing(present, REQUIRED_COLUMNS)
+    _upload_rule_valid, missing_required = check_required_columns(frame.columns)
+    # ``check_required_columns`` reports alternate sales bases and does not
+    # incorrectly require Category, Item, Quantity, Selling Price and Cost Price
+    # all at once. Keep the explicit list for the Schema Overview panel.
 
     date_range: dict = {}
     if "Date" in present:
@@ -340,7 +370,7 @@ def build(frame: pd.DataFrame, mapping: dict[str, str] | None = None) -> dict:
             date_range = {}
 
     return {
-        "kpi_cards": _sorted_by_availability(_kpi_entry(c, present, has_rows) for c in _KPI_CARDS),
+        "kpi_cards": _sorted_by_availability(_kpi_entry(c, present, has_rows, frame) for c in _KPI_CARDS),
         # Sorted so the panel reads as: what works now, then what could work.
         # A shopkeeper opening this is asking "what can I do?", and an unsorted
         # list of mostly-unavailable entries buries the answer.
@@ -366,24 +396,47 @@ def _sorted_by_availability(entries) -> list[dict]:
     return sorted(entries, key=lambda entry: not entry["available"])
 
 
-def _kpi_entry(card: dict, present: set[str], has_rows: bool = True) -> dict:
-    """One KPI card, flagged available or not, with the reason when it isn't."""
-    missing = _missing(present, card["requires"])
-    
-    if card["key"] == "discount" and "Discount" in missing:
-        if "MRP" in present:
+def _kpi_entry(card: dict, present: set[str], has_rows: bool = True, frame: pd.DataFrame | None = None) -> dict:
+    """One KPI card, flagged available based on present and complete inputs."""
+    required = set(card["requires"])
+    missing = _missing(present, required)
+    completeness_fields = set(required)
+
+    if card["key"] == "discount":
+        if "Discount" in present:
             missing = []
-            
-    available = not missing and has_rows
+            completeness_fields = {"Discount"}
+        else:
+            alternative = {"MRP", "Selling Price", "Quantity"}
+            alternative_missing = _missing(present, alternative)
+            if not alternative_missing:
+                missing = []
+                completeness_fields = alternative
+            else:
+                missing = list(alternative_missing)
+                completeness_fields = set()
+                missing_alternative = alternative_missing
+    else:
+        missing_alternative = []
+
+    incomplete = []
+    if frame is not None and has_rows:
+        incomplete = [
+            col for col in sorted(completeness_fields)
+            if col in frame.columns and frame[col].isna().any()
+        ]
+
+    available = not missing and not incomplete and has_rows
     reason = None
     if not available:
-        # Rows first: "this file has no sales in it" is the fact, and telling
-        # someone to map a column they already mapped would send them in circles.
-        reason = (
-            _NO_ROWS_REASON
-            if not has_rows
-            else _reason_for(missing, 0, None)
-        )
+        if not has_rows:
+            reason = _NO_ROWS_REASON
+        elif card["key"] == "discount" and "Discount" not in present and missing_alternative:
+            reason = "Map Discount, or map MRP + Selling Price + Quantity, to calculate this metric."
+        elif missing:
+            reason = _reason_for(missing, 0, None)
+        elif incomplete:
+            reason = "Some rows have blank " + ", ".join(incomplete) + "; complete those values to calculate this metric reliably."
     return {
         "key": card["key"],
         "label": card["label"],
@@ -391,7 +444,12 @@ def _kpi_entry(card: dict, present: set[str], has_rows: bool = True) -> dict:
         "available": available,
         "reason": reason,
         "formats": list(card["formats"]),
-        "blocked_by": [] if available else list(missing),
+        "blocked_by": (
+            [] if available else
+            ["Discount or MRP + Selling Price + Quantity"]
+            if card["key"] == "discount" and "Discount" not in present and missing_alternative
+            else list(missing or incomplete)
+        ),
         # A card that needs Cost Price also takes margin, the profit trend and the
         # P&L down with it. Listing the cascade explicitly lets the UI explain
         # why several things went missing at once, instead of hiding them silently.
@@ -418,6 +476,10 @@ def _chart_entry(chart: dict, frame: pd.DataFrame, present: set[str], has_rows: 
             break
 
     reason = _reason_for(missing, chart.get("min_categories", 0), distinct)
+    required_values = required & {"Quantity", "Selling Price", "Cost Price", "MRP"}
+    incomplete = [col for col in sorted(required_values) if col in frame.columns and frame[col].isna().any()]
+    if reason is None and incomplete:
+        reason = "Some rows have blank " + ", ".join(incomplete) + "; complete those values to calculate this chart reliably."
     if reason is None and not has_rows:
         reason = _NO_ROWS_REASON
     available = reason is None

@@ -2,7 +2,9 @@ import { useMemo, useState, useEffect } from 'react'
 import useSalesStore from '../../store/useSalesStore'
 
 import Button from '../common/Button'
+import Icon from '../common/Icon'
 import { formatNumber } from '../charts/chartFormat'
+import GroupedClarificationDialog from './GroupedClarificationDialog'
 
 /**
  * Column-mapping confirmation screen.
@@ -21,7 +23,7 @@ import { formatNumber } from '../charts/chartFormat'
  */
 
 /** Fallbacks used only if an older backend response omits the field lists. */
-const FALLBACK_REQUIRED = ['Date', 'Category', 'Item', 'Quantity', 'Selling Price', 'Cost Price']
+const FALLBACK_REQUIRED = ['Date']
 const FALLBACK_OPTIONAL = []
 
 /** Optional fields that are numbers rather than dimensions, for grouping. */
@@ -36,10 +38,14 @@ export function shouldStartTier2(preview, aiConsent) {
   )
 }
 
-export default function ColumnMappingScreen({ preview, onConfirm, onCancel, submitting }) {
+export default function ColumnMappingScreen({ preview, onConfirm, onCancel, submitting, initialOpenClarification = false }) {
   const requiredFields = preview.required_fields?.length ? preview.required_fields : FALLBACK_REQUIRED
   const optionalFields = preview.optional_fields?.length ? preview.optional_fields : FALLBACK_OPTIONAL
   const fieldHelp = preview.field_help ?? {}
+  const allFields = useMemo(
+    () => Array.from(new Set([...requiredFields, ...optionalFields])),
+    [requiredFields, optionalFields],
+  )
 
   const [mapping, setMapping] = useState(() => {
     const initial = {}
@@ -48,6 +54,22 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
     }
     return initial
   })
+
+  // Columns for which the user made an explicit personal choice (table dropdown or dialog)
+  const [userSelected, setUserSelected] = useState(() => new Set())
+
+  // Ambiguous columns that justify clarification
+  const ambiguousColumns = useMemo(() => {
+    return (preview.detected_columns || []).filter((col) => {
+      if (col.recognised_unused) return false
+      return (col.evidence_candidates && col.evidence_candidates.length > 0) || Boolean(col.needs_review)
+    })
+  }, [preview.detected_columns])
+
+  const [clarificationOpen, setClarificationOpen] = useState(
+    () => Boolean(initialOpenClarification && ambiguousColumns.length > 0),
+  )
+  const [rememberMapping, setRememberMapping] = useState(false)
 
   const aiConsent = useSalesStore((state) => state.aiConsent)
   const runTier2Async = useSalesStore((state) => state.runTier2Async)
@@ -99,24 +121,74 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
   const duplicates = assignedFields.filter((field, index) => assignedFields.indexOf(field) !== index)
 
   /**
-   * Selling Price is the one required field that can be *derived*: if the file
-   * only carries a line total (Amount / Net Amount), the server computes the
-   * unit price as total ÷ quantity. So it stops being required once Line Total
-   * is mapped.
+   * Section 1.2 Two-field upload rule:
+   * Require only Date + Line Total (Path A) OR Date + Quantity + Selling Price (Path B).
+   * Category, Item, Cost Price, MRP, Discount, Tax, etc., are strictly optional for upload confirmation.
    */
+  const hasDate = assignedFields.includes('Date')
   const hasLineTotal = assignedFields.includes('Line Total')
-  const effectiveRequired = requiredFields.filter(
-    (field) => !(field === 'Selling Price' && hasLineTotal),
+  const hasQuantity = assignedFields.includes('Quantity')
+  const hasSellingPrice = assignedFields.includes('Selling Price')
+
+  const meetsTwoFieldRule = hasDate && (hasLineTotal || (hasQuantity && hasSellingPrice))
+  const canSubmit = duplicates.length === 0 && meetsTwoFieldRule && !submitting
+
+  const missingRequirements = []
+  if (!hasDate) {
+    missingRequirements.push('Date')
+  }
+  if (!hasLineTotal && !(hasQuantity && hasSellingPrice)) {
+    if (!hasQuantity && !hasSellingPrice) {
+      missingRequirements.push('Line Total (or Quantity + Selling Price)')
+    } else if (!hasQuantity) {
+      missingRequirements.push('Quantity (or Line Total)')
+    } else {
+      missingRequirements.push('Selling Price (or Line Total)')
+    }
+  }
+
+  const unmappedCoreOptional = ['Category', 'Item', 'Cost Price'].filter(
+    (field) => !assignedFields.includes(field),
   )
-  const missingRequired = effectiveRequired.filter((field) => !assignedFields.includes(field))
 
   const mappedOptional = optionalFields.filter((field) => assignedFields.includes(field))
-  const canSubmit = duplicates.length === 0 && missingRequired.length === 0 && !submitting
 
   const handleChange = (rawColumn, value) => {
     setMapping((previous) => ({ ...previous, [rawColumn]: value }))
     setReviewed((previous) => (previous.has(rawColumn) ? previous : new Set(previous).add(rawColumn)))
+    setUserSelected((previous) => (previous.has(rawColumn) ? previous : new Set(previous).add(rawColumn)))
   }
+
+  const handleApplyClarification = (selectedChanges, clarificationNotes, explicitlyTouched) => {
+    const touched = explicitlyTouched || new Set(Object.keys(selectedChanges))
+
+    setMapping((previous) => {
+      const next = { ...previous }
+      for (const [col, val] of Object.entries(selectedChanges)) {
+        if (val !== undefined) {
+          next[col] = val
+        }
+      }
+      return next
+    })
+    setReviewed((previous) => {
+      const next = new Set(previous)
+      for (const col of touched) {
+        next.add(col)
+      }
+      return next
+    })
+    setUserSelected((previous) => {
+      const next = new Set(previous)
+      for (const col of touched) {
+        next.add(col)
+      }
+      return next
+    })
+    setClarificationOpen(false)
+  }
+
+  const unreviewedAmbiguousCount = ambiguousColumns.filter((c) => !reviewed.has(c.raw_column)).length
 
   return (
     <div className="card">
@@ -137,6 +209,41 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
           )}
         </p>
       </header>
+
+      {/* Module 2.2 Clarification Banner */}
+      {ambiguousColumns.length > 0 && (
+        <div
+          className="mx-[var(--card-pad)] my-2 p-2.5 rounded-lg flex flex-wrap items-center justify-between gap-2"
+          style={{
+            background: 'rgba(59,130,246,0.08)',
+            border: '1px solid rgba(59,130,246,0.25)',
+          }}
+          data-testid="clarification-banner"
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'rgba(59,130,246,0.18)', color: 'var(--accent-blue)' }}
+            >
+              <Icon name="spark" className="w-3 h-3" />
+            </span>
+            <span className="text-xs" style={{ color: 'var(--text-primary)' }}>
+              {unreviewedAmbiguousCount > 0
+                ? `${unreviewedAmbiguousCount} column(s) need clarification based on data evidence.`
+                : 'All ambiguous columns have been reviewed.'}
+            </span>
+          </div>
+
+          <Button
+            type="button"
+            variant="secondary"
+            className="text-xs py-1 px-2.5"
+            onClick={() => setClarificationOpen(true)}
+          >
+            Clarify columns ({ambiguousColumns.length})
+          </Button>
+        </div>
+      )}
 
       {/* Scrolls inside the card: a 40-column file must not make the page
           endless, and the action row below must stay reachable. */}
@@ -239,7 +346,7 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                   </td>
 
                   <td style={{ textAlign: 'left' }}>
-                    <ConfidenceBadge column={guess} />
+                    <ConfidenceBadge column={guess} isUserChoice={userSelected.has(column.raw_column)} />
                   </td>
                 </tr>
               )
@@ -249,9 +356,15 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
       </div>
 
       <footer className="px-[var(--card-pad)] py-3 space-y-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-        {missingRequired.length > 0 && (
+        {missingRequirements.length > 0 && (
           <p className="text-xs" style={{ color: 'var(--accent-amber)' }}>
-            Still need a column for: <strong>{missingRequired.join(', ')}</strong>
+            Still need a column for: <strong>{missingRequirements.join(' and ')}</strong>
+          </p>
+        )}
+
+        {missingRequirements.length === 0 && unmappedCoreOptional.length > 0 && (
+          <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+            Optional columns not mapped: <strong>{unmappedCoreOptional.join(', ')}</strong> — views requiring these will show &quot;Not available&quot; rather than fabricating numbers.
           </p>
         )}
 
@@ -268,21 +381,44 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
           </p>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
-          <Button type="button" variant="secondary" onClick={onCancel} disabled={submitting}>
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            variant="primary"
-            disabled={!canSubmit}
-            loading={submitting}
-            onClick={() => onConfirm(mapping)}
-          >
-            Confirm &amp; analyse
-          </Button>
+        <div className="flex flex-col sm:flex-row gap-2 sm:justify-between sm:items-center pt-2">
+          <label className="flex items-center gap-2 text-xs cursor-pointer select-none" style={{ color: 'var(--text-secondary)' }}>
+            <input
+              type="checkbox"
+              checked={rememberMapping}
+              onChange={(e) => setRememberMapping(e.target.checked)}
+              className="rounded"
+              data-testid="remember-mapping-checkbox"
+            />
+            <span>Remember approved mappings for this template next time (opt-in)</span>
+          </label>
+          <div className="flex gap-2 justify-end">
+            <Button type="button" variant="secondary" onClick={onCancel} disabled={submitting}>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              disabled={!canSubmit}
+              loading={submitting}
+              onClick={() => onConfirm(mapping, Array.from(userSelected), rememberMapping)}
+            >
+              Confirm &amp; analyse
+            </Button>
+          </div>
         </div>
       </footer>
+
+      <GroupedClarificationDialog
+        open={clarificationOpen}
+        columns={ambiguousColumns}
+        sampleRows={preview.sample_rows || []}
+        fieldHelp={fieldHelp}
+        allFields={allFields}
+        currentMapping={mapping}
+        onApply={handleApplyClarification}
+        onSkip={() => setClarificationOpen(false)}
+      />
     </div>
   )
 }
@@ -317,23 +453,33 @@ const SOURCE_LABEL = {
   gemini: 'AI',
   local: 'on-device',
   fallback: 'needs a human',
+  evidence: 'deterministic',
+  memory: 'saved memory',
 }
 
-function ConfidenceBadge({ column }) {
+function ConfidenceBadge({ column, isUserChoice }) {
   const legacy = LEGACY_TONE[column?.confidence] ?? LEGACY_TONE.none
   let tone = BAND_TONE[column?.confidence_band] ?? legacy
 
-  if (column?.recognised_unused) {
+  if (isUserChoice) {
+    tone = { colour: 'var(--accent-blue)', label: 'User choice' }
+  } else if (column?.source === 'memory') {
+    tone = { colour: 'var(--accent-purple, #8b5cf6)', label: 'Memory' }
+  } else if (column?.recognised_unused) {
     tone = { colour: 'var(--text-muted)', label: 'Recognised, not analysed' }
   }
 
   const score = Number(column?.confidence_score)
   const hasScore = Number.isFinite(score) && score > 0
-  const source = SOURCE_LABEL[column?.source]
+  const source = isUserChoice
+    ? 'from your selection'
+    : (SOURCE_LABEL[column?.source] || column?.source)
 
-  const reason = column?.recognised_unused
-    ? 'We know what this is. It is not used in the numbers. You can still map it by hand.'
-    : column?.reason
+  const reason = isUserChoice
+    ? 'You selected this mapping.'
+    : (column?.recognised_unused
+        ? 'We know what this is. It is not used in the numbers. You can still map it by hand.'
+        : column?.reason)
 
   return (
     <span className="inline-flex flex-wrap items-center gap-1 align-middle">
@@ -346,14 +492,14 @@ function ConfidenceBadge({ column }) {
 
       {/* The score is a refinement of the word beside it, never a replacement:
           0.95 and the next one below it both read as "Confident" here. */}
-      {hasScore && !column?.recognised_unused && (
+      {hasScore && !column?.recognised_unused && !isUserChoice && (
         <span className="text-[11px] font-mono" style={{ color: 'var(--text-muted)' }}>
           {Math.round(score * 100)}%
         </span>
       )}
 
       {source && !column?.recognised_unused && (
-        <span className="text-[11px]" style={{ color: 'var(--text-muted)' }} title={`Decided by: ${column.source}`}>
+        <span className="text-[11px]" style={{ color: 'var(--text-muted)' }} title={`Decided by: ${source}`}>
           {source}
         </span>
       )}

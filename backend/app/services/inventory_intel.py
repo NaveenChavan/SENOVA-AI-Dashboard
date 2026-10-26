@@ -81,13 +81,38 @@ def compute_inventory_intelligence(df: pd.DataFrame, top_n: int = 50) -> Invento
             note="No transactions in this period, so there is no demand to measure.",
         )
 
+    missing = sorted({"Item", "Quantity", "Date"} - set(df.columns))
+    if missing:
+        return InventoryResponse(
+            stock_aware=False,
+            window_days=0,
+            items=[],
+            note="Not available: needs " + ", ".join(missing) + " to calculate item-level inventory demand.",
+        )
+    if df["Quantity"].isna().any():
+        return InventoryResponse(
+            stock_aware=False,
+            window_days=0,
+            items=[],
+            note="Not available: Quantity has blank rows; complete quantities to calculate item-level demand reliably.",
+        )
+
     prepped = _prepare(df)
+    if "Category" not in prepped.columns:
+        prepped["Category"] = "Unspecified"
+    if "Cost Price" not in prepped.columns:
+        prepped["Cost Price"] = np.nan
     window_start = prepped["Date"].min().normalize()
     window_end = prepped["Date"].max().normalize()
     window_days = int((window_end - window_start).days) + 1
-    stock_aware = "Stock On Hand" in df.columns
+    has_cost = "Cost Price" in df.columns and df["Cost Price"].notna().all()
+    # Stock-aware cover needs complete stock values; a blank is unknown, not zero.
+    stock_aware = "Stock On Hand" in df.columns and df["Stock On Hand"].notna().all()
 
     per_item = _aggregate_items(prepped, stock_aware)
+    if not has_cost:
+        per_item["profit"] = np.nan
+        per_item["avg_cost"] = np.nan
     per_item["days_since_last_sale"] = (window_end - per_item["last_sale"].dt.normalize()).dt.days
     per_item["velocity_per_day"] = per_item["units"] / max(window_days, 1)
     per_item["velocity_active"] = np.where(
@@ -109,7 +134,7 @@ def compute_inventory_intelligence(df: pd.DataFrame, top_n: int = 50) -> Invento
             per_item["stock_on_hand"] / per_item["velocity_per_day"],
             np.nan,
         )
-        per_item["capital_locked"] = per_item["stock_on_hand"] * per_item["avg_cost"]
+        per_item["capital_locked"] = per_item["stock_on_hand"] * per_item["avg_cost"] if has_cost else np.nan
         per_item["reorder_flag"] = per_item["days_of_cover"] < REORDER_COVER_DAYS
     else:
         per_item["days_of_cover"] = np.nan
@@ -119,25 +144,25 @@ def compute_inventory_intelligence(df: pd.DataFrame, top_n: int = 50) -> Invento
     ranked = per_item.sort_values("reorder_priority", ascending=False)
     limit = min(max(top_n, 1), MAX_ITEMS_RETURNED)
 
-    items = [_to_schema(row, stock_aware) for _, row in ranked.head(limit).iterrows()]
+    items = [_to_schema(row, stock_aware, has_cost) for _, row in ranked.head(limit).iterrows()]
 
     return InventoryResponse(
         stock_aware=stock_aware,
         window_days=window_days,
         items=items,
-        abc_buckets=_abc_buckets(per_item, stock_aware),
-        ageing_buckets=_ageing_buckets(per_item, stock_aware),
+        abc_buckets=_abc_buckets(per_item, stock_aware, has_cost),
+        ageing_buckets=_ageing_buckets(per_item, stock_aware, has_cost),
         reorder_count=int(per_item["reorder_flag"].sum()),
         total_capital_locked=(
-            safe_float(per_item["capital_locked"].sum()) if stock_aware else None
+            safe_float(per_item["capital_locked"].sum()) if stock_aware and has_cost else None
         ),
         note=(
             None
             if stock_aware
             else (
-                "This file is a sales register only, so days-of-cover and locked capital "
-                "can't be calculated. Map a stock column (Stock / Closing Stock / Balance Qty) "
-                "on the column screen to unlock real reorder alerts."
+                "Stock coverage is unavailable because complete Stock On Hand values are missing. "
+                "Map a stock column (Stock / Closing Stock / Balance Qty) and complete its values "
+                "to unlock real days-of-cover and reorder alerts."
             )
         ),
     )
@@ -279,7 +304,7 @@ def _priority_scores(per_item: pd.DataFrame) -> pd.Series:
 # ── Bucket summaries ────────────────────────────────────────────────────────
 
 
-def _abc_buckets(per_item: pd.DataFrame, stock_aware: bool) -> list[InventoryBucket]:
+def _abc_buckets(per_item: pd.DataFrame, stock_aware: bool, has_cost: bool = True) -> list[InventoryBucket]:
     """Summarise the A/B/C classes for the three KPI tiles above the table."""
     total_revenue = float(per_item["revenue"].sum())
     buckets: list[InventoryBucket] = []
@@ -297,13 +322,13 @@ def _abc_buckets(per_item: pd.DataFrame, stock_aware: bool) -> list[InventoryBuc
                 units=safe_int(rows["units"].sum()),
                 revenue=safe_float(rows["revenue"].sum(), default=0.0) or 0.0,
                 revenue_share_pct=safe_percentage(rows["revenue"].sum(), total_revenue),
-                capital_locked=safe_float(rows["capital_locked"].sum()) if stock_aware else None,
+                capital_locked=safe_float(rows["capital_locked"].sum()) if stock_aware and has_cost else None,
             )
         )
     return buckets
 
 
-def _ageing_buckets(per_item: pd.DataFrame, stock_aware: bool) -> list[InventoryBucket]:
+def _ageing_buckets(per_item: pd.DataFrame, stock_aware: bool, has_cost: bool = True) -> list[InventoryBucket]:
     """Summarise the ageing buckets, newest first, skipping empty ones."""
     total_revenue = float(per_item["revenue"].sum())
     order = [
@@ -324,21 +349,21 @@ def _ageing_buckets(per_item: pd.DataFrame, stock_aware: bool) -> list[Inventory
                 units=safe_int(rows["units"].sum()),
                 revenue=safe_float(rows["revenue"].sum(), default=0.0) or 0.0,
                 revenue_share_pct=safe_percentage(rows["revenue"].sum(), total_revenue),
-                capital_locked=safe_float(rows["capital_locked"].sum()) if stock_aware else None,
+                capital_locked=safe_float(rows["capital_locked"].sum()) if stock_aware and has_cost else None,
             )
         )
     return buckets
 
 
-def _to_schema(row: pd.Series, stock_aware: bool) -> InventoryItem:
+def _to_schema(row: pd.Series, stock_aware: bool, has_cost: bool = True) -> InventoryItem:
     """Convert one aggregated row into its JSON-safe response model."""
     return InventoryItem(
         item=str(row["Item"]),
         category=str(row["category"]),
         units_sold=safe_int(row["units"]),
         revenue=safe_float(row["revenue"], default=0.0) or 0.0,
-        profit=safe_float(row["profit"], default=0.0) or 0.0,
-        margin_pct=safe_percentage(row["profit"], row["revenue"]),
+        profit=safe_float(row["profit"]) if has_cost else None,
+        margin_pct=safe_percentage(row["profit"], row["revenue"]) if has_cost else None,
         velocity_per_day=safe_float(row["velocity_per_day"], digits=3, default=0.0) or 0.0,
         velocity_active=safe_float(row["velocity_active"], digits=3, default=0.0) or 0.0,
         active_days=safe_int(row["active_days"]),
@@ -350,5 +375,5 @@ def _to_schema(row: pd.Series, stock_aware: bool) -> InventoryItem:
         stock_on_hand=safe_float(row["stock_on_hand"]) if stock_aware else None,
         days_of_cover=safe_float(row["days_of_cover"], digits=1) if stock_aware else None,
         reorder_flag=bool(row["reorder_flag"]),
-        capital_locked=safe_float(row["capital_locked"]) if stock_aware else None,
+        capital_locked=safe_float(row["capital_locked"]) if stock_aware and has_cost else None,
     )

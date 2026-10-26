@@ -72,6 +72,9 @@ UPLOAD_TTL_MINUTES: int = int(os.getenv("UPLOAD_TTL_MINUTES", "120"))
 # How often the background sweep runs.
 UPLOAD_SWEEP_INTERVAL_MINUTES: int = int(os.getenv("UPLOAD_SWEEP_INTERVAL_MINUTES", "30"))
 
+# --- Safe Mapping Memory (Module 2.3) ---
+MAPPING_MEMORY_DIR: str = os.getenv("MAPPING_MEMORY_DIR", "mapping_memory")
+
 # --- Frame cache (memory tuning) ---
 # The normalised-DataFrame LRU. These are env-tunable because the right values
 # depend entirely on how much RAM the host gives you: a Render free instance

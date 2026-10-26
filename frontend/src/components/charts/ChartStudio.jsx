@@ -28,6 +28,9 @@ export default function ChartStudio({
   heatmapData,
   loading,
   availableDimensions = [],
+  extraMeasures = [],
+  measureAvailability = [],
+  schemaReady = true,
   onQueryChange,
   onDrillDown,
   selectedLabel,
@@ -46,19 +49,83 @@ export default function ChartStudio({
   // The optional dimensions come from the file itself (Branch, Payment Mode…),
   // so a column the user never mapped can never appear here.
   const dimensions = useMemo(() => {
-    const extras = availableDimensions.filter(
-      (option) => !BASE_DIMENSIONS.some((base) => base.key === option.key),
+    const presentKeys = new Set((availableDimensions || []).map((option) => option.key))
+    // Category and Item are optional. Date-derived dimensions remain available
+    // even though they are not real columns in the uploaded file.
+    const base = BASE_DIMENSIONS.filter(
+      (option) => ['day', 'weekday', 'month'].includes(option.key) || presentKeys.has(option.key),
     )
-    return [...BASE_DIMENSIONS, ...extras]
+    const extras = (availableDimensions || []).filter(
+      (option) => !BASE_DIMENSIONS.some((baseOption) => baseOption.key === option.key),
+    )
+    return [...base, ...extras]
   }, [availableDimensions])
 
-  const request = useMemo(() => resolveChartRequest(view), [view])
+  // Keep only built-in measures that the uploaded file can calculate. Before
+  // capability metadata arrives, retain the old option list for compatibility;
+  // once received, unavailable values are not offered as if they were real zeros.
+  const measures = useMemo(() => {
+    const knownAvailability = new Map((measureAvailability || []).map((item) => [item.key, item]))
+    const hasAvailability = knownAvailability.size > 0
+    const base = hasAvailability
+      ? MEASURES.filter((option) => knownAvailability.get(option.value)?.available === true)
+      : MEASURES
+    const extras = (extraMeasures || []).map((m) => {
+      const isAvg = m.aggregation === 'avg' || m.aggregation === 'average' || m.additive === false
+      return {
+        value: m.key,
+        label: isAvg ? `${m.label} (average, not sum)` : m.label,
+      }
+    })
+    return [...base, ...extras]
+  }, [extraMeasures, measureAvailability])
+
+  const availableDimensionKeys = dimensions.map((option) => option.key)
+  const defaultDimension = availableDimensionKeys.includes('category')
+    ? 'category'
+    : availableDimensionKeys.includes('item')
+      ? 'item'
+      : availableDimensionKeys[0] || 'day'
+  const availableMeasureKeys = measures.map((option) => option.value)
+  const effectiveMeasure = availableMeasureKeys.includes(view.measure)
+    ? view.measure
+    : availableMeasureKeys.includes('revenue')
+      ? 'revenue'
+      : availableMeasureKeys[0] || 'revenue'
+  const effectiveView = {
+    ...view,
+    measure: effectiveMeasure,
+    dimension: availableDimensionKeys.includes(view.dimension) ? view.dimension : defaultDimension,
+  }
+  const request = useMemo(() => {
+    const resolved = resolveChartRequest({
+      ...view,
+      measure: effectiveMeasure,
+      dimension: effectiveView.dimension,
+    })
+    const knownKeys = new Set(dimensions.map((option) => option.key))
+    // resolveChartRequest traditionally falls back to category for non-time
+    // charts. When Category is absent, use the already-validated available axis.
+    if (!knownKeys.has(resolved.dimension)) {
+      resolved.dimension = effectiveView.dimension
+    }
+    return resolved
+  }, [view.chartType, effectiveMeasure, effectiveView.dimension, dimensions])
   const effectiveDimension = request.dimension
 
-  // Ask the parent for the data this combination needs.
   useEffect(() => {
+    if (!schemaReady) return
+    if (view.measure !== effectiveMeasure || view.dimension !== effectiveView.dimension) {
+      update({ measure: effectiveMeasure, dimension: effectiveView.dimension })
+    }
+  }, [schemaReady, view.measure, view.dimension, effectiveMeasure, effectiveView.dimension, update])
+
+  // Do not issue a speculative invalid query or rewrite the saved chart axis
+  // while file-specific dimensions/measures are still loading.
+  useEffect(() => {
+    if (!schemaReady) return
     onQueryChange?.(request)
-  }, [request, onQueryChange])
+  }, [schemaReady, request, onQueryChange])
 
   const activeType = CHART_TYPES.find((type) => type.value === chartType)
   const isHeatmap = chartType === 'heatmap'
@@ -79,11 +146,11 @@ export default function ChartStudio({
         <div className="flex items-center gap-1.5 flex-wrap">
           <select
             className="filter-select"
-            value={measure}
+            value={effectiveMeasure}
             onChange={(event) => update({ measure: event.target.value })}
             aria-label="Measure to plot"
           >
-            {MEASURES.map((option) => (
+            {measures.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>

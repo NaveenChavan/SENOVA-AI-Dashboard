@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import ALLOWED_ORIGINS, UPLOAD_SWEEP_INTERVAL_MINUTES
-from app.api.routes import upload, analytics, auth
+from app.api.routes import upload, analytics, auth, mapping_memory
 from app.api.routes.analytics import analytics_router
 from app.services.file_handler import sweep_expired_uploads
 from app.services import tier2_gemini
@@ -71,6 +71,7 @@ app.include_router(upload.router, prefix="/upload", tags=["Upload"])
 app.include_router(analytics.router, prefix="/process", tags=["Analytics"])
 app.include_router(analytics_router, prefix="/analytics", tags=["Analytics"])
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(mapping_memory.router, prefix="/mapping-memory", tags=["Mapping Memory"])
 
 
 @app.get("/health")

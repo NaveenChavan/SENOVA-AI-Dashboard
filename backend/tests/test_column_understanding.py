@@ -98,7 +98,7 @@ class TestAiDisabled:
         frame = pd.DataFrame({"Qty.": [1, 2, 3]})
         _reports, timings, _notice, _ = await analyse(frame)
         payload = timings.as_dict()
-        assert set(payload) == {"tier1_ms", "tier2_ms", "total_ms"}
+        assert set(payload) == {"tier1_ms", "evidence_ms", "tier2_ms", "total_ms"}
         assert payload["total_ms"] >= payload["tier1_ms"]
 
 
@@ -645,3 +645,49 @@ class TestFinalRouteRegression:
         assert {"Date", "Category", "Item", "Quantity", "Selling Price", "Cost Price"}.issubset(mapped)
         assert _by_name(reports)["Price1"]["suggested_field"] == "Selling Price"
         assert _by_name(reports)["Price1"]["needs_review"] is False
+
+    async def test_non_pii_header_with_pii_cell_values_suppressed_and_stored_only(self, gemini_on, no_embeddings, monkeypatch):
+        """
+        An ambiguous non-PII header whose values contain contact information:
+        - When escalated to Tier 2, sample values are suppressed.
+        - Even if Gemini proposes a financial/dimensional role, _apply_tier2_reports
+          overrides it to stored-only 'personal'.
+        - When AI is disabled, column is immediately marked stored-only 'personal'.
+        """
+        captured: list[dict] = []
+
+        async def _fake_resolve(columns, ai_consent, **kwargs):
+            captured.extend(columns)
+            # Simulate Gemini trying to claim this column as "customer"
+            return tier2_gemini.Tier2Result(
+                verdicts={"Custom_Info": {"label": "customer", "confidence": 0.95, "reason": "AI guess"}},
+                source=tier2_gemini.SOURCE_GEMINI,
+                elapsed_ms=1.0,
+            )
+
+        monkeypatch.setattr(tier2_gemini, "resolve_columns", _fake_resolve)
+        frame = pd.DataFrame({
+            "Custom_Info": ["Contact 9876543210", "Email test@company.com", "Phone 9123456789"],
+        })
+
+        # Run with Tier 2 enabled
+        reports, _, _, _ = await analyse(frame, ai_consent=True, run_tier2=True)
+        assert len(captured) == 1
+        assert captured[0]["suppressed"] is True
+        assert captured[0]["samples"] == []
+        assert "9876543210" not in json.dumps(captured)
+
+        custom_report = next(r for r in reports if r["raw_column"] == "Custom_Info")
+        # Overridden to personal, stored-only, no canonical field
+        assert custom_report["suggested_field"] is None
+        assert custom_report["semantic_label"] == "personal"
+        assert custom_report["recognised_unused"] is True
+        assert custom_report["confidence_band"] == "low"
+        assert custom_report["confidence_score"] == 0.0
+
+        # Run with AI disabled
+        reports_no_ai, _, _, _ = await analyse(frame, ai_consent=False, run_tier2=False)
+        no_ai_report = next(r for r in reports_no_ai if r["raw_column"] == "Custom_Info")
+        assert no_ai_report["suggested_field"] is None
+        assert no_ai_report["semantic_label"] == "personal"
+        assert no_ai_report["recognised_unused"] is True

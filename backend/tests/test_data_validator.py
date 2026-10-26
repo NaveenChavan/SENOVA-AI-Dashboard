@@ -265,10 +265,12 @@ def test_bad_rows_are_reported_not_fatal():
         }
     )
     frame, errors = normalize_dataframe(raw)
-    assert len(frame) == 1
+    # Invalid date is dropped; blank Category is optional, so the third row stays.
+    assert len(frame) == 2
     columns_with_errors = {e["column"] for e in errors}
     assert "Date" in columns_with_errors
-    assert "Category" in columns_with_errors
+    # Category is optional under Phase 1, so blank category is not a validation error.
+    assert "Category" not in columns_with_errors
 
 
 def test_business_rules_remove_impossible_rows():

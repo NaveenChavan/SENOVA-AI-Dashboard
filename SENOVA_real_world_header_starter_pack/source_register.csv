@@ -1,0 +1,9 @@
+﻿platform,official_source_url,use
+TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,"Official sample Excel templates for masters, vouchers, GST, inventory, locations; best for Indian retail/accounting"
+ERPNext,https://docs.frappe.io/erpnext/sales-invoice,"Official invoice field descriptions including Customer, Posting Date, Item, Quantity, Rate, Amount, Warehouse, taxes, totals"
+ERPNext,https://docs.frappe.io/erpnext/sales-order,"Official order fields including Delivery Date, Item Code, Quantity, Rate, Warehouse, addresses and contacts"
+Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,Official order/transaction CSV headers
+Shopify,https://help.shopify.com/en/manual/sell-in-person/shopify-pos/inventory-management/export-import-inventory-csv-pos,Official inventory CSV headers and inventory states
+Zoho Books,https://www.zoho.com/us/books/help/invoice/,Official invoice fields and sample import guidance
+Zoho Books,https://www.zoho.com/us/books/help/reports/tax-reports.html,Official tax report columns
+Odoo,https://www.odoo.com/documentation/17.0/applications/essentials/export_import_data.html,Official CSV/XLS export/import examples and field selection

@@ -67,12 +67,14 @@ class ColumnGuess(BaseModel):
             "meanings fit about equally well, which is why it escalates even at a high score."
         ),
     )
-    source: Literal["local", "gemini", "fallback", "pending"] = Field(
+    source: Literal["local", "gemini", "fallback", "pending", "evidence", "memory"] = Field(
         "local",
         description=(
             "Who decided this column: 'local' = the on-server FastEmbed classifier or the alias "
             "map, 'gemini' = Gemini Flash, 'fallback' = we could not decide and the user must map it, "
-            "'pending' = Tier 2 is deferred and will be run asynchronously."
+            "'pending' = Tier 2 is deferred and will be run asynchronously, "
+            "'evidence' = deterministic evidence rules engine (Module 2.1), "
+            "'memory' = safe mapping memory (Module 2.3)."
         ),
     )
     semantic_label: str = Field(
@@ -92,6 +94,19 @@ class ColumnGuess(BaseModel):
         False,
         description="True when the column is recognised but intentionally not analysed (e.g. currency).",
     )
+    # ── Module 2.1 Evidence Engine fields (additive — absent on older backends) ──
+    evidence_facts: List[str] = Field(
+        default_factory=list,
+        description="Bullet-point statistical facts the evidence engine collected (shown in the dialog).",
+    )
+    evidence_candidates: List[str] = Field(
+        default_factory=list,
+        description="Canonical field candidates the engine identified for 'ask' columns.",
+    )
+    evidence_reason: str = Field(
+        "",
+        description="One sentence from the evidence engine explaining why it needs user input.",
+    )
 
 
 class PipelineTimings(BaseModel):
@@ -105,6 +120,7 @@ class PipelineTimings(BaseModel):
     """
 
     tier1_ms: float = Field(0.0, description="Local FastEmbed classification time")
+    evidence_ms: float = Field(0.0, description="Module 2.1 Deterministic Evidence Engine time (0 when no ambiguous columns)")
     tier2_ms: float = Field(0.0, description="Gemini Flash disambiguation time (0 when skipped)")
     pandas_ms: float | None = Field(None, description="Row normalisation/validation time, when it ran")
     total_ms: float = Field(0.0, description="End-to-end pipeline time")
@@ -138,8 +154,8 @@ class ColumnMappingPreview(BaseModel):
     filename: str
     detected_columns: List[ColumnGuess]
     required_fields: List[str] = Field(
-        default_factory=lambda: ["Date", "Category", "Item", "Quantity", "Selling Price", "Cost Price"],
-        description="The 6 canonical fields every uploaded file must map to.",
+        default_factory=lambda: ["Date"],
+        description="Date is required, plus either Line Total or both Quantity and Selling Price.",
     )
     optional_fields: List[str] = Field(
         default_factory=list,
@@ -184,10 +200,10 @@ class TopItem(BaseModel):
 
 
 class DailyTrend(BaseModel):
-    """Single data-point for the daily sales trend line chart."""
+    """Single daily sales trend point; profit is null without complete cost data."""
     date: str = Field(..., description="Date in YYYY-MM-DD format")
-    revenue: float = Field(..., description="Gross revenue on that day")
-    profit: float = Field(..., description="Net profit on that day")
+    revenue: float = Field(..., description="Net revenue on that day")
+    profit: float | None = Field(None, description="Net profit, unavailable without quantity and cost data")
 
 
 class DeadStockItem(BaseModel):
@@ -199,12 +215,14 @@ class DeadStockItem(BaseModel):
 
 class MetricValue(BaseModel):
     """Single KPI metric with total, trend, and sparkline data."""
-    value: float = Field(..., description="Total for the selected period")
-    trend_percentage: float = Field(0, description="Percentage change vs previous period")
+    value: float | None = Field(None, description="Total for the selected period, or None if unavailable")
+    trend_percentage: float | None = Field(0.0, description="Percentage change vs previous period")
     sparkline_data: list[float] = Field(
         default_factory=list,
         description="Daily totals for the trailing days (sparkline source)",
     )
+    available: bool = Field(True, description="Whether this metric is available from the uploaded columns")
+    reason: str | None = Field(None, description="Reason if the metric is unavailable")
 
 
 class SalesSummary(BaseModel):
@@ -217,10 +235,10 @@ class SalesSummary(BaseModel):
 
 
 class CategoryBreakdown(BaseModel):
-    """Revenue and quantity grouped by product category."""
+    """Revenue and optional quantity grouped by product category."""
     category: str = Field(..., description="Product category name")
-    revenue: float = Field(..., description="Gross revenue for this category")
-    quantity: int = Field(..., description="Total units sold in this category")
+    revenue: float = Field(..., description="Net revenue for this category")
+    quantity: int | None = Field(None, description="Units sold, null when Quantity is unavailable")
 
     # Allows construction straight from an object with matching attributes
     # (Pydantic v2 style; the old class-based Config is deprecated).
@@ -238,7 +256,7 @@ class DiscountMarginItem(BaseModel):
 class DiscountMetrics(BaseModel):
     """High-level metrics for MRP-based discount analysis."""
     discount_given: float
-    discount_pct: float
+    discount_pct: float | None = Field(None, description="Unavailable without a usable MRP comparison basis")
     valid_discount_rows: int
     missing_mrp_rows: int
     price_above_mrp_rows: int
@@ -287,7 +305,8 @@ class PnLLineItem(BaseModel):
     matching standard accounting statement formatting.
     """
     label: str = Field(..., description="Line item name, e.g. 'Gross Revenue', 'Gross Profit'")
-    amount: float = Field(..., description="Amount in INR for this line item")
+    amount: float | None = Field(..., description="Amount in INR, or None when unavailable from uploaded columns")
+    availability_reason: str | None = Field(None, description="Reason when the amount cannot be computed from this file")
     percentage_of_revenue: float | None = Field(
         None, description="This line as a % of gross revenue, where meaningful (null for revenue itself)."
     )
@@ -295,13 +314,17 @@ class PnLLineItem(BaseModel):
 
 
 class CategoryLedgerRow(BaseModel):
-    """One row of the category-wise breakdown table in the CA-style report."""
+    """One row of the category-wise breakdown table in the CA-style report.
+
+    Optional totals are null when the uploaded fields cannot support the
+    calculation; null must not be displayed as a zero-valued business result.
+    """
     category: str
-    units_sold: int
+    units_sold: int | None = None
     revenue: float
-    cost: float
-    profit: float
-    margin_percentage: float = Field(..., description="profit / revenue * 100, rounded to 2dp")
+    cost: float | None = None
+    profit: float | None = None
+    margin_percentage: float | None = Field(None, description="profit / revenue * 100, rounded to 2dp")
 
 
 class CAReportSummary(BaseModel):
@@ -329,12 +352,12 @@ class LedgerEntry(BaseModel):
     date: str = Field(..., description="Transaction date, YYYY-MM-DD")
     category: str
     item: str
-    quantity: int
-    selling_price: float
-    cost_price: float
+    quantity: int | None = None
+    selling_price: float | None = None
+    cost_price: float | None = None
     discount: float = Field(0.0, description="Discount on this line (0 when the file has no discount column)")
-    revenue: float = Field(..., description="quantity * selling_price - discount (net, matches the P&L)")
-    profit: float = Field(..., description="revenue - (quantity * cost_price)")
+    revenue: float | None = Field(None, description="Net sales from the accepted sales basis")
+    profit: float | None = Field(None, description="Revenue minus cost, null when quantity/cost are unavailable")
 
 
 class LedgerPage(BaseModel):
@@ -391,6 +414,15 @@ class UploadResponse(BaseModel):
         default_factory=PipelineTimings,
         description="Per-stage timings for the row validation that just ran.",
     )
+    warnings: List[str] = Field(
+        default_factory=list,
+        description=(
+            "Non-blocking advisories about the confirmed mapping (e.g. a column "
+            "mapped to Line Total that might be a bill-level total). The upload "
+            "still succeeded; the client should surface these so the user can "
+            "revise the mapping if a warning indicates a likely revenue error."
+        ),
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -405,10 +437,8 @@ class UploadResponse(BaseModel):
 
 TimeFilter = Literal["all", "today", "week", "30days", "month", "custom"]
 
-#: Dimensions the client may group or filter by. Requests naming anything
-#: outside this list are rejected (422) — the value is never used to build a
-#: query string or touch ``DataFrame.query``/``eval``.
-DimensionKey = Literal[
+#: Built-in dimensions the client may group or filter by.
+BUILTIN_DIMENSIONS: tuple[str, ...] = (
     "category",
     "item",
     "day",
@@ -422,10 +452,13 @@ DimensionKey = Literal[
     "size",
     "colour",
     "invoice_no",
-]
+)
 
-#: Measures the client may plot. Same closed-set rule as dimensions.
-MeasureKey = Literal[
+#: Dimensions can be built-in or from the per-file extra column registry.
+DimensionKey = str
+
+#: Built-in measures the client may plot.
+BUILTIN_MEASURES: tuple[str, ...] = (
     "revenue",
     "profit",
     "cost",
@@ -434,7 +467,34 @@ MeasureKey = Literal[
     "transactions",
     "discount",
     "avg_price",
-]
+)
+
+#: Measures can be built-in or from the per-file extra column registry.
+MeasureKey = str
+
+
+class ExtraColumnInfo(BaseModel):
+    """Metadata describing a single extra column in the per-file registry."""
+
+    key: str = Field(..., description="Safe deterministic key, e.g. 'x_meas:delivery_charge'")
+    display_label: str = Field(..., description="Original column header as uploaded")
+    class_name: str = Field(..., description="date_like | id_like | personal | numeric | low_cardinality_text | other_text")
+    role: str = Field(..., description="extra_measure | extra_dimension | stored_only")
+    aggregation: str | None = Field(None, description="sum | average | None")
+    how_used: str = Field("", description="Human-readable explanation of usage")
+    reason: str | None = Field(None, description="Reason if preserved as stored-only")
+
+
+class ColumnCoverageReport(BaseModel):
+    """Coverage summary and itemized list of all columns in the file."""
+
+    total_columns: int = 0
+    mapped_columns: int = 0
+    extra_measures: int = 0
+    extra_dimensions: int = 0
+    stored_only: int = 0
+    stored_only_columns: int = 0
+    columns: List[ExtraColumnInfo] = Field(default_factory=list)
 
 #: Hard caps that keep one request from turning into a server-wide slowdown.
 MAX_FILTER_KEYS = 8
@@ -521,10 +581,10 @@ class ChartPoint(BaseModel):
     label: str = Field(..., description="Group name, e.g. 'Kurta', 'Mon', '2026-07-14'")
     value: float = Field(..., description="The requested measure — what the chart plots")
     revenue: float
-    cost: float
-    profit: float
-    units: int
-    transactions: int
+    cost: float | None = None
+    profit: float | None = None
+    units: int | None = None
+    transactions: int = 0
     discount: float = 0.0
     margin_pct: float | None = Field(None, description="profit / revenue * 100 (null when revenue is 0)")
     avg_price: float | None = Field(None, description="Average realised unit price for this group")
@@ -611,6 +671,14 @@ class DimensionsResponse(BaseModel):
         description="Optional numeric fields present in this file (Discount, Tax, Stock On Hand, Line Total).",
     )
     date_range: DataDateRange = Field(default_factory=DataDateRange)
+    extra_measures: List[dict] = Field(
+        default_factory=list,
+        description="Extra measures present in this file with key, label, aggregation.",
+    )
+    extra_registry: dict[str, dict] = Field(
+        default_factory=dict,
+        description="Per-file extra column registry.",
+    )
 
 
 class AiInsightsRequest(AnalysisQuery):
@@ -757,6 +825,12 @@ class DynamicSchema(BaseModel):
         default_factory=list, description="Required fields this file still lacks"
     )
     date_range: DataDateRange = Field(default_factory=DataDateRange)
+    extra_registry: dict[str, ExtraColumnInfo] = Field(
+        default_factory=dict, description="Per-file extra column registry"
+    )
+    coverage: ColumnCoverageReport | None = Field(
+        None, description="Report on how every uploaded column was classified and used"
+    )
 
 
 # ── Feature 1: AI insight cards ─────────────────────────────────────────────
@@ -834,7 +908,7 @@ class InventoryItem(BaseModel):
     category: str
     units_sold: int
     revenue: float
-    profit: float
+    profit: float | None = Field(None, description="Unavailable when Cost Price is missing or incomplete")
     margin_pct: float | None = None
     velocity_per_day: float = Field(..., description="Units sold ÷ days in the window")
     velocity_active: float = Field(..., description="Units sold ÷ days on which it actually sold")

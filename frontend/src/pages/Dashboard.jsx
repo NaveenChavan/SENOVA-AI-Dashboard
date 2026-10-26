@@ -90,6 +90,7 @@ export default function Dashboard() {
     setQuery,
     resetFilters,
     dimensions,
+    extraMeasures,
     fetchDimensions,
     chartData,
     chartLoading,
@@ -211,7 +212,18 @@ export default function Dashboard() {
   useEffect(() => {
     if (!fileId) return
     if (useSalesStore.getState().fileId !== fileId) {
-      useSalesStore.setState({ fileId })
+      useSalesStore.setState({
+        fileId,
+        data: null,
+        insights: null,
+        aiNarratives: {},
+        chartData: null,
+        heatmapData: null,
+        dynamicSchema: null,
+        inventory: null,
+        forecast: null,
+        caReport: null,
+      })
     }
     fetchDimensions(fileId)
     // Capability only — describes what this file can be asked, never a figure.
@@ -667,7 +679,13 @@ export default function Dashboard() {
               </motion.div>
 
               <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.05 }}>
-                <SummaryStats key={querySignature} summary={data.summary} discountMetrics={data.discount_metrics} />
+                <SummaryStats
+                  key={querySignature}
+                  summary={data.summary}
+                  discountMetrics={data.discount_metrics}
+                  discountAvailability={dynamicSchema?.kpi_cards?.find((entry) => entry.key === 'discount')}
+                  discountPctAvailability={dynamicSchema?.kpi_cards?.find((entry) => entry.key === 'discount_pct')}
+                />
               </motion.div>
 
               <motion.div initial={fadeUp.initial} animate={fadeUp.animate} transition={{ ...fadeUp.transition, delay: 0.1 }}>
@@ -713,6 +731,8 @@ export default function Dashboard() {
                     heatmapData={heatmapData}
                     loading={chartLoading || heatmapLoading}
                     availableDimensions={dimensions}
+                    extraMeasures={extraMeasures}
+                    measureAvailability={dynamicSchema?.measures ?? []}
                     view={chartView}
                     onViewChange={setChartView}
                     onDrillDown={handleDrillDown}

@@ -76,8 +76,17 @@ _AMBER = colors.HexColor("#b7791f")
 _WHITE = colors.white
 
 
-def _fmt_money(amount: float) -> str:
+def _fmt_money(amount: float | None) -> str:
+    """Format a known monetary value; ``None`` means unavailable, not zero."""
+    if amount is None:
+        return "—"
     return f"{_CURR}{amount:,.2f}"
+
+
+def _fmt_number(value, decimals: int = 0) -> str:
+    if value is None:
+        return "—"
+    return f"{float(value):,.{decimals}f}"
 
 
 def _fmt_compact_money(amount: float) -> str:
@@ -129,7 +138,13 @@ def _pnl_table(report: CAReportSummary) -> Table:
     subtotal_rows = []
     for i, line in enumerate(report.pnl, start=1):
         pct = _fmt_pct(line.percentage_of_revenue) if line.percentage_of_revenue is not None else "-"
-        rows.append([line.label, _fmt_money(line.amount), pct])
+        label_cell = line.label
+        if getattr(line, "availability_reason", None):
+            label_cell = Paragraph(
+                f"{line.label}<br/><font size='6' color='#64748b'>{line.availability_reason}</font>",
+                _build_styles()["SmallNote2"],
+            )
+        rows.append([label_cell, _fmt_money(line.amount), pct])
         if line.is_subtotal:
             subtotal_rows.append(i)
 
@@ -163,7 +178,7 @@ def _category_ledger_table(report: CAReportSummary) -> Table:
     for row in report.category_ledger:
         rows.append([
             row.category,
-            f"{row.units_sold:,}",
+            _fmt_number(row.units_sold),
             _fmt_money(row.revenue),
             _fmt_money(row.cost),
             _fmt_money(row.profit),
@@ -312,7 +327,7 @@ def _ledger_table(entries) -> Table:
     rows = [headers]
     for e in entries:
         rows.append([
-            e.date, e.category, e.item, f"{e.quantity:,}",
+            e.date, e.category, e.item, _fmt_number(e.quantity),
             _fmt_money(e.selling_price), _fmt_money(e.cost_price),
             _fmt_money(e.revenue), _fmt_money(e.profit),
         ])
@@ -341,7 +356,7 @@ def _daily_summary_table(daily_summary: list[dict]) -> Table:
     rows = [["Date", "Transactions", "Units Sold", "Revenue", "Cost", "Profit", "Margin %"]]
     for r in daily_summary:
         rows.append([
-            r["date"], f"{r['transactions']:,}", f"{r['units_sold']:,}",
+            r["date"], _fmt_number(r["transactions"]), _fmt_number(r["units_sold"]),
             _fmt_money(r["revenue"]), _fmt_money(r["cost"]), _fmt_money(r["profit"]),
             _fmt_pct(r["margin_percentage"]),
         ])
@@ -409,8 +424,10 @@ _AMBER_BG = colors.HexColor("#fef3c7")
 _AMBER_TEXT = colors.HexColor("#b45309")
 
 
-def _fmt_inr_full(amount: float) -> str:
-    """Format full rupee value without decimals, e.g. ₹17,74,788."""
+def _fmt_inr_full(amount: float | None) -> str:
+    """Format a known rupee value without decimals; null is unavailable."""
+    if amount is None:
+        return "—"
     amt = int(round(float(amount)))
     sign = "-" if amt < 0 else ""
     amt_str = str(abs(amt))
@@ -535,13 +552,18 @@ def _draw_header(c: canvas.Canvas, x, y, w, h, filename: str, ca_report, prepare
 def _draw_kpi_row(c: canvas.Canvas, x, y, w, h, analytics, ca_report):
     summary = analytics.summary
     card_w = (w - 3 * 6) / 4
-    margin_pct = (float(summary.profit.value) / float(summary.revenue.value) * 100) if summary.revenue.value else 0.0
+    profit_available = summary.profit.available and summary.profit.value is not None
+    revenue_value = summary.revenue.value
+    margin_pct = (
+        (float(summary.profit.value) / float(revenue_value) * 100)
+        if profit_available and revenue_value else None
+    )
 
     kpis = [
         ("Total Revenue", _fmt_inr_full(summary.revenue.value), summary.revenue.trend_percentage, "trend"),
-        ("Gross Profit", _fmt_inr_full(summary.profit.value), summary.profit.trend_percentage, "table"),
-        ("Profit Margin", f"{margin_pct:.2f}%", summary.profit.trend_percentage, "donut"),
-        ("Units Sold", f"{int(summary.units_sold.value):,}", summary.units_sold.trend_percentage, "chart"),
+        ("Gross Profit", _fmt_inr_full(summary.profit.value) if profit_available else "—", summary.profit.trend_percentage, "table"),
+        ("Profit Margin", _fmt_pct(margin_pct), summary.profit.trend_percentage, "donut"),
+        ("Units Sold", _fmt_number(summary.units_sold.value), summary.units_sold.trend_percentage, "chart"),
     ]
 
     for idx, (label, val_str, trend, icon) in enumerate(kpis):
@@ -975,11 +997,14 @@ def _draw_category_ledger_table(c: canvas.Canvas, x, y, w, h, ca_report):
         cx_cursor += cw
 
     rows = ca_report.category_ledger[:4]
-    tot_units = sum(r.units_sold for r in ca_report.category_ledger)
+    units_known = all(r.units_sold is not None for r in ca_report.category_ledger)
+    cost_known = all(r.cost is not None for r in ca_report.category_ledger)
+    profit_known = all(r.profit is not None for r in ca_report.category_ledger)
+    tot_units = sum(r.units_sold or 0 for r in ca_report.category_ledger) if units_known else None
     tot_rev = sum(r.revenue for r in ca_report.category_ledger)
-    tot_cost = sum(r.cost for r in ca_report.category_ledger)
-    tot_prof = sum(r.profit for r in ca_report.category_ledger)
-    tot_margin = (tot_prof / tot_rev * 100) if tot_rev else 0.0
+    tot_cost = sum(r.cost or 0 for r in ca_report.category_ledger) if cost_known else None
+    tot_prof = sum(r.profit or 0 for r in ca_report.category_ledger) if profit_known else None
+    tot_margin = (tot_prof / tot_rev * 100) if (profit_known and tot_rev) else None
 
     row_y = ty - 14
     row_h = 12
@@ -995,19 +1020,19 @@ def _draw_category_ledger_table(c: canvas.Canvas, x, y, w, h, ca_report):
         c.drawString(cx_cursor + 4, row_y - 5.5, str(r.category)[:16])
         cx_cursor += cols[0][1]
 
-        c.drawRightString(cx_cursor + cols[1][1] - 4, row_y - 5.5, f"{r.units_sold:,}")
+        c.drawRightString(cx_cursor + cols[1][1] - 4, row_y - 5.5, _fmt_number(r.units_sold))
         cx_cursor += cols[1][1]
 
         c.drawRightString(cx_cursor + cols[2][1] - 4, row_y - 5.5, f"{r.revenue:,.2f}")
         cx_cursor += cols[2][1]
 
-        c.drawRightString(cx_cursor + cols[3][1] - 4, row_y - 5.5, f"{r.cost:,.2f}")
+        c.drawRightString(cx_cursor + cols[3][1] - 4, row_y - 5.5, _fmt_number(r.cost, 2))
         cx_cursor += cols[3][1]
 
-        c.drawRightString(cx_cursor + cols[4][1] - 4, row_y - 5.5, f"{r.profit:,.2f}")
+        c.drawRightString(cx_cursor + cols[4][1] - 4, row_y - 5.5, _fmt_number(r.profit, 2))
         cx_cursor += cols[4][1]
 
-        c.drawRightString(cx_cursor + cols[5][1] - 4, row_y - 5.5, f"{r.margin_percentage:.2f}%")
+        c.drawRightString(cx_cursor + cols[5][1] - 4, row_y - 5.5, _fmt_pct(r.margin_percentage))
 
         row_y -= row_h
 
@@ -1020,19 +1045,19 @@ def _draw_category_ledger_table(c: canvas.Canvas, x, y, w, h, ca_report):
     c.drawString(cx_cursor + 4, row_y - 5.5, "Total")
     cx_cursor += cols[0][1]
 
-    c.drawRightString(cx_cursor + cols[1][1] - 4, row_y - 5.5, f"{tot_units:,}")
+    c.drawRightString(cx_cursor + cols[1][1] - 4, row_y - 5.5, _fmt_number(tot_units))
     cx_cursor += cols[1][1]
 
     c.drawRightString(cx_cursor + cols[2][1] - 4, row_y - 5.5, f"{tot_rev:,.2f}")
     cx_cursor += cols[2][1]
 
-    c.drawRightString(cx_cursor + cols[3][1] - 4, row_y - 5.5, f"{tot_cost:,.2f}")
+    c.drawRightString(cx_cursor + cols[3][1] - 4, row_y - 5.5, _fmt_number(tot_cost, 2))
     cx_cursor += cols[3][1]
 
-    c.drawRightString(cx_cursor + cols[4][1] - 4, row_y - 5.5, f"{tot_prof:,.2f}")
+    c.drawRightString(cx_cursor + cols[4][1] - 4, row_y - 5.5, _fmt_number(tot_prof, 2))
     cx_cursor += cols[4][1]
 
-    c.drawRightString(cx_cursor + cols[5][1] - 4, row_y - 5.5, f"{tot_margin:.2f}%")
+    c.drawRightString(cx_cursor + cols[5][1] - 4, row_y - 5.5, _fmt_pct(tot_margin))
 
 
 def _draw_top_items_table(c: canvas.Canvas, x, y, w, h, analytics):

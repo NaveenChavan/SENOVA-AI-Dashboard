@@ -45,10 +45,12 @@ from app.models.schemas import (
     CAReportSummary,
     ChartDataResponse,
     ChartQuery,
+    ColumnCoverageReport,
     DimensionsResponse,
     DimensionOption,
     DimensionOptionsRequest,
     DynamicSchema,
+    ExtraColumnInfo,
     ForecastQuery,
     ForecastResponse,
     HeatmapResponse,
@@ -65,6 +67,7 @@ from app.services.file_handler import (
     assert_owner,
     get_original_filename,
     load_column_mapping,
+    load_extra_registry,
     validate_file_id,
 )
 from app.services.forecasting import compute_forecast
@@ -135,6 +138,10 @@ def _load_frame(file_id: str, user: str) -> pd.DataFrame:
         # Missing required columns after mapping — actionable, so it is shown.
         raise HTTPException(status_code=400, detail=str(exc))
 
+    extra_reg = load_extra_registry(file_id)
+    if extra_reg:
+        frame.attrs["extra_registry"] = extra_reg
+
     return frame
 
 
@@ -191,6 +198,13 @@ def _empty_analytics(errors: list[RowError], row_count: int = 0) -> AnalyticsRes
     )
 
 
+def _discount_metrics_if_supported(frame: pd.DataFrame):
+    """Do not attach an all-zero discount report when no discount basis exists."""
+    has_direct = "Discount" in frame.columns
+    has_mrp_basis = {"MRP", "Selling Price", "Quantity"}.issubset(frame.columns)
+    return compute_discount(frame) if has_direct or has_mrp_basis else None
+
+
 def _build_analytics(current, previous, window, errors: list[RowError]) -> AnalyticsResponse:
     """Assemble the standard dashboard payload from a resolved slice."""
     if current.empty:
@@ -206,7 +220,7 @@ def _build_analytics(current, previous, window, errors: list[RowError]) -> Analy
         dead_stock=compute_dead_stock(current),
         categories=compute_revenue_by_category(current),
         errors=errors,
-        discount_metrics=compute_discount(current),
+        discount_metrics=_discount_metrics_if_supported(current),
         discount_vs_margin=compute_discount_vs_margin(current),
     )
 
@@ -292,6 +306,17 @@ def get_dimensions(file_id: str, user: str = Depends(get_current_user)):
 def post_dimension_options(file_id: str, request: DimensionOptionsRequest, user: str = Depends(get_current_user)):
     """Return searchable, cascade-aware values for one filter dimension."""
     frame = _load_frame(file_id, user)
+    extra_reg = frame.attrs.get("extra_registry", {})
+    if request.dimension not in query_engine.DIMENSIONS:
+        if not (
+            request.dimension.startswith("x_dim:")
+            and request.dimension in extra_reg
+            and extra_reg[request.dimension].get("role") == "extra_dimension"
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Dimension '{request.dimension}' is not available for this file.",
+            )
     try:
         return query_engine.dimension_option(
             frame,
@@ -312,19 +337,29 @@ def post_schema(file_id: str, user: str = Depends(get_current_user)):
     """
     What this file can be asked — KPI cards, charts, dimensions and measures,
     each flagged available or not with the reason when it isn't.
-
-    Additive: the existing dashboard does not depend on this. Its value is that
-    the UI can stop hiding cards silently. A file with no Cost Price would
-    otherwise show a profit card reading zero, which is indistinguishable from a
-    genuinely unprofitable month.
-
-    Goes through ``_load_frame``, so it carries the same ownership check, the same
-    indistinguishable 404 and the same 409-until-mapping-confirmed rule as every
-    other route in this file.
     """
     frame = _load_frame(file_id, user)
     mapping = load_column_mapping(file_id) or {}
-    return dynamic_schema.build(frame, mapping=mapping)
+    schema_dict = dynamic_schema.build(frame, mapping=mapping)
+    extra_reg = frame.attrs.get("extra_registry", {})
+    extra_info_dict = {k: ExtraColumnInfo(**v) for k, v in extra_reg.items()}
+    schema_dict["extra_registry"] = extra_info_dict
+
+    n_mapped = len(mapping)
+    n_extra_meas = sum(1 for v in extra_reg.values() if v.get("role") == "extra_measure")
+    n_extra_dim = sum(1 for v in extra_reg.values() if v.get("role") == "extra_dimension")
+    n_stored_only = sum(1 for v in extra_reg.values() if v.get("role") == "stored_only")
+    total_cols = n_mapped + len(extra_reg)
+    schema_dict["coverage"] = ColumnCoverageReport(
+        total_columns=total_cols,
+        mapped_columns=n_mapped,
+        extra_measures=n_extra_meas,
+        extra_dimensions=n_extra_dim,
+        stored_only=n_stored_only,
+        stored_only_columns=n_stored_only,
+        columns=list(extra_info_dict.values()),
+    )
+    return DynamicSchema(**schema_dict)
 
 
 @analytics_router.post("/{file_id}/ai-insights", response_model=AiInsightsResponse)
@@ -438,6 +473,52 @@ def post_chart_data(file_id: str, query: ChartQuery, user: str = Depends(get_cur
     every measure — one request feeds bar, line, donut, combo, scatter, Pareto
     and treemap views.
     """
+    frame = _load_frame(file_id, user)
+    extra_reg = frame.attrs.get("extra_registry", {})
+
+    # Dynamic dimension validation (built-in or valid per-file extra dimension)
+    if query.dimension not in query_engine.DIMENSIONS:
+        if not (
+            query.dimension.startswith("x_dim:")
+            and query.dimension in extra_reg
+            and extra_reg[query.dimension].get("role") == "extra_dimension"
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Dimension '{query.dimension}' is not available for this file.",
+            )
+
+    # Dynamic measure validation (built-in or valid per-file extra measure)
+    if query.measure not in query_engine.MEASURES:
+        if not (
+            query.measure.startswith("x_meas:")
+            and query.measure in extra_reg
+            and extra_reg[query.measure].get("role") == "extra_measure"
+            and query.measure in frame.columns
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Measure '{query.measure}' is not available for this file.",
+            )
+    else:
+        unavailable_reason = query_engine.measure_unavailable_reason(frame, query.measure)
+        if unavailable_reason:
+            raise HTTPException(status_code=422, detail=unavailable_reason)
+
+    # Filter dimension validation
+    if query.filters:
+        for f_dim in query.filters.keys():
+            if f_dim not in query_engine.DIMENSIONS:
+                if not (
+                    f_dim.startswith("x_dim:")
+                    and f_dim in extra_reg
+                    and extra_reg[f_dim].get("role") == "extra_dimension"
+                ):
+                    raise HTTPException(
+                        status_code=422,
+                        detail=f"Filter dimension '{f_dim}' is not available for this file.",
+                    )
+
     current, _previous, _window = _slice(file_id, user, query)
     try:
         return query_engine.aggregate(
@@ -450,6 +531,23 @@ def post_chart_data(file_id: str, query: ChartQuery, user: str = Depends(get_cur
 @analytics_router.post("/{file_id}/heatmap", response_model=HeatmapResponse)
 def post_heatmap(file_id: str, query: ChartQuery, user: str = Depends(get_current_user)):
     """Weekday × week intensity grid for the selected measure."""
+    frame = _load_frame(file_id, user)
+    extra_reg = frame.attrs.get("extra_registry", {})
+    if query.measure not in query_engine.MEASURES:
+        if not (
+            query.measure.startswith("x_meas:")
+            and query.measure in extra_reg
+            and extra_reg[query.measure].get("role") == "extra_measure"
+            and query.measure in frame.columns
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail=f"Measure '{query.measure}' is not available for this file.",
+            )
+    else:
+        unavailable_reason = query_engine.measure_unavailable_reason(frame, query.measure)
+        if unavailable_reason:
+            raise HTTPException(status_code=422, detail=unavailable_reason)
     current, _previous, _window = _slice(file_id, user, query)
     try:
         return query_engine.heatmap(current, measure=query.measure)
@@ -508,33 +606,74 @@ def post_visual_report_pdf(file_id: str, query: AnalysisQuery, user: str = Depen
 
 
 def _assert_report_consistency(analytics, ca_report, daily_summary: list[dict]) -> None:
-    """Fail closed if the report's independent sections disagree."""
-    revenue = round(float(analytics.summary.revenue.value), 2)
-    profit = round(float(analytics.summary.profit.value), 2)
-    cost = round(float(analytics.summary.cost.value), 2)
-    units = int(analytics.summary.units_sold.value)
+    """Check that all figures which are available reconcile across report sections.
 
-    pnl = {line.label: round(float(line.amount), 2) for line in ca_report.pnl}
-    revenue_from_pnl = pnl.get("Net Revenue", pnl.get("Gross Revenue"))
-    profit_from_pnl = pnl.get("Gross Profit")
-    cost_from_pnl = pnl.get("Cost of Goods Sold (COGS)")
+    Optional inputs must not block a valid Date + Line Total report. Compare a
+    measure only when the dashboard, P&L and daily/category sections can all
+    honestly calculate it; unavailable values remain ``None`` / em dashes.
+    """
+    summary = analytics.summary
 
-    if revenue_from_pnl != revenue or profit_from_pnl != profit or cost_from_pnl != cost:
-        raise HTTPException(status_code=500, detail="Report generation stopped because dashboard and report values do not match.")
+    def _metric_value(metric):
+        if metric is None or getattr(metric, "available", True) is False or metric.value is None:
+            return None
+        return round(float(metric.value), 2)
 
-    category_revenue = round(sum(float(r.revenue) for r in ca_report.category_ledger), 2)
-    category_cost = round(sum(float(r.cost) for r in ca_report.category_ledger), 2)
-    category_profit = round(sum(float(r.profit) for r in ca_report.category_ledger), 2)
-    category_units = sum(int(r.units_sold) for r in ca_report.category_ledger)
-    if (category_revenue, category_cost, category_profit, category_units) != (revenue, cost, profit, units):
-        raise HTTPException(status_code=500, detail="Report generation stopped because category totals do not reconcile with dashboard totals.")
+    summary_revenue = _metric_value(summary.revenue)
+    summary_cost = _metric_value(summary.cost)
+    summary_profit = _metric_value(summary.profit)
+    summary_units = _metric_value(summary.units_sold)
+
+    pnl = {
+        line.label: round(float(line.amount), 2)
+        for line in ca_report.pnl
+        if line.amount is not None
+    }
+    report_revenue = pnl.get("Net Revenue", pnl.get("Gross Revenue"))
+    if summary_revenue is not None and report_revenue is not None and report_revenue != summary_revenue:
+        raise HTTPException(status_code=500, detail="Report generation stopped because dashboard and report revenue do not match.")
+
+    report_cost = pnl.get("Cost of Goods Sold (COGS)")
+    report_profit = pnl.get("Gross Profit")
+    if summary_cost is not None and report_cost is not None and summary_cost != report_cost:
+        raise HTTPException(status_code=500, detail="Report generation stopped because dashboard and report cost do not match.")
+    if summary_profit is not None and report_profit is not None and summary_profit != report_profit:
+        raise HTTPException(status_code=500, detail="Report generation stopped because dashboard and report profit do not match.")
+
+    # Category-level revenue should reconcile whenever category grouping exists.
+    # Cost/profit/units are checked only if all category rows have those values.
+    if ca_report.category_ledger:
+        category_revenue = round(sum(float(r.revenue) for r in ca_report.category_ledger), 2)
+        if summary_revenue is not None and category_revenue != summary_revenue:
+            raise HTTPException(status_code=500, detail="Report generation stopped because category revenue does not reconcile with dashboard revenue.")
+        if summary_cost is not None and all(r.cost is not None for r in ca_report.category_ledger):
+            category_cost = round(sum(float(r.cost) for r in ca_report.category_ledger), 2)
+            if category_cost != summary_cost:
+                raise HTTPException(status_code=500, detail="Report generation stopped because category cost does not reconcile with dashboard cost.")
+        if summary_profit is not None and all(r.profit is not None for r in ca_report.category_ledger):
+            category_profit = round(sum(float(r.profit) for r in ca_report.category_ledger), 2)
+            if category_profit != summary_profit:
+                raise HTTPException(status_code=500, detail="Report generation stopped because category profit does not reconcile with dashboard profit.")
+        if summary_units is not None and all(r.units_sold is not None for r in ca_report.category_ledger):
+            category_units = sum(int(r.units_sold) for r in ca_report.category_ledger)
+            if category_units != int(summary_units):
+                raise HTTPException(status_code=500, detail="Report generation stopped because category units do not reconcile with dashboard units.")
 
     daily_revenue = round(sum(float(r["revenue"]) for r in daily_summary), 2)
-    daily_cost = round(sum(float(r["cost"]) for r in daily_summary), 2)
-    daily_profit = round(sum(float(r["profit"]) for r in daily_summary), 2)
-    daily_units = sum(int(r["units_sold"]) for r in daily_summary)
-    if (daily_revenue, daily_cost, daily_profit, daily_units) != (revenue, cost, profit, units):
-        raise HTTPException(status_code=500, detail="Report generation stopped because daily totals do not reconcile with dashboard totals.")
+    if summary_revenue is not None and daily_revenue != summary_revenue:
+        raise HTTPException(status_code=500, detail="Report generation stopped because daily revenue does not reconcile with dashboard revenue.")
+    if summary_cost is not None and all(r["cost"] is not None for r in daily_summary):
+        daily_cost = round(sum(float(r["cost"]) for r in daily_summary), 2)
+        if daily_cost != summary_cost:
+            raise HTTPException(status_code=500, detail="Report generation stopped because daily cost does not reconcile with dashboard cost.")
+    if summary_profit is not None and all(r["profit"] is not None for r in daily_summary):
+        daily_profit = round(sum(float(r["profit"]) for r in daily_summary), 2)
+        if daily_profit != summary_profit:
+            raise HTTPException(status_code=500, detail="Report generation stopped because daily profit does not reconcile with dashboard profit.")
+    if summary_units is not None and all(r["units_sold"] is not None for r in daily_summary):
+        daily_units = sum(int(r["units_sold"]) for r in daily_summary)
+        if daily_units != int(summary_units):
+            raise HTTPException(status_code=500, detail="Report generation stopped because daily units do not reconcile with dashboard units.")
 
 
 # ── PDF assembly (shared by the classic GET and the Pro POST) ───────────────

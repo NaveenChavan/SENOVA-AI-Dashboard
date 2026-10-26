@@ -9,17 +9,17 @@ DataFrame, while reporting every bad cell instead of crashing on it.
 
 Two groups of columns are understood:
 
-**Required (6)** — ``Date``, ``Category``, ``Item``, ``Quantity``,
-``Selling Price``, ``Cost Price``. A row missing any of these is not
-analysable, so it is reported as an error and dropped.
+**Upload rule (Phase 1)** — ``Date`` plus either ``Line Total`` or both
+``Quantity`` and ``Selling Price``. ``Category``, ``Item``, and ``Cost Price``
+are optional; missing category/item values are retained as ``Unspecified``
+rather than silently dropping valid sales.
 
-**Optional** — extra measures (``Line Total``, ``Discount``, ``Tax``,
+**Other optional fields** — extra measures (``Discount``, ``Tax``,
 ``Stock On Hand``) and extra dimensions (``Branch``, ``Payment Mode``,
 ``Customer``, ``Salesperson``, ``Brand``, ``Size``, ``Colour``,
-``Invoice No``). These are never required; when a shop's file happens to
-contain them they unlock extra analysis — slicing every chart by branch or
-payment mode, net-of-discount revenue, and real days-of-cover / reorder
-alerts from stock on hand.
+``Invoice No``). When a shop's file happens to contain them they unlock extra
+analysis — slicing charts by branch or payment mode, net-of-discount revenue,
+and stock-cover / reorder alerts from stock on hand.
 
 Why ``Line Total`` matters (a real correctness fix)
 --------------------------------------------------
@@ -35,23 +35,26 @@ Safe coercion pipeline (never crashes on bad values)
 ----------------------------------------------------
 1. Rename columns via the user-confirmed mapping, or the alias map.
 2. Derive ``Selling Price`` from ``Line Total`` when only the total exists.
-3. Assert the 6 required columns exist (hard error, or soft-fail report).
+3. Assert Date plus Line Total, or Date plus Quantity and Selling Price exists.
 4. ``pd.to_numeric(errors="coerce")`` on every numeric column.
 5. Retry values that are still NaN with currency symbols/commas stripped.
 6. Replace ``inf`` / ``-inf`` with ``NaN`` so ``.astype(int)`` is safe.
 7. ``pd.to_datetime`` twice: ``dayfirst=True`` for DD-MM-YYYY, then ISO.
-8. Blank ``Category`` / ``Item`` → ``NaN`` so ``dropna`` catches them.
+8. Blank ``Category`` / ``Item`` → ``Unspecified``; these fields are optional.
 9. Collect row-level errors from the coerced frame.
-10. ``dropna`` on the 6 required columns → only fully valid rows remain.
+10. Drop only rows missing Date or the selected row-level sales basis.
 11. Cast types, then apply business rules (quantity > 0, no negative prices).
 """
 
+import re
 import pandas as pd
 import numpy as np
 
 # ── Canonical column names ──────────────────────────────────────────────────
 
-#: The 6 fields every uploaded file must provide for analysis to be possible.
+#: Legacy canonical field catalog retained for mapping/classifier compatibility.
+#: This is NOT the Phase 1 upload gate. The actual upload rule is implemented
+#: by ``check_required_columns``: Date + Line Total OR Date + Quantity + Selling Price.
 REQUIRED_COLUMNS: set[str] = {
     "Date",
     "Category",
@@ -481,6 +484,18 @@ def _normalize_col_name(col: str) -> str:
     return col.strip().lstrip("\ufeff").lower()
 
 
+_PII_HEADER_TOKENS: set[str] = {
+    "email", "mail", "phone", "mobile", "contact", "aadhaar",
+    "aadhar", "pan", "ssn", "dob", "birth", "tel", "cell",
+}
+
+
+def _is_pii_header(col: str) -> bool:
+    """Return True if header contains personal/contact identification tokens."""
+    tokens = set(re.split(r"[^a-z0-9]+", col.strip().lower()))
+    return bool(tokens.intersection(_PII_HEADER_TOKENS))
+
+
 def guess_canonical_column(raw_col: str) -> tuple[str | None, str]:
     """
     Best-guess a single raw column name to one of the canonical fields.
@@ -490,6 +505,9 @@ def guess_canonical_column(raw_col: str) -> tuple[str | None, str]:
     UI asks the user to confirm these) or ``"none"`` (no match; the column
     is simply ignored, e.g. "Notes", "HSN", "Remarks").
     """
+    if _is_pii_header(raw_col):
+        return None, "none"
+
     cleaned = _normalize_col_name(raw_col)
 
     if cleaned in COLUMN_ALIAS_MAP:
@@ -650,14 +668,38 @@ def _derive_selling_price_from_line_total(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def check_required_columns(columns: set[str] | list[str] | pd.Index) -> tuple[bool, list[str]]:
+    """
+    Two-field upload validation rule (Phase 1):
+    Path A: Date + Line Total
+    OR
+    Path B: Date + Quantity + Selling Price
+    All other fields (Category, Item, Cost Price, etc.) are strictly optional.
+    """
+    cols = set(columns)
+    missing = []
+    if "Date" not in cols:
+        missing.append("Date")
+    has_path_a = "Line Total" in cols
+    has_path_b = "Quantity" in cols and "Selling Price" in cols
+    if not (has_path_a or has_path_b):
+        if "Quantity" in cols and "Selling Price" not in cols:
+            missing.append("Selling Price (or Line Total)")
+        elif "Selling Price" in cols and "Quantity" not in cols:
+            missing.append("Quantity (or Line Total)")
+        else:
+            missing.append("Line Total or (Quantity and Selling Price)")
+    return len(missing) == 0, missing
+
+
 def _validate_columns_exist(df: pd.DataFrame) -> None:
-    """Raise a user-readable ``ValueError`` listing any missing required column."""
-    missing = REQUIRED_COLUMNS - set(df.columns)
-    if missing:
+    """Raise a user-readable ``ValueError`` listing any missing required column under the two-field rule."""
+    is_valid, missing = check_required_columns(df.columns)
+    if not is_valid:
         raise ValueError(
-            f"Missing required columns after normalisation: {', '.join(sorted(missing))}. "
+            f"Missing required columns after normalisation: {', '.join(missing)}. "
             f"Your file has: {', '.join(str(c) for c in sorted(df.columns))}. "
-            f"Expected one of: {', '.join(sorted(REQUIRED_COLUMNS))}."
+            "Must provide Date + Line Total (or Amount), or Date + Quantity + Selling Price."
         )
 
 
@@ -691,7 +733,7 @@ def normalize_dataframe(
     column_mapping: dict[str, str] | None = None,
 ) -> tuple[pd.DataFrame, list[dict]]:
     """
-    Clean, type, and validate a raw DataFrame.
+    Clean, type, and validate a raw DataFrame under the two-field upload rule.
 
     Parameters
     ----------
@@ -707,32 +749,54 @@ def normalize_dataframe(
     -------
     (clean_valid_df, errors)
         ``clean_valid_df`` holds only rows that passed every check, with
-        required columns typed and any mapped optional columns preserved.
+        required columns typed, mapped optional columns preserved, and up to
+        30 unmapped extra columns deterministically classified.
         ``errors`` is a list of ``{"row", "column", "error"}`` dicts.
     """
-    df = apply_column_mapping(df, column_mapping) if column_mapping else _rename_columns(df)
+    raw_input_df = df.copy()
+
+    # Determine mapped raw columns
+    if column_mapping:
+        mapped_raw = {
+            raw for raw, canonical in column_mapping.items()
+            if raw in raw_input_df.columns and canonical in set(MAPPABLE_FIELDS)
+        }
+        df_mapped = apply_column_mapping(raw_input_df, column_mapping)
+    else:
+        guesses = detect_column_mapping(raw_input_df)
+        mapped_raw = {
+            g["raw_column"] for g in guesses
+            if g.get("suggested_field") in set(MAPPABLE_FIELDS)
+        }
+        df_mapped = _rename_columns(raw_input_df)
+
+    # Classify unmapped extra columns (up to 30) deterministically
+    from app.services.extra_columns import classify_extra_columns
+    extra_registry, raw_to_safe = classify_extra_columns(raw_input_df, mapped_raw)
+
+    # Rename unmapped extra columns to safe slugs
+    df_mapped = df_mapped.rename(columns=raw_to_safe)
 
     # Drop duplicate canonical columns before anything else: two raw columns
     # mapped to one field would make df["Quantity"] a DataFrame, not a
     # Series, and every downstream ``.astype`` would fail cryptically.
-    df = df.loc[:, ~pd.Index(df.columns).duplicated(keep="first")]
+    df_mapped = df_mapped.loc[:, ~pd.Index(df_mapped.columns).duplicated(keep="first")]
 
-    df = _derive_selling_price_from_line_total(df)
+    df_mapped = _derive_selling_price_from_line_total(df_mapped)
 
     try:
-        _validate_columns_exist(df)
+        _validate_columns_exist(df_mapped)
     except ValueError as e:
         if soft_fail:
-            return df.iloc[0:0].copy(), [{"row": 0, "column": "schema", "error": str(e)}]
+            empty_df = df_mapped.iloc[0:0].copy()
+            empty_df.attrs["extra_registry"] = extra_registry
+            return empty_df, [{"row": 0, "column": "schema", "error": str(e)}]
         raise
 
-    df = df.copy()
-
-    # Keep only canonical columns from here on. Unmapped extras are dropped
-    # so nothing unexpected (e.g. a huge free-text notes column) is carried
-    # into the cache, the JSON responses, or the PDF.
-    keep = [c for c in df.columns if c in set(MAPPABLE_FIELDS)]
-    df = df[keep]
+    # Keep canonical columns + safe extra columns
+    canonical_keep = [c for c in df_mapped.columns if c in set(MAPPABLE_FIELDS)]
+    extra_keep = [c for c in df_mapped.columns if c in raw_to_safe.values()]
+    df = df_mapped[canonical_keep + extra_keep].copy()
 
     # ── 1. Snapshot originals so error messages can quote what the user typed ──
     raw = {col: df[col].copy() for col in df.columns}
@@ -743,27 +807,61 @@ def normalize_dataframe(
     for col in numeric_cols:
         df[col] = _coerce_numeric(df[col])
 
+    # Also coerce numeric extra measures
+    for key, info in extra_registry.items():
+        if info.get("role") == "extra_measure" and key in df.columns:
+            df[key] = _coerce_numeric(df[key])
+
     # ── 3. Date parsing: ISO first, then Indian day-first ──
     df["Date"] = _parse_dates(df["Date"])
 
-    # ── 4. Required text columns: blank → NaN so dropna removes the row ──
+    # ── 4. Optional text columns: preserve sales rows when blank ──
+    # Category and Item are useful dimensions, not upload requirements. Keep
+    # otherwise valid sales and make the missing dimension explicit.
     for col in ("Category", "Item"):
-        df.loc[raw[col].apply(_is_empty), col] = np.nan
+        if col in df.columns:
+            empty_mask = raw[col].apply(_is_empty)
+            df.loc[empty_mask, col] = UNSPECIFIED
 
     # ── 5. Row-level error collection from the coerced frame ──
     _collect_all_errors(df, raw, errors)
 
     # ── 6. Drop rows missing any required field ──
-    valid_df = df.dropna(subset=sorted(REQUIRED_COLUMNS)).copy()
+    valid_mask = df["Date"].notna()
+
+    has_line_total = "Line Total" in df.columns
+    has_qty_price = "Quantity" in df.columns and "Selling Price" in df.columns
+
+    if has_line_total and not has_qty_price:
+        valid_mask &= df["Line Total"].notna()
+    elif has_qty_price and not has_line_total:
+        valid_mask &= df["Quantity"].notna() & df["Selling Price"].notna()
+    elif has_line_total and has_qty_price:
+        valid_mask &= df["Line Total"].notna() | (df["Quantity"].notna() & df["Selling Price"].notna())
+
+    valid_df = df[valid_mask].copy()
     if valid_df.empty:
+        valid_df.attrs["extra_registry"] = extra_registry
         return valid_df, errors
 
     # ── 7. Final typing — guaranteed NaN/inf-free by the steps above ──
-    valid_df["Quantity"] = valid_df["Quantity"].astype(int)
-    valid_df["Selling Price"] = valid_df["Selling Price"].astype(float)
-    valid_df["Cost Price"] = valid_df["Cost Price"].astype(float)
+    if "Quantity" in valid_df.columns:
+        # Path A may include an optional, sparsely populated Quantity column.
+        # Nullable Int64 preserves missing cells instead of crashing on astype(int).
+        quantity_values = valid_df["Quantity"]
+        non_null_quantity = quantity_values.dropna()
+        if non_null_quantity.empty or np.all(np.isclose(non_null_quantity % 1, 0)):
+            valid_df["Quantity"] = quantity_values.astype("Int64")
+        else:
+            valid_df["Quantity"] = quantity_values.astype(float)
+    if "Selling Price" in valid_df.columns:
+        valid_df["Selling Price"] = valid_df["Selling Price"].astype(float)
+    if "Cost Price" in valid_df.columns:
+        valid_df["Cost Price"] = valid_df["Cost Price"].astype(float)
     for col in ("Category", "Item"):
-        valid_df[col] = valid_df[col].fillna("").astype(str).str.strip()
+        if col in valid_df.columns:
+            values = valid_df[col].astype(str).str.strip()
+            valid_df[col] = values.mask(values.isin(("", "nan", "None", "NaT")), UNSPECIFIED)
 
     # Optional measures: a blank discount/tax means "none charged", so 0 is
     # the correct fill. Stock On Hand is deliberately left as NaN when
@@ -773,17 +871,54 @@ def normalize_dataframe(
             valid_df[col] = valid_df[col].fillna(0.0).astype(float).clip(lower=0.0)
     if "Stock On Hand" in valid_df.columns:
         valid_df["Stock On Hand"] = valid_df["Stock On Hand"].astype(float)
+    if "MRP" in valid_df.columns:
+        # Unknown MRP is not the same as an actual zero MRP. Retain NaN so
+        # dynamic availability and discount calculations can degrade honestly.
+        valid_df["MRP"] = valid_df["MRP"].astype(float).clip(lower=0.0)
 
-    # Optional dimensions: blank → "Unspecified" so grouping stays complete
-    # and no row is silently excluded from a branch/payment-mode breakdown.
+    # Extra measures: preserve missing / non-numeric cells as NaN. Unlike an
+    # explicit Discount or Tax field (where blank often means zero), an
+    # arbitrary extra header such as GST %, Delivery Charge or Margin has no
+    # universal blank-value semantics. Aggregations will report the measure as
+    # unavailable instead of silently averaging blanks as zero or under-summing.
+    for key, info in extra_registry.items():
+        if info.get("role") == "extra_measure" and key in valid_df.columns:
+            valid_df[key] = valid_df[key].astype(float)
+
     for col in OPTIONAL_DIMENSION_COLUMNS:
         if col in valid_df.columns:
             values = valid_df[col].astype(str).str.strip()
             valid_df[col] = values.mask(values.isin(("", "nan", "None", "NaT")), UNSPECIFIED)
 
+    if "Customer" in valid_df.columns:
+        from app.services.pii_mask import mask_text
+        valid_df["Customer"] = valid_df["Customer"].apply(
+            lambda v: mask_text(v) if v != UNSPECIFIED else v
+        )
+
+    # Extra dimensions: blank → "Unspecified"
+    for key, info in extra_registry.items():
+        if info.get("role") == "extra_dimension" and key in valid_df.columns:
+            values = valid_df[key].astype(str).str.strip()
+            valid_df[key] = values.mask(values.isin(("", "nan", "None", "NaT")), UNSPECIFIED)
+
+    # Stored-only data is never exposed as a facet or measure. For columns
+    # classified as personal, also redact the value in the normalised analytics
+    # frame itself; keeping a raw upload on disk is separate from analytics access.
+    for key, info in extra_registry.items():
+        if info.get("role") == "stored_only" and key in valid_df.columns:
+            values = valid_df[key].fillna("").astype(str).str.strip()
+            if info.get("class_name") == "personal":
+                valid_df[key] = values.map(lambda value: "[redacted]" if value else "")
+            else:
+                valid_df[key] = values
+
     # ── 8. Business rules (physically impossible values) ──
     valid_df, business_errors = _validate_business_rules(valid_df)
     errors.extend(business_errors)
+
+    # Attach per-file extra registry sidecar
+    valid_df.attrs["extra_registry"] = extra_registry
 
     return valid_df, errors
 
@@ -808,10 +943,22 @@ def _collect_all_errors(df: pd.DataFrame, raw: dict, errors: list) -> None:
     a required column, non-integer quantities, and unparseable values in an
     optional numeric column (reported, but never a reason to drop the row).
     """
-    # Required numeric columns — a failure here drops the row.
-    for col in ("Quantity", "Selling Price", "Cost Price"):
+    # Required numeric columns if present
+    for col in ("Quantity", "Selling Price", "Cost Price", "Line Total"):
+        if col not in df.columns:
+            continue
         for idx in df.index[df[col].isna()]:
             orig = raw[col].loc[idx] if col in raw else None
+            # When this row already has a valid Line Total, Quantity and
+            # Selling Price are optional analytics inputs. Their blank cells
+            # must not inflate the upload's row-error count or invalidate sales.
+            has_line_total_fallback = (
+                col in {"Quantity", "Selling Price"}
+                and "Line Total" in df.columns
+                and pd.notna(df.at[idx, "Line Total"])
+            )
+            if _is_empty(orig) and has_line_total_fallback:
+                continue
             if _is_empty(orig):
                 errors.append({"row": int(idx), "column": col, "error": f"Missing {col}"})
             else:
@@ -824,38 +971,52 @@ def _collect_all_errors(df: pd.DataFrame, raw: dict, errors: list) -> None:
                 )
 
     # Quantity must be a whole number of pieces.
-    qty_ok = df["Quantity"].notna()
-    not_whole = pd.Series(False, index=df.index)
-    if qty_ok.any():
-        valid_qty = df.loc[qty_ok, "Quantity"]
-        not_whole.loc[qty_ok] = valid_qty != valid_qty.astype(int)
-    for idx in df.index[not_whole]:
-        errors.append(
-            {
-                "row": int(idx),
-                "column": "Quantity",
-                "error": f"Invalid Quantity: Expected Integer, received Number ('{raw['Quantity'].loc[idx]}')",
-            }
-        )
-
-    # Date
-    for idx in df.index[df["Date"].isna()]:
-        orig = raw["Date"].loc[idx]
-        if _is_empty(orig):
-            errors.append({"row": int(idx), "column": "Date", "error": "Missing Date"})
-        else:
+    if "Quantity" in df.columns:
+        qty_ok = df["Quantity"].notna()
+        not_whole = pd.Series(False, index=df.index)
+        if qty_ok.any():
+            valid_qty = df.loc[qty_ok, "Quantity"]
+            not_whole.loc[qty_ok] = valid_qty != valid_qty.astype(int)
+        for idx in df.index[not_whole]:
             errors.append(
                 {
                     "row": int(idx),
-                    "column": "Date",
-                    "error": f"Invalid Date: Expected Valid Date, received '{str(orig)[:80]}'",
+                    "column": "Quantity",
+                    "error": f"Invalid Quantity: Expected Integer, received Number ('{raw['Quantity'].loc[idx]}')",
                 }
             )
 
-    # Required text columns
+    # Date
+    if "Date" in df.columns:
+        for idx in df.index[df["Date"].isna()]:
+            orig = raw["Date"].loc[idx] if "Date" in raw else None
+            if _is_empty(orig):
+                errors.append({"row": int(idx), "column": "Date", "error": "Missing Date"})
+            else:
+                errors.append(
+                    {
+                        "row": int(idx),
+                        "column": "Date",
+                        "error": f"Invalid Date: Expected Valid Date, received '{str(orig)[:80]}'",
+                    }
+                )
+
+    # Required text columns if present
     for col in ("Category", "Item"):
+        if col not in df.columns:
+            continue
         for idx in df.index[df[col].isna()]:
-            orig = raw[col].loc[idx]
+            orig = raw[col].loc[idx] if col in raw else None
+            # When this row already has a valid Line Total, Quantity and
+            # Selling Price are optional analytics inputs. Their blank cells
+            # must not inflate the upload's row-error count or invalidate sales.
+            has_line_total_fallback = (
+                col in {"Quantity", "Selling Price"}
+                and "Line Total" in df.columns
+                and pd.notna(df.at[idx, "Line Total"])
+            )
+            if _is_empty(orig) and has_line_total_fallback:
+                continue
             if _is_empty(orig):
                 errors.append({"row": int(idx), "column": col, "error": f"Missing {col}"})
             else:
@@ -893,19 +1054,21 @@ def _validate_business_rules(df: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]
     - ``Quantity <= 0``      — a sale of zero or negative pieces
     - ``Selling Price < 0``  — negative price
     - ``Cost Price < 0``     — negative cost
-
-    Deliberately **not** flagged: ``Cost Price > Selling Price``. Selling
-    below cost is a real clearance-sale scenario, and flagging it would
-    delete exactly the rows a margin-leak insight needs to find.
+    - ``Line Total < 0``     — negative total
     """
     errors: list[dict] = []
     valid = pd.Series(True, index=df.index)
 
-    checks = (
-        ("Quantity", df["Quantity"] <= 0, "Quantity must be greater than zero."),
-        ("Selling Price", df["Selling Price"] < 0, "Selling Price cannot be negative."),
-        ("Cost Price", df["Cost Price"] < 0, "Cost Price cannot be negative."),
-    )
+    checks = []
+    if "Quantity" in df.columns:
+        checks.append(("Quantity", df["Quantity"] <= 0, "Quantity must be greater than zero."))
+    if "Selling Price" in df.columns:
+        checks.append(("Selling Price", df["Selling Price"] < 0, "Selling Price cannot be negative."))
+    if "Cost Price" in df.columns:
+        checks.append(("Cost Price", (df["Cost Price"] < 0).fillna(False), "Cost Price cannot be negative."))
+    if "Line Total" in df.columns:
+        checks.append(("Line Total", (df["Line Total"] < 0).fillna(False), "Line Total cannot be negative."))
+
     for column, failed_mask, message in checks:
         for idx in df.index[failed_mask]:
             errors.append({"row": int(idx), "column": column, "error": message})

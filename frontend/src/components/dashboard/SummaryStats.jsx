@@ -32,15 +32,21 @@ function Trend({ metric }) {
   )
 }
 
-export default function SummaryStats({ summary, discountMetrics }) {
+export default function SummaryStats({ summary, discountMetrics, discountAvailability, discountPctAvailability }) {
   if (!summary) return null
 
-  const revenue = summary.revenue?.value ?? 0
-  const profit = summary.profit?.value ?? 0
-  const cost = summary.cost?.value ?? 0
-  const units = summary.units_sold?.value ?? 0
-  const unique = summary.unique_items_sold?.value ?? 0
-  const margin = revenue > 0 ? (profit / revenue) * 100 : null
+  const revenueAvailable = summary.revenue?.available !== false && summary.revenue?.value != null
+  const profitAvailable = summary.profit?.available !== false && summary.profit?.value != null
+  const costAvailable = summary.cost?.available !== false && summary.cost?.value != null
+  const unitsAvailable = summary.units_sold?.available !== false && summary.units_sold?.value != null
+  const uniqueAvailable = summary.unique_items_sold?.available !== false && summary.unique_items_sold?.value != null
+
+  const revenue = revenueAvailable ? summary.revenue.value : 0
+  const profit = profitAvailable ? summary.profit.value : null
+  const cost = costAvailable ? summary.cost.value : null
+  const units = unitsAvailable ? summary.units_sold.value : null
+  const unique = uniqueAvailable ? summary.unique_items_sold.value : null
+  const margin = (revenueAvailable && profitAvailable && revenue > 0) ? (profit / revenue) * 100 : null
 
   const tiles = [
     {
@@ -52,35 +58,72 @@ export default function SummaryStats({ summary, discountMetrics }) {
     },
     {
       label: 'Profit',
-      value: formatCurrency(profit),
-      colour: profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)',
-      sub: margin != null ? `${formatPercent(margin, 1)} of revenue` : null,
-      metric: summary.profit,
+      value: profitAvailable ? formatCurrency(profit) : '—',
+      colour: profitAvailable ? (profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)') : 'var(--text-muted)',
+      sub: profitAvailable
+        ? (margin != null ? `${formatPercent(margin, 1)} of revenue` : null)
+        : (summary.profit?.reason || 'Not available: needs Cost Price'),
+      metric: profitAvailable ? summary.profit : null,
     },
     {
       label: 'Cost',
-      value: formatCurrency(cost),
-      colour: 'var(--text-primary)',
-      sub: revenue > 0 ? `${formatPercent((cost / revenue) * 100, 1)} of revenue` : null,
-      metric: summary.cost,
+      value: costAvailable ? formatCurrency(cost) : '—',
+      colour: costAvailable ? 'var(--text-primary)' : 'var(--text-muted)',
+      sub: costAvailable
+        ? (revenue > 0 ? `${formatPercent((cost / revenue) * 100, 1)} of revenue` : null)
+        : (summary.cost?.reason || 'Not available: needs Cost Price'),
+      metric: costAvailable ? summary.cost : null,
     },
     {
       label: 'Units Sold',
-      value: formatNumber(units),
-      colour: 'var(--text-primary)',
-      sub: `${formatNumber(unique)} unique SKU${unique === 1 ? '' : 's'}`,
-      metric: summary.units_sold,
+      value: unitsAvailable ? formatNumber(units) : '—',
+      colour: unitsAvailable ? 'var(--text-primary)' : 'var(--text-muted)',
+      sub: unitsAvailable
+        ? (uniqueAvailable ? `${formatNumber(unique)} unique SKU${unique === 1 ? '' : 's'}` : null)
+        : (summary.units_sold?.reason || 'Not available: needs Quantity'),
+      metric: unitsAvailable ? summary.units_sold : null,
     },
     {
       label: 'Unique Items',
-      value: formatNumber(unique),
-      colour: 'var(--text-primary)',
-      sub: units > 0 ? `${(units / Math.max(unique, 1)).toFixed(1)} units per item` : null,
+      value: uniqueAvailable ? formatNumber(unique) : '—',
+      colour: uniqueAvailable ? 'var(--text-primary)' : 'var(--text-muted)',
+      sub: uniqueAvailable
+        ? (unitsAvailable && units > 0 ? `${(units / Math.max(unique, 1)).toFixed(1)} units per item` : null)
+        : (summary.unique_items_sold?.reason || 'Not available: needs Item'),
       metric: null,
     },
   ]
 
-  if (discountMetrics && discountMetrics.valid_discount_rows > 0) {
+  if (discountAvailability || discountPctAvailability) {
+    const discountReady = discountAvailability?.available === true
+    const discountPctReady = discountPctAvailability?.available === true
+    tiles.push(
+      {
+        label: 'Discount Given',
+        value: discountReady && discountMetrics?.discount_given != null
+          ? formatCurrency(discountMetrics.discount_given)
+          : '—',
+        colour: discountReady ? 'var(--accent-red)' : 'var(--text-muted)',
+        sub: discountReady
+          ? 'Total discount recorded for the selected period'
+          : (discountAvailability?.reason || 'Not available: needs Discount or MRP + Selling Price + Quantity'),
+        metric: null,
+      },
+      {
+        label: 'Discount %',
+        value: discountPctReady && discountMetrics?.discount_pct != null
+          ? formatPercent(discountMetrics.discount_pct, 1)
+          : '—',
+        colour: discountPctReady ? 'var(--accent-red)' : 'var(--text-muted)',
+        sub: discountPctReady
+          ? 'of list price (MRP) value'
+          : (discountPctAvailability?.reason || 'Not available: needs MRP + Selling Price + Quantity'),
+        metric: null,
+      }
+    )
+  } else if (discountMetrics && discountMetrics.valid_discount_rows > 0) {
+    // Backwards-compatible behaviour for isolated/legacy renders that don't
+    // pass the file-specific schema yet.
     tiles.push(
       {
         label: 'Discount Given',

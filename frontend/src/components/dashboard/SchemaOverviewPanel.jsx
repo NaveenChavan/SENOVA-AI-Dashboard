@@ -27,6 +27,8 @@ export default function SchemaOverviewPanel({ schema, loading }) {
   const measures = schema.measures ?? []
   const missing = schema.missing_required_columns ?? []
 
+  const coverage = schema.coverage
+
   const availableCount = kpi.filter((card) => card.available).length
   const blocked = kpi.filter((card) => !card.available && card.reason)
 
@@ -59,6 +61,23 @@ export default function SchemaOverviewPanel({ schema, loading }) {
         . Anything marked unavailable below says what would unlock it.
       </p>
 
+      {coverage && (
+        <div className="flex flex-wrap items-center gap-3 mt-2 pt-2 text-[12px]" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+          <span style={{ color: 'var(--text-secondary)' }}>
+            <strong>{coverage.mapped_columns}</strong> mapped
+          </span>
+          <span style={{ color: 'var(--text-secondary)' }}>
+            <strong>{coverage.extra_dimensions}</strong> extra dimensions
+          </span>
+          <span style={{ color: 'var(--text-secondary)' }}>
+            <strong>{coverage.extra_measures}</strong> extra measures
+          </span>
+          <span style={{ color: 'var(--text-secondary)' }}>
+            <strong>{coverage.stored_only_columns}</strong> stored-only
+          </span>
+        </div>
+      )}
+
       <ul className="flex flex-wrap gap-1.5 mt-2.5">
         {kpi.map((card) => (
           <li key={card.key}>
@@ -84,7 +103,7 @@ export default function SchemaOverviewPanel({ schema, loading }) {
       )}
 
       {open && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--gap)] mt-3">
+        <div className={`grid grid-cols-1 md:grid-cols-3 ${coverage?.details?.length ? 'lg:grid-cols-4' : ''} gap-[var(--gap)] mt-3`}>
           <CapabilityColumn title="Charts" empty="No charts described.">
             {charts.map((chart) => (
               <CapabilityRow
@@ -118,6 +137,20 @@ export default function SchemaOverviewPanel({ schema, loading }) {
               />
             ))}
           </CapabilityColumn>
+
+          {coverage?.details?.length > 0 && (
+            <CapabilityColumn title="Unmapped columns" empty="No unmapped columns.">
+              {coverage.details.map((item) => (
+                <CapabilityRow
+                  key={item.column_name}
+                  label={item.column_name}
+                  available={item.role === 'dimension' || item.role === 'numeric'}
+                  reason={item.reason}
+                  suffix={`Role: ${item.role}${item.aggregation ? ` (${item.aggregation})` : ''}`}
+                />
+              ))}
+            </CapabilityColumn>
+          )}
         </div>
       )}
     </section>

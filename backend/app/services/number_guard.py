@@ -243,6 +243,46 @@ def _expected_values(metrics: dict, evidence: list[str]) -> list[float]:
     return values
 
 
+_WEEKDAYS = {
+    "monday": "mon", "tuesday": "tue", "wednesday": "wed", "thursday": "thu",
+    "friday": "fri", "saturday": "sat", "sunday": "sun",
+    "mon": "mon", "tue": "tue", "wed": "wed", "thu": "thu", "fri": "fri",
+    "sat": "sat", "sun": "sun",
+}
+
+
+def _check_weekday_consistency(text: str, metrics: dict, evidence: list[str]) -> list[str]:
+    """Ensure AI rewrite does not invert or contradict calculated best/worst weekdays."""
+    best = str(metrics.get("best_day") or (evidence[0] if evidence else "")).strip().lower()
+    worst = str(metrics.get("worst_day") or (evidence[1] if len(evidence) > 1 else "")).strip().lower()
+    if not best or not worst:
+        return []
+
+    best_short = _WEEKDAYS.get(best, best[:3])
+    worst_short = _WEEKDAYS.get(worst, worst[:3])
+
+    text_lower = text.lower()
+    positive_words = ["strongest", "busiest", "best day", "highest takings", "top day", "most sales"]
+    negative_words = ["weakest", "slowest", "worst day", "lowest takings", "least takings", "least sales"]
+
+    offenders = []
+    for pos in positive_words:
+        if pos in text_lower:
+            idx = text_lower.find(pos)
+            surrounding = text_lower[max(0, idx - 45): min(len(text_lower), idx + len(pos) + 45)]
+            if (worst in surrounding or worst_short in surrounding) and not (best in surrounding or best_short in surrounding):
+                offenders.append(f"Inverted weekday: {worst} claimed as {pos}")
+
+    for neg in negative_words:
+        if neg in text_lower:
+            idx = text_lower.find(neg)
+            surrounding = text_lower[max(0, idx - 45): min(len(text_lower), idx + len(neg) + 45)]
+            if (best in surrounding or best_short in surrounding) and not (worst in surrounding or worst_short in surrounding):
+                offenders.append(f"Inverted weekday: {best} claimed as {neg}")
+
+    return offenders
+
+
 def verify(text: str, metrics: dict | None = None, evidence: list[str] | None = None) -> tuple[bool, list[str]]:
     """
     Check every load-bearing number in ``text`` against known values.
@@ -278,5 +318,10 @@ def verify(text: str, metrics: dict | None = None, evidence: list[str] | None = 
 
         if not any(_close(value, expected) for expected in known):
             offenders.append(token.strip())
+
+    if metrics and ("best_average" in metrics or "best_day" in metrics):
+        day_offenders = _check_weekday_consistency(text, metrics, evidence or [])
+        if day_offenders:
+            offenders.extend(day_offenders)
 
     return (not offenders), offenders

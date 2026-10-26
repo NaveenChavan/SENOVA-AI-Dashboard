@@ -253,19 +253,16 @@ def compute_insights(
 
 
 def _daily_revenue(prepped: pd.DataFrame) -> pd.DataFrame:
-    """
-    Daily revenue/profit/units for the slice, zero-filled across every
-    calendar day. Zero-filling matters: a closed Sunday is real information,
-    and dropping it would make the series look smoother than the shop is.
+    """Return the revenue-only daily series used by anomaly checks.
+
+    The anomaly detector does not need Quantity or Cost Price. Keeping its
+    aggregation limited to revenue lets a valid Date + Line Total upload use
+    revenue insights without manufacturing units/profit or raising KeyError.
     """
     daily = (
         prepped.assign(_day=prepped["Date"].dt.date)
         .groupby("_day", as_index=False)
-        .agg(
-            revenue=("_row_revenue", "sum"),
-            profit=("_row_profit", "sum"),
-            units=("Quantity", "sum"),
-        )
+        .agg(revenue=("_row_revenue", "sum"))
         .sort_values("_day")
     )
     return _zero_fill_daily(daily, prepped["Date"].min(), prepped["Date"].max())
@@ -402,7 +399,7 @@ def _mover_insights(prepped: pd.DataFrame, previous: pd.DataFrame, period_label:
     Only items present in *both* periods are compared: a brand-new item has no
     "previous" to grow from, and reporting it as +100% would be noise.
     """
-    if previous is None or previous.empty:
+    if previous is None or previous.empty or "Item" not in prepped.columns or "Item" not in previous.columns:
         return []
 
     prev_prepped = _prepare(previous)
@@ -461,9 +458,13 @@ def _mover_insights(prepped: pd.DataFrame, previous: pd.DataFrame, period_label:
 def _margin_leak_insights(prepped: pd.DataFrame) -> list[Insight]:
     """
     Find an item that sells well but earns little: either a negative margin,
-    or a margin far below the median of its own category (comparing within the
-    category avoids flagging a whole low-margin product line as broken).
+    or a margin far below the median of its own category.
     """
+    required = {"Item", "Category", "Quantity", "Cost Price", "Date"}
+    if not required.issubset(prepped.columns):
+        return []
+    if prepped["Quantity"].isna().any() or prepped["Cost Price"].isna().any():
+        return []
     totals = _item_totals(prepped)
     total_revenue = float(totals["revenue"].sum())
     if total_revenue <= 0 or totals.empty:
@@ -549,7 +550,10 @@ def _margin_leak_insights(prepped: pd.DataFrame) -> list[Insight]:
 
 
 def _discount_leader_insight(prepped: pd.DataFrame) -> Insight | None:
-    if "MRP" not in prepped.columns:
+    required = {"Item", "MRP", "Selling Price", "Quantity"}
+    if not required.issubset(prepped.columns):
+        return None
+    if any(prepped[column].isna().any() for column in ("MRP", "Selling Price", "Quantity")):
         return None
         
     totals = prepped.groupby("Item").agg(
@@ -601,6 +605,11 @@ def _discount_leader_insight(prepped: pd.DataFrame) -> Insight | None:
     return None
 
 def _margin_gap_insight(prepped: pd.DataFrame) -> list[Insight]:
+    required = {"Item", "Quantity", "Cost Price"}
+    if not required.issubset(prepped.columns):
+        return []
+    if prepped["Quantity"].isna().any() or prepped["Cost Price"].isna().any():
+        return []
     totals = prepped.groupby("Item").agg(
         revenue=("_row_revenue", "sum"),
         cost=("_row_cost", "sum")
@@ -651,10 +660,16 @@ def _payment_mix_insight(prepped: pd.DataFrame) -> Insight | None:
     if "Payment Mode" not in prepped.columns:
         return None
         
-    methods = prepped.groupby("Payment Mode").agg(
-        revenue=("_row_revenue", "sum"),
-        cost=("_row_cost", "sum")
+    has_cost = (
+        "Quantity" in prepped.columns
+        and "Cost Price" in prepped.columns
+        and prepped["Quantity"].notna().all()
+        and prepped["Cost Price"].notna().all()
     )
+    aggregation = {"revenue": ("_row_revenue", "sum")}
+    if has_cost:
+        aggregation["cost"] = ("_row_cost", "sum")
+    methods = prepped.groupby("Payment Mode").agg(**aggregation)
     if len(methods) < 2:
         return None
         
@@ -662,11 +677,14 @@ def _payment_mix_insight(prepped: pd.DataFrame) -> Insight | None:
     if total_rev <= 0:
         return None
 
-    methods["margin_pct"] = np.where(
-        methods["revenue"] > 0,
-        ((methods["revenue"] - methods["cost"]) / methods["revenue"]) * 100,
-        np.nan
-    )
+    if has_cost:
+        methods["margin_pct"] = np.where(
+            methods["revenue"] > 0,
+            ((methods["revenue"] - methods["cost"]) / methods["revenue"]) * 100,
+            np.nan
+        )
+    else:
+        methods["margin_pct"] = np.nan
         
     dominant = methods["revenue"].idxmax()
     dominant_rev = float(methods["revenue"].max())
@@ -713,7 +731,13 @@ def _concentration_insight(prepped: pd.DataFrame) -> Insight | None:
     How many items make up 80% of revenue. A very small number is a real
     operational risk: one stockout in that handful hits the whole shop.
     """
-    totals = _item_totals(prepped).sort_values("revenue", ascending=False)
+    if "Item" not in prepped.columns:
+        return None
+    totals = (
+        prepped.groupby("Item", as_index=False)
+        .agg(revenue=("_row_revenue", "sum"))
+        .sort_values("revenue", ascending=False)
+    )
     item_count = len(totals)
     total_revenue = float(totals["revenue"].sum())
     if item_count < MIN_ITEMS_FOR_CONCENTRATION or total_revenue <= 0:
@@ -778,23 +802,35 @@ def _weekday_insight(prepped: pd.DataFrame) -> Insight | None:
     if worst_value <= 0 or best_value / worst_value < MIN_WEEKDAY_RATIO:
         return None
 
+    _WEEKDAY_FULL_NAMES = {
+        "Mon": "Monday",
+        "Tue": "Tuesday",
+        "Wed": "Wednesday",
+        "Thu": "Thursday",
+        "Fri": "Friday",
+        "Sat": "Saturday",
+        "Sun": "Sunday",
+    }
+    best_name = _WEEKDAY_FULL_NAMES.get(str(best), str(best))
+    worst_name = _WEEKDAY_FULL_NAMES.get(str(worst), str(worst))
+
     return Insight(
         id="weekday-timing",
         kind="timing",
         severity="neutral",
-        title=f"{best} is your strongest day, {worst} the weakest",
+        title=f"{best_name} is your strongest day, {worst_name} the weakest",
         message=(
-            f"{best} averages {_inr(best_value)} per day against {_inr(worst_value)} on {worst} — "
+            f"{best_name} averages {_inr(best_value)} per day against {_inr(worst_value)} on {worst_name} — "
             f"{best_value / worst_value:.1f}× the takings."
         ),
-        action=f"Staff and stock up for {best}; try a promotion or shorter hours on {worst}.",
+        action=f"Staff and stock up for {best_name}; try a promotion or shorter hours on {worst_name}.",
         metrics={
             "best_average": safe_float(best_value),
             "worst_average": safe_float(worst_value),
             "ratio": safe_float(best_value / worst_value),
             "impact": safe_float(best_value - worst_value),
         },
-        evidence=[str(best), str(worst)],
+        evidence=[str(best), str(worst), best_name, worst_name],
     )
 
 
@@ -803,7 +839,12 @@ def _weekday_insight(prepped: pd.DataFrame) -> Insight | None:
 
 def _dead_stock_insight(prepped: pd.DataFrame) -> Insight | None:
     """Items with no sale for ``DEAD_STOCK_DAYS``, and what they earned when they did sell."""
-    totals = _item_totals(prepped)
+    if not {"Item", "Date"}.issubset(prepped.columns):
+        return None
+    totals = (
+        prepped.groupby("Item", as_index=False)
+        .agg(revenue=("_row_revenue", "sum"), last_sale=("Date", "max"))
+    )
     if totals.empty:
         return None
 

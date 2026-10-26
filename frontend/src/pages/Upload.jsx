@@ -7,6 +7,7 @@ import useSalesStore from '../store/useSalesStore'
 import FileDropzone from '../components/upload/FileDropzone'
 import ColumnMappingScreen from '../components/upload/ColumnMappingScreen'
 import AiConsentModal from '../components/upload/AiConsentModal'
+import InvoiceTotalWarningModal from '../components/upload/InvoiceTotalWarningModal'
 import AiNoticeBanner, { PipelineTimingNote } from '../components/upload/AiNoticeBanner'
 import RowErrorsBanner from '../components/dashboard/RowErrorsBanner'
 import Icon from '../components/common/Icon'
@@ -91,6 +92,9 @@ export default function Upload() {
     confirmMapping,
     cancelMapping,
     mappingPreview,
+    mappingWarnings,
+    acknowledgeMappingWarnings,
+    dismissMappingWarnings,
     isLoading,
     validationMessage,
     error,
@@ -135,23 +139,42 @@ export default function Upload() {
     }
   }
 
-  const handleConfirmMapping = async (mapping) => {
+  const handleConfirmMapping = async (mapping, userSelectedColumns = [], rememberMapping = false) => {
     const fileId = useSalesStore.getState().fileId
     validateStartRef.current = Date.now()
     try {
-      const response = await confirmMapping(fileId, mapping)
-      // Ensure minimum visible duration for "Validate rows" step (step 3)
-      const elapsed = Date.now() - validateStartRef.current
-      if (elapsed < MIN_STEP_DURATION) {
-        await new Promise(resolve => setTimeout(resolve, MIN_STEP_DURATION - elapsed))
-      }
-      setUploadDone(true)
-      // Hold step 4 ("Build dashboard") visibly before navigating
-      await new Promise(resolve => setTimeout(resolve, STEP4_HOLD_DURATION))
-      if (response.valid_count > 0) navigate(`/dashboard?fileId=${fileId}`)
+      const response = await confirmMapping(fileId, mapping, userSelectedColumns, rememberMapping)
+      // A null response means either a stored error or a non-blocking 409
+      // advisory (warning dialog now open) — in both cases, do not navigate.
+      await finishAndNavigate(response, fileId)
     } catch {
       // Error already stored; stay on this page to show it.
     }
+  }
+
+  // Module 2.4: user acknowledged the invoice-total advisory → retry with
+  // acknowledge_warnings=true using the preserved mapping, then navigate.
+  const handleAcknowledgeWarning = async () => {
+    const fileId = useSalesStore.getState().fileId
+    validateStartRef.current = Date.now()
+    try {
+      const response = await acknowledgeMappingWarnings()
+      await finishAndNavigate(response, fileId)
+    } catch {
+      // Error already stored; stay on this page to show it.
+    }
+  }
+
+  // Shared success path: hold the final pipeline steps visibly, then navigate.
+  const finishAndNavigate = async (response, fileId) => {
+    if (!response || !(response.valid_count > 0)) return
+    const elapsed = Date.now() - validateStartRef.current
+    if (elapsed < MIN_STEP_DURATION) {
+      await new Promise(resolve => setTimeout(resolve, MIN_STEP_DURATION - elapsed))
+    }
+    setUploadDone(true)
+    await new Promise(resolve => setTimeout(resolve, STEP4_HOLD_DURATION))
+    navigate(`/dashboard?fileId=${fileId}`)
   }
 
   // Real pipeline position: 0 while choosing a file, 1 once mapping is shown,
@@ -193,6 +216,11 @@ export default function Upload() {
           onConfirm={handleConfirmMapping}
           onCancel={cancelMapping}
           submitting={isLoading}
+          initialOpenClarification={Boolean(
+            mappingPreview?.detected_columns?.some(
+              (c) => !c.recognised_unused && ((c.evidence_candidates && c.evidence_candidates.length > 0) || Boolean(c.needs_review))
+            )
+          )}
         />
 
         {error && (
@@ -207,6 +235,14 @@ export default function Upload() {
           onAccept={() => answerConsent(true)}
           onDecline={() => answerConsent(false)}
           onClose={() => setReopeningConsent(false)}
+        />
+
+        <InvoiceTotalWarningModal
+          open={mappingWarnings.length > 0}
+          warnings={mappingWarnings}
+          submitting={isLoading}
+          onGoBack={dismissMappingWarnings}
+          onAcknowledge={handleAcknowledgeWarning}
         />
       </section>
     )

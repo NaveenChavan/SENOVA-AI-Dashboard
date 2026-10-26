@@ -36,7 +36,12 @@ function PnLStatement({ pnl }) {
                     borderTop: line.is_subtotal ? '1px solid var(--border-strong)' : undefined,
                   }}
                 >
-                  {line.label}
+                  <div>{line.label}</div>
+                  {line.availability_reason && (
+                    <div className="text-[10px] font-normal" style={{ color: 'var(--text-muted)' }}>
+                      {line.availability_reason}
+                    </div>
+                  )}
                 </th>
                 <td
                   className="font-mono"
@@ -46,7 +51,7 @@ function PnLStatement({ pnl }) {
                     borderTop: line.is_subtotal ? '1px solid var(--border-strong)' : undefined,
                   }}
                 >
-                  {formatCurrencyExact(line.amount)}
+                  {line.amount == null ? '—' : formatCurrencyExact(line.amount)}
                 </td>
                 <td
                   className="font-mono"
@@ -84,14 +89,14 @@ function CategoryLedger({ rows }) {
             {rows.map((row) => (
               <tr key={row.category}>
                 <th scope="row">{row.category}</th>
-                <td className="font-mono">{formatNumber(row.units_sold)}</td>
-                <td className="font-mono">{formatCurrencyExact(row.revenue)}</td>
-                <td className="font-mono">{formatCurrencyExact(row.cost)}</td>
+                <td className="font-mono">{row.units_sold == null ? '—' : formatNumber(row.units_sold)}</td>
+                <td className="font-mono">{row.revenue == null ? '—' : formatCurrencyExact(row.revenue)}</td>
+                <td className="font-mono">{row.cost == null ? '—' : formatCurrencyExact(row.cost)}</td>
                 <td
                   className="font-mono"
-                  style={{ color: row.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
+                  style={{ color: row.profit == null ? 'var(--text-muted)' : row.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
                 >
-                  {formatCurrencyExact(row.profit)}
+                  {row.profit == null ? '—' : formatCurrencyExact(row.profit)}
                 </td>
                 <td className="font-mono">{formatPercent(row.margin_percentage)}</td>
               </tr>

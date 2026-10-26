@@ -84,10 +84,10 @@ export default function ChartDataTable({ data, onSelect, selectedLabel }) {
               <td className="font-mono" style={{ color: 'var(--text-primary)' }}>
                 {formatCurrency(point.revenue)}
               </td>
-              <td className="font-mono" style={{ color: point.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}>
-                {formatCurrency(point.profit)}
+              <td className="font-mono" style={{ color: point.profit == null ? 'var(--text-muted)' : point.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}>
+                {point.profit == null ? '—' : formatCurrency(point.profit)}
               </td>
-              <td className="font-mono">{formatNumber(point.units)}</td>
+              <td className="font-mono">{point.units == null ? '—' : formatNumber(point.units)}</td>
               <td className="font-mono">{formatPercent(point.margin_pct)}</td>
               <td className="font-mono" style={{ color: 'var(--text-muted)' }}>
                 {formatPercent(point.share_pct)}

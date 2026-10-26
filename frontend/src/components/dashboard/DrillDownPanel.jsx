@@ -135,11 +135,11 @@ export default function DrillDownPanel({ selection, ledger, loading, onClose, on
                               {entry.category}
                             </span>
                           </th>
-                          <td className="font-mono">{entry.quantity}</td>
+                          <td className="font-mono">{entry.quantity ?? '—'}</td>
                           <td className="font-mono">{formatCurrencyCompact(entry.revenue)}</td>
                           <td
                             className="font-mono"
-                            style={{ color: entry.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
+                            style={{ color: entry.profit == null ? 'var(--text-muted)' : entry.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
                           >
                             {formatCurrencyCompact(entry.profit)}
                           </td>

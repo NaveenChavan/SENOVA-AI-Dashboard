@@ -222,13 +222,11 @@ class TestEdgeCases:
         assert schema["kpi_cards"]
         assert schema["charts"]
         assert schema["present_columns"] == []
+        # Phase 1 requires Date + Line Total OR Date + Quantity + Selling Price.
+        # Category, Item and Cost Price are optional and must not block upload.
         assert set(schema["missing_required_columns"]) == {
             "Date",
-            "Category",
-            "Item",
-            "Quantity",
-            "Selling Price",
-            "Cost Price",
+            "Line Total or (Quantity and Selling Price)",
         }
         for entry in schema["kpi_cards"]:
             assert entry["available"] is False

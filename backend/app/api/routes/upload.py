@@ -46,13 +46,14 @@ class Tier2Response(BaseModel):
     detected_columns: list[ColumnGuess]
     ai_notice: AiNotice | None = None
     pipeline_timings: PipelineTimings
-from app.services import column_understanding, frame_cache, tier2_gemini
+from app.services import column_understanding, frame_cache, mapping_memory, tier2_gemini
 from app.services.file_handler import (
     assert_owner,
     cleanup,
     get_original_filename,
     read_to_dataframe,
     save_column_mapping,
+    save_extra_registry,
     save_upload,
     validate_file_id,
 )
@@ -62,7 +63,6 @@ from app.utils.data_validator import (
     MAPPABLE_FIELDS,
     OPTIONAL_DIMENSION_COLUMNS,
     OPTIONAL_MEASURE_COLUMNS,
-    REQUIRED_COLUMNS,
     normalize_dataframe,
 )
 
@@ -167,13 +167,28 @@ async def upload_file(
     # escalating only the columns it can't settle to Tier 2. To avoid blocking the upload,
     # we explicitly skip Tier 2 here. The frontend will request it asynchronously if needed.
     reports, timings, ai_notice, reason_code = await column_understanding.analyse(
-        df, ai_consent=ai_consent, file_id=file_id, run_tier2=False
+        df, ai_consent=ai_consent, file_id=file_id, run_tier2=False, owner=user
     )
 
     # Sample rows for the live preview: NaN → None so the JSON stays valid, and
-    # everything else stringified so no numpy/pandas type leaks into the payload.
+    # PII values masked/redacted so raw emails and phone numbers never leak.
+    from app.services.extra_columns import is_personal_pii
+    from app.services.pii_mask import mask_text
+
+    pii_cols = {col for col in df.columns if is_personal_pii(str(col), df[col])}
     sample_rows = [
-        {str(col): (None if pd.isna(value) else str(value)[:120]) for col, value in row.items()}
+        {
+            str(col): (
+                None
+                if pd.isna(value)
+                else (
+                    "[redacted]"
+                    if col in pii_cols
+                    else mask_text(value)[:120]
+                )
+            )
+            for col, value in row.items()
+        }
         for row in df.head(_SAMPLE_ROW_COUNT).to_dict(orient="records")
     ]
 
@@ -186,8 +201,11 @@ async def upload_file(
         file_id=file_id,
         filename=file.filename,
         detected_columns=[ColumnGuess(**report) for report in reports],
-        required_fields=sorted(REQUIRED_COLUMNS),
-        optional_fields=[f for f in MAPPABLE_FIELDS if f not in REQUIRED_COLUMNS],
+        # The mapping screen enforces the alternate sales-basis rule below;
+        # Date is the only single required target. Quantity + Selling Price or
+        # Line Total together satisfy the second requirement.
+        required_fields=["Date"],
+        optional_fields=[f for f in MAPPABLE_FIELDS if f != "Date"],
         field_help=_FIELD_HELP,
         row_count=len(df),
         sample_rows=sample_rows,
@@ -220,7 +238,7 @@ async def run_tier2(
         raise HTTPException(status_code=404, detail="File not found or invalid.")
 
     reports, timings, ai_notice, reason_code = await column_understanding.analyse(
-        df, ai_consent=body.ai_consent, file_id=file_id, run_tier2=True
+        df, ai_consent=body.ai_consent, file_id=file_id, run_tier2=True, owner=user
     )
     unresolved = sum(
         1 for report in reports
@@ -244,6 +262,22 @@ class ConfirmMappingRequest(BaseModel):
     mapping: dict[str, str] = Field(
         ..., description="{raw_column: canonical_field}; unrecognised fields are ignored."
     )
+    user_selected_columns: list[str] = Field(
+        default_factory=list,
+        description="Raw columns the user explicitly reviewed, changed, or confirmed.",
+    )
+    remember_mapping: bool = Field(
+        default=False,
+        description="Whether to persist user-approved mappings to safe mapping memory (opt-in by default).",
+    )
+    acknowledge_warnings: bool = Field(
+        default=False,
+        description=(
+            "Set True to proceed past non-blocking advisories (e.g. a single-invoice "
+            "amount that might be a bill-level total). Hard rejections (strong "
+            "multi-invoice invoice-total evidence) are never bypassed by this flag."
+        ),
+    )
 
 
 @router.post("/{file_id}/confirm-mapping", response_model=UploadResponse)
@@ -266,6 +300,62 @@ async def confirm_mapping(
         # One indistinguishable 404 for malformed / missing / someone else's id.
         raise HTTPException(status_code=404, detail="File not found. Upload a file first.")
 
+    # ── Module 2.2: Validate user-confirmed mapping payload ─────────────────
+    allowed_fields = set(MAPPABLE_FIELDS)
+    assigned_targets: list[str] = []
+    for raw_col, canonical in body.mapping.items():
+        if raw_col not in df.columns:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Column '{raw_col}' does not exist in the uploaded file.",
+            )
+        if canonical:
+            if canonical not in allowed_fields:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Target field '{canonical}' is not a valid canonical field.",
+                )
+            assigned_targets.append(canonical)
+
+    seen_targets: set[str] = set()
+    for target in assigned_targets:
+        if target in seen_targets:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Duplicate mapping detected for field '{target}'. Each canonical field can only be mapped to one column.",
+            )
+        seen_targets.add(target)
+
+    # ── Module 2.4: Invoice-total repeat guard on a user-forced Line Total ───
+    # Reuses the Module 2.1 detector. A column the user explicitly maps to
+    # Line Total that is provably an invoice-level total (constant across the
+    # line items of ≥2 invoices) would inflate revenue when summed row-wise, so
+    # it is rejected outright. A weaker single-invoice signal becomes a
+    # non-blocking warning the user may acknowledge.
+    from app.services.ambiguity_engine import assess_forced_line_total
+
+    confirm_warnings: list[str] = []
+    for raw_col, canonical in body.mapping.items():
+        if canonical != "Line Total":
+            continue
+        assessment = assess_forced_line_total(raw_col, df, body.mapping)
+        if assessment.verdict == "reject":
+            raise HTTPException(status_code=400, detail=assessment.message)
+        if assessment.verdict == "warn":
+            confirm_warnings.append(assessment.message)
+
+    if confirm_warnings and not body.acknowledge_warnings:
+        # Surface the advisory without committing. The client re-submits with
+        # acknowledge_warnings=True once the user has intentionally confirmed.
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "message": "Please confirm this mapping before proceeding.",
+                "warnings": confirm_warnings,
+                "requires_acknowledgement": True,
+            },
+        )
+
     try:
         pandas_started = time.perf_counter()
         valid_df, error_dicts = normalize_dataframe(df, soft_fail=True, column_mapping=body.mapping)
@@ -276,7 +366,20 @@ async def confirm_mapping(
 
     # Persist the mapping, then drop any cached frame built from an older one.
     save_column_mapping(file_id, body.mapping)
+    if hasattr(valid_df, "attrs") and "extra_registry" in valid_df.attrs:
+        save_extra_registry(file_id, valid_df.attrs["extra_registry"])
     frame_cache.invalidate(file_id)
+
+    # Module 2.3: Persist explicitly approved mappings to owner memory (opt-in only)
+    if body.remember_mapping and body.user_selected_columns:
+        mapping_memory.record_confirmed_mappings(
+            owner=user,
+            raw_headers=list(df.columns),
+            confirmed_mapping=body.mapping,
+            user_selected_columns=body.user_selected_columns,
+            remember_mapping=body.remember_mapping,
+            df=df,
+        )
 
     optional_present = [
         field
@@ -294,4 +397,5 @@ async def confirm_mapping(
         date_range=DataDateRange(**compute_data_date_range(valid_df)),
         optional_fields=optional_present,
         pipeline_timings=PipelineTimings(pandas_ms=round(pandas_ms, 2), total_ms=round(pandas_ms, 2)),
+        warnings=confirm_warnings,
     )

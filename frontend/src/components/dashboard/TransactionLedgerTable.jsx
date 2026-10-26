@@ -90,20 +90,20 @@ export default function TransactionLedgerTable({ ledgerPage, loading, onPageChan
                   </td>
                   <td style={{ textAlign: 'left' }}>{entry.category}</td>
                   <th scope="row">{entry.item}</th>
-                  <td className="font-mono">{entry.quantity}</td>
-                  <td className="font-mono">{formatCurrencyExact(entry.selling_price)}</td>
-                  <td className="font-mono">{formatCurrencyExact(entry.cost_price)}</td>
+                  <td className="font-mono">{entry.quantity == null ? '—' : formatNumber(entry.quantity)}</td>
+                  <td className="font-mono">{entry.selling_price == null ? '—' : formatCurrencyExact(entry.selling_price)}</td>
+                  <td className="font-mono">{entry.cost_price == null ? '—' : formatCurrencyExact(entry.cost_price)}</td>
                   {showDiscount && (
                     <td className="font-mono" style={{ color: 'var(--text-muted)' }}>
                       {formatCurrencyExact(entry.discount ?? 0)}
                     </td>
                   )}
-                  <td className="font-mono">{formatCurrencyExact(entry.revenue)}</td>
+                  <td className="font-mono">{entry.revenue == null ? '—' : formatCurrencyExact(entry.revenue)}</td>
                   <td
                     className="font-mono"
-                    style={{ color: entry.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
+                    style={{ color: entry.profit == null ? 'var(--text-muted)' : entry.profit < 0 ? 'var(--accent-red)' : 'var(--accent-green)' }}
                   >
-                    {formatCurrencyExact(entry.profit)}
+                    {entry.profit == null ? '—' : formatCurrencyExact(entry.profit)}
                   </td>
                 </tr>
               ))}

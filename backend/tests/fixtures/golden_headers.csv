@@ -1,0 +1,80 @@
+header,expected_role,candidate_roles,industry,source,source_url,verification_status,split
+date,Date,,,builtin_alias_map,,builtin-existing,tuning
+transaction date,Date,,,builtin_alias_map,,builtin-existing,holdout
+bill_date,Date,,,builtin_alias_map,,builtin-existing,tuning
+ordered on,Date,,,builtin_alias_map,,builtin-existing,holdout
+category,Category,,,builtin_alias_map,,builtin-existing,holdout
+item group,Category,,,builtin_alias_map,,builtin-existing,tuning
+type,Category,,,builtin_alias_map,,builtin-existing,tuning
+collection,Category,,,builtin_alias_map,,builtin-existing,holdout
+item,Item,,,builtin_alias_map,,builtin-existing,tuning
+product_name,Item,,,builtin_alias_map,,builtin-existing,tuning
+stock item,Item,,,builtin_alias_map,,builtin-existing,holdout
+prod,Item,,,builtin_alias_map,,builtin-existing,holdout
+product code,Item,,,builtin_alias_map,,builtin-existing,tuning
+qty,Quantity,,,builtin_alias_map,,builtin-existing,tuning
+pcs,Quantity,,,builtin_alias_map,,builtin-existing,holdout
+qty_sold,Quantity,,,builtin_alias_map,,builtin-existing,tuning
+sold,Quantity,,,builtin_alias_map,,builtin-existing,holdout
+sale price,Selling Price,,,builtin_alias_map,,builtin-existing,holdout
+price/unit,Selling Price,,,builtin_alias_map,,builtin-existing,holdout
+mrp,MRP,,,builtin_alias_map,,builtin-existing,holdout
+cost price,Cost Price,,,builtin_alias_map,,builtin-existing,holdout
+purchase_price,Cost Price,,,builtin_alias_map,,builtin-existing,holdout
+landed cost,Cost Price,,,builtin_alias_map,,builtin-existing,holdout
+gross amount,Line Total,,,builtin_alias_map,,builtin-existing,tuning
+row total,Line Total,,,builtin_alias_map,,builtin-existing,tuning
+taxable amount,Line Total,,,builtin_alias_map,,builtin-existing,holdout
+discount amount,Discount,,,builtin_alias_map,,builtin-existing,tuning
+tax,Tax,,,builtin_alias_map,,builtin-existing,tuning
+cgst+sgst,Tax,,,builtin_alias_map,,builtin-existing,holdout
+in stock,Stock On Hand,,,builtin_alias_map,,builtin-existing,holdout
+current stock,Stock On Hand,,,builtin_alias_map,,builtin-existing,holdout
+outlet,Branch,,,builtin_alias_map,,builtin-existing,holdout
+payment method,Payment Mode,,,builtin_alias_map,,builtin-existing,tuning
+customer_name,Customer,,,builtin_alias_map,,builtin-existing,tuning
+sales_person,Salesperson,,,builtin_alias_map,,builtin-existing,tuning
+brand name,Brand,,,builtin_alias_map,,builtin-existing,tuning
+colour,Colour,,,builtin_alias_map,,builtin-existing,holdout
+bill no,Invoice No,,,builtin_alias_map,,builtin-existing,holdout
+order no,Invoice No,,,builtin_alias_map,,builtin-existing,tuning
+Voucher Date,Date,,accounting,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,tuning
+Voucher Number,Invoice No,,accounting,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,tuning
+Item Name,Item,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Item Description,Item,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Item Amount,Line Total,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Item Rate,Selling Price,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Stock Category,Category,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Order Number,Invoice No,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,tuning
+Standard Cost,Cost Price,,inventory,TallyPrime,https://help.tallysolutions.com/download-sample-excel-files-with-data-for-import/,documented-source; validate against actual export before production mapping,holdout
+Posting Date,Date,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,tuning
+Customer,Customer,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,holdout
+Description,Item,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,holdout
+Quantity,Quantity,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,tuning
+Rate,Selling Price,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,holdout
+Amount,Line Total,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,holdout
+Warehouse,Branch,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,holdout
+Currency,currency,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,tuning
+Delivery Date,Date,,sales,ERPNext,https://docs.frappe.io/erpnext/sales-invoice,documented-source; validate against actual export before production mapping,tuning
+Order,Invoice No,,orders,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,tuning
+Created At,Date,,orders,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Status,status,,orders,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,tuning
+Title,Item,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Location,Branch,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Incoming,Quantity,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,tuning
+Unavailable,Quantity,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Committed,Quantity,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Available,Stock On Hand,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+On hand (current),Stock On Hand,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,tuning
+On hand (new),Stock On Hand,,inventory,Shopify,https://help.shopify.com/en/manual/fulfillment/managing-orders/exporting-orders,documented-source; validate against actual export before production mapping,holdout
+Invoice Date,Date,,sales,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,holdout
+Salesperson,Salesperson,,sales,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,holdout
+Discount,Discount,,sales,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,tuning
+Tax Payable,Tax,,tax,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,holdout
+Tax Claimable,Tax,,tax,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,holdout
+Net Tax Amount,Tax,,tax,Zoho Books,https://www.zoho.com/us/books/help/invoice/,documented-source; validate against actual export before production mapping,tuning
+Name,ambiguous,Customer|Item,,curated_ambiguous,,curated-ambiguous,holdout
+Total,ambiguous,Line Total,,curated_ambiguous,,curated-ambiguous,tuning
+Value,ambiguous,Line Total|MRP,,curated_ambiguous,,curated-ambiguous,holdout
+Number,ambiguous,Invoice No|Quantity,,curated_ambiguous,,curated-ambiguous,tuning
+Code,ambiguous,Item|Invoice No,,curated_ambiguous,,curated-ambiguous,tuning

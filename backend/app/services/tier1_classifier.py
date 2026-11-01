@@ -118,6 +118,12 @@ _ALIAS_MAP_CONFLICTS: frozenset[str] = frozenset()
 SOURCE_LOCAL = "local"
 SOURCE_GEMINI = "gemini"
 SOURCE_FALLBACK = "fallback"
+#: Phase 3: an exact hit against ``column_dictionary.json`` (via
+#: ``guess_canonical_column`` / ``lookup_legacy_alias``). Distinct from
+#: ``SOURCE_LOCAL`` so the UI can tell a dictionary exact-match apart from an
+#: embedding-model decision, even though both are "decided on this server
+#: without AI".
+SOURCE_DICTIONARY = "dictionary"
 
 #: Where the decision goes next.
 ROUTE_LOCAL = "local"
@@ -438,7 +444,7 @@ def _score_one(
                 score=1.0,
                 margin=1.0,
                 route=ROUTE_LOCAL,
-                source=SOURCE_LOCAL,
+                source=SOURCE_DICTIONARY,
                 reason="Matched a known column name exactly.",
             )
 
@@ -504,7 +510,7 @@ def _alias_fallback_guess(raw_column: str, ai_available: bool = False) -> Column
             score=1.0,
             margin=1.0,
             route=ROUTE_LOCAL,
-            source=SOURCE_LOCAL,
+            source=SOURCE_DICTIONARY,
             reason="Matched a known column name exactly.",
         )
 

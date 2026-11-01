@@ -68,7 +68,7 @@ export function getPipelineAiMessage({ timings, aiEnabled, preview }) {
 
   if (tier2Ran) {
     if (preview?.detected_columns) {
-      const unclearCount = preview.detected_columns.filter((c) => c.source !== 'local').length
+      const unclearCount = preview.detected_columns.filter((c) => c.source !== 'local' && c.source !== 'dictionary').length
       const aiCount = preview.detected_columns.filter((c) => c.source === 'gemini').length
       return `AI helped with ${aiCount} of ${unclearCount} unclear columns (${ms(timings.tier2_ms)})`
     }

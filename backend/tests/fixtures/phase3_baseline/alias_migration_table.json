@@ -1,0 +1,4423 @@
+{
+  "schema_version": 1,
+  "description": "Alias-to-target migration table. 'legacy_alias' carries target_canonical directly and reproduces guess_canonical_column() exactly. 'lossless_as_semantic' says whether the alias could instead be stored as a semantic label and still round-trip through canonical_field_for(), including the conditional id -> Invoice No promotion.",
+  "row_count": 268,
+  "rows": [
+    {
+      "key": "date",
+      "legacy_key": "date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "dates",
+      "legacy_key": "dates",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "date_sold",
+      "legacy_key": "date_sold",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "sold date",
+      "legacy_key": "sold date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "sale date",
+      "legacy_key": "sale date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "sale_date",
+      "legacy_key": "sale_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "sales date",
+      "legacy_key": "sales date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "transaction date",
+      "legacy_key": "transaction date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "transaction_date",
+      "legacy_key": "transaction_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "txn date",
+      "legacy_key": "txn date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "txn_date",
+      "legacy_key": "txn_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "invoice date",
+      "legacy_key": "invoice date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "invoice_date",
+      "legacy_key": "invoice_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "bill date",
+      "legacy_key": "bill date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "bill_date",
+      "legacy_key": "bill_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "billing date",
+      "legacy_key": "billing date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "voucher date",
+      "legacy_key": "voucher date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "voucher_date",
+      "legacy_key": "voucher_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "entry date",
+      "legacy_key": "entry date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "order date",
+      "legacy_key": "order date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "order_date",
+      "legacy_key": "order_date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "ordered on",
+      "legacy_key": "ordered on",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "purchase-date",
+      "legacy_key": "purchase-date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "posting date",
+      "legacy_key": "posting date",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "day",
+      "legacy_key": "day",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "dt",
+      "legacy_key": "dt",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "datetime",
+      "legacy_key": "datetime",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "timestamp",
+      "legacy_key": "timestamp",
+      "reachable": true,
+      "current_canonical": "Date",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Date",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "date",
+      "semantic_round_trip_canonical": "Date",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "date"
+      ]
+    },
+    {
+      "key": "category",
+      "legacy_key": "category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "categories",
+      "legacy_key": "categories",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "cat",
+      "legacy_key": "cat",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "product category",
+      "legacy_key": "product category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "product_category",
+      "legacy_key": "product_category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "item category",
+      "legacy_key": "item category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "item_category",
+      "legacy_key": "item_category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "item group",
+      "legacy_key": "item group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "stock group",
+      "legacy_key": "stock group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "stock_group",
+      "legacy_key": "stock_group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "product type",
+      "legacy_key": "product type",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "product_type",
+      "legacy_key": "product_type",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "dept",
+      "legacy_key": "dept",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "department",
+      "legacy_key": "department",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "type",
+      "legacy_key": "type",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "group",
+      "legacy_key": "group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "segment",
+      "legacy_key": "segment",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "class",
+      "legacy_key": "class",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "sub category",
+      "legacy_key": "sub category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "sub-category",
+      "legacy_key": "sub-category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "subcategory",
+      "legacy_key": "subcategory",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "collection",
+      "legacy_key": "collection",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "section",
+      "legacy_key": "section",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "menu group",
+      "legacy_key": "menu group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "menu category",
+      "legacy_key": "menu category",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "course",
+      "legacy_key": "course",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "kitchen group",
+      "legacy_key": "kitchen group",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "food type",
+      "legacy_key": "food type",
+      "reachable": true,
+      "current_canonical": "Category",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Category",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "category",
+      "semantic_round_trip_canonical": "Category",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "category"
+      ]
+    },
+    {
+      "key": "item",
+      "legacy_key": "item",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "items",
+      "legacy_key": "items",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item name",
+      "legacy_key": "item name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item_name",
+      "legacy_key": "item_name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "itemname",
+      "legacy_key": "itemname",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "product",
+      "legacy_key": "product",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "product name",
+      "legacy_key": "product name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "product_name",
+      "legacy_key": "product_name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "products",
+      "legacy_key": "products",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "description",
+      "legacy_key": "description",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item description",
+      "legacy_key": "item description",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item_description",
+      "legacy_key": "item_description",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "product_description",
+      "legacy_key": "product_description",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "particulars",
+      "legacy_key": "particulars",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "stock item",
+      "legacy_key": "stock item",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "stock_item",
+      "legacy_key": "stock_item",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "style",
+      "legacy_key": "style",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "style name",
+      "legacy_key": "style name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "style code",
+      "legacy_key": "style code",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "design",
+      "legacy_key": "design",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "design no",
+      "legacy_key": "design no",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "prod",
+      "legacy_key": "prod",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "name",
+      "legacy_key": "name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "goods",
+      "legacy_key": "goods",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "sku",
+      "legacy_key": "sku",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "sku code",
+      "legacy_key": "sku code",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item code",
+      "legacy_key": "item code",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "item_code",
+      "legacy_key": "item_code",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "product code",
+      "legacy_key": "product code",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "barcode",
+      "legacy_key": "barcode",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "article",
+      "legacy_key": "article",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "lineitem name",
+      "legacy_key": "lineitem name",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "title",
+      "legacy_key": "title",
+      "reachable": true,
+      "current_canonical": "Item",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Item",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "product",
+      "semantic_round_trip_canonical": "Item",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "product"
+      ]
+    },
+    {
+      "key": "quantity",
+      "legacy_key": "quantity",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "quantities",
+      "legacy_key": "quantities",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "qty",
+      "legacy_key": "qty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "qty.",
+      "legacy_key": "qty.",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "qnty",
+      "legacy_key": "qnty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "nos",
+      "legacy_key": "nos",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "no of units",
+      "legacy_key": "no of units",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "units",
+      "legacy_key": "units",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "unit",
+      "legacy_key": "unit",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "pcs",
+      "legacy_key": "pcs",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "pieces",
+      "legacy_key": "pieces",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "units sold",
+      "legacy_key": "units sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "units_sold",
+      "legacy_key": "units_sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "quantity sold",
+      "legacy_key": "quantity sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "quantity_sold",
+      "legacy_key": "quantity_sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "qty sold",
+      "legacy_key": "qty sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "qty_sold",
+      "legacy_key": "qty_sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "billed qty",
+      "legacy_key": "billed qty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "billed_qty",
+      "legacy_key": "billed_qty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "sold qty",
+      "legacy_key": "sold qty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "actual qty",
+      "legacy_key": "actual qty",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "no.",
+      "legacy_key": "no.",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "count",
+      "legacy_key": "count",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "sold",
+      "legacy_key": "sold",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "num",
+      "legacy_key": "num",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "lineitem quantity",
+      "legacy_key": "lineitem quantity",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "quantity-purchased",
+      "legacy_key": "quantity-purchased",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "order quantity",
+      "legacy_key": "order quantity",
+      "reachable": true,
+      "current_canonical": "Quantity",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Quantity",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "quantity",
+      "semantic_round_trip_canonical": "Quantity",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "quantity"
+      ]
+    },
+    {
+      "key": "selling price",
+      "legacy_key": "selling price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "selling_price",
+      "legacy_key": "selling_price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "sale price",
+      "legacy_key": "sale price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "sales price",
+      "legacy_key": "sales price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "sell price",
+      "legacy_key": "sell price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "price",
+      "legacy_key": "price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "unit price",
+      "legacy_key": "unit price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "unit_price",
+      "legacy_key": "unit_price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "price per unit",
+      "legacy_key": "price per unit",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "price/unit",
+      "legacy_key": "price/unit",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "rate",
+      "legacy_key": "rate",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "rate/unit",
+      "legacy_key": "rate/unit",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "rate per unit",
+      "legacy_key": "rate per unit",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "unit rate",
+      "legacy_key": "unit rate",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "retail price",
+      "legacy_key": "retail price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "retail_price",
+      "legacy_key": "retail_price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "mrp",
+      "legacy_key": "mrp",
+      "reachable": true,
+      "current_canonical": "MRP",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "MRP",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "mrp",
+      "semantic_round_trip_canonical": "MRP",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "mrp"
+      ]
+    },
+    {
+      "key": "m.r.p",
+      "legacy_key": "m.r.p",
+      "reachable": true,
+      "current_canonical": "MRP",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "MRP",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "mrp",
+      "semantic_round_trip_canonical": "MRP",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "mrp"
+      ]
+    },
+    {
+      "key": "list price",
+      "legacy_key": "list price",
+      "reachable": true,
+      "current_canonical": "MRP",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "MRP",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "mrp",
+      "semantic_round_trip_canonical": "MRP",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "mrp"
+      ]
+    },
+    {
+      "key": "maximum retail price",
+      "legacy_key": "maximum retail price",
+      "reachable": true,
+      "current_canonical": "MRP",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "MRP",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "mrp",
+      "semantic_round_trip_canonical": "MRP",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "mrp"
+      ]
+    },
+    {
+      "key": "sp",
+      "legacy_key": "sp",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "lineitem price",
+      "legacy_key": "lineitem price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "item-price",
+      "legacy_key": "item-price",
+      "reachable": true,
+      "current_canonical": "Selling Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Selling Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "unit_price",
+      "semantic_round_trip_canonical": "Selling Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "unit_price"
+      ]
+    },
+    {
+      "key": "cost price",
+      "legacy_key": "cost price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "cost_price",
+      "legacy_key": "cost_price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "cost",
+      "legacy_key": "cost",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "unit cost",
+      "legacy_key": "unit cost",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "unit_cost",
+      "legacy_key": "unit_cost",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "cost per unit",
+      "legacy_key": "cost per unit",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "purchase price",
+      "legacy_key": "purchase price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "purchase_price",
+      "legacy_key": "purchase_price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "purchase rate",
+      "legacy_key": "purchase rate",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "buying price",
+      "legacy_key": "buying price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "buying_price",
+      "legacy_key": "buying_price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "wholesale price",
+      "legacy_key": "wholesale price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "wholesale_price",
+      "legacy_key": "wholesale_price",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "landing cost",
+      "legacy_key": "landing cost",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "landed cost",
+      "legacy_key": "landed cost",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "cp",
+      "legacy_key": "cp",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "cogs",
+      "legacy_key": "cogs",
+      "reachable": true,
+      "current_canonical": "Cost Price",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Cost Price",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "cost",
+      "semantic_round_trip_canonical": "Cost Price",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "cost"
+      ]
+    },
+    {
+      "key": "amount",
+      "legacy_key": "amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "amt",
+      "legacy_key": "amt",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "net amount",
+      "legacy_key": "net amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "net_amount",
+      "legacy_key": "net_amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "gross amount",
+      "legacy_key": "gross amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "total",
+      "legacy_key": "total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "total amount",
+      "legacy_key": "total amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "total_amount",
+      "legacy_key": "total_amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "line total",
+      "legacy_key": "line total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "line_total",
+      "legacy_key": "line_total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "line amount",
+      "legacy_key": "line amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "row total",
+      "legacy_key": "row total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "sale amount",
+      "legacy_key": "sale amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "sales amount",
+      "legacy_key": "sales amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "sales value",
+      "legacy_key": "sales value",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "invoice amount",
+      "legacy_key": "invoice amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "bill amount",
+      "legacy_key": "bill amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "taxable value",
+      "legacy_key": "taxable value",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "taxable amount",
+      "legacy_key": "taxable amount",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "revenue",
+      "legacy_key": "revenue",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "turnover",
+      "legacy_key": "turnover",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "item-total",
+      "legacy_key": "item-total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "lineitem total",
+      "legacy_key": "lineitem total",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "value",
+      "legacy_key": "value",
+      "reachable": true,
+      "current_canonical": "Line Total",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Line Total",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "revenue",
+      "semantic_round_trip_canonical": "Line Total",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "revenue"
+      ]
+    },
+    {
+      "key": "discount",
+      "legacy_key": "discount",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "discount amount",
+      "legacy_key": "discount amount",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "discount_amount",
+      "legacy_key": "discount_amount",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "disc",
+      "legacy_key": "disc",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "disc amt",
+      "legacy_key": "disc amt",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "rebate",
+      "legacy_key": "rebate",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "less discount",
+      "legacy_key": "less discount",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "lineitem discount",
+      "legacy_key": "lineitem discount",
+      "reachable": true,
+      "current_canonical": "Discount",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Discount",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "discount",
+      "semantic_round_trip_canonical": "Discount",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "discount"
+      ]
+    },
+    {
+      "key": "tax",
+      "legacy_key": "tax",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "tax amount",
+      "legacy_key": "tax amount",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "tax_amount",
+      "legacy_key": "tax_amount",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "gst",
+      "legacy_key": "gst",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "gst amount",
+      "legacy_key": "gst amount",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "gst_amount",
+      "legacy_key": "gst_amount",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "total gst",
+      "legacy_key": "total gst",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "cgst+sgst",
+      "legacy_key": "cgst+sgst",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "vat",
+      "legacy_key": "vat",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "igst",
+      "legacy_key": "igst",
+      "reachable": true,
+      "current_canonical": "Tax",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Tax",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "tax",
+      "semantic_round_trip_canonical": "Tax",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "tax"
+      ]
+    },
+    {
+      "key": "stock",
+      "legacy_key": "stock",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "stock on hand",
+      "legacy_key": "stock on hand",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "stock_on_hand",
+      "legacy_key": "stock_on_hand",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "on hand",
+      "legacy_key": "on hand",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "in stock",
+      "legacy_key": "in stock",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "closing stock",
+      "legacy_key": "closing stock",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "closing_stock",
+      "legacy_key": "closing_stock",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "closing balance",
+      "legacy_key": "closing balance",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "balance qty",
+      "legacy_key": "balance qty",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "balance_qty",
+      "legacy_key": "balance_qty",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "available qty",
+      "legacy_key": "available qty",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "current stock",
+      "legacy_key": "current stock",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "inventory",
+      "legacy_key": "inventory",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "inventory qty",
+      "legacy_key": "inventory qty",
+      "reachable": true,
+      "current_canonical": "Stock On Hand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Stock On Hand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "branch",
+      "legacy_key": "branch",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "store",
+      "legacy_key": "store",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "store name",
+      "legacy_key": "store name",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "shop",
+      "legacy_key": "shop",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "outlet",
+      "legacy_key": "outlet",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "location",
+      "legacy_key": "location",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "godown",
+      "legacy_key": "godown",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "warehouse",
+      "legacy_key": "warehouse",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "city",
+      "legacy_key": "city",
+      "reachable": true,
+      "current_canonical": "Branch",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Branch",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "region",
+      "semantic_round_trip_canonical": "Branch",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "region"
+      ]
+    },
+    {
+      "key": "payment mode",
+      "legacy_key": "payment mode",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "payment_mode",
+      "legacy_key": "payment_mode",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "payment method",
+      "legacy_key": "payment method",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "mode of payment",
+      "legacy_key": "mode of payment",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "paid via",
+      "legacy_key": "paid via",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "payment type",
+      "legacy_key": "payment type",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "tender",
+      "legacy_key": "tender",
+      "reachable": true,
+      "current_canonical": "Payment Mode",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Payment Mode",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "customer",
+      "legacy_key": "customer",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "customer name",
+      "legacy_key": "customer name",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "customer_name",
+      "legacy_key": "customer_name",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "buyer",
+      "legacy_key": "buyer",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "party",
+      "legacy_key": "party",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "party name",
+      "legacy_key": "party name",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "client",
+      "legacy_key": "client",
+      "reachable": true,
+      "current_canonical": "Customer",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Customer",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "customer",
+      "semantic_round_trip_canonical": "Customer",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "customer"
+      ]
+    },
+    {
+      "key": "salesperson",
+      "legacy_key": "salesperson",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "sales person",
+      "legacy_key": "sales person",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "sales_person",
+      "legacy_key": "sales_person",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "salesman",
+      "legacy_key": "salesman",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "staff",
+      "legacy_key": "staff",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "employee",
+      "legacy_key": "employee",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "cashier",
+      "legacy_key": "cashier",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "biller",
+      "legacy_key": "biller",
+      "reachable": true,
+      "current_canonical": "Salesperson",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Salesperson",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "brand",
+      "legacy_key": "brand",
+      "reachable": true,
+      "current_canonical": "Brand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Brand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "brand name",
+      "legacy_key": "brand name",
+      "reachable": true,
+      "current_canonical": "Brand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Brand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "make",
+      "legacy_key": "make",
+      "reachable": true,
+      "current_canonical": "Brand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Brand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "manufacturer",
+      "legacy_key": "manufacturer",
+      "reachable": true,
+      "current_canonical": "Brand",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Brand",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "size",
+      "legacy_key": "size",
+      "reachable": true,
+      "current_canonical": "Size",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Size",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "sizes",
+      "legacy_key": "sizes",
+      "reachable": true,
+      "current_canonical": "Size",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Size",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "item size",
+      "legacy_key": "item size",
+      "reachable": true,
+      "current_canonical": "Size",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Size",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "variant",
+      "legacy_key": "variant",
+      "reachable": true,
+      "current_canonical": "Size",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Size",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "colour",
+      "legacy_key": "colour",
+      "reachable": true,
+      "current_canonical": "Colour",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Colour",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "color",
+      "legacy_key": "color",
+      "reachable": true,
+      "current_canonical": "Colour",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Colour",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "shade",
+      "legacy_key": "shade",
+      "reachable": true,
+      "current_canonical": "Colour",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Colour",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": null,
+      "semantic_round_trip_canonical": null,
+      "lossless_as_semantic": false,
+      "semantic_reason": "canonical has no semantic label (passthrough canonical)",
+      "also_semantic_synonym_of": []
+    },
+    {
+      "key": "invoice no",
+      "legacy_key": "invoice no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "invoice_no",
+      "legacy_key": "invoice_no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "invoice number",
+      "legacy_key": "invoice number",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "invoice",
+      "legacy_key": "invoice",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "bill no",
+      "legacy_key": "bill no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "bill_no",
+      "legacy_key": "bill_no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "bill number",
+      "legacy_key": "bill number",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "voucher no",
+      "legacy_key": "voucher no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "receipt no",
+      "legacy_key": "receipt no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "order id",
+      "legacy_key": "order id",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "order_id",
+      "legacy_key": "order_id",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "order no",
+      "legacy_key": "order no",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    },
+    {
+      "key": "txn id",
+      "legacy_key": "txn id",
+      "reachable": true,
+      "current_canonical": "Invoice No",
+      "proposed_kind": "legacy_alias",
+      "proposed_target_canonical": "Invoice No",
+      "lossless_as_legacy_alias": true,
+      "legacy_alias_reason": null,
+      "tier1_semantic_label": "id",
+      "semantic_round_trip_canonical": "Invoice No",
+      "lossless_as_semantic": true,
+      "semantic_reason": null,
+      "also_semantic_synonym_of": [
+        "id"
+      ]
+    }
+  ]
+}

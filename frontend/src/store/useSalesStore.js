@@ -311,6 +311,90 @@ const useSalesStore = create((set, get) => ({
   },
 
   /**
+   * Phase 4.1 — "Check again with AI". Explicit, user-initiated retry for
+   * columns still unresolved after the automatic pass. Bypasses the server's
+   * verdict cache (so this is a genuinely fresh opinion, not a replay) and is
+   * subject to a 10-second server-side cooldown per file. The caller is
+   * responsible for disabling the button while ``aiRecheckInFlight`` is true
+   * and for surfacing ``retry_after_seconds`` from a 429 if it fires.
+   */
+  aiRecheckInFlight: false,
+  forceRecheckTier2Async: async (fileId, targetColumns) => {
+    const currentConsent = useSalesStore.getState().aiConsent
+    set({ aiRecheckInFlight: true })
+    try {
+      const { data: updatedPreview } = await api.post(`/upload/${fileId}/tier2`, {
+        ai_consent: currentConsent,
+        force_recheck: true,
+        target_columns: targetColumns && targetColumns.length ? targetColumns : null,
+      })
+      set((state) => {
+        if (!state.mappingPreview || state.fileId !== fileId) return state
+        return {
+          mappingPreview: {
+            ...state.mappingPreview,
+            detected_columns: updatedPreview.detected_columns,
+            ai_notice: updatedPreview.ai_notice ?? state.mappingPreview.ai_notice,
+            pipeline_timings: updatedPreview.pipeline_timings ?? state.mappingPreview.pipeline_timings,
+          },
+          aiNotice: updatedPreview.ai_notice ?? state.aiNotice,
+          pipelineTimings: updatedPreview.pipeline_timings ?? state.pipelineTimings,
+        }
+      })
+      // Measured counts only — never fabricated when the server reports 0.
+      return {
+        columnsEvaluated: updatedPreview.columns_evaluated ?? 0,
+        columnsResolved: updatedPreview.columns_resolved ?? 0,
+      }
+    } catch (err) {
+      if (err?.response?.status === 429) {
+        const detail = err.response.data?.detail || {}
+        return {
+          cooldown: true,
+          retryAfterSeconds: detail.retry_after_seconds ?? 10,
+          message: detail.message || 'Please wait before checking again.',
+        }
+      }
+      console.warn('Forced AI recheck failed:', err)
+      return {
+        columnsEvaluated: 0,
+        columnsResolved: 0,
+        error: err.response?.data?.detail?.message || err.response?.data?.message || 'AI recheck failed.',
+      }
+    } finally {
+      set({ aiRecheckInFlight: false })
+    }
+  },
+
+  /**
+   * Phase 4.2 — ask AI about up to 20 user-written column notes in one
+   * request. Returns proposed roles only; nothing here changes ``mapping``
+   * itself. The caller must collect explicit confirmation (and, for a
+   * money-sensitive role, an extra confirmation) before folding a suggestion
+   * into the mapping and calling ``confirmMapping``.
+   */
+  submitColumnNotes: async (fileId, notes) => {
+    const currentConsent = useSalesStore.getState().aiConsent
+    try {
+      const { data } = await api.post(`/upload/${fileId}/column-notes`, {
+        ai_consent: currentConsent,
+        notes,
+      })
+      return data
+    } catch (err) {
+      console.warn('Column notes request failed:', err)
+      return {
+        suggestions: [],
+        notes_echo: {},
+        ai_notice: {
+          message: err.response?.data?.detail?.message || 'Could not reach AI for notes.',
+          reason_code: err.response?.data?.detail?.reason_code || 'server_error',
+        },
+      }
+    }
+  },
+
+  /**
    * Step 2: send the confirmed mapping. Runs row-level validation server-side
    * and persists the mapping so every later request reuses it.
    */

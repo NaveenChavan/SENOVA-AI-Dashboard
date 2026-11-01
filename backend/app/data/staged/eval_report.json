@@ -1,0 +1,581 @@
+{
+  "generated_at": "2026-10-27T21:29:53.206824+00:00",
+  "generator": "backend/scripts/eval_columns.py",
+  "golden_path": "C:\\Users\\LENOVO\\SENOVA-AI-Dashboard\\backend\\tests\\fixtures\\golden_headers.csv",
+  "split_filter": "all",
+  "overall": {
+    "row_count": 79,
+    "non_ambiguous_count": 74,
+    "ambiguous_count": 5,
+    "accuracy_non_ambiguous": 0.8649,
+    "unresolved_share": 0.1772,
+    "routing_proportions": {
+      "resolved-by-dictionary": 0.6835,
+      "resolved-by-fuzzy": 0.1392,
+      "unresolved": 0.1772
+    },
+    "per_role_precision_recall": {
+      "Branch": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 3,
+        "fp": 0,
+        "fn": 0
+      },
+      "Brand": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "Category": {
+        "precision": 1.0,
+        "recall": 0.8,
+        "tp": 4,
+        "fp": 0,
+        "fn": 1
+      },
+      "Colour": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "Cost Price": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "Customer": {
+        "precision": null,
+        "recall": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2
+      },
+      "Date": {
+        "precision": 1.0,
+        "recall": 0.8889,
+        "tp": 8,
+        "fp": 0,
+        "fn": 1
+      },
+      "Discount": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "Invoice No": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "tp": 3,
+        "fp": 0,
+        "fn": 2
+      },
+      "Item": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 9,
+        "fp": 0,
+        "fn": 0
+      },
+      "Line Total": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 5,
+        "fp": 0,
+        "fn": 0
+      },
+      "MRP": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "Payment Mode": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "Quantity": {
+        "precision": 1.0,
+        "recall": 0.625,
+        "tp": 5,
+        "fp": 0,
+        "fn": 3
+      },
+      "Salesperson": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "Selling Price": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 4,
+        "fp": 0,
+        "fn": 0
+      },
+      "Stock On Hand": {
+        "precision": 0.8,
+        "recall": 0.8,
+        "tp": 4,
+        "fp": 1,
+        "fn": 1
+      },
+      "Tax": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 5,
+        "fp": 0,
+        "fn": 0
+      },
+      "currency": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "personal": {
+        "precision": 0.0,
+        "recall": null,
+        "tp": 0,
+        "fp": 2,
+        "fn": 0
+      },
+      "status": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    "top_confusions": [
+      {
+        "expected": "Quantity",
+        "got": null,
+        "count": 3
+      },
+      {
+        "expected": "Customer",
+        "got": "personal",
+        "count": 2
+      },
+      {
+        "expected": "Invoice No",
+        "got": null,
+        "count": 2
+      },
+      {
+        "expected": "Category",
+        "got": "Stock On Hand",
+        "count": 1
+      },
+      {
+        "expected": "Date",
+        "got": null,
+        "count": 1
+      },
+      {
+        "expected": "Stock On Hand",
+        "got": null,
+        "count": 1
+      }
+    ],
+    "false_mapping_count": 6,
+    "false_mappings": [
+      {
+        "header": "customer_name",
+        "expected_role": "Customer",
+        "resolved_role": "personal",
+        "is_ambiguous": false
+      },
+      {
+        "header": "Stock Category",
+        "expected_role": "Category",
+        "resolved_role": "Stock On Hand",
+        "is_ambiguous": false
+      },
+      {
+        "header": "Customer",
+        "expected_role": "Customer",
+        "resolved_role": "personal",
+        "is_ambiguous": false
+      },
+      {
+        "header": "Name",
+        "expected_role": "ambiguous",
+        "resolved_role": "personal",
+        "is_ambiguous": true
+      },
+      {
+        "header": "Total",
+        "expected_role": "ambiguous",
+        "resolved_role": "Line Total",
+        "is_ambiguous": true
+      },
+      {
+        "header": "Value",
+        "expected_role": "ambiguous",
+        "resolved_role": "Line Total",
+        "is_ambiguous": true
+      }
+    ],
+    "ambiguous_false_mapping_count": 3
+  },
+  "by_split": {
+    "holdout": {
+      "row_count": 45,
+      "non_ambiguous_count": 43,
+      "ambiguous_count": 2,
+      "accuracy_non_ambiguous": 0.8605,
+      "unresolved_share": 0.1333,
+      "routing_proportions": {
+        "resolved-by-dictionary": 0.7111,
+        "resolved-by-fuzzy": 0.1556,
+        "unresolved": 0.1333
+      },
+      "per_role_precision_recall": {
+        "Branch": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "Category": {
+          "precision": 1.0,
+          "recall": 0.6667,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1
+        },
+        "Colour": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Cost Price": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "Customer": {
+          "precision": null,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        },
+        "Date": {
+          "precision": 1.0,
+          "recall": 0.75,
+          "tp": 3,
+          "fp": 0,
+          "fn": 1
+        },
+        "Invoice No": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Item": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "Line Total": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "MRP": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Quantity": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "tp": 2,
+          "fp": 0,
+          "fn": 2
+        },
+        "Salesperson": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Selling Price": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 4,
+          "fp": 0,
+          "fn": 0
+        },
+        "Stock On Hand": {
+          "precision": 0.75,
+          "recall": 0.75,
+          "tp": 3,
+          "fp": 1,
+          "fn": 1
+        },
+        "Tax": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "personal": {
+          "precision": 0.0,
+          "recall": null,
+          "tp": 0,
+          "fp": 1,
+          "fn": 0
+        }
+      },
+      "top_confusions": [
+        {
+          "expected": "Quantity",
+          "got": null,
+          "count": 2
+        },
+        {
+          "expected": "Category",
+          "got": "Stock On Hand",
+          "count": 1
+        },
+        {
+          "expected": "Customer",
+          "got": "personal",
+          "count": 1
+        },
+        {
+          "expected": "Date",
+          "got": null,
+          "count": 1
+        },
+        {
+          "expected": "Stock On Hand",
+          "got": null,
+          "count": 1
+        }
+      ],
+      "false_mapping_count": 4,
+      "false_mappings": [
+        {
+          "header": "Stock Category",
+          "expected_role": "Category",
+          "resolved_role": "Stock On Hand",
+          "is_ambiguous": false
+        },
+        {
+          "header": "Customer",
+          "expected_role": "Customer",
+          "resolved_role": "personal",
+          "is_ambiguous": false
+        },
+        {
+          "header": "Name",
+          "expected_role": "ambiguous",
+          "resolved_role": "personal",
+          "is_ambiguous": true
+        },
+        {
+          "header": "Value",
+          "expected_role": "ambiguous",
+          "resolved_role": "Line Total",
+          "is_ambiguous": true
+        }
+      ],
+      "ambiguous_false_mapping_count": 2
+    },
+    "tuning": {
+      "row_count": 34,
+      "non_ambiguous_count": 31,
+      "ambiguous_count": 3,
+      "accuracy_non_ambiguous": 0.871,
+      "unresolved_share": 0.2353,
+      "routing_proportions": {
+        "resolved-by-dictionary": 0.6471,
+        "resolved-by-fuzzy": 0.1176,
+        "unresolved": 0.2353
+      },
+      "per_role_precision_recall": {
+        "Brand": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Category": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "Customer": {
+          "precision": null,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        },
+        "Date": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0
+        },
+        "Discount": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "Invoice No": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "tp": 2,
+          "fp": 0,
+          "fn": 2
+        },
+        "Item": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0
+        },
+        "Line Total": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "Payment Mode": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Quantity": {
+          "precision": 1.0,
+          "recall": 0.75,
+          "tp": 3,
+          "fp": 0,
+          "fn": 1
+        },
+        "Salesperson": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Stock On Hand": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "Tax": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "currency": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "personal": {
+          "precision": 0.0,
+          "recall": null,
+          "tp": 0,
+          "fp": 1,
+          "fn": 0
+        },
+        "status": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "top_confusions": [
+        {
+          "expected": "Invoice No",
+          "got": null,
+          "count": 2
+        },
+        {
+          "expected": "Customer",
+          "got": "personal",
+          "count": 1
+        },
+        {
+          "expected": "Quantity",
+          "got": null,
+          "count": 1
+        }
+      ],
+      "false_mapping_count": 2,
+      "false_mappings": [
+        {
+          "header": "customer_name",
+          "expected_role": "Customer",
+          "resolved_role": "personal",
+          "is_ambiguous": false
+        },
+        {
+          "header": "Total",
+          "expected_role": "ambiguous",
+          "resolved_role": "Line Total",
+          "is_ambiguous": true
+        }
+      ],
+      "ambiguous_false_mapping_count": 1
+    }
+  }
+}

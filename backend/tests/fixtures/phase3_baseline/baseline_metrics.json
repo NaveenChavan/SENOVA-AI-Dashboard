@@ -1,0 +1,494 @@
+{
+  "schema_version": 1,
+  "alias_map": {
+    "live_entries": 268,
+    "source_literal": {
+      "literal_entries": 268,
+      "unique_keys": 268,
+      "duplicate_keys": []
+    },
+    "reachable": 268,
+    "unreachable_legacy_keys": [],
+    "canonical_distribution": {
+      "Date": 28,
+      "Category": 28,
+      "Item": 33,
+      "Quantity": 28,
+      "Selling Price": 19,
+      "MRP": 4,
+      "Cost Price": 17,
+      "Line Total": 24,
+      "Discount": 8,
+      "Tax": 10,
+      "Stock On Hand": 14,
+      "Branch": 9,
+      "Payment Mode": 7,
+      "Customer": 7,
+      "Salesperson": 8,
+      "Brand": 4,
+      "Size": 4,
+      "Colour": 3,
+      "Invoice No": 13
+    },
+    "canonicals_without_semantic_label": [
+      "Brand",
+      "Colour",
+      "Payment Mode",
+      "Salesperson",
+      "Size",
+      "Stock On Hand"
+    ],
+    "exact_lookup_misses_for_own_keys": [],
+    "own_keys_unresolved": []
+  },
+  "fuzzy_keywords": {
+    "entries": 66,
+    "unreachable_keywords": [],
+    "overlap_with_alias_keys": 53,
+    "overlap_role_conflicts": [],
+    "own_keywords_unresolved": []
+  },
+  "semantic_synonyms": {
+    "fields": 17,
+    "total": 359,
+    "unique_by_legacy_key": 359,
+    "per_label": {
+      "date": 28,
+      "quantity": 28,
+      "unit_price": 27,
+      "mrp": 15,
+      "cost": 25,
+      "revenue": 32,
+      "discount": 14,
+      "tax": 18,
+      "product": 34,
+      "currency": 4,
+      "category": 29,
+      "customer": 19,
+      "region": 21,
+      "status": 15,
+      "notes": 16,
+      "id": 24,
+      "other": 10
+    },
+    "script_breakdown": {
+      "latin_ascii": 287,
+      "devanagari": 72
+    },
+    "kannada_synonyms_present": false,
+    "that_are_alias_keys": 198,
+    "semantic_only_count": 161,
+    "duplicate_within_one_label": [],
+    "cross_label_duplicates": [],
+    "unresolved_by_legacy_resolver": [
+      "area",
+      "bachat",
+      "ccy",
+      "column",
+      "comment",
+      "comments",
+      "concession",
+      "condition",
+      "consignee",
+      "curr",
+      "currency",
+      "delivery status",
+      "description note",
+      "din",
+      "doc no",
+      "ek kitna",
+      "field",
+      "fulfilment status",
+      "id",
+      "instructions",
+      "kab",
+      "khareed ka daam",
+      "kis din",
+      "kiska maal",
+      "kitna paisa",
+      "kitna paisa mila",
+      "kitni dukan",
+      "koi baat",
+      "kya becha",
+      "kya hua",
+      "lagai",
+      "m.r.p.",
+      "memo",
+      "misc",
+      "miscellaneous",
+      "n/a",
+      "na",
+      "narration",
+      "note",
+      "notes",
+      "observation",
+      "order state",
+      "order status",
+      "other",
+      "paisa",
+      "ref no",
+      "reference no",
+      "region",
+      "remark",
+      "remarks",
+      "remarks kya",
+      "serial no",
+      "sr no",
+      "stage",
+      "state",
+      "status",
+      "status kya",
+      "supplier",
+      "territory",
+      "transaction id",
+      "unknown",
+      "unnamed",
+      "untitled",
+      "vendor",
+      "zone",
+      "अधिकतम खुदरा मूल्य",
+      "आइटम",
+      "आय",
+      "इकाई मूल्य",
+      "इलाका",
+      "उत्पाद",
+      "एमआरपी",
+      "कटेगरी",
+      "कर",
+      "कस्टमर",
+      "कितना",
+      "कितने",
+      "कुल रकम",
+      "कुल राशि",
+      "क्रमांक",
+      "क्रय दर",
+      "क्रय मूल्य",
+      "क्षेत्र",
+      "खरीद तारीख",
+      "खरीद मूल्य",
+      "खरीदार",
+      "खर्च",
+      "ग्राहक",
+      "ग्राहक का नाम",
+      "चालान संख्या",
+      "चीज़",
+      "छाप मूल्य",
+      "छूट",
+      "छोट",
+      "जीएसटी",
+      "टिप्पणियाँ",
+      "टिप्पणी",
+      "टैक्स",
+      "डिस्काउंट",
+      "तारीख",
+      "थोक मूल्य",
+      "दर",
+      "दिनांक",
+      "दुकान",
+      "नग",
+      "नाम",
+      "नोट",
+      "पर्ची संख्या",
+      "पार्टी",
+      "पीस",
+      "फैक्ट्री",
+      "बिक्री तारीख",
+      "बिक्री राशि",
+      "बिल तारीख",
+      "बिल संख्या",
+      "ब्याज",
+      "भाव",
+      "मात्रा",
+      "मुद्रा",
+      "मूल्य",
+      "राशि",
+      "रिहायत",
+      "लागत",
+      "वर्ग",
+      "वस्तु",
+      "विक्रय मूल्य",
+      "विभाग",
+      "शाखा",
+      "श्रेणी",
+      "संख्या",
+      "समूह",
+      "सामान",
+      "सूची मूल्य",
+      "स्टेटस",
+      "स्थान",
+      "स्थिति",
+      "हालत"
+    ]
+  },
+  "semantic_only_with_fastembed_unavailable": {
+    "note": "These synonyms are NOT alias-map keys. With FastEmbed unavailable they can only resolve through the fuzzy keyword heuristic, never through an exact hit.",
+    "count": 161,
+    "outcomes": {
+      "unresolved_no_suggestion": 126,
+      "fuzzy_agrees_with_label": 15,
+      "fuzzy_disagrees_with_label": 6,
+      "recognised_not_analysed": 12,
+      "pii_shield_stored_only": 2
+    },
+    "per_label_outcomes": {
+      "date": {
+        "unresolved_no_suggestion": 8,
+        "fuzzy_agrees_with_label": 1
+      },
+      "quantity": {
+        "unresolved_no_suggestion": 6,
+        "fuzzy_agrees_with_label": 1
+      },
+      "unit_price": {
+        "unresolved_no_suggestion": 8,
+        "fuzzy_agrees_with_label": 1
+      },
+      "mrp": {
+        "unresolved_no_suggestion": 5,
+        "fuzzy_disagrees_with_label": 4,
+        "fuzzy_agrees_with_label": 2
+      },
+      "cost": {
+        "unresolved_no_suggestion": 7,
+        "fuzzy_agrees_with_label": 1
+      },
+      "revenue": {
+        "unresolved_no_suggestion": 7,
+        "fuzzy_agrees_with_label": 1
+      },
+      "discount": {
+        "unresolved_no_suggestion": 6
+      },
+      "tax": {
+        "fuzzy_agrees_with_label": 4,
+        "unresolved_no_suggestion": 4
+      },
+      "product": {
+        "unresolved_no_suggestion": 7,
+        "fuzzy_agrees_with_label": 2
+      },
+      "currency": {
+        "recognised_not_analysed": 3,
+        "unresolved_no_suggestion": 1
+      },
+      "category": {
+        "unresolved_no_suggestion": 5,
+        "fuzzy_agrees_with_label": 1
+      },
+      "customer": {
+        "fuzzy_disagrees_with_label": 1,
+        "pii_shield_stored_only": 2,
+        "unresolved_no_suggestion": 9
+      },
+      "region": {
+        "unresolved_no_suggestion": 11,
+        "fuzzy_agrees_with_label": 1
+      },
+      "status": {
+        "recognised_not_analysed": 3,
+        "unresolved_no_suggestion": 11,
+        "fuzzy_disagrees_with_label": 1
+      },
+      "notes": {
+        "recognised_not_analysed": 6,
+        "unresolved_no_suggestion": 10
+      },
+      "id": {
+        "unresolved_no_suggestion": 11
+      },
+      "other": {
+        "unresolved_no_suggestion": 10
+      }
+    },
+    "examples": {
+      "unresolved_no_suggestion": [
+        "तारीख",
+        "बिल तारीख",
+        "खरीद तारीख",
+        "बिक्री तारीख",
+        "दिनांक",
+        "kis din",
+        "din",
+        "kab"
+      ],
+      "fuzzy_agrees_with_label": [
+        "date kitne",
+        "qty kya",
+        "rate kya",
+        "mrp price",
+        "mrp kitna",
+        "cost kya",
+        "total kitne",
+        "cgst"
+      ],
+      "fuzzy_disagrees_with_label": [
+        "marked price",
+        "printed price",
+        "showroom price",
+        "maximum price",
+        "account",
+        "invoice status"
+      ],
+      "recognised_not_analysed": [
+        "currency",
+        "ccy",
+        "curr",
+        "status",
+        "order status",
+        "payment status",
+        "notes",
+        "note"
+      ],
+      "pii_shield_stored_only": [
+        "account name",
+        "customer kaun"
+      ]
+    },
+    "would_escalate_to_gemini_if_ai_available": 147
+  },
+  "conflicts_and_ambiguity": {
+    "_ALIAS_MAP_CONFLICTS_size": 0,
+    "alias_vs_fuzzy_role_conflicts": 0,
+    "alias_vs_semantic_disagreements": [],
+    "cross_label_duplicate_synonyms": 0,
+    "fuzzy_order_dependent_phrases": 4,
+    "fuzzy_order_dependent_examples": [
+      "taxable",
+      "mrp price",
+      "Total Qty",
+      "Purchase Qty"
+    ],
+    "pii_blocked_alias_keys": [],
+    "pii_blocked_synonyms": []
+  },
+  "perturbations": {
+    "rows": 638,
+    "outcome_vs_base": {
+      "unchanged": 438,
+      "exact->fuzzy": 142,
+      "exact->none": 51,
+      "fuzzy->none": 7
+    },
+    "by_kind": {
+      "upper": {
+        "unchanged": 55
+      },
+      "title": {
+        "unchanged": 55
+      },
+      "pad_spaces": {
+        "unchanged": 61
+      },
+      "bom_prefix": {
+        "unchanged": 61
+      },
+      "bom_then_space": {
+        "exact->fuzzy": 35,
+        "exact->none": 3,
+        "unchanged": 23
+      },
+      "space_then_bom": {
+        "unchanged": 61
+      },
+      "trailing_colon": {
+        "exact->fuzzy": 35,
+        "exact->none": 3,
+        "unchanged": 23
+      },
+      "trailing_dot": {
+        "exact->fuzzy": 35,
+        "exact->none": 3,
+        "unchanged": 23
+      },
+      "fullwidth": {
+        "exact->none": 38,
+        "unchanged": 13,
+        "fuzzy->none": 7
+      },
+      "double_internal_space": {
+        "exact->fuzzy": 9,
+        "exact->none": 1,
+        "unchanged": 10
+      },
+      "underscore_for_space": {
+        "unchanged": 19,
+        "exact->fuzzy": 1
+      },
+      "hyphen_for_space": {
+        "exact->fuzzy": 9,
+        "exact->none": 1,
+        "unchanged": 10
+      },
+      "nbsp_for_space": {
+        "exact->fuzzy": 9,
+        "exact->none": 1,
+        "unchanged": 10
+      },
+      "tab_for_space": {
+        "exact->fuzzy": 9,
+        "exact->none": 1,
+        "unchanged": 10
+      },
+      "space_for_underscore": {
+        "unchanged": 4
+      }
+    }
+  },
+  "migration_table": {
+    "rows": 268,
+    "lossless_as_legacy_alias": 268,
+    "excluded_pending_review": [],
+    "not_lossless_as_semantic": 40,
+    "not_lossless_as_semantic_keys": [
+      "stock",
+      "stock on hand",
+      "stock_on_hand",
+      "on hand",
+      "in stock",
+      "closing stock",
+      "closing_stock",
+      "closing balance",
+      "balance qty",
+      "balance_qty",
+      "available qty",
+      "current stock",
+      "inventory",
+      "inventory qty",
+      "payment mode",
+      "payment_mode",
+      "payment method",
+      "mode of payment",
+      "paid via",
+      "payment type",
+      "tender",
+      "salesperson",
+      "sales person",
+      "sales_person",
+      "salesman",
+      "staff",
+      "employee",
+      "cashier",
+      "biller",
+      "brand",
+      "brand name",
+      "make",
+      "manufacturer",
+      "size",
+      "sizes",
+      "item size",
+      "variant",
+      "colour",
+      "color",
+      "shade"
+    ]
+  },
+  "catalog": {
+    "anchor_count": 376,
+    "npz_matrix_shape": [
+      376,
+      384
+    ],
+    "npz_rows_equal_anchor_count": true,
+    "npz_labels_equal_anchor_labels": true
+  }
+}

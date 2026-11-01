@@ -1,0 +1,799 @@
+{
+  "dictionary_counts": {
+    "alias_map_entries": 268,
+    "fuzzy_entries": 66,
+    "semantic_catalog_fields": 17,
+    "semantic_catalog_synonyms": 359,
+    "unique_semantic_synonyms": 359,
+    "alias_fuzzy_overlap": 53,
+    "alias_fuzzy_role_conflicts": {}
+  },
+  "starter_pack_inventory": {
+    "verified_header_starter_rows": 90,
+    "verified_header_starter_fields": [
+      "\ufeffsource_platform",
+      "industry_module",
+      "header_original",
+      "proposed_role",
+      "verification_note",
+      "source_url",
+      "verification_status"
+    ],
+    "source_register_rows": 8
+  },
+  "electronics_regression": {
+    "rows": 700,
+    "valid_rows": 700,
+    "errors": 0,
+    "revenue": 5757679.0,
+    "cost": 3450780.0,
+    "profit": 2306899.0,
+    "units": 2621,
+    "discount_given": 1211000.0,
+    "discount_pct": 17.38
+  },
+  "representative_datasets": {
+    "01_garment_tally_export.csv": {
+      "total_rows": 758,
+      "total_columns": 8,
+      "columns": [
+        {
+          "header": "Voucher Date",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Voucher No",
+          "suggested_field": "Invoice No",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Particulars",
+          "suggested_field": "Item",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Stock Group",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Qty.",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Rate/Unit",
+          "suggested_field": "Selling Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "unit_price",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Purchase Rate",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Payment Mode",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8806,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "status",
+          "recognised_unused": true,
+          "needs_review": false
+        }
+      ]
+    },
+    "02_grocery_gst_invoice.csv": {
+      "total_rows": 1050,
+      "total_columns": 11,
+      "columns": [
+        {
+          "header": "Bill No",
+          "suggested_field": "Invoice No",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Bill Date",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Item Name",
+          "suggested_field": "Item",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Item Group",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "HSN Code",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.6948,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Billed Qty",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Taxable Value",
+          "suggested_field": "Line Total",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "revenue",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Discount",
+          "suggested_field": "Discount",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "discount",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "GST Amount",
+          "suggested_field": "Tax",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "tax",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Purchase Rate",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Customer",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "personal",
+          "recognised_unused": true,
+          "needs_review": false
+        }
+      ]
+    },
+    "03_electronics_shopify_orders.csv": {
+      "total_rows": 700,
+      "total_columns": 12,
+      "columns": [
+        {
+          "header": "Order ID",
+          "suggested_field": "Invoice No",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Ordered On",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Lineitem name",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "personal",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Product type",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Lineitem quantity",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Lineitem price",
+          "suggested_field": "Selling Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "unit_price",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "MRP",
+          "suggested_field": "MRP",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "mrp",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Unit Cost",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Currency",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.9841,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "currency",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Payment Method",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8359,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "status",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Order Status",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.9893,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "status",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Notes",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.9731,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "notes",
+          "recognised_unused": true,
+          "needs_review": false
+        }
+      ]
+    },
+    "04_pharmacy_marg_stock.xlsx": {
+      "total_rows": 770,
+      "total_columns": 10,
+      "columns": [
+        {
+          "header": "Invoice Date",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Bill No",
+          "suggested_field": "Invoice No",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Item Name",
+          "suggested_field": "Item",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Category",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Qty",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "MRP",
+          "suggested_field": "MRP",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "mrp",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Purchase Rate",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Closing Stock",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.5876,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "tax",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Godown",
+          "suggested_field": "Branch",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "region",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Salesman",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8746,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "customer",
+          "recognised_unused": false,
+          "needs_review": true
+        }
+      ]
+    },
+    "05_restaurant_pos_semicolon.csv": {
+      "total_rows": 556,
+      "total_columns": 7,
+      "columns": [
+        {
+          "header": "Sale Date",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Item",
+          "suggested_field": "Item",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Section",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Qty Sold",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Rate",
+          "suggested_field": "Selling Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "unit_price",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Cost",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Order Type",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.84,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": true
+        }
+      ]
+    },
+    "06_footwear_boutique_wide.csv": {
+      "total_rows": 576,
+      "total_columns": 18,
+      "columns": [
+        {
+          "header": "Bill Date",
+          "suggested_field": "Date",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "date",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Invoice No",
+          "suggested_field": "Invoice No",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "id",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Style Name",
+          "suggested_field": "Item",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Category",
+          "suggested_field": "Category",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "category",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Brand",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8584,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Size",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.7535,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Colour",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.6158,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "product",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Qty",
+          "suggested_field": "Quantity",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "quantity",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Rate/Unit",
+          "suggested_field": "Selling Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "unit_price",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Purchase Rate",
+          "suggested_field": "Cost Price",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "cost",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Discount",
+          "suggested_field": "Discount",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "discount",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "GST Amount",
+          "suggested_field": "Tax",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "tax",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Store",
+          "suggested_field": "Branch",
+          "confidence": "exact",
+          "confidence_score": 1.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "region",
+          "recognised_unused": false,
+          "needs_review": false
+        },
+        {
+          "header": "Payment Mode",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8806,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "status",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Customer Name",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.0,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "personal",
+          "recognised_unused": true,
+          "needs_review": false
+        },
+        {
+          "header": "Salesperson",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.8553,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "customer",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Closing Stock",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.5876,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "tax",
+          "recognised_unused": false,
+          "needs_review": true
+        },
+        {
+          "header": "Remarks",
+          "suggested_field": null,
+          "confidence": "none",
+          "confidence_score": 0.9991,
+          "route": "local",
+          "source": "local",
+          "semantic_label": "notes",
+          "recognised_unused": true,
+          "needs_review": false
+        }
+      ]
+    }
+  }
+}

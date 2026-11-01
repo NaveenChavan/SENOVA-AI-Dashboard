@@ -74,13 +74,23 @@ SOURCE_MEMORY = "memory"
 class PipelineTimings:
     """Per-stage wall-clock milliseconds, for the upload response and the logs."""
 
-    __slots__ = ("tier1_ms", "evidence_ms", "tier2_ms", "total_ms")
+    __slots__ = (
+        "tier1_ms", "evidence_ms", "tier2_ms", "total_ms",
+        "tier2_requested", "tier2_resolved",
+    )
 
     def __init__(self) -> None:
         self.tier1_ms: float = 0.0
         self.evidence_ms: float = 0.0   # Module 2.1 deterministic engine
         self.tier2_ms: float = 0.0
         self.total_ms: float = 0.0
+        # Phase 4.1 — measured at the exact moment Tier 2 was actually called,
+        # before any later route recompute can make a resolved column look
+        # unescalated again. Not part of ``as_dict()``: these are read directly
+        # off this object by the caller, not serialised into the existing
+        # ``PipelineTimings`` response schema, so an older client sees no change.
+        self.tier2_requested: int = 0
+        self.tier2_resolved: int = 0
 
     def as_dict(self) -> dict[str, float]:
         return {
@@ -97,6 +107,9 @@ async def analyse(
     file_id: str | None = None,
     run_tier2: bool = True,
     owner: str | None = None,
+    *,
+    bypass_cache: bool = False,
+    force_columns: set[str] | None = None,
 ) -> tuple[list[dict], PipelineTimings, str | None, str | None]:
     """
     Understand every column in ``df`` and return a mapping report.
@@ -106,6 +119,19 @@ async def analyse(
     suggestion, and only then do we decide whether Gemini should get a second
     look. This is important because a collision is itself a reason to review the
     column.
+
+    ``bypass_cache`` and ``force_columns`` exist for Phase 4.1's explicit
+    "Check again with AI" action and default to the original, automatic-pass
+    behaviour:
+
+    * ``bypass_cache=True`` skips both the cache lookup and the cache write for
+      this call, so a user-initiated retry always reaches Gemini fresh instead
+      of replaying a stale verdict — the whole point of the button.
+    * ``force_columns``, when given, restricts Tier 2 escalation to exactly
+      those raw column names (still only among columns Tier 1/evidence left
+      ambiguous; a column that is already settled is never force-escalated).
+      ``None`` means "every column Tier 1 routed to Gemini", unchanged from
+      before this parameter existed.
     """
     overall = time.perf_counter()
     timings = PipelineTimings()
@@ -166,7 +192,20 @@ async def analyse(
         and not report.get("recognised_unused")
     ]
 
+    if force_columns is not None:
+        # Restrict to the explicitly requested subset, still only among
+        # columns that were actually routed to Gemini. A name the caller
+        # passed that Tier 1 already settled locally is silently ignored
+        # rather than force-escalated — "check again" re-asks about an
+        # unresolved column, it does not relitigate a settled one.
+        escalated = [
+            report for report in escalated
+            if report["raw_column"] in force_columns
+        ]
+
     if escalated and run_tier2:
+        timings.tier2_requested = len(escalated)
+
         columns = [
             tier2_gemini.describe_column(
                 df[report["raw_column"]],
@@ -176,9 +215,9 @@ async def analyse(
             for report in escalated
         ]
 
-        cache_key = ai_cache.build_key(columns) if file_id else None
-        cache_load = (lambda key: ai_cache.load(file_id, key)) if file_id else None
-        cache_save = (lambda key, verdicts: ai_cache.save(file_id, key, verdicts)) if file_id else None
+        cache_key = ai_cache.build_key(columns) if (file_id and not bypass_cache) else None
+        cache_load = (lambda key: ai_cache.load(file_id, key)) if (file_id and not bypass_cache) else None
+        cache_save = (lambda key, verdicts: ai_cache.save(file_id, key, verdicts)) if (file_id and not bypass_cache) else None
 
         result = await tier2_gemini.resolve_columns(
             columns,
@@ -190,6 +229,13 @@ async def analyse(
         timings.tier2_ms = result.elapsed_ms
         notice = result.notice
         reason_code = result.reason_code
+        # Measured from the actual verdicts dict, not inferred: a verdict is
+        # only present here when Gemini (or the cache standing in for an
+        # earlier Gemini call) actually returned a usable answer for that
+        # exact column, which is precisely what "resolved" must mean.
+        timings.tier2_resolved = sum(
+            1 for report in escalated if report["raw_column"] in result.verdicts
+        )
 
         _apply_tier2_reports(ordered, result, df)
 
@@ -291,7 +337,7 @@ def _set_final_routes(
         needs_review = bool(report.get("needs_review"))
         if needs_review and ai_available and ai_consent:
             report["route"] = ROUTE_GEMINI
-            if report.get("source") == SOURCE_LOCAL:
+            if report.get("source") in (SOURCE_LOCAL, "dictionary"):
                 report["reason"] = (
                     report.get("reason") or "Needs a second opinion."
                 ) + " AI can take a second look."

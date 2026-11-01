@@ -103,7 +103,7 @@ def test_upload_carries_the_legacy_confidence_string(client, raw_sales_frame):
     # The additive fields arrive alongside it.
     assert by_name["Bill Date"]["confidence_score"] == 1.0
     assert by_name["Bill Date"]["confidence_band"] in {"high", "medium", "low"}
-    assert by_name["Bill Date"]["source"] in {"local", "gemini", "fallback", "pending"}
+    assert by_name["Bill Date"]["source"] in {"local", "dictionary", "gemini", "fallback", "pending"}
     assert isinstance(by_name["Bill Date"]["needs_review"], bool)
 
 

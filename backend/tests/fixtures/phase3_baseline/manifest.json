@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-26T09:40:40+00:00",
+  "git_head": "f9cda441ff4017fdc3470b82e9cbb5e98b980b89",
+  "git_tracked_changes": "none",
+  "python": "3.12.10",
+  "hash_note": "Text files are hashed with CRLF folded to LF so git autocrlf cannot change them.",
+  "artifacts": {
+    "legacy_alias_map.json": "8359a57c546b70b03b4be64e07873c2d444c86651e689611632414099fa5c8b4",
+    "fuzzy_keywords.json": "6196a88ad9d8be4b6e8edb9c725a84e19359a452a0576f2faedecd0aa451c2a5",
+    "catalog_anchors.json": "b047dcf566d518140738226df9a0ba5f068a33820b16bf02ed08e0651245594a",
+    "catalog_npz_alignment.json": "347d8e64eeb5a7af6d8c964b6ca0f94b4c878dc9527227cdaa528751f0f245a7",
+    "resolution_snapshot.json": "9e6f3dece58f7abf713f77ce806eb7276d4c43b3b11d3aff4fb7cccc5924a661",
+    "perturbation_snapshot.json": "439bb9165b0b61ba2d9247665bf816e7a7493d5ab5625f3367c8dc5434edef75",
+    "alias_migration_table.json": "1508e3878666bcec44529ab46af6261565bc8bae4c9ef6e40a1b9ac24620e532",
+    "baseline_metrics.json": "0d939804cac33060ee33b261c9f24053575e8aadc4777025aa20579a09b8e4d9"
+  },
+  "source_files_at_capture": {
+    "app/utils/data_validator.py": "b2d396e153433560e515d2f87cb75a3f8f67d717cc1c1667dabfb864305fb7e0",
+    "app/services/column_catalog.py": "27b69b2bffb6a4153ef65aa65342cffe4e33b21283ebdf6c79423af73731c564",
+    "app/services/tier1_classifier.py": "7d57df4b0be633228d2c8c5fa1eede935dd561839e789b2d80f85e81bab1f6c8",
+    "app/services/embedder.py": "f88667efabe52f00a77ec17007de1357a99fd1ed51e39f55ed112f26308b7376",
+    "app/services/column_understanding.py": "144dbaccd1fb25b8c9ddd11c4025363b315c94ebacea4b7a73caba1276d31173"
+  },
+  "catalog_embeddings_npz_sha256": "28e2b93fd06358fab09acbe07dd06cc4b8f61ab3bfae7cf8ef2bc21891acb1bc"
+}

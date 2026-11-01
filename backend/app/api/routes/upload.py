@@ -46,7 +46,15 @@ class Tier2Response(BaseModel):
     detected_columns: list[ColumnGuess]
     ai_notice: AiNotice | None = None
     pipeline_timings: PipelineTimings
-from app.services import column_understanding, frame_cache, mapping_memory, tier2_gemini
+    #: Phase 4.1 — counts measured from this actual call, never estimated.
+    #: ``columns_evaluated`` is how many columns were actually sent to Gemini
+    #: this time (0 on a skip/cache-served/cooldown-blocked call);
+    #: ``columns_resolved`` is how many of those came back with a verdict
+    #: (``source == "gemini"``). Both are 0, not omitted, when nothing ran —
+    #: the UI must never fabricate a count for a call that made no request.
+    columns_evaluated: int = 0
+    columns_resolved: int = 0
+from app.services import column_understanding, frame_cache, mapping_memory, tier2_cooldown, tier2_gemini
 from app.services.file_handler import (
     assert_owner,
     cleanup,
@@ -220,6 +228,13 @@ async def upload_file(
 
 class Tier2Request(BaseModel):
     ai_consent: bool = False
+    #: Phase 4.1 — "Check again with AI". False (the default) is the original,
+    #: automatic once-per-upload pass and is unaffected by anything below.
+    force_recheck: bool = False
+    #: Restrict a forced recheck to specific raw column headers. ``None``
+    #: (the default) means "every column Tier 1 still considers ambiguous",
+    #: matching the original endpoint's behaviour.
+    target_columns: list[str] | None = None
 
 
 @router.post("/{file_id}/tier2", response_model=Tier2Response)
@@ -229,7 +244,19 @@ async def run_tier2(
     user: str = Depends(get_current_user)
 ):
     """
-    Run Tier 2 asynchronously.
+    Run Tier 2 — once automatically per upload, or again on explicit request.
+
+    Phase 4.1, "Check again with AI": when ``force_recheck`` is set, this call
+    bypasses the Gemini verdict cache for this upload (so a stale answer is
+    never replayed) and is subject to a 10-second cooldown per (user, file_id)
+    so repeated clicks cannot fire unlimited Gemini requests. The cooldown is
+    enforced *before* any of the existing consent/availability gates are even
+    consulted, because a user mashing the button should see "wait a moment",
+    not a reason code that implies something is actually wrong.
+
+    Every other gate from the automatic pass is unchanged: no consent, no AI
+    available, or no API key still means zero Gemini calls, exactly as before
+    this parameter existed.
     """
     try:
         assert_owner(file_id, user)
@@ -237,13 +264,46 @@ async def run_tier2(
     except Exception as exc:
         raise HTTPException(status_code=404, detail="File not found or invalid.")
 
+    if body.force_recheck:
+        remaining = tier2_cooldown.seconds_remaining(user, file_id)
+        if remaining > 0:
+            raise HTTPException(
+                status_code=429,
+                detail={
+                    "message": f"Please wait {remaining:.0f}s before checking again.",
+                    "reason_code": "cooldown",
+                    "retry_after_seconds": round(remaining, 1),
+                },
+            )
+        # Record the attempt before the call, not after: a slow/erroring
+        # Gemini call must not let a second click slip in under the window.
+        tier2_cooldown.record_attempt(user, file_id)
+
+    force_columns = set(body.target_columns) if body.target_columns else None
+
     reports, timings, ai_notice, reason_code = await column_understanding.analyse(
-        df, ai_consent=body.ai_consent, file_id=file_id, run_tier2=True, owner=user
+        df,
+        ai_consent=body.ai_consent,
+        file_id=file_id,
+        run_tier2=True,
+        owner=user,
+        bypass_cache=body.force_recheck,
+        force_columns=force_columns,
     )
     unresolved = sum(
         1 for report in reports
         if report.get("needs_review") and not report.get("recognised_unused")
     )
+
+    # Measured, not estimated — read directly off the pipeline's own record of
+    # the moment it called Tier 2, before any later route recompute could make
+    # a resolved column look unescalated again (a fully resolved column's
+    # ``needs_review`` becomes false, which would otherwise make a post-hoc
+    # "was this routed to gemini" check undercount). Both are 0 whenever Tier 2
+    # was skipped for any reason — no consent, AI off, cooldown, nothing
+    # ambiguous — because ``analyse()`` never reaches the line that sets them.
+    columns_evaluated = timings.tier2_requested
+    columns_resolved = timings.tier2_resolved
 
     return Tier2Response(
         detected_columns=[ColumnGuess(**report) for report in reports],
@@ -253,7 +313,131 @@ async def run_tier2(
             else None
         ),
         pipeline_timings=PipelineTimings(**timings.as_dict()),
+        columns_evaluated=columns_evaluated,
+        columns_resolved=columns_resolved,
     )
+
+
+
+# ── Phase 4.2 — Custom note per column ───────────────────────────────────────
+
+
+class ColumnNoteInput(BaseModel):
+    """One column's header plus the user's short explanatory note."""
+
+    column: str = Field(..., description="Raw column header this note is about.")
+    note: str = Field(
+        "",
+        max_length=5000,
+        description=(
+            "Short user note, e.g. 'this is the delivery charge'. Sanitised and "
+            "truncated to 200 characters server-side regardless of length sent — "
+            "an over-long note is trimmed, not rejected. The 5000-char field limit "
+            "here is only a request-size guard, well above any legitimate note; "
+            "the real, user-facing limit is the 200-char truncation."
+        ),
+    )
+
+
+class ColumnNoteSuggestion(BaseModel):
+    """A single proposed role for a noted column, pending user confirmation."""
+
+    column: str
+    role: str = Field(..., description="One of the canonical fields, extra_dimension, extra_measure, or ignore.")
+    reason: str = ""
+    money_sensitive: bool = Field(
+        False,
+        description="True for Selling Price/Cost Price/Line Total/Quantity — the client must demand explicit confirmation.",
+    )
+
+
+class ColumnNotesRequest(BaseModel):
+    ai_consent: bool = False
+    notes: list[ColumnNoteInput] = Field(
+        default_factory=list,
+        description="Up to 20 columns with a note each; extras beyond 20 are dropped, not erred on.",
+    )
+
+
+class ColumnNotesResponse(BaseModel):
+    suggestions: list[ColumnNoteSuggestion] = Field(default_factory=list)
+    ai_notice: AiNotice | None = None
+    #: Sanitised notes, echoed back so the client can show them as a display
+    #: label immediately — including on the AI-off/AI-failure path, where
+    #: there is no suggestion at all but the note itself is still usable.
+    notes_echo: dict[str, str] = Field(default_factory=dict)
+
+
+@router.post("/{file_id}/column-notes", response_model=ColumnNotesResponse)
+async def submit_column_notes(
+    file_id: str,
+    body: ColumnNotesRequest,
+    user: str = Depends(get_current_user),
+):
+    """
+    Phase 4.2 — ask AI about up to 20 user-written column notes in one request.
+
+    This never mutates the file's mapping by itself. It only returns proposed
+    roles; applying any of them is a separate, explicit client action (the
+    mapping screen's existing dropdown / confirm flow), and money-sensitive
+    roles additionally require the client to collect its own extra
+    confirmation before calling ``confirm-mapping`` with that role. A note is
+    never written to the Gemini cache or to mapping memory — it lives only
+    for the duration of this request.
+    """
+    try:
+        assert_owner(file_id, user)
+        df = read_to_dataframe(file_id)
+    except Exception:
+        raise HTTPException(status_code=404, detail="File not found or invalid.")
+
+    from app.services.note_sanitizer import sanitize_note
+
+    # Sanitise first, then cap at 20 — a caller that sends 25 notes gets the
+    # first 20 processed and the note text itself is never trusted as-sent.
+    seen: dict[str, str] = {}
+    for item in body.notes:
+        if item.column not in df.columns:
+            continue
+        clean_note = sanitize_note(item.note)
+        if not clean_note:
+            continue
+        seen[item.column] = clean_note
+        if len(seen) >= tier2_gemini.MAX_NOTE_COLUMNS:
+            break
+
+    notes_echo = dict(seen)
+
+    if not seen:
+        return ColumnNotesResponse(suggestions=[], ai_notice=None, notes_echo={})
+
+    columns_payload = [
+        {
+            **tier2_gemini.describe_column(df[column], column, None),
+            "note": note,
+        }
+        for column, note in seen.items()
+    ]
+
+    result = await tier2_gemini.resolve_with_notes(columns_payload, ai_consent=body.ai_consent)
+
+    suggestions = [
+        ColumnNoteSuggestion(
+            column=column,
+            role=verdict.role,
+            reason=verdict.reason,
+            money_sensitive=verdict.money_sensitive,
+        )
+        for column, verdict in result.verdicts.items()
+    ]
+
+    ai_notice = (
+        AiNotice(message=result.notice, tone="info", affected_columns=len(seen) - len(suggestions), reason_code=result.reason_code)
+        if result.notice
+        else None
+    )
+
+    return ColumnNotesResponse(suggestions=suggestions, ai_notice=ai_notice, notes_echo=notes_echo)
 
 
 class ConfirmMappingRequest(BaseModel):

@@ -5,6 +5,7 @@ import Button from '../common/Button'
 import Icon from '../common/Icon'
 import { formatNumber } from '../charts/chartFormat'
 import GroupedClarificationDialog from './GroupedClarificationDialog'
+import ColumnNoteInput from './ColumnNoteInput'
 
 /**
  * Column-mapping confirmation screen.
@@ -85,6 +86,137 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
       setCheckingAi(false)
     })
   }, [checkingAi, preview.file_id, runTier2Async])
+
+  // ── Phase 4.1: "Check again with AI" ──────────────────────────────────────
+  const forceRecheckTier2Async = useSalesStore((state) => state.forceRecheckTier2Async)
+  const aiRecheckInFlight = useSalesStore((state) => state.aiRecheckInFlight)
+  const [recheckMessage, setRecheckMessage] = useState(null)
+  const [recheckCooldownUntil, setRecheckCooldownUntil] = useState(0)
+  const [recheckClockTick, setRecheckClockTick] = useState(0)
+
+  useEffect(() => {
+    if (!recheckCooldownUntil) return
+    const interval = setInterval(() => setRecheckClockTick((t) => t + 1), 1000)
+    return () => clearInterval(interval)
+  }, [recheckCooldownUntil])
+
+  const recheckSecondsRemaining = Math.max(0, Math.ceil((recheckCooldownUntil - Date.now()) / 1000))
+
+  const handleCheckAgain = async () => {
+    const result = await forceRecheckTier2Async(preview.file_id)
+    if (result?.cooldown) {
+      setRecheckCooldownUntil(Date.now() + (result.retryAfterSeconds || 10) * 1000)
+      setRecheckMessage(result.message)
+      return
+    }
+    if (result?.error) {
+      setRecheckMessage(result.error)
+      return
+    }
+    setRecheckCooldownUntil(Date.now() + 10 * 1000)
+    const evaluated = result?.columnsEvaluated ?? 0
+    const resolved = result?.columnsResolved ?? 0
+    // Only ever a real, measured count — never shown when nothing ran.
+    setRecheckMessage(
+      evaluated > 0 ? `AI looked at ${evaluated} column${evaluated === 1 ? '' : 's'}, resolved ${resolved}.` : null,
+    )
+  }
+
+  // ── Phase 4.2: custom note per column ─────────────────────────────────────
+  const submitColumnNotes = useSalesStore((state) => state.submitColumnNotes)
+  const [columnNotes, setColumnNotes] = useState({})
+  const [noteSuggestions, setNoteSuggestions] = useState({})
+  const [notesSubmitting, setNotesSubmitting] = useState(false)
+
+  const handleNoteChange = (rawColumn, note) => {
+    setColumnNotes((previous) => ({ ...previous, [rawColumn]: note }))
+  }
+
+  const handleAskAiAboutNotes = async () => {
+    const entries = Object.entries(columnNotes)
+      .filter(([, note]) => note && note.trim().length > 0)
+      .slice(0, 20)
+      .map(([column, note]) => ({ column, note }))
+    if (entries.length === 0) return
+
+    setNotesSubmitting(true)
+    try {
+      const response = await submitColumnNotes(preview.file_id, entries)
+      const byColumn = {}
+      for (const suggestion of response?.suggestions || []) {
+        byColumn[suggestion.column] = suggestion
+      }
+      setNoteSuggestions(byColumn)
+    } finally {
+      setNotesSubmitting(false)
+    }
+  }
+
+  /**
+   * Phase 4.2 fix: the three note-driven outcomes that are NOT a canonical
+   * field. ``ignore`` has an existing, already-valid representation (the
+   * empty-string "Ignore this column" option). ``extra_dimension`` /
+   * ``extra_measure`` do not — the extra-column registry
+   * (``extra_columns.classify_extra_columns``) decides those automatically,
+   * deterministically, from the column's own data shape, *after*
+   * confirm-mapping, for any column left unmapped here. There is no existing
+   * API that lets this screen force a specific extra-column role onto the
+   * registry, so the safe action is: leave the column unmapped (which lets
+   * the real classifier decide) and say so plainly, rather than forcing the
+   * literal AI role string into canonical mapping state where no dropdown
+   * option matches it.
+   */
+  const NOTE_NON_CANONICAL_ROLES = new Set(['extra_dimension', 'extra_measure', 'ignore'])
+
+  // Per-column note on what actually happened when a non-canonical
+  // suggestion was applied, so "Use this" never looks like a no-op.
+  const [noteOutcomeMessages, setNoteOutcomeMessages] = useState({})
+
+  const handleApplyNoteSuggestion = (rawColumn, role) => {
+    // Explicit confirmation already happened in ColumnNoteInput (the "Use
+    // this" button, gated on the money-sensitive checkbox when applicable).
+    // Only now does the suggestion become a real mapping change.
+    if (NOTE_NON_CANONICAL_ROLES.has(role)) {
+      // Always a safe, valid, already-supported state: unmapped. Never the
+      // literal role string, which has no matching <option> and would leave
+      // the select showing an unmatched value.
+      handleChange(rawColumn, '')
+      setNoteOutcomeMessages((previous) => ({
+        ...previous,
+        [rawColumn]:
+          role === 'ignore'
+            ? 'Set to "Ignore this column".'
+            : `Left unmapped so it can be classified automatically as an ${role === 'extra_dimension' ? 'extra dimension' : 'extra measure'} based on its data, once you confirm.`,
+      }))
+    } else if (allFields.includes(role)) {
+      handleChange(rawColumn, role)
+      setNoteOutcomeMessages((previous) => {
+        const next = { ...previous }
+        delete next[rawColumn]
+        return next
+      })
+    } else {
+      // Defensive: a role that is neither a known canonical field nor one of
+      // the three special outcomes should never reach this far (the backend
+      // whitelist already rejects it), but if it ever did, refuse safely
+      // rather than writing an unmatched value into mapping state.
+      setNoteOutcomeMessages((previous) => ({
+        ...previous,
+        [rawColumn]: `"${role}" is not a supported mapping target. The current mapping was left unchanged.`,
+      }))
+      setNoteSuggestions((previous) => {
+        const next = { ...previous }
+        delete next[rawColumn]
+        return next
+      })
+      return
+    }
+    setNoteSuggestions((previous) => {
+      const next = { ...previous }
+      delete next[rawColumn]
+      return next
+    })
+  }
 
   // Update mapping state when preview.detected_columns updates (from Tier 2 response)
   useEffect(() => {
@@ -245,6 +377,58 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
         </div>
       )}
 
+      {/* Phase 4.1: Check again with AI — only offered when something is
+          still unresolved after the automatic pass. */}
+      {(() => {
+        const stillUnresolved = preview.detected_columns.filter(
+          (c) => c.needs_review && !c.recognised_unused,
+        ).length
+        if (stillUnresolved === 0) return null
+
+        let disabledReason = null
+        if (!preview.ai_enabled) disabledReason = 'AI is switched off on this server.'
+        else if (!aiConsent) disabledReason = 'AI was not approved for this upload.'
+        else if (recheckSecondsRemaining > 0) disabledReason = `Wait ${recheckSecondsRemaining}s before checking again.`
+        else if (aiRecheckInFlight) disabledReason = 'Checking…'
+
+        return (
+          <div
+            className="mx-[var(--card-pad)] my-2 p-2.5 rounded-lg flex flex-wrap items-center justify-between gap-2"
+            style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)' }}
+            data-testid="check-again-banner"
+          >
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs" style={{ color: 'var(--text-primary)' }}>
+                {stillUnresolved} column{stillUnresolved === 1 ? '' : 's'} still unresolved.
+              </span>
+              {recheckMessage && (
+                <span className="text-[11.5px]" style={{ color: 'var(--text-muted)' }} data-testid="check-again-message">
+                  {recheckMessage}
+                </span>
+              )}
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              className="text-xs py-1 px-2.5"
+              onClick={handleCheckAgain}
+              disabled={Boolean(disabledReason)}
+              loading={aiRecheckInFlight}
+              title={disabledReason || 'Ask AI to look again at the unresolved columns'}
+              data-testid="check-again-button"
+            >
+              <Icon name="refresh" className="w-3.5 h-3.5" />
+              Check again with AI
+            </Button>
+            {disabledReason && (
+              <span className="text-[11px] w-full" style={{ color: 'var(--text-muted)' }} data-testid="check-again-disabled-reason">
+                {disabledReason}
+              </span>
+            )}
+          </div>
+        )
+      })()}
+
       {/* Scrolls inside the card: a 40-column file must not make the page
           endless, and the action row below must stay reachable. */}
       <div className="scroll-x" style={{ maxHeight: '46vh', overflowY: 'auto' }}>
@@ -343,6 +527,29 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
                         Already used by another column
                       </span>
                     )}
+
+                    {/* Phase 4.2: a note is only offered for a column that
+                        still needs review — a confidently-matched column has
+                        no ambiguity for a note to resolve. */}
+                    {needsReview && (
+                      <ColumnNoteInput
+                        column={column.raw_column}
+                        existingNote={columnNotes[column.raw_column]}
+                        suggestion={noteSuggestions[column.raw_column]}
+                        onNoteChange={handleNoteChange}
+                        onApply={handleApplyNoteSuggestion}
+                        disabled={notesSubmitting}
+                      />
+                    )}
+                    {noteOutcomeMessages[column.raw_column] && (
+                      <span
+                        className="block text-[11px] mt-1 whitespace-normal"
+                        style={{ color: 'var(--text-muted)', maxWidth: 220 }}
+                        data-testid={`note-outcome-${column.raw_column}`}
+                      >
+                        {noteOutcomeMessages[column.raw_column]}
+                      </span>
+                    )}
                   </td>
 
                   <td style={{ textAlign: 'left' }}>
@@ -379,6 +586,25 @@ export default function ColumnMappingScreen({ preview, onConfirm, onCancel, subm
           <p className="text-[12px]" style={{ color: 'var(--text-secondary)' }}>
             Extra features unlocked: <strong>{mappedOptional.join(', ')}</strong>
           </p>
+        )}
+
+        {Object.values(columnNotes).some((note) => note && note.trim().length > 0) && preview.ai_enabled && aiConsent && (
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              className="text-xs py-1 px-2.5"
+              onClick={handleAskAiAboutNotes}
+              loading={notesSubmitting}
+              data-testid="ask-ai-about-notes-button"
+            >
+              <Icon name="spark" className="w-3.5 h-3.5" />
+              Ask AI about my notes
+            </Button>
+            <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+              Up to 20 columns, one request.
+            </span>
+          </div>
         )}
 
         <div className="flex flex-col sm:flex-row gap-2 sm:justify-between sm:items-center pt-2">
@@ -452,6 +678,7 @@ const LEGACY_TONE = {
 const SOURCE_LABEL = {
   gemini: 'AI',
   local: 'on-device',
+  dictionary: 'From dictionary',
   fallback: 'needs a human',
   evidence: 'deterministic',
   memory: 'saved memory',

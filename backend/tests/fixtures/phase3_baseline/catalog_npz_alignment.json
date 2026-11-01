@@ -1,0 +1,43 @@
+{
+  "path": "app/services/catalog_embeddings.npz",
+  "exists": true,
+  "keys": [
+    "labels",
+    "matrix"
+  ],
+  "file_bytes": 535431,
+  "file_sha256": "28e2b93fd06358fab09acbe07dd06cc4b8f61ab3bfae7cf8ef2bc21891acb1bc",
+  "matrix_shape": [
+    376,
+    384
+  ],
+  "matrix_dtype": "float32",
+  "label_count": 376,
+  "anchor_count": 376,
+  "rows_equal_anchor_count": true,
+  "labels_equal_anchor_labels": true,
+  "first_label_mismatch_index": null,
+  "labels_per_label": {
+    "date": 29,
+    "quantity": 29,
+    "unit_price": 28,
+    "mrp": 16,
+    "cost": 26,
+    "revenue": 33,
+    "discount": 15,
+    "tax": 19,
+    "product": 35,
+    "currency": 5,
+    "category": 30,
+    "customer": 20,
+    "region": 22,
+    "status": 16,
+    "notes": 17,
+    "id": 25,
+    "other": 11
+  },
+  "row_norm_min": 1.0,
+  "row_norm_max": 1.0,
+  "text_alignment_verified": false,
+  "text_alignment_note": "Only shape and label order are checked here. The embedded TEXT of each row cannot be verified without the model; see --real-model-check."
+}

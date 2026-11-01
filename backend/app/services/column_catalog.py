@@ -46,6 +46,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from app.utils.column_dictionary import semantic_synonyms_by_label
 from app.utils.data_validator import (
     OPTIONAL_MEASURE_COLUMNS,
     REQUIRED_COLUMNS,
@@ -71,265 +72,133 @@ class SemanticField:
     synonyms: tuple[str, ...]
 
 
-#: Every meaning the pipeline can assign. ``other`` is the deliberate "we
-#: recognised this as *not* one of our concepts" bucket — never a synonym for
-#: "unmapped", because Tier 2 can still take a run at an ``other`` column and
-#: move it to a real label.
-SEMANTIC_FIELDS: tuple[SemanticField, ...] = (
-    SemanticField(
-        label="date",
-        description=(
-            "The calendar date or timestamp on which a transaction happened — "
-            "bill date, invoice date, voucher date, order date, sale date."
-        ),
-        synonyms=(
-            "date", "dates", "date_sold", "sale date", "sales date", "sold date",
-            "transaction date", "txn date", "invoice date", "bill date",
-            "billing date", "voucher date", "entry date", "posting date",
-            "order date", "ordered on", "datetime", "timestamp", "day",
-            # Hindi / Hinglish
-            "तारीख", "बिल तारीख", "खरीद तारीख", "बिक्री तारीख", "दिनांक",
-            "date kitne", "kis din", "din", "kab",
-        ),
+#: Every meaning the pipeline can assign, paired with its natural-language
+#: anchor description. ``other`` is the deliberate "we recognised this as
+#: *not* one of our concepts" bucket — never a synonym for "unmapped", because
+#: Tier 2 can still take a run at an ``other`` column and move it to a real
+#: label.
+#:
+#: Phase 3: only the ``(label, description)`` pairs live here now. The literal
+#: synonym tuples (359 entries total) moved to ``app/data/column_dictionary.json``
+#: and are loaded back in below via ``semantic_synonyms_by_label()`` — see
+#: ``SEMANTIC_FIELDS`` immediately after this definition. Descriptions stay as
+#: code literals because they are prose written for the embedding model, not
+#: dictionary data.
+_FIELD_DEFINITIONS: tuple[tuple[str, str], ...] = (
+    (
+        "date",
+        "The calendar date or timestamp on which a transaction happened — "
+        "bill date, invoice date, voucher date, order date, sale date.",
     ),
-    SemanticField(
-        label="quantity",
-        description=(
-            "How many individual pieces or units were sold on a line — pieces, "
-            "pcs, stock quantity, units sold, billed quantity."
-        ),
-        synonyms=(
-            "quantity", "qty", "qty.", "qnty", "quantities", "units", "unit",
-            "nos", "no of units", "pieces", "pcs", "count", "units sold",
-            "quantity sold", "qty sold", "billed qty", "sold qty", "actual qty",
-            "order quantity", "lineitem quantity", "quantity-purchased",
-            # Hindi / Hinglish
-            "मात्रा", "कितना", "कितने", "संख्या", "पीस", "नग", "qty kya",
-        ),
+    (
+        "quantity",
+        "How many individual pieces or units were sold on a line — pieces, "
+        "pcs, stock quantity, units sold, billed quantity.",
     ),
-    SemanticField(
-        label="unit_price",
-        description=(
-            "The selling price of ONE single piece — the retail rate per unit, "
-            "not the total for the whole line."
-        ),
-        synonyms=(
-            "selling price", "selling_price", "sale price", "sales price",
-            "sell price", "price", "unit price", "unit_price", "price per unit",
-            "price/unit", "rate", "rate/unit", "rate per unit", "unit rate",
-            "retail price", "sp", "lineitem price", "item-price",
-            # Hindi / Hinglish
-            "इकाई मूल्य", "विक्रय मूल्य", "क्रय मूल्य", "दर", "भाव", "मूल्य",
-            "ek kitna", "kitna paisa", "rate kya",
-        ),
+    (
+        "unit_price",
+        "The selling price of ONE single piece — the retail rate per unit, "
+        "not the total for the whole line.",
     ),
-    SemanticField(
-        label="mrp",
-        description=(
-            "The maximum retail price — the printed list price shown to a "
-            "customer before any discount. This is NOT the price actually "
-            "charged and NOT the cost price."
-        ),
-        synonyms=(
-            "mrp", "m.r.p", "m.r.p.", "maximum retail price", "list price",
-            "marked price", "printed price", "mrp price", "showroom price",
-            # Hindi / Hinglish
-            "एमआरपी", "अधिकतम खुदरा मूल्य", "सूची मूल्य", "छाप मूल्य",
-            "mrp kitna", "maximum price",
-        ),
+    (
+        "mrp",
+        "The maximum retail price — the printed list price shown to a "
+        "customer before any discount. This is NOT the price actually "
+        "charged and NOT the cost price.",
     ),
-    SemanticField(
-        label="cost",
-        description=(
-            "What the shop paid for ONE piece — purchase rate, cost price, "
-            "buying price, wholesale rate, landed cost, COGS."
-        ),
-        synonyms=(
-            "cost price", "cost_price", "cost", "unit cost", "unit_cost",
-            "cost per unit", "purchase price", "purchase_price", "purchase rate",
-            "buying price", "buying_price", "wholesale price", "wholesale_price",
-            "landing cost", "landed cost", "cp", "cogs",
-            # Hindi / Hinglish
-            "लागत", "खरीद मूल्य", "क्रय दर", "थोक मूल्य", "खर्च",
-            "khareed ka daam", "cost kya", "lagai",
-        ),
+    (
+        "cost",
+        "What the shop paid for ONE piece — purchase rate, cost price, "
+        "buying price, wholesale rate, landed cost, COGS.",
     ),
-    SemanticField(
-        label="revenue",
-        description=(
-            "The total amount for a whole invoice line — quantity multiplied "
-            "by the unit price, i.e. the line total, net amount or taxable "
-            "value. This is a LINE TOTAL, not a per-unit price."
-        ),
-        synonyms=(
-            "amount", "amt", "net amount", "net_amount", "gross amount",
-            "total", "total amount", "total_amount", "line total", "line_total",
-            "line amount", "row total", "sale amount", "sales amount",
-            "sales value", "invoice amount", "bill amount", "taxable value",
-            "taxable amount", "revenue", "turnover", "value", "lineitem total",
-            "item-total",
-            # Hindi / Hinglish
-            "राशि", "कुल राशि", "कुल रकम", "बिक्री राशि", "आय",
-            "total kitne", "kitna paisa mila", "paisa",
-        ),
+    (
+        "revenue",
+        "The total amount for a whole invoice line — quantity multiplied "
+        "by the unit price, i.e. the line total, net amount or taxable "
+        "value. This is a LINE TOTAL, not a per-unit price.",
     ),
-    SemanticField(
-        label="discount",
-        description=(
-            "A reduction given off the line — a discount amount, rebate or "
-            "less-discount value, usually in rupees."
-        ),
-        synonyms=(
-            "discount", "discount amount", "discount_amount", "disc", "disc amt",
-            "rebate", "less discount", "lineitem discount", "concession",
-            # Hindi / Hinglish
-            "छूट", "रिहायत", "डिस्काउंट", "छोट", "bachat",
-        ),
+    (
+        "discount",
+        "A reduction given off the line — a discount amount, rebate or "
+        "less-discount value, usually in rupees.",
     ),
-    SemanticField(
-        label="tax",
-        description=(
-            "Government tax collected on the line — GST, CGST, SGST, IGST or "
-            "VAT, reported separately and never counted as profit."
-        ),
-        synonyms=(
-            "tax", "tax amount", "tax_amount", "gst", "gst amount", "gst_amount",
-            "total gst", "cgst+sgst", "cgst", "sgst", "igst", "vat", "gstin",
-            # Hindi / Hinglish
-            "कर", "जीएसटी", "टैक्स", "ब्याज", "gst kitna",
-        ),
+    (
+        "tax",
+        "Government tax collected on the line — GST, CGST, SGST, IGST or "
+        "VAT, reported separately and never counted as profit.",
     ),
-    SemanticField(
-        label="product",
-        description=(
-            "The name of the individual product, garment, style or article that "
-            "was sold — the specific thing, not the group it belongs to."
-        ),
-        synonyms=(
-            "item", "items", "item name", "item_name", "product", "product name",
-            "product_name", "products", "description", "item description",
-            "particulars", "stock item", "style", "style name", "style code",
-            "design", "prod", "goods", "sku", "sku code", "item code",
-            "product code", "barcode", "article", "title",
-            # Hindi / Hinglish
-            "उत्पाद", "वस्तु", "सामान", "चीज़", "आइटम", "नाम",
-            "product naam", "item ka naam", "kya becha",
-        ),
+    (
+        "product",
+        "The name of the individual product, garment, style or article that "
+        "was sold — the specific thing, not the group it belongs to.",
     ),
-    SemanticField(
-        label="currency",
-        description=(
-            "The currency code or symbol for the money amounts on this row — "
-            "INR, USD, EUR, Rs, etc."
-        ),
-        synonyms=(
-            "currency", "ccy", "curr",
-            # Hindi / Hinglish
-            "मुद्रा",
-        ),
+    (
+        "currency",
+        "The currency code or symbol for the money amounts on this row — "
+        "INR, USD, EUR, Rs, etc.",
     ),
-    SemanticField(
-        label="category",
-        description=(
-            "The group or department a product belongs to — Kurta, Saree, "
-            "Shirt, Grocery, Beverages. A classification of the product, not "
-            "the product itself."
-        ),
-        synonyms=(
-            "category", "categories", "cat", "product category", "item category",
-            "item group", "stock group", "product type", "dept", "department",
-            "type", "group", "segment", "class", "sub category", "sub-category",
-            "subcategory", "collection", "section", "menu group", "course",
-            "kitchen group", "food type",
-            # Hindi / Hinglish
-            "श्रेणी", "वर्ग", "समूह", "विभाग", "कटेगरी", "category kya",
-        ),
+    (
+        "category",
+        "The group or department a product belongs to — Kurta, Saree, "
+        "Shirt, Grocery, Beverages. A classification of the product, not "
+        "the product itself.",
     ),
-    SemanticField(
-        label="customer",
-        description=(
-            "The person or business the sale was made to — customer name, "
-            "buyer, party, client. Personal data."
-        ),
-        synonyms=(
-            "customer", "customer name", "customer_name", "buyer", "party",
-            "party name", "client", "account", "account name", "consignee",
-            "supplier", "vendor",
-            # Hindi / Hinglish
-            "ग्राहक", "कस्टमर", "खरीदार", "पार्टी", "ग्राहक का नाम",
-            "customer kaun", "kiska maal",
-        ),
+    (
+        "customer",
+        "The person or business the sale was made to — customer name, "
+        "buyer, party, client. Personal data.",
     ),
-    SemanticField(
-        label="region",
-        description=(
-            "A geographical or organisational location the sale happened at — "
-            "branch, store, shop, outlet, godown, warehouse, city."
-        ),
-        synonyms=(
-            "branch", "store", "store name", "shop", "outlet", "location",
-            "godown", "warehouse", "city", "region", "zone", "area", "territory",
-            # Hindi / Hinglish
-            "शाखा", "दुकान", "स्थान", "क्षेत्र", "इलाका", "फैक्ट्री",
-            "branch kaun", "kitni dukan",
-        ),
+    (
+        "region",
+        "A geographical or organisational location the sale happened at — "
+        "branch, store, shop, outlet, godown, warehouse, city.",
     ),
-    SemanticField(
-        label="status",
-        description=(
-            "The state of the order or transaction — pending, shipped, delivered, "
-            "cancelled, returned, paid or unpaid."
-        ),
-        synonyms=(
-            "status", "order status", "payment status", "fulfilment status", "state", "stage",
-            "order state", "delivery status", "invoice status", "condition",
-            # Hindi / Hinglish
-            "स्थिति", "हालत", "स्टेटस", "status kya", "kya hua",
-        ),
+    (
+        "status",
+        "The state of the order or transaction — pending, shipped, delivered, "
+        "cancelled, returned, paid or unpaid.",
     ),
-    SemanticField(
-        label="notes",
-        description=(
-            "Free-text remarks written by staff about the transaction — "
-            "delivery instructions, damage reports, supplier notes, anything "
-            "typed in a remarks or observation box."
-        ),
-        synonyms=(
-            "notes", "note", "remarks", "remark", "comment", "comments", "narration",
-            "observation", "description note", "instructions", "memo",
-            # Hindi / Hinglish
-            "टिप्पणी", "नोट", "टिप्पणियाँ", "remarks kya", "koi baat",
-        ),
+    (
+        "notes",
+        "Free-text remarks written by staff about the transaction — "
+        "delivery instructions, damage reports, supplier notes, anything "
+        "typed in a remarks or observation box.",
     ),
-    SemanticField(
-        label="id",
-        description=(
-            "A unique reference number identifying a transaction or document — "
-            "invoice number, bill number, voucher number, receipt number or "
-            "order id."
-        ),
-        synonyms=(
-            "id", "invoice no", "invoice_no", "invoice number", "invoice",
-            "bill no", "bill_no", "bill number", "voucher no", "receipt no",
-            "order id", "order_id", "order no", "txn id", "transaction id",
-            "reference no", "ref no", "doc no", "sr no", "serial no",
-            # Hindi / Hinglish
-            "बिल संख्या", "चालान संख्या", "क्रमांक", "पर्ची संख्या",
-        ),
+    (
+        "id",
+        "A unique reference number identifying a transaction or document — "
+        "invoice number, bill number, voucher number, receipt number or "
+        "order id.",
     ),
-    SemanticField(
-        label="other",
-        description=(
-            "A column that matches none of the known business meanings — an "
-            "unrecognised extra, a technical artefact, or free text we cannot "
-            "place."
-        ),
-        synonyms=(
-            "other", "misc", "miscellaneous", "na", "n/a", "unknown",
-            "unnamed", "untitled", "column", "field",
-        ),
+    (
+        "other",
+        "A column that matches none of the known business meanings — an "
+        "unrecognised extra, a technical artefact, or free text we cannot "
+        "place.",
     ),
 )
+
+#: Synonym lists loaded from ``app/data/column_dictionary.json``, keyed by
+#: semantic label, in the exact order the hardcoded tuples used to carry —
+#: see ``build_dictionary_json.py``'s ``semantic_order`` field and
+#: ``column_dictionary._synonyms_by_label`` for how that order survives the
+#: round-trip through JSON.
+_SYNONYMS_FROM_DICT: dict[str, list[str]] = semantic_synonyms_by_label()
+
+#: Every meaning the pipeline can assign. Combines the code-literal
+#: descriptions above with the JSON-loaded synonym lists. The synonym ORDER
+#: per label must stay identical to the pre-migration hardcoded order because
+#: ``catalog_anchors()`` produces anchors in this order and the cached
+#: ``catalog_embeddings.npz`` is index-matched against it.
+SEMANTIC_FIELDS: tuple[SemanticField, ...] = tuple(
+    SemanticField(
+        label=label,
+        description=description,
+        synonyms=tuple(_SYNONYMS_FROM_DICT.get(label, ())),
+    )
+    for label, description in _FIELD_DEFINITIONS
+)
+
 
 
 #: Label → its definition. Ordered like ``SEMANTIC_FIELDS`` so anchor indices

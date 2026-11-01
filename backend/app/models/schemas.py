@@ -67,11 +67,12 @@ class ColumnGuess(BaseModel):
             "meanings fit about equally well, which is why it escalates even at a high score."
         ),
     )
-    source: Literal["local", "gemini", "fallback", "pending", "evidence", "memory"] = Field(
+    source: Literal["local", "gemini", "fallback", "pending", "evidence", "memory", "dictionary"] = Field(
         "local",
         description=(
-            "Who decided this column: 'local' = the on-server FastEmbed classifier or the alias "
-            "map, 'gemini' = Gemini Flash, 'fallback' = we could not decide and the user must map it, "
+            "Who decided this column: 'local' = the on-server FastEmbed classifier, 'dictionary' = "
+            "an exact hit against the column_dictionary.json alias/synonym table, 'gemini' = Gemini "
+            "Flash, 'fallback' = we could not decide and the user must map it, "
             "'pending' = Tier 2 is deferred and will be run asynchronously, "
             "'evidence' = deterministic evidence rules engine (Module 2.1), "
             "'memory' = safe mapping memory (Module 2.3)."

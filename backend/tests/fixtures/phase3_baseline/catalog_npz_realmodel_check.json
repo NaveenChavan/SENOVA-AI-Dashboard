@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "offline": true,
+  "configured_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "cache_path": "fastembed_cache",
+  "model_loaded": false,
+  "loaded_model_name": null,
+  "model_name_matches_config": false,
+  "status": "model_unavailable_offline"
+}

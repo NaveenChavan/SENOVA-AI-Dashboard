@@ -307,7 +307,8 @@ class TestDegradation:
         guesses = classify_columns(df)
 
         assert [g.canonical for g in guesses] == ["Date", "Item"]
-        assert all(g.source == SOURCE_LOCAL for g in guesses)
+        # Both are exact alias/dictionary hits post Phase-3 migration.
+        assert all(g.source in (SOURCE_LOCAL, "dictionary") for g in guesses)
 
     def test_flag_off_leaves_fuzzy_matches_for_confirmation(self, stub_embeddings, monkeypatch):
         monkeypatch.setattr(tier1_classifier, "FASTEMBED_ENABLED", False)

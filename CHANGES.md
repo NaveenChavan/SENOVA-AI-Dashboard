@@ -269,3 +269,95 @@ Implemented **Module 2.2: Grouped Clarification Dialog** as specified in the SEN
 - Phase 1 regression suite (`pytest tests/test_phase1_extra_columns.py tests/test_phase1_recording_fixes.py tests/test_data_validator.py tests/test_pdf_exports.py`): **73 passed**
 - Full backend suite (`pytest tests/`): **609 passed, 1 skipped**
 
+
+
+
+---
+
+## 8. Phase 3 — Offline-First, Source-Backed Dictionary
+
+Implemented strictly per the **SENOVA Playbook Phase 3** (pages 8–9), approval-gated in stages:
+Step 0 (frozen baseline) → core migration (JSON becomes the runtime alias source) → remaining
+tooling (staged import, evaluation) + documentation. No new matching behaviour was introduced;
+this phase is a structural + provenance refactor that preserves existing resolution results.
+
+### Requirement → Files → Tests
+
+| Playbook req | What it is | Files | Tests |
+|---|---|---|---|
+| 3.1 | Dictionary source file + schema | `backend/app/data/column_dictionary.json`, `backend/scripts/build_dictionary_json.py` | `test_dictionary_migration.py::test_compatibility_view` |
+| 3.2 | Seed without regression | `backend/app/utils/column_dictionary.py`, `backend/app/utils/data_validator.py`, `backend/app/services/column_catalog.py` | `test_phase3_baseline.py` (23), `test_dictionary_migration.py::test_snapshot_compat_after_migration` |
+| 3.3 | Normalization + bounded lookup order | `backend/app/utils/column_dictionary.py` (`legacy_key`, `normalize_phrase`) | `test_phase3_baseline.py::test_legacy_and_tier1_normalisation_match_frozen_baseline` |
+| 3.4 | Source-backed staged import | `backend/scripts/import_headers.py` | `test_phase3_tooling.py` (import group) |
+| 3.5 | Evaluation script + golden set | `backend/scripts/eval_columns.py`, `backend/tests/fixtures/golden_headers.csv` | `test_phase3_tooling.py` (eval group) |
+| source label | `From dictionary` on exact hits | `tier1_classifier.py`, `schemas.py`, `ColumnMappingScreen.jsx`, `AiNoticeBanner.jsx` | `test_dictionary_migration.py::test_dictionary_source_on_exact_hit` |
+
+### Migration contract
+- **JSON is the runtime source.** The 268-entry `COLUMN_ALIAS_MAP` literal was removed from
+  `data_validator.py`; `guess_canonical_column` now routes its exact lookup through
+  `column_dictionary.lookup_legacy_alias` (JSON-backed). `COLUMN_ALIAS_MAP` remains only as a
+  read-only `MappingProxyType` compatibility view derived from the JSON — there is no competing
+  hard-coded alias map. Proven by `test_json_is_runtime_source` (redirects the loader to a temp
+  dict and observes the resolver output change).
+- **Alias precedence preserved.** Where a legacy alias key and a semantic synonym normalise to the
+  same phrase, the `legacy_alias` entry wins for production; agreement/conflict is recorded in
+  `provenance`. 198 agreeing merges, 0 conflicts.
+- **Byte-for-byte legacy behaviour.** `legacy_key()` is an exact copy of `_normalize_col_name`;
+  `_FUZZY_KEYWORDS` order, PII-first ordering, `catalog_anchors()` sequence (376) and the
+  `catalog_embeddings.npz` index alignment are all unchanged (frozen-baseline asserted).
+- **Documented source exception.** The only permitted resolution change is the `source` label
+  `local → dictionary` on exact dictionary hits (non-PII). All canonical/label/confidence/routing
+  outcomes are identical to the frozen Step-0 baseline.
+
+### Provenance policy
+- `builtin-existing` — migrated code aliases/synonyms (verified, already shipping).
+- `documented-source; staged-candidate; not promoted` — starter-pack import output; **never**
+  upgraded to `verified` by a script, **never** auto-promoted into the runtime dictionary.
+- Conflicts (same phrase / different role) and unmapped `proposed_role` values are reported, never
+  force-mapped or invented.
+
+### Evaluation methodology
+- Golden set `tests/fixtures/golden_headers.csv` (79 rows): 39 builtin aliases + 35 source-backed
+  starter-pack headers + 5 curated ambiguous, each with source/source_url/verification_status and a
+  `split` (34 tuning / 45 holdout).
+- Inherently ambiguous headers carry `expected_role=ambiguous` + `candidate_roles`; committing to a
+  single role for them counts as a **false mapping**, not a correct answer.
+- Metrics reported per split and overall: accuracy, per-role precision/recall, top confusions,
+  unresolved share, false mappings, routing proportions (dictionary/fuzzy/unresolved).
+- `eval_columns.py` is offline and makes **no Gemini/network call**; it measures only and never
+  tunes a threshold against holdout.
+
+### Known limitations
+- **Stage-2 normalized-variant runtime matching is DISABLED.** `normalize_phrase()` (NFKC/casefold)
+  exists in the loader and is unit-tested, but is not wired into production lookup — perturbation
+  analysis showed trailing punctuation / full-width characters would change existing outcomes, so
+  activation is deferred to a separately-approved step.
+- **Kannada synonyms** are absent from the current catalog (Devanagari present); none were invented.
+- **NPZ model/text alignment is not verified offline** — the cached FastEmbed model cannot load
+  without a network handshake, so only shape and label/index alignment are asserted
+  (`text_alignment_verified: false`, reported honestly).
+
+### Verification results (exact)
+- Focused Phase 3: `pytest tests/test_dictionary_migration.py tests/test_phase3_baseline.py tests/test_phase3_tooling.py` → **35 passed**.
+- Staged import on starter pack (90 rows): **20 staged candidates, 47 unmapped (reported), 18 already-present, 5 merged-provenance groups, 0 conflicts**; runtime dictionary SHA-256 unchanged (no auto-promote).
+- Evaluation (offline, re-verified 2026-10-28): overall non-ambiguous accuracy **0.8649** (tuning **0.871** / holdout **0.8605**); routing dictionary **0.6835** / fuzzy **0.1392** / unresolved **0.1772**; overall unresolved share **0.1772**; **6 false mappings (3 of which are ambiguous rows** the resolver correctly declined or over-committed on). `eval_report.json` written under `backend/app/data/staged/`.
+- Full backend suite (`pytest`): **676 passed, 1 skipped**.
+- Full frontend Vitest (`npx vitest run`): **177 passed across 12 files**.
+- Electronics regression (`python validation/verify_fixture.py`): **PASS** — Revenue 5,757,679 / Cost 3,450,780 / Profit 2,306,899 / Units 2,621 / Discount 1,211,000 / Discount % 17.38 unchanged; C2 fixtures unchanged.
+
+### Phase 3 status (approved within reviewed scope — 2026-10-28)
+Phase 3 is **approved as complete within the reviewed scope**. The implementation, exact test
+results, and evaluation metrics recorded above reflect the final state and were re-verified on
+2026-10-28 (backend 676 passed / 1 skipped; frontend 177 passed / 12 files; Phase 3 focused 35
+passed; electronics fixture PASS; evaluation overall accuracy 0.8649). No Phase 4 work has been
+started.
+
+**Remaining limitations carried forward (explicitly unresolved):**
+1. **Normalized-variant runtime matching remains DISABLED.** `normalize_phrase()` (NFKC/casefold)
+   exists in the loader and is unit-tested, but is deliberately **not wired into the production
+   lookup path**. Perturbation analysis showed trailing punctuation / full-width characters would
+   change existing resolution outcomes, so activation is deferred to a separately-approved step.
+2. **NPZ model/text alignment remains UNVERIFIED offline.** The cached FastEmbed model cannot load
+   without a network handshake, so only NPZ shape and label/index alignment are asserted; the
+   model-to-text vector correspondence is reported honestly as `text_alignment_verified: false` and
+   has not been confirmed.

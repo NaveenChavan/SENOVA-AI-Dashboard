@@ -1,0 +1,2391 @@
+{
+  "schema_version": 1,
+  "description": "Complete catalog_anchors() sequence: exact text, label and order.",
+  "anchor_count": 376,
+  "sequence_sha256": "bf7f6aae7c0706598170b404f83e355a3aa815b0b2277936e38f983b96d45d76",
+  "labels_in_order": [
+    "date",
+    "quantity",
+    "unit_price",
+    "mrp",
+    "cost",
+    "revenue",
+    "discount",
+    "tax",
+    "product",
+    "currency",
+    "category",
+    "customer",
+    "region",
+    "status",
+    "notes",
+    "id",
+    "other"
+  ],
+  "anchors_per_label": {
+    "date": 29,
+    "quantity": 29,
+    "unit_price": 28,
+    "mrp": 16,
+    "cost": 26,
+    "revenue": 33,
+    "discount": 15,
+    "tax": 19,
+    "product": 35,
+    "currency": 5,
+    "category": 30,
+    "customer": 20,
+    "region": 22,
+    "status": 16,
+    "notes": 17,
+    "id": 25,
+    "other": 11
+  },
+  "anchors": [
+    {
+      "index": 0,
+      "label": "date",
+      "kind": "description",
+      "text": "The calendar date or timestamp on which a transaction happened — bill date, invoice date, voucher date, order date, sale date.",
+      "raw_ascii": "The calendar date or timestamp on which a transaction happened \\u2014 bill date, invoice date, voucher date, order date, sale date."
+    },
+    {
+      "index": 1,
+      "label": "date",
+      "kind": "synonym",
+      "text": "date"
+    },
+    {
+      "index": 2,
+      "label": "date",
+      "kind": "synonym",
+      "text": "dates"
+    },
+    {
+      "index": 3,
+      "label": "date",
+      "kind": "synonym",
+      "text": "date_sold"
+    },
+    {
+      "index": 4,
+      "label": "date",
+      "kind": "synonym",
+      "text": "sale date"
+    },
+    {
+      "index": 5,
+      "label": "date",
+      "kind": "synonym",
+      "text": "sales date"
+    },
+    {
+      "index": 6,
+      "label": "date",
+      "kind": "synonym",
+      "text": "sold date"
+    },
+    {
+      "index": 7,
+      "label": "date",
+      "kind": "synonym",
+      "text": "transaction date"
+    },
+    {
+      "index": 8,
+      "label": "date",
+      "kind": "synonym",
+      "text": "txn date"
+    },
+    {
+      "index": 9,
+      "label": "date",
+      "kind": "synonym",
+      "text": "invoice date"
+    },
+    {
+      "index": 10,
+      "label": "date",
+      "kind": "synonym",
+      "text": "bill date"
+    },
+    {
+      "index": 11,
+      "label": "date",
+      "kind": "synonym",
+      "text": "billing date"
+    },
+    {
+      "index": 12,
+      "label": "date",
+      "kind": "synonym",
+      "text": "voucher date"
+    },
+    {
+      "index": 13,
+      "label": "date",
+      "kind": "synonym",
+      "text": "entry date"
+    },
+    {
+      "index": 14,
+      "label": "date",
+      "kind": "synonym",
+      "text": "posting date"
+    },
+    {
+      "index": 15,
+      "label": "date",
+      "kind": "synonym",
+      "text": "order date"
+    },
+    {
+      "index": 16,
+      "label": "date",
+      "kind": "synonym",
+      "text": "ordered on"
+    },
+    {
+      "index": 17,
+      "label": "date",
+      "kind": "synonym",
+      "text": "datetime"
+    },
+    {
+      "index": 18,
+      "label": "date",
+      "kind": "synonym",
+      "text": "timestamp"
+    },
+    {
+      "index": 19,
+      "label": "date",
+      "kind": "synonym",
+      "text": "day"
+    },
+    {
+      "index": 20,
+      "label": "date",
+      "kind": "synonym",
+      "text": "तारीख",
+      "raw_ascii": "\\u0924\\u093e\\u0930\\u0940\\u0916"
+    },
+    {
+      "index": 21,
+      "label": "date",
+      "kind": "synonym",
+      "text": "बिल तारीख",
+      "raw_ascii": "\\u092c\\u093f\\u0932 \\u0924\\u093e\\u0930\\u0940\\u0916"
+    },
+    {
+      "index": 22,
+      "label": "date",
+      "kind": "synonym",
+      "text": "खरीद तारीख",
+      "raw_ascii": "\\u0916\\u0930\\u0940\\u0926 \\u0924\\u093e\\u0930\\u0940\\u0916"
+    },
+    {
+      "index": 23,
+      "label": "date",
+      "kind": "synonym",
+      "text": "बिक्री तारीख",
+      "raw_ascii": "\\u092c\\u093f\\u0915\\u094d\\u0930\\u0940 \\u0924\\u093e\\u0930\\u0940\\u0916"
+    },
+    {
+      "index": 24,
+      "label": "date",
+      "kind": "synonym",
+      "text": "दिनांक",
+      "raw_ascii": "\\u0926\\u093f\\u0928\\u093e\\u0902\\u0915"
+    },
+    {
+      "index": 25,
+      "label": "date",
+      "kind": "synonym",
+      "text": "date kitne"
+    },
+    {
+      "index": 26,
+      "label": "date",
+      "kind": "synonym",
+      "text": "kis din"
+    },
+    {
+      "index": 27,
+      "label": "date",
+      "kind": "synonym",
+      "text": "din"
+    },
+    {
+      "index": 28,
+      "label": "date",
+      "kind": "synonym",
+      "text": "kab"
+    },
+    {
+      "index": 29,
+      "label": "quantity",
+      "kind": "description",
+      "text": "How many individual pieces or units were sold on a line — pieces, pcs, stock quantity, units sold, billed quantity.",
+      "raw_ascii": "How many individual pieces or units were sold on a line \\u2014 pieces, pcs, stock quantity, units sold, billed quantity."
+    },
+    {
+      "index": 30,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "quantity"
+    },
+    {
+      "index": 31,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "qty"
+    },
+    {
+      "index": 32,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "qty."
+    },
+    {
+      "index": 33,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "qnty"
+    },
+    {
+      "index": 34,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "quantities"
+    },
+    {
+      "index": 35,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "units"
+    },
+    {
+      "index": 36,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "unit"
+    },
+    {
+      "index": 37,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "nos"
+    },
+    {
+      "index": 38,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "no of units"
+    },
+    {
+      "index": 39,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "pieces"
+    },
+    {
+      "index": 40,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "pcs"
+    },
+    {
+      "index": 41,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "count"
+    },
+    {
+      "index": 42,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "units sold"
+    },
+    {
+      "index": 43,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "quantity sold"
+    },
+    {
+      "index": 44,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "qty sold"
+    },
+    {
+      "index": 45,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "billed qty"
+    },
+    {
+      "index": 46,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "sold qty"
+    },
+    {
+      "index": 47,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "actual qty"
+    },
+    {
+      "index": 48,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "order quantity"
+    },
+    {
+      "index": 49,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "lineitem quantity"
+    },
+    {
+      "index": 50,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "quantity-purchased"
+    },
+    {
+      "index": 51,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "मात्रा",
+      "raw_ascii": "\\u092e\\u093e\\u0924\\u094d\\u0930\\u093e"
+    },
+    {
+      "index": 52,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "कितना",
+      "raw_ascii": "\\u0915\\u093f\\u0924\\u0928\\u093e"
+    },
+    {
+      "index": 53,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "कितने",
+      "raw_ascii": "\\u0915\\u093f\\u0924\\u0928\\u0947"
+    },
+    {
+      "index": 54,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "संख्या",
+      "raw_ascii": "\\u0938\\u0902\\u0916\\u094d\\u092f\\u093e"
+    },
+    {
+      "index": 55,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "पीस",
+      "raw_ascii": "\\u092a\\u0940\\u0938"
+    },
+    {
+      "index": 56,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "नग",
+      "raw_ascii": "\\u0928\\u0917"
+    },
+    {
+      "index": 57,
+      "label": "quantity",
+      "kind": "synonym",
+      "text": "qty kya"
+    },
+    {
+      "index": 58,
+      "label": "unit_price",
+      "kind": "description",
+      "text": "The selling price of ONE single piece — the retail rate per unit, not the total for the whole line.",
+      "raw_ascii": "The selling price of ONE single piece \\u2014 the retail rate per unit, not the total for the whole line."
+    },
+    {
+      "index": 59,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "selling price"
+    },
+    {
+      "index": 60,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "selling_price"
+    },
+    {
+      "index": 61,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "sale price"
+    },
+    {
+      "index": 62,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "sales price"
+    },
+    {
+      "index": 63,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "sell price"
+    },
+    {
+      "index": 64,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "price"
+    },
+    {
+      "index": 65,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "unit price"
+    },
+    {
+      "index": 66,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "unit_price"
+    },
+    {
+      "index": 67,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "price per unit"
+    },
+    {
+      "index": 68,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "price/unit"
+    },
+    {
+      "index": 69,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "rate"
+    },
+    {
+      "index": 70,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "rate/unit"
+    },
+    {
+      "index": 71,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "rate per unit"
+    },
+    {
+      "index": 72,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "unit rate"
+    },
+    {
+      "index": 73,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "retail price"
+    },
+    {
+      "index": 74,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "sp"
+    },
+    {
+      "index": 75,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "lineitem price"
+    },
+    {
+      "index": 76,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "item-price"
+    },
+    {
+      "index": 77,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "इकाई मूल्य",
+      "raw_ascii": "\\u0907\\u0915\\u093e\\u0908 \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 78,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "विक्रय मूल्य",
+      "raw_ascii": "\\u0935\\u093f\\u0915\\u094d\\u0930\\u092f \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 79,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "क्रय मूल्य",
+      "raw_ascii": "\\u0915\\u094d\\u0930\\u092f \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 80,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "दर",
+      "raw_ascii": "\\u0926\\u0930"
+    },
+    {
+      "index": 81,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "भाव",
+      "raw_ascii": "\\u092d\\u093e\\u0935"
+    },
+    {
+      "index": 82,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "मूल्य",
+      "raw_ascii": "\\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 83,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "ek kitna"
+    },
+    {
+      "index": 84,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "kitna paisa"
+    },
+    {
+      "index": 85,
+      "label": "unit_price",
+      "kind": "synonym",
+      "text": "rate kya"
+    },
+    {
+      "index": 86,
+      "label": "mrp",
+      "kind": "description",
+      "text": "The maximum retail price — the printed list price shown to a customer before any discount. This is NOT the price actually charged and NOT the cost price.",
+      "raw_ascii": "The maximum retail price \\u2014 the printed list price shown to a customer before any discount. This is NOT the price actually charged and NOT the cost price."
+    },
+    {
+      "index": 87,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "mrp"
+    },
+    {
+      "index": 88,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "m.r.p"
+    },
+    {
+      "index": 89,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "m.r.p."
+    },
+    {
+      "index": 90,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "maximum retail price"
+    },
+    {
+      "index": 91,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "list price"
+    },
+    {
+      "index": 92,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "marked price"
+    },
+    {
+      "index": 93,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "printed price"
+    },
+    {
+      "index": 94,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "mrp price"
+    },
+    {
+      "index": 95,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "showroom price"
+    },
+    {
+      "index": 96,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "एमआरपी",
+      "raw_ascii": "\\u090f\\u092e\\u0906\\u0930\\u092a\\u0940"
+    },
+    {
+      "index": 97,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "अधिकतम खुदरा मूल्य",
+      "raw_ascii": "\\u0905\\u0927\\u093f\\u0915\\u0924\\u092e \\u0916\\u0941\\u0926\\u0930\\u093e \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 98,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "सूची मूल्य",
+      "raw_ascii": "\\u0938\\u0942\\u091a\\u0940 \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 99,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "छाप मूल्य",
+      "raw_ascii": "\\u091b\\u093e\\u092a \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 100,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "mrp kitna"
+    },
+    {
+      "index": 101,
+      "label": "mrp",
+      "kind": "synonym",
+      "text": "maximum price"
+    },
+    {
+      "index": 102,
+      "label": "cost",
+      "kind": "description",
+      "text": "What the shop paid for ONE piece — purchase rate, cost price, buying price, wholesale rate, landed cost, COGS.",
+      "raw_ascii": "What the shop paid for ONE piece \\u2014 purchase rate, cost price, buying price, wholesale rate, landed cost, COGS."
+    },
+    {
+      "index": 103,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cost price"
+    },
+    {
+      "index": 104,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cost_price"
+    },
+    {
+      "index": 105,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cost"
+    },
+    {
+      "index": 106,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "unit cost"
+    },
+    {
+      "index": 107,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "unit_cost"
+    },
+    {
+      "index": 108,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cost per unit"
+    },
+    {
+      "index": 109,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "purchase price"
+    },
+    {
+      "index": 110,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "purchase_price"
+    },
+    {
+      "index": 111,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "purchase rate"
+    },
+    {
+      "index": 112,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "buying price"
+    },
+    {
+      "index": 113,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "buying_price"
+    },
+    {
+      "index": 114,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "wholesale price"
+    },
+    {
+      "index": 115,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "wholesale_price"
+    },
+    {
+      "index": 116,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "landing cost"
+    },
+    {
+      "index": 117,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "landed cost"
+    },
+    {
+      "index": 118,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cp"
+    },
+    {
+      "index": 119,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cogs"
+    },
+    {
+      "index": 120,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "लागत",
+      "raw_ascii": "\\u0932\\u093e\\u0917\\u0924"
+    },
+    {
+      "index": 121,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "खरीद मूल्य",
+      "raw_ascii": "\\u0916\\u0930\\u0940\\u0926 \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 122,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "क्रय दर",
+      "raw_ascii": "\\u0915\\u094d\\u0930\\u092f \\u0926\\u0930"
+    },
+    {
+      "index": 123,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "थोक मूल्य",
+      "raw_ascii": "\\u0925\\u094b\\u0915 \\u092e\\u0942\\u0932\\u094d\\u092f"
+    },
+    {
+      "index": 124,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "खर्च",
+      "raw_ascii": "\\u0916\\u0930\\u094d\\u091a"
+    },
+    {
+      "index": 125,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "khareed ka daam"
+    },
+    {
+      "index": 126,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "cost kya"
+    },
+    {
+      "index": 127,
+      "label": "cost",
+      "kind": "synonym",
+      "text": "lagai"
+    },
+    {
+      "index": 128,
+      "label": "revenue",
+      "kind": "description",
+      "text": "The total amount for a whole invoice line — quantity multiplied by the unit price, i.e. the line total, net amount or taxable value. This is a LINE TOTAL, not a per-unit price.",
+      "raw_ascii": "The total amount for a whole invoice line \\u2014 quantity multiplied by the unit price, i.e. the line total, net amount or taxable value. This is a LINE TOTAL, not a per-unit price."
+    },
+    {
+      "index": 129,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "amount"
+    },
+    {
+      "index": 130,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "amt"
+    },
+    {
+      "index": 131,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "net amount"
+    },
+    {
+      "index": 132,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "net_amount"
+    },
+    {
+      "index": 133,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "gross amount"
+    },
+    {
+      "index": 134,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "total"
+    },
+    {
+      "index": 135,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "total amount"
+    },
+    {
+      "index": 136,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "total_amount"
+    },
+    {
+      "index": 137,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "line total"
+    },
+    {
+      "index": 138,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "line_total"
+    },
+    {
+      "index": 139,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "line amount"
+    },
+    {
+      "index": 140,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "row total"
+    },
+    {
+      "index": 141,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "sale amount"
+    },
+    {
+      "index": 142,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "sales amount"
+    },
+    {
+      "index": 143,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "sales value"
+    },
+    {
+      "index": 144,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "invoice amount"
+    },
+    {
+      "index": 145,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "bill amount"
+    },
+    {
+      "index": 146,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "taxable value"
+    },
+    {
+      "index": 147,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "taxable amount"
+    },
+    {
+      "index": 148,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "revenue"
+    },
+    {
+      "index": 149,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "turnover"
+    },
+    {
+      "index": 150,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "value"
+    },
+    {
+      "index": 151,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "lineitem total"
+    },
+    {
+      "index": 152,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "item-total"
+    },
+    {
+      "index": 153,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "राशि",
+      "raw_ascii": "\\u0930\\u093e\\u0936\\u093f"
+    },
+    {
+      "index": 154,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "कुल राशि",
+      "raw_ascii": "\\u0915\\u0941\\u0932 \\u0930\\u093e\\u0936\\u093f"
+    },
+    {
+      "index": 155,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "कुल रकम",
+      "raw_ascii": "\\u0915\\u0941\\u0932 \\u0930\\u0915\\u092e"
+    },
+    {
+      "index": 156,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "बिक्री राशि",
+      "raw_ascii": "\\u092c\\u093f\\u0915\\u094d\\u0930\\u0940 \\u0930\\u093e\\u0936\\u093f"
+    },
+    {
+      "index": 157,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "आय",
+      "raw_ascii": "\\u0906\\u092f"
+    },
+    {
+      "index": 158,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "total kitne"
+    },
+    {
+      "index": 159,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "kitna paisa mila"
+    },
+    {
+      "index": 160,
+      "label": "revenue",
+      "kind": "synonym",
+      "text": "paisa"
+    },
+    {
+      "index": 161,
+      "label": "discount",
+      "kind": "description",
+      "text": "A reduction given off the line — a discount amount, rebate or less-discount value, usually in rupees.",
+      "raw_ascii": "A reduction given off the line \\u2014 a discount amount, rebate or less-discount value, usually in rupees."
+    },
+    {
+      "index": 162,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "discount"
+    },
+    {
+      "index": 163,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "discount amount"
+    },
+    {
+      "index": 164,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "discount_amount"
+    },
+    {
+      "index": 165,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "disc"
+    },
+    {
+      "index": 166,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "disc amt"
+    },
+    {
+      "index": 167,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "rebate"
+    },
+    {
+      "index": 168,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "less discount"
+    },
+    {
+      "index": 169,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "lineitem discount"
+    },
+    {
+      "index": 170,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "concession"
+    },
+    {
+      "index": 171,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "छूट",
+      "raw_ascii": "\\u091b\\u0942\\u091f"
+    },
+    {
+      "index": 172,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "रिहायत",
+      "raw_ascii": "\\u0930\\u093f\\u0939\\u093e\\u092f\\u0924"
+    },
+    {
+      "index": 173,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "डिस्काउंट",
+      "raw_ascii": "\\u0921\\u093f\\u0938\\u094d\\u0915\\u093e\\u0909\\u0902\\u091f"
+    },
+    {
+      "index": 174,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "छोट",
+      "raw_ascii": "\\u091b\\u094b\\u091f"
+    },
+    {
+      "index": 175,
+      "label": "discount",
+      "kind": "synonym",
+      "text": "bachat"
+    },
+    {
+      "index": 176,
+      "label": "tax",
+      "kind": "description",
+      "text": "Government tax collected on the line — GST, CGST, SGST, IGST or VAT, reported separately and never counted as profit.",
+      "raw_ascii": "Government tax collected on the line \\u2014 GST, CGST, SGST, IGST or VAT, reported separately and never counted as profit."
+    },
+    {
+      "index": 177,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "tax"
+    },
+    {
+      "index": 178,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "tax amount"
+    },
+    {
+      "index": 179,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "tax_amount"
+    },
+    {
+      "index": 180,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "gst"
+    },
+    {
+      "index": 181,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "gst amount"
+    },
+    {
+      "index": 182,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "gst_amount"
+    },
+    {
+      "index": 183,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "total gst"
+    },
+    {
+      "index": 184,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "cgst+sgst"
+    },
+    {
+      "index": 185,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "cgst"
+    },
+    {
+      "index": 186,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "sgst"
+    },
+    {
+      "index": 187,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "igst"
+    },
+    {
+      "index": 188,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "vat"
+    },
+    {
+      "index": 189,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "gstin"
+    },
+    {
+      "index": 190,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "कर",
+      "raw_ascii": "\\u0915\\u0930"
+    },
+    {
+      "index": 191,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "जीएसटी",
+      "raw_ascii": "\\u091c\\u0940\\u090f\\u0938\\u091f\\u0940"
+    },
+    {
+      "index": 192,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "टैक्स",
+      "raw_ascii": "\\u091f\\u0948\\u0915\\u094d\\u0938"
+    },
+    {
+      "index": 193,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "ब्याज",
+      "raw_ascii": "\\u092c\\u094d\\u092f\\u093e\\u091c"
+    },
+    {
+      "index": 194,
+      "label": "tax",
+      "kind": "synonym",
+      "text": "gst kitna"
+    },
+    {
+      "index": 195,
+      "label": "product",
+      "kind": "description",
+      "text": "The name of the individual product, garment, style or article that was sold — the specific thing, not the group it belongs to.",
+      "raw_ascii": "The name of the individual product, garment, style or article that was sold \\u2014 the specific thing, not the group it belongs to."
+    },
+    {
+      "index": 196,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item"
+    },
+    {
+      "index": 197,
+      "label": "product",
+      "kind": "synonym",
+      "text": "items"
+    },
+    {
+      "index": 198,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item name"
+    },
+    {
+      "index": 199,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item_name"
+    },
+    {
+      "index": 200,
+      "label": "product",
+      "kind": "synonym",
+      "text": "product"
+    },
+    {
+      "index": 201,
+      "label": "product",
+      "kind": "synonym",
+      "text": "product name"
+    },
+    {
+      "index": 202,
+      "label": "product",
+      "kind": "synonym",
+      "text": "product_name"
+    },
+    {
+      "index": 203,
+      "label": "product",
+      "kind": "synonym",
+      "text": "products"
+    },
+    {
+      "index": 204,
+      "label": "product",
+      "kind": "synonym",
+      "text": "description"
+    },
+    {
+      "index": 205,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item description"
+    },
+    {
+      "index": 206,
+      "label": "product",
+      "kind": "synonym",
+      "text": "particulars"
+    },
+    {
+      "index": 207,
+      "label": "product",
+      "kind": "synonym",
+      "text": "stock item"
+    },
+    {
+      "index": 208,
+      "label": "product",
+      "kind": "synonym",
+      "text": "style"
+    },
+    {
+      "index": 209,
+      "label": "product",
+      "kind": "synonym",
+      "text": "style name"
+    },
+    {
+      "index": 210,
+      "label": "product",
+      "kind": "synonym",
+      "text": "style code"
+    },
+    {
+      "index": 211,
+      "label": "product",
+      "kind": "synonym",
+      "text": "design"
+    },
+    {
+      "index": 212,
+      "label": "product",
+      "kind": "synonym",
+      "text": "prod"
+    },
+    {
+      "index": 213,
+      "label": "product",
+      "kind": "synonym",
+      "text": "goods"
+    },
+    {
+      "index": 214,
+      "label": "product",
+      "kind": "synonym",
+      "text": "sku"
+    },
+    {
+      "index": 215,
+      "label": "product",
+      "kind": "synonym",
+      "text": "sku code"
+    },
+    {
+      "index": 216,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item code"
+    },
+    {
+      "index": 217,
+      "label": "product",
+      "kind": "synonym",
+      "text": "product code"
+    },
+    {
+      "index": 218,
+      "label": "product",
+      "kind": "synonym",
+      "text": "barcode"
+    },
+    {
+      "index": 219,
+      "label": "product",
+      "kind": "synonym",
+      "text": "article"
+    },
+    {
+      "index": 220,
+      "label": "product",
+      "kind": "synonym",
+      "text": "title"
+    },
+    {
+      "index": 221,
+      "label": "product",
+      "kind": "synonym",
+      "text": "उत्पाद",
+      "raw_ascii": "\\u0909\\u0924\\u094d\\u092a\\u093e\\u0926"
+    },
+    {
+      "index": 222,
+      "label": "product",
+      "kind": "synonym",
+      "text": "वस्तु",
+      "raw_ascii": "\\u0935\\u0938\\u094d\\u0924\\u0941"
+    },
+    {
+      "index": 223,
+      "label": "product",
+      "kind": "synonym",
+      "text": "सामान",
+      "raw_ascii": "\\u0938\\u093e\\u092e\\u093e\\u0928"
+    },
+    {
+      "index": 224,
+      "label": "product",
+      "kind": "synonym",
+      "text": "चीज़",
+      "raw_ascii": "\\u091a\\u0940\\u091c\\u093c"
+    },
+    {
+      "index": 225,
+      "label": "product",
+      "kind": "synonym",
+      "text": "आइटम",
+      "raw_ascii": "\\u0906\\u0907\\u091f\\u092e"
+    },
+    {
+      "index": 226,
+      "label": "product",
+      "kind": "synonym",
+      "text": "नाम",
+      "raw_ascii": "\\u0928\\u093e\\u092e"
+    },
+    {
+      "index": 227,
+      "label": "product",
+      "kind": "synonym",
+      "text": "product naam"
+    },
+    {
+      "index": 228,
+      "label": "product",
+      "kind": "synonym",
+      "text": "item ka naam"
+    },
+    {
+      "index": 229,
+      "label": "product",
+      "kind": "synonym",
+      "text": "kya becha"
+    },
+    {
+      "index": 230,
+      "label": "currency",
+      "kind": "description",
+      "text": "The currency code or symbol for the money amounts on this row — INR, USD, EUR, Rs, etc.",
+      "raw_ascii": "The currency code or symbol for the money amounts on this row \\u2014 INR, USD, EUR, Rs, etc."
+    },
+    {
+      "index": 231,
+      "label": "currency",
+      "kind": "synonym",
+      "text": "currency"
+    },
+    {
+      "index": 232,
+      "label": "currency",
+      "kind": "synonym",
+      "text": "ccy"
+    },
+    {
+      "index": 233,
+      "label": "currency",
+      "kind": "synonym",
+      "text": "curr"
+    },
+    {
+      "index": 234,
+      "label": "currency",
+      "kind": "synonym",
+      "text": "मुद्रा",
+      "raw_ascii": "\\u092e\\u0941\\u0926\\u094d\\u0930\\u093e"
+    },
+    {
+      "index": 235,
+      "label": "category",
+      "kind": "description",
+      "text": "The group or department a product belongs to — Kurta, Saree, Shirt, Grocery, Beverages. A classification of the product, not the product itself.",
+      "raw_ascii": "The group or department a product belongs to \\u2014 Kurta, Saree, Shirt, Grocery, Beverages. A classification of the product, not the product itself."
+    },
+    {
+      "index": 236,
+      "label": "category",
+      "kind": "synonym",
+      "text": "category"
+    },
+    {
+      "index": 237,
+      "label": "category",
+      "kind": "synonym",
+      "text": "categories"
+    },
+    {
+      "index": 238,
+      "label": "category",
+      "kind": "synonym",
+      "text": "cat"
+    },
+    {
+      "index": 239,
+      "label": "category",
+      "kind": "synonym",
+      "text": "product category"
+    },
+    {
+      "index": 240,
+      "label": "category",
+      "kind": "synonym",
+      "text": "item category"
+    },
+    {
+      "index": 241,
+      "label": "category",
+      "kind": "synonym",
+      "text": "item group"
+    },
+    {
+      "index": 242,
+      "label": "category",
+      "kind": "synonym",
+      "text": "stock group"
+    },
+    {
+      "index": 243,
+      "label": "category",
+      "kind": "synonym",
+      "text": "product type"
+    },
+    {
+      "index": 244,
+      "label": "category",
+      "kind": "synonym",
+      "text": "dept"
+    },
+    {
+      "index": 245,
+      "label": "category",
+      "kind": "synonym",
+      "text": "department"
+    },
+    {
+      "index": 246,
+      "label": "category",
+      "kind": "synonym",
+      "text": "type"
+    },
+    {
+      "index": 247,
+      "label": "category",
+      "kind": "synonym",
+      "text": "group"
+    },
+    {
+      "index": 248,
+      "label": "category",
+      "kind": "synonym",
+      "text": "segment"
+    },
+    {
+      "index": 249,
+      "label": "category",
+      "kind": "synonym",
+      "text": "class"
+    },
+    {
+      "index": 250,
+      "label": "category",
+      "kind": "synonym",
+      "text": "sub category"
+    },
+    {
+      "index": 251,
+      "label": "category",
+      "kind": "synonym",
+      "text": "sub-category"
+    },
+    {
+      "index": 252,
+      "label": "category",
+      "kind": "synonym",
+      "text": "subcategory"
+    },
+    {
+      "index": 253,
+      "label": "category",
+      "kind": "synonym",
+      "text": "collection"
+    },
+    {
+      "index": 254,
+      "label": "category",
+      "kind": "synonym",
+      "text": "section"
+    },
+    {
+      "index": 255,
+      "label": "category",
+      "kind": "synonym",
+      "text": "menu group"
+    },
+    {
+      "index": 256,
+      "label": "category",
+      "kind": "synonym",
+      "text": "course"
+    },
+    {
+      "index": 257,
+      "label": "category",
+      "kind": "synonym",
+      "text": "kitchen group"
+    },
+    {
+      "index": 258,
+      "label": "category",
+      "kind": "synonym",
+      "text": "food type"
+    },
+    {
+      "index": 259,
+      "label": "category",
+      "kind": "synonym",
+      "text": "श्रेणी",
+      "raw_ascii": "\\u0936\\u094d\\u0930\\u0947\\u0923\\u0940"
+    },
+    {
+      "index": 260,
+      "label": "category",
+      "kind": "synonym",
+      "text": "वर्ग",
+      "raw_ascii": "\\u0935\\u0930\\u094d\\u0917"
+    },
+    {
+      "index": 261,
+      "label": "category",
+      "kind": "synonym",
+      "text": "समूह",
+      "raw_ascii": "\\u0938\\u092e\\u0942\\u0939"
+    },
+    {
+      "index": 262,
+      "label": "category",
+      "kind": "synonym",
+      "text": "विभाग",
+      "raw_ascii": "\\u0935\\u093f\\u092d\\u093e\\u0917"
+    },
+    {
+      "index": 263,
+      "label": "category",
+      "kind": "synonym",
+      "text": "कटेगरी",
+      "raw_ascii": "\\u0915\\u091f\\u0947\\u0917\\u0930\\u0940"
+    },
+    {
+      "index": 264,
+      "label": "category",
+      "kind": "synonym",
+      "text": "category kya"
+    },
+    {
+      "index": 265,
+      "label": "customer",
+      "kind": "description",
+      "text": "The person or business the sale was made to — customer name, buyer, party, client. Personal data.",
+      "raw_ascii": "The person or business the sale was made to \\u2014 customer name, buyer, party, client. Personal data."
+    },
+    {
+      "index": 266,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "customer"
+    },
+    {
+      "index": 267,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "customer name"
+    },
+    {
+      "index": 268,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "customer_name"
+    },
+    {
+      "index": 269,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "buyer"
+    },
+    {
+      "index": 270,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "party"
+    },
+    {
+      "index": 271,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "party name"
+    },
+    {
+      "index": 272,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "client"
+    },
+    {
+      "index": 273,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "account"
+    },
+    {
+      "index": 274,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "account name"
+    },
+    {
+      "index": 275,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "consignee"
+    },
+    {
+      "index": 276,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "supplier"
+    },
+    {
+      "index": 277,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "vendor"
+    },
+    {
+      "index": 278,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "ग्राहक",
+      "raw_ascii": "\\u0917\\u094d\\u0930\\u093e\\u0939\\u0915"
+    },
+    {
+      "index": 279,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "कस्टमर",
+      "raw_ascii": "\\u0915\\u0938\\u094d\\u091f\\u092e\\u0930"
+    },
+    {
+      "index": 280,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "खरीदार",
+      "raw_ascii": "\\u0916\\u0930\\u0940\\u0926\\u093e\\u0930"
+    },
+    {
+      "index": 281,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "पार्टी",
+      "raw_ascii": "\\u092a\\u093e\\u0930\\u094d\\u091f\\u0940"
+    },
+    {
+      "index": 282,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "ग्राहक का नाम",
+      "raw_ascii": "\\u0917\\u094d\\u0930\\u093e\\u0939\\u0915 \\u0915\\u093e \\u0928\\u093e\\u092e"
+    },
+    {
+      "index": 283,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "customer kaun"
+    },
+    {
+      "index": 284,
+      "label": "customer",
+      "kind": "synonym",
+      "text": "kiska maal"
+    },
+    {
+      "index": 285,
+      "label": "region",
+      "kind": "description",
+      "text": "A geographical or organisational location the sale happened at — branch, store, shop, outlet, godown, warehouse, city.",
+      "raw_ascii": "A geographical or organisational location the sale happened at \\u2014 branch, store, shop, outlet, godown, warehouse, city."
+    },
+    {
+      "index": 286,
+      "label": "region",
+      "kind": "synonym",
+      "text": "branch"
+    },
+    {
+      "index": 287,
+      "label": "region",
+      "kind": "synonym",
+      "text": "store"
+    },
+    {
+      "index": 288,
+      "label": "region",
+      "kind": "synonym",
+      "text": "store name"
+    },
+    {
+      "index": 289,
+      "label": "region",
+      "kind": "synonym",
+      "text": "shop"
+    },
+    {
+      "index": 290,
+      "label": "region",
+      "kind": "synonym",
+      "text": "outlet"
+    },
+    {
+      "index": 291,
+      "label": "region",
+      "kind": "synonym",
+      "text": "location"
+    },
+    {
+      "index": 292,
+      "label": "region",
+      "kind": "synonym",
+      "text": "godown"
+    },
+    {
+      "index": 293,
+      "label": "region",
+      "kind": "synonym",
+      "text": "warehouse"
+    },
+    {
+      "index": 294,
+      "label": "region",
+      "kind": "synonym",
+      "text": "city"
+    },
+    {
+      "index": 295,
+      "label": "region",
+      "kind": "synonym",
+      "text": "region"
+    },
+    {
+      "index": 296,
+      "label": "region",
+      "kind": "synonym",
+      "text": "zone"
+    },
+    {
+      "index": 297,
+      "label": "region",
+      "kind": "synonym",
+      "text": "area"
+    },
+    {
+      "index": 298,
+      "label": "region",
+      "kind": "synonym",
+      "text": "territory"
+    },
+    {
+      "index": 299,
+      "label": "region",
+      "kind": "synonym",
+      "text": "शाखा",
+      "raw_ascii": "\\u0936\\u093e\\u0916\\u093e"
+    },
+    {
+      "index": 300,
+      "label": "region",
+      "kind": "synonym",
+      "text": "दुकान",
+      "raw_ascii": "\\u0926\\u0941\\u0915\\u093e\\u0928"
+    },
+    {
+      "index": 301,
+      "label": "region",
+      "kind": "synonym",
+      "text": "स्थान",
+      "raw_ascii": "\\u0938\\u094d\\u0925\\u093e\\u0928"
+    },
+    {
+      "index": 302,
+      "label": "region",
+      "kind": "synonym",
+      "text": "क्षेत्र",
+      "raw_ascii": "\\u0915\\u094d\\u0937\\u0947\\u0924\\u094d\\u0930"
+    },
+    {
+      "index": 303,
+      "label": "region",
+      "kind": "synonym",
+      "text": "इलाका",
+      "raw_ascii": "\\u0907\\u0932\\u093e\\u0915\\u093e"
+    },
+    {
+      "index": 304,
+      "label": "region",
+      "kind": "synonym",
+      "text": "फैक्ट्री",
+      "raw_ascii": "\\u092b\\u0948\\u0915\\u094d\\u091f\\u094d\\u0930\\u0940"
+    },
+    {
+      "index": 305,
+      "label": "region",
+      "kind": "synonym",
+      "text": "branch kaun"
+    },
+    {
+      "index": 306,
+      "label": "region",
+      "kind": "synonym",
+      "text": "kitni dukan"
+    },
+    {
+      "index": 307,
+      "label": "status",
+      "kind": "description",
+      "text": "The state of the order or transaction — pending, shipped, delivered, cancelled, returned, paid or unpaid.",
+      "raw_ascii": "The state of the order or transaction \\u2014 pending, shipped, delivered, cancelled, returned, paid or unpaid."
+    },
+    {
+      "index": 308,
+      "label": "status",
+      "kind": "synonym",
+      "text": "status"
+    },
+    {
+      "index": 309,
+      "label": "status",
+      "kind": "synonym",
+      "text": "order status"
+    },
+    {
+      "index": 310,
+      "label": "status",
+      "kind": "synonym",
+      "text": "payment status"
+    },
+    {
+      "index": 311,
+      "label": "status",
+      "kind": "synonym",
+      "text": "fulfilment status"
+    },
+    {
+      "index": 312,
+      "label": "status",
+      "kind": "synonym",
+      "text": "state"
+    },
+    {
+      "index": 313,
+      "label": "status",
+      "kind": "synonym",
+      "text": "stage"
+    },
+    {
+      "index": 314,
+      "label": "status",
+      "kind": "synonym",
+      "text": "order state"
+    },
+    {
+      "index": 315,
+      "label": "status",
+      "kind": "synonym",
+      "text": "delivery status"
+    },
+    {
+      "index": 316,
+      "label": "status",
+      "kind": "synonym",
+      "text": "invoice status"
+    },
+    {
+      "index": 317,
+      "label": "status",
+      "kind": "synonym",
+      "text": "condition"
+    },
+    {
+      "index": 318,
+      "label": "status",
+      "kind": "synonym",
+      "text": "स्थिति",
+      "raw_ascii": "\\u0938\\u094d\\u0925\\u093f\\u0924\\u093f"
+    },
+    {
+      "index": 319,
+      "label": "status",
+      "kind": "synonym",
+      "text": "हालत",
+      "raw_ascii": "\\u0939\\u093e\\u0932\\u0924"
+    },
+    {
+      "index": 320,
+      "label": "status",
+      "kind": "synonym",
+      "text": "स्टेटस",
+      "raw_ascii": "\\u0938\\u094d\\u091f\\u0947\\u091f\\u0938"
+    },
+    {
+      "index": 321,
+      "label": "status",
+      "kind": "synonym",
+      "text": "status kya"
+    },
+    {
+      "index": 322,
+      "label": "status",
+      "kind": "synonym",
+      "text": "kya hua"
+    },
+    {
+      "index": 323,
+      "label": "notes",
+      "kind": "description",
+      "text": "Free-text remarks written by staff about the transaction — delivery instructions, damage reports, supplier notes, anything typed in a remarks or observation box.",
+      "raw_ascii": "Free-text remarks written by staff about the transaction \\u2014 delivery instructions, damage reports, supplier notes, anything typed in a remarks or observation box."
+    },
+    {
+      "index": 324,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "notes"
+    },
+    {
+      "index": 325,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "note"
+    },
+    {
+      "index": 326,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "remarks"
+    },
+    {
+      "index": 327,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "remark"
+    },
+    {
+      "index": 328,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "comment"
+    },
+    {
+      "index": 329,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "comments"
+    },
+    {
+      "index": 330,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "narration"
+    },
+    {
+      "index": 331,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "observation"
+    },
+    {
+      "index": 332,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "description note"
+    },
+    {
+      "index": 333,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "instructions"
+    },
+    {
+      "index": 334,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "memo"
+    },
+    {
+      "index": 335,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "टिप्पणी",
+      "raw_ascii": "\\u091f\\u093f\\u092a\\u094d\\u092a\\u0923\\u0940"
+    },
+    {
+      "index": 336,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "नोट",
+      "raw_ascii": "\\u0928\\u094b\\u091f"
+    },
+    {
+      "index": 337,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "टिप्पणियाँ",
+      "raw_ascii": "\\u091f\\u093f\\u092a\\u094d\\u092a\\u0923\\u093f\\u092f\\u093e\\u0901"
+    },
+    {
+      "index": 338,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "remarks kya"
+    },
+    {
+      "index": 339,
+      "label": "notes",
+      "kind": "synonym",
+      "text": "koi baat"
+    },
+    {
+      "index": 340,
+      "label": "id",
+      "kind": "description",
+      "text": "A unique reference number identifying a transaction or document — invoice number, bill number, voucher number, receipt number or order id.",
+      "raw_ascii": "A unique reference number identifying a transaction or document \\u2014 invoice number, bill number, voucher number, receipt number or order id."
+    },
+    {
+      "index": 341,
+      "label": "id",
+      "kind": "synonym",
+      "text": "id"
+    },
+    {
+      "index": 342,
+      "label": "id",
+      "kind": "synonym",
+      "text": "invoice no"
+    },
+    {
+      "index": 343,
+      "label": "id",
+      "kind": "synonym",
+      "text": "invoice_no"
+    },
+    {
+      "index": 344,
+      "label": "id",
+      "kind": "synonym",
+      "text": "invoice number"
+    },
+    {
+      "index": 345,
+      "label": "id",
+      "kind": "synonym",
+      "text": "invoice"
+    },
+    {
+      "index": 346,
+      "label": "id",
+      "kind": "synonym",
+      "text": "bill no"
+    },
+    {
+      "index": 347,
+      "label": "id",
+      "kind": "synonym",
+      "text": "bill_no"
+    },
+    {
+      "index": 348,
+      "label": "id",
+      "kind": "synonym",
+      "text": "bill number"
+    },
+    {
+      "index": 349,
+      "label": "id",
+      "kind": "synonym",
+      "text": "voucher no"
+    },
+    {
+      "index": 350,
+      "label": "id",
+      "kind": "synonym",
+      "text": "receipt no"
+    },
+    {
+      "index": 351,
+      "label": "id",
+      "kind": "synonym",
+      "text": "order id"
+    },
+    {
+      "index": 352,
+      "label": "id",
+      "kind": "synonym",
+      "text": "order_id"
+    },
+    {
+      "index": 353,
+      "label": "id",
+      "kind": "synonym",
+      "text": "order no"
+    },
+    {
+      "index": 354,
+      "label": "id",
+      "kind": "synonym",
+      "text": "txn id"
+    },
+    {
+      "index": 355,
+      "label": "id",
+      "kind": "synonym",
+      "text": "transaction id"
+    },
+    {
+      "index": 356,
+      "label": "id",
+      "kind": "synonym",
+      "text": "reference no"
+    },
+    {
+      "index": 357,
+      "label": "id",
+      "kind": "synonym",
+      "text": "ref no"
+    },
+    {
+      "index": 358,
+      "label": "id",
+      "kind": "synonym",
+      "text": "doc no"
+    },
+    {
+      "index": 359,
+      "label": "id",
+      "kind": "synonym",
+      "text": "sr no"
+    },
+    {
+      "index": 360,
+      "label": "id",
+      "kind": "synonym",
+      "text": "serial no"
+    },
+    {
+      "index": 361,
+      "label": "id",
+      "kind": "synonym",
+      "text": "बिल संख्या",
+      "raw_ascii": "\\u092c\\u093f\\u0932 \\u0938\\u0902\\u0916\\u094d\\u092f\\u093e"
+    },
+    {
+      "index": 362,
+      "label": "id",
+      "kind": "synonym",
+      "text": "चालान संख्या",
+      "raw_ascii": "\\u091a\\u093e\\u0932\\u093e\\u0928 \\u0938\\u0902\\u0916\\u094d\\u092f\\u093e"
+    },
+    {
+      "index": 363,
+      "label": "id",
+      "kind": "synonym",
+      "text": "क्रमांक",
+      "raw_ascii": "\\u0915\\u094d\\u0930\\u092e\\u093e\\u0902\\u0915"
+    },
+    {
+      "index": 364,
+      "label": "id",
+      "kind": "synonym",
+      "text": "पर्ची संख्या",
+      "raw_ascii": "\\u092a\\u0930\\u094d\\u091a\\u0940 \\u0938\\u0902\\u0916\\u094d\\u092f\\u093e"
+    },
+    {
+      "index": 365,
+      "label": "other",
+      "kind": "description",
+      "text": "A column that matches none of the known business meanings — an unrecognised extra, a technical artefact, or free text we cannot place.",
+      "raw_ascii": "A column that matches none of the known business meanings \\u2014 an unrecognised extra, a technical artefact, or free text we cannot place."
+    },
+    {
+      "index": 366,
+      "label": "other",
+      "kind": "synonym",
+      "text": "other"
+    },
+    {
+      "index": 367,
+      "label": "other",
+      "kind": "synonym",
+      "text": "misc"
+    },
+    {
+      "index": 368,
+      "label": "other",
+      "kind": "synonym",
+      "text": "miscellaneous"
+    },
+    {
+      "index": 369,
+      "label": "other",
+      "kind": "synonym",
+      "text": "na"
+    },
+    {
+      "index": 370,
+      "label": "other",
+      "kind": "synonym",
+      "text": "n/a"
+    },
+    {
+      "index": 371,
+      "label": "other",
+      "kind": "synonym",
+      "text": "unknown"
+    },
+    {
+      "index": 372,
+      "label": "other",
+      "kind": "synonym",
+      "text": "unnamed"
+    },
+    {
+      "index": 373,
+      "label": "other",
+      "kind": "synonym",
+      "text": "untitled"
+    },
+    {
+      "index": 374,
+      "label": "other",
+      "kind": "synonym",
+      "text": "column"
+    },
+    {
+      "index": 375,
+      "label": "other",
+      "kind": "synonym",
+      "text": "field"
+    }
+  ]
+}

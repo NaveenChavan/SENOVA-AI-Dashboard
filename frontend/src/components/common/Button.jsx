@@ -34,6 +34,7 @@ export default function Button({
   loading = false,
   type = 'button',
   className = '',
+  ...rest
 }) {
   return (
     <button
@@ -43,6 +44,7 @@ export default function Button({
       aria-busy={loading || undefined}
       className={`${VARIANT_CLASS[variant] ?? 'btn'} ${className}`}
       style={VARIANT_STYLE[variant]}
+      {...rest}
     >
       {loading ? (
         <>

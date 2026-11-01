@@ -1,0 +1,1888 @@
+{
+  "schema_version": 1,
+  "description": "COLUMN_ALIAS_MAP exactly as the live module exposes it, in dict order.",
+  "normalisation": "data_validator._normalize_col_name = col.strip().lstrip('\\ufeff').lower()",
+  "source_literal": {
+    "literal_entries": 268,
+    "unique_keys": 268,
+    "duplicate_keys": []
+  },
+  "entries": [
+    {
+      "index": 0,
+      "key": "date",
+      "canonical": "Date",
+      "legacy_key": "date",
+      "reachable": true
+    },
+    {
+      "index": 1,
+      "key": "dates",
+      "canonical": "Date",
+      "legacy_key": "dates",
+      "reachable": true
+    },
+    {
+      "index": 2,
+      "key": "date_sold",
+      "canonical": "Date",
+      "legacy_key": "date_sold",
+      "reachable": true
+    },
+    {
+      "index": 3,
+      "key": "sold date",
+      "canonical": "Date",
+      "legacy_key": "sold date",
+      "reachable": true
+    },
+    {
+      "index": 4,
+      "key": "sale date",
+      "canonical": "Date",
+      "legacy_key": "sale date",
+      "reachable": true
+    },
+    {
+      "index": 5,
+      "key": "sale_date",
+      "canonical": "Date",
+      "legacy_key": "sale_date",
+      "reachable": true
+    },
+    {
+      "index": 6,
+      "key": "sales date",
+      "canonical": "Date",
+      "legacy_key": "sales date",
+      "reachable": true
+    },
+    {
+      "index": 7,
+      "key": "transaction date",
+      "canonical": "Date",
+      "legacy_key": "transaction date",
+      "reachable": true
+    },
+    {
+      "index": 8,
+      "key": "transaction_date",
+      "canonical": "Date",
+      "legacy_key": "transaction_date",
+      "reachable": true
+    },
+    {
+      "index": 9,
+      "key": "txn date",
+      "canonical": "Date",
+      "legacy_key": "txn date",
+      "reachable": true
+    },
+    {
+      "index": 10,
+      "key": "txn_date",
+      "canonical": "Date",
+      "legacy_key": "txn_date",
+      "reachable": true
+    },
+    {
+      "index": 11,
+      "key": "invoice date",
+      "canonical": "Date",
+      "legacy_key": "invoice date",
+      "reachable": true
+    },
+    {
+      "index": 12,
+      "key": "invoice_date",
+      "canonical": "Date",
+      "legacy_key": "invoice_date",
+      "reachable": true
+    },
+    {
+      "index": 13,
+      "key": "bill date",
+      "canonical": "Date",
+      "legacy_key": "bill date",
+      "reachable": true
+    },
+    {
+      "index": 14,
+      "key": "bill_date",
+      "canonical": "Date",
+      "legacy_key": "bill_date",
+      "reachable": true
+    },
+    {
+      "index": 15,
+      "key": "billing date",
+      "canonical": "Date",
+      "legacy_key": "billing date",
+      "reachable": true
+    },
+    {
+      "index": 16,
+      "key": "voucher date",
+      "canonical": "Date",
+      "legacy_key": "voucher date",
+      "reachable": true
+    },
+    {
+      "index": 17,
+      "key": "voucher_date",
+      "canonical": "Date",
+      "legacy_key": "voucher_date",
+      "reachable": true
+    },
+    {
+      "index": 18,
+      "key": "entry date",
+      "canonical": "Date",
+      "legacy_key": "entry date",
+      "reachable": true
+    },
+    {
+      "index": 19,
+      "key": "order date",
+      "canonical": "Date",
+      "legacy_key": "order date",
+      "reachable": true
+    },
+    {
+      "index": 20,
+      "key": "order_date",
+      "canonical": "Date",
+      "legacy_key": "order_date",
+      "reachable": true
+    },
+    {
+      "index": 21,
+      "key": "ordered on",
+      "canonical": "Date",
+      "legacy_key": "ordered on",
+      "reachable": true
+    },
+    {
+      "index": 22,
+      "key": "purchase-date",
+      "canonical": "Date",
+      "legacy_key": "purchase-date",
+      "reachable": true
+    },
+    {
+      "index": 23,
+      "key": "posting date",
+      "canonical": "Date",
+      "legacy_key": "posting date",
+      "reachable": true
+    },
+    {
+      "index": 24,
+      "key": "day",
+      "canonical": "Date",
+      "legacy_key": "day",
+      "reachable": true
+    },
+    {
+      "index": 25,
+      "key": "dt",
+      "canonical": "Date",
+      "legacy_key": "dt",
+      "reachable": true
+    },
+    {
+      "index": 26,
+      "key": "datetime",
+      "canonical": "Date",
+      "legacy_key": "datetime",
+      "reachable": true
+    },
+    {
+      "index": 27,
+      "key": "timestamp",
+      "canonical": "Date",
+      "legacy_key": "timestamp",
+      "reachable": true
+    },
+    {
+      "index": 28,
+      "key": "category",
+      "canonical": "Category",
+      "legacy_key": "category",
+      "reachable": true
+    },
+    {
+      "index": 29,
+      "key": "categories",
+      "canonical": "Category",
+      "legacy_key": "categories",
+      "reachable": true
+    },
+    {
+      "index": 30,
+      "key": "cat",
+      "canonical": "Category",
+      "legacy_key": "cat",
+      "reachable": true
+    },
+    {
+      "index": 31,
+      "key": "product category",
+      "canonical": "Category",
+      "legacy_key": "product category",
+      "reachable": true
+    },
+    {
+      "index": 32,
+      "key": "product_category",
+      "canonical": "Category",
+      "legacy_key": "product_category",
+      "reachable": true
+    },
+    {
+      "index": 33,
+      "key": "item category",
+      "canonical": "Category",
+      "legacy_key": "item category",
+      "reachable": true
+    },
+    {
+      "index": 34,
+      "key": "item_category",
+      "canonical": "Category",
+      "legacy_key": "item_category",
+      "reachable": true
+    },
+    {
+      "index": 35,
+      "key": "item group",
+      "canonical": "Category",
+      "legacy_key": "item group",
+      "reachable": true
+    },
+    {
+      "index": 36,
+      "key": "stock group",
+      "canonical": "Category",
+      "legacy_key": "stock group",
+      "reachable": true
+    },
+    {
+      "index": 37,
+      "key": "stock_group",
+      "canonical": "Category",
+      "legacy_key": "stock_group",
+      "reachable": true
+    },
+    {
+      "index": 38,
+      "key": "product type",
+      "canonical": "Category",
+      "legacy_key": "product type",
+      "reachable": true
+    },
+    {
+      "index": 39,
+      "key": "product_type",
+      "canonical": "Category",
+      "legacy_key": "product_type",
+      "reachable": true
+    },
+    {
+      "index": 40,
+      "key": "dept",
+      "canonical": "Category",
+      "legacy_key": "dept",
+      "reachable": true
+    },
+    {
+      "index": 41,
+      "key": "department",
+      "canonical": "Category",
+      "legacy_key": "department",
+      "reachable": true
+    },
+    {
+      "index": 42,
+      "key": "type",
+      "canonical": "Category",
+      "legacy_key": "type",
+      "reachable": true
+    },
+    {
+      "index": 43,
+      "key": "group",
+      "canonical": "Category",
+      "legacy_key": "group",
+      "reachable": true
+    },
+    {
+      "index": 44,
+      "key": "segment",
+      "canonical": "Category",
+      "legacy_key": "segment",
+      "reachable": true
+    },
+    {
+      "index": 45,
+      "key": "class",
+      "canonical": "Category",
+      "legacy_key": "class",
+      "reachable": true
+    },
+    {
+      "index": 46,
+      "key": "sub category",
+      "canonical": "Category",
+      "legacy_key": "sub category",
+      "reachable": true
+    },
+    {
+      "index": 47,
+      "key": "sub-category",
+      "canonical": "Category",
+      "legacy_key": "sub-category",
+      "reachable": true
+    },
+    {
+      "index": 48,
+      "key": "subcategory",
+      "canonical": "Category",
+      "legacy_key": "subcategory",
+      "reachable": true
+    },
+    {
+      "index": 49,
+      "key": "collection",
+      "canonical": "Category",
+      "legacy_key": "collection",
+      "reachable": true
+    },
+    {
+      "index": 50,
+      "key": "section",
+      "canonical": "Category",
+      "legacy_key": "section",
+      "reachable": true
+    },
+    {
+      "index": 51,
+      "key": "menu group",
+      "canonical": "Category",
+      "legacy_key": "menu group",
+      "reachable": true
+    },
+    {
+      "index": 52,
+      "key": "menu category",
+      "canonical": "Category",
+      "legacy_key": "menu category",
+      "reachable": true
+    },
+    {
+      "index": 53,
+      "key": "course",
+      "canonical": "Category",
+      "legacy_key": "course",
+      "reachable": true
+    },
+    {
+      "index": 54,
+      "key": "kitchen group",
+      "canonical": "Category",
+      "legacy_key": "kitchen group",
+      "reachable": true
+    },
+    {
+      "index": 55,
+      "key": "food type",
+      "canonical": "Category",
+      "legacy_key": "food type",
+      "reachable": true
+    },
+    {
+      "index": 56,
+      "key": "item",
+      "canonical": "Item",
+      "legacy_key": "item",
+      "reachable": true
+    },
+    {
+      "index": 57,
+      "key": "items",
+      "canonical": "Item",
+      "legacy_key": "items",
+      "reachable": true
+    },
+    {
+      "index": 58,
+      "key": "item name",
+      "canonical": "Item",
+      "legacy_key": "item name",
+      "reachable": true
+    },
+    {
+      "index": 59,
+      "key": "item_name",
+      "canonical": "Item",
+      "legacy_key": "item_name",
+      "reachable": true
+    },
+    {
+      "index": 60,
+      "key": "itemname",
+      "canonical": "Item",
+      "legacy_key": "itemname",
+      "reachable": true
+    },
+    {
+      "index": 61,
+      "key": "product",
+      "canonical": "Item",
+      "legacy_key": "product",
+      "reachable": true
+    },
+    {
+      "index": 62,
+      "key": "product name",
+      "canonical": "Item",
+      "legacy_key": "product name",
+      "reachable": true
+    },
+    {
+      "index": 63,
+      "key": "product_name",
+      "canonical": "Item",
+      "legacy_key": "product_name",
+      "reachable": true
+    },
+    {
+      "index": 64,
+      "key": "products",
+      "canonical": "Item",
+      "legacy_key": "products",
+      "reachable": true
+    },
+    {
+      "index": 65,
+      "key": "description",
+      "canonical": "Item",
+      "legacy_key": "description",
+      "reachable": true
+    },
+    {
+      "index": 66,
+      "key": "item description",
+      "canonical": "Item",
+      "legacy_key": "item description",
+      "reachable": true
+    },
+    {
+      "index": 67,
+      "key": "item_description",
+      "canonical": "Item",
+      "legacy_key": "item_description",
+      "reachable": true
+    },
+    {
+      "index": 68,
+      "key": "product_description",
+      "canonical": "Item",
+      "legacy_key": "product_description",
+      "reachable": true
+    },
+    {
+      "index": 69,
+      "key": "particulars",
+      "canonical": "Item",
+      "legacy_key": "particulars",
+      "reachable": true
+    },
+    {
+      "index": 70,
+      "key": "stock item",
+      "canonical": "Item",
+      "legacy_key": "stock item",
+      "reachable": true
+    },
+    {
+      "index": 71,
+      "key": "stock_item",
+      "canonical": "Item",
+      "legacy_key": "stock_item",
+      "reachable": true
+    },
+    {
+      "index": 72,
+      "key": "style",
+      "canonical": "Item",
+      "legacy_key": "style",
+      "reachable": true
+    },
+    {
+      "index": 73,
+      "key": "style name",
+      "canonical": "Item",
+      "legacy_key": "style name",
+      "reachable": true
+    },
+    {
+      "index": 74,
+      "key": "style code",
+      "canonical": "Item",
+      "legacy_key": "style code",
+      "reachable": true
+    },
+    {
+      "index": 75,
+      "key": "design",
+      "canonical": "Item",
+      "legacy_key": "design",
+      "reachable": true
+    },
+    {
+      "index": 76,
+      "key": "design no",
+      "canonical": "Item",
+      "legacy_key": "design no",
+      "reachable": true
+    },
+    {
+      "index": 77,
+      "key": "prod",
+      "canonical": "Item",
+      "legacy_key": "prod",
+      "reachable": true
+    },
+    {
+      "index": 78,
+      "key": "name",
+      "canonical": "Item",
+      "legacy_key": "name",
+      "reachable": true
+    },
+    {
+      "index": 79,
+      "key": "goods",
+      "canonical": "Item",
+      "legacy_key": "goods",
+      "reachable": true
+    },
+    {
+      "index": 80,
+      "key": "sku",
+      "canonical": "Item",
+      "legacy_key": "sku",
+      "reachable": true
+    },
+    {
+      "index": 81,
+      "key": "sku code",
+      "canonical": "Item",
+      "legacy_key": "sku code",
+      "reachable": true
+    },
+    {
+      "index": 82,
+      "key": "item code",
+      "canonical": "Item",
+      "legacy_key": "item code",
+      "reachable": true
+    },
+    {
+      "index": 83,
+      "key": "item_code",
+      "canonical": "Item",
+      "legacy_key": "item_code",
+      "reachable": true
+    },
+    {
+      "index": 84,
+      "key": "product code",
+      "canonical": "Item",
+      "legacy_key": "product code",
+      "reachable": true
+    },
+    {
+      "index": 85,
+      "key": "barcode",
+      "canonical": "Item",
+      "legacy_key": "barcode",
+      "reachable": true
+    },
+    {
+      "index": 86,
+      "key": "article",
+      "canonical": "Item",
+      "legacy_key": "article",
+      "reachable": true
+    },
+    {
+      "index": 87,
+      "key": "lineitem name",
+      "canonical": "Item",
+      "legacy_key": "lineitem name",
+      "reachable": true
+    },
+    {
+      "index": 88,
+      "key": "title",
+      "canonical": "Item",
+      "legacy_key": "title",
+      "reachable": true
+    },
+    {
+      "index": 89,
+      "key": "quantity",
+      "canonical": "Quantity",
+      "legacy_key": "quantity",
+      "reachable": true
+    },
+    {
+      "index": 90,
+      "key": "quantities",
+      "canonical": "Quantity",
+      "legacy_key": "quantities",
+      "reachable": true
+    },
+    {
+      "index": 91,
+      "key": "qty",
+      "canonical": "Quantity",
+      "legacy_key": "qty",
+      "reachable": true
+    },
+    {
+      "index": 92,
+      "key": "qty.",
+      "canonical": "Quantity",
+      "legacy_key": "qty.",
+      "reachable": true
+    },
+    {
+      "index": 93,
+      "key": "qnty",
+      "canonical": "Quantity",
+      "legacy_key": "qnty",
+      "reachable": true
+    },
+    {
+      "index": 94,
+      "key": "nos",
+      "canonical": "Quantity",
+      "legacy_key": "nos",
+      "reachable": true
+    },
+    {
+      "index": 95,
+      "key": "no of units",
+      "canonical": "Quantity",
+      "legacy_key": "no of units",
+      "reachable": true
+    },
+    {
+      "index": 96,
+      "key": "units",
+      "canonical": "Quantity",
+      "legacy_key": "units",
+      "reachable": true
+    },
+    {
+      "index": 97,
+      "key": "unit",
+      "canonical": "Quantity",
+      "legacy_key": "unit",
+      "reachable": true
+    },
+    {
+      "index": 98,
+      "key": "pcs",
+      "canonical": "Quantity",
+      "legacy_key": "pcs",
+      "reachable": true
+    },
+    {
+      "index": 99,
+      "key": "pieces",
+      "canonical": "Quantity",
+      "legacy_key": "pieces",
+      "reachable": true
+    },
+    {
+      "index": 100,
+      "key": "units sold",
+      "canonical": "Quantity",
+      "legacy_key": "units sold",
+      "reachable": true
+    },
+    {
+      "index": 101,
+      "key": "units_sold",
+      "canonical": "Quantity",
+      "legacy_key": "units_sold",
+      "reachable": true
+    },
+    {
+      "index": 102,
+      "key": "quantity sold",
+      "canonical": "Quantity",
+      "legacy_key": "quantity sold",
+      "reachable": true
+    },
+    {
+      "index": 103,
+      "key": "quantity_sold",
+      "canonical": "Quantity",
+      "legacy_key": "quantity_sold",
+      "reachable": true
+    },
+    {
+      "index": 104,
+      "key": "qty sold",
+      "canonical": "Quantity",
+      "legacy_key": "qty sold",
+      "reachable": true
+    },
+    {
+      "index": 105,
+      "key": "qty_sold",
+      "canonical": "Quantity",
+      "legacy_key": "qty_sold",
+      "reachable": true
+    },
+    {
+      "index": 106,
+      "key": "billed qty",
+      "canonical": "Quantity",
+      "legacy_key": "billed qty",
+      "reachable": true
+    },
+    {
+      "index": 107,
+      "key": "billed_qty",
+      "canonical": "Quantity",
+      "legacy_key": "billed_qty",
+      "reachable": true
+    },
+    {
+      "index": 108,
+      "key": "sold qty",
+      "canonical": "Quantity",
+      "legacy_key": "sold qty",
+      "reachable": true
+    },
+    {
+      "index": 109,
+      "key": "actual qty",
+      "canonical": "Quantity",
+      "legacy_key": "actual qty",
+      "reachable": true
+    },
+    {
+      "index": 110,
+      "key": "no.",
+      "canonical": "Quantity",
+      "legacy_key": "no.",
+      "reachable": true
+    },
+    {
+      "index": 111,
+      "key": "count",
+      "canonical": "Quantity",
+      "legacy_key": "count",
+      "reachable": true
+    },
+    {
+      "index": 112,
+      "key": "sold",
+      "canonical": "Quantity",
+      "legacy_key": "sold",
+      "reachable": true
+    },
+    {
+      "index": 113,
+      "key": "num",
+      "canonical": "Quantity",
+      "legacy_key": "num",
+      "reachable": true
+    },
+    {
+      "index": 114,
+      "key": "lineitem quantity",
+      "canonical": "Quantity",
+      "legacy_key": "lineitem quantity",
+      "reachable": true
+    },
+    {
+      "index": 115,
+      "key": "quantity-purchased",
+      "canonical": "Quantity",
+      "legacy_key": "quantity-purchased",
+      "reachable": true
+    },
+    {
+      "index": 116,
+      "key": "order quantity",
+      "canonical": "Quantity",
+      "legacy_key": "order quantity",
+      "reachable": true
+    },
+    {
+      "index": 117,
+      "key": "selling price",
+      "canonical": "Selling Price",
+      "legacy_key": "selling price",
+      "reachable": true
+    },
+    {
+      "index": 118,
+      "key": "selling_price",
+      "canonical": "Selling Price",
+      "legacy_key": "selling_price",
+      "reachable": true
+    },
+    {
+      "index": 119,
+      "key": "sale price",
+      "canonical": "Selling Price",
+      "legacy_key": "sale price",
+      "reachable": true
+    },
+    {
+      "index": 120,
+      "key": "sales price",
+      "canonical": "Selling Price",
+      "legacy_key": "sales price",
+      "reachable": true
+    },
+    {
+      "index": 121,
+      "key": "sell price",
+      "canonical": "Selling Price",
+      "legacy_key": "sell price",
+      "reachable": true
+    },
+    {
+      "index": 122,
+      "key": "price",
+      "canonical": "Selling Price",
+      "legacy_key": "price",
+      "reachable": true
+    },
+    {
+      "index": 123,
+      "key": "unit price",
+      "canonical": "Selling Price",
+      "legacy_key": "unit price",
+      "reachable": true
+    },
+    {
+      "index": 124,
+      "key": "unit_price",
+      "canonical": "Selling Price",
+      "legacy_key": "unit_price",
+      "reachable": true
+    },
+    {
+      "index": 125,
+      "key": "price per unit",
+      "canonical": "Selling Price",
+      "legacy_key": "price per unit",
+      "reachable": true
+    },
+    {
+      "index": 126,
+      "key": "price/unit",
+      "canonical": "Selling Price",
+      "legacy_key": "price/unit",
+      "reachable": true
+    },
+    {
+      "index": 127,
+      "key": "rate",
+      "canonical": "Selling Price",
+      "legacy_key": "rate",
+      "reachable": true
+    },
+    {
+      "index": 128,
+      "key": "rate/unit",
+      "canonical": "Selling Price",
+      "legacy_key": "rate/unit",
+      "reachable": true
+    },
+    {
+      "index": 129,
+      "key": "rate per unit",
+      "canonical": "Selling Price",
+      "legacy_key": "rate per unit",
+      "reachable": true
+    },
+    {
+      "index": 130,
+      "key": "unit rate",
+      "canonical": "Selling Price",
+      "legacy_key": "unit rate",
+      "reachable": true
+    },
+    {
+      "index": 131,
+      "key": "retail price",
+      "canonical": "Selling Price",
+      "legacy_key": "retail price",
+      "reachable": true
+    },
+    {
+      "index": 132,
+      "key": "retail_price",
+      "canonical": "Selling Price",
+      "legacy_key": "retail_price",
+      "reachable": true
+    },
+    {
+      "index": 133,
+      "key": "mrp",
+      "canonical": "MRP",
+      "legacy_key": "mrp",
+      "reachable": true
+    },
+    {
+      "index": 134,
+      "key": "m.r.p",
+      "canonical": "MRP",
+      "legacy_key": "m.r.p",
+      "reachable": true
+    },
+    {
+      "index": 135,
+      "key": "list price",
+      "canonical": "MRP",
+      "legacy_key": "list price",
+      "reachable": true
+    },
+    {
+      "index": 136,
+      "key": "maximum retail price",
+      "canonical": "MRP",
+      "legacy_key": "maximum retail price",
+      "reachable": true
+    },
+    {
+      "index": 137,
+      "key": "sp",
+      "canonical": "Selling Price",
+      "legacy_key": "sp",
+      "reachable": true
+    },
+    {
+      "index": 138,
+      "key": "lineitem price",
+      "canonical": "Selling Price",
+      "legacy_key": "lineitem price",
+      "reachable": true
+    },
+    {
+      "index": 139,
+      "key": "item-price",
+      "canonical": "Selling Price",
+      "legacy_key": "item-price",
+      "reachable": true
+    },
+    {
+      "index": 140,
+      "key": "cost price",
+      "canonical": "Cost Price",
+      "legacy_key": "cost price",
+      "reachable": true
+    },
+    {
+      "index": 141,
+      "key": "cost_price",
+      "canonical": "Cost Price",
+      "legacy_key": "cost_price",
+      "reachable": true
+    },
+    {
+      "index": 142,
+      "key": "cost",
+      "canonical": "Cost Price",
+      "legacy_key": "cost",
+      "reachable": true
+    },
+    {
+      "index": 143,
+      "key": "unit cost",
+      "canonical": "Cost Price",
+      "legacy_key": "unit cost",
+      "reachable": true
+    },
+    {
+      "index": 144,
+      "key": "unit_cost",
+      "canonical": "Cost Price",
+      "legacy_key": "unit_cost",
+      "reachable": true
+    },
+    {
+      "index": 145,
+      "key": "cost per unit",
+      "canonical": "Cost Price",
+      "legacy_key": "cost per unit",
+      "reachable": true
+    },
+    {
+      "index": 146,
+      "key": "purchase price",
+      "canonical": "Cost Price",
+      "legacy_key": "purchase price",
+      "reachable": true
+    },
+    {
+      "index": 147,
+      "key": "purchase_price",
+      "canonical": "Cost Price",
+      "legacy_key": "purchase_price",
+      "reachable": true
+    },
+    {
+      "index": 148,
+      "key": "purchase rate",
+      "canonical": "Cost Price",
+      "legacy_key": "purchase rate",
+      "reachable": true
+    },
+    {
+      "index": 149,
+      "key": "buying price",
+      "canonical": "Cost Price",
+      "legacy_key": "buying price",
+      "reachable": true
+    },
+    {
+      "index": 150,
+      "key": "buying_price",
+      "canonical": "Cost Price",
+      "legacy_key": "buying_price",
+      "reachable": true
+    },
+    {
+      "index": 151,
+      "key": "wholesale price",
+      "canonical": "Cost Price",
+      "legacy_key": "wholesale price",
+      "reachable": true
+    },
+    {
+      "index": 152,
+      "key": "wholesale_price",
+      "canonical": "Cost Price",
+      "legacy_key": "wholesale_price",
+      "reachable": true
+    },
+    {
+      "index": 153,
+      "key": "landing cost",
+      "canonical": "Cost Price",
+      "legacy_key": "landing cost",
+      "reachable": true
+    },
+    {
+      "index": 154,
+      "key": "landed cost",
+      "canonical": "Cost Price",
+      "legacy_key": "landed cost",
+      "reachable": true
+    },
+    {
+      "index": 155,
+      "key": "cp",
+      "canonical": "Cost Price",
+      "legacy_key": "cp",
+      "reachable": true
+    },
+    {
+      "index": 156,
+      "key": "cogs",
+      "canonical": "Cost Price",
+      "legacy_key": "cogs",
+      "reachable": true
+    },
+    {
+      "index": 157,
+      "key": "amount",
+      "canonical": "Line Total",
+      "legacy_key": "amount",
+      "reachable": true
+    },
+    {
+      "index": 158,
+      "key": "amt",
+      "canonical": "Line Total",
+      "legacy_key": "amt",
+      "reachable": true
+    },
+    {
+      "index": 159,
+      "key": "net amount",
+      "canonical": "Line Total",
+      "legacy_key": "net amount",
+      "reachable": true
+    },
+    {
+      "index": 160,
+      "key": "net_amount",
+      "canonical": "Line Total",
+      "legacy_key": "net_amount",
+      "reachable": true
+    },
+    {
+      "index": 161,
+      "key": "gross amount",
+      "canonical": "Line Total",
+      "legacy_key": "gross amount",
+      "reachable": true
+    },
+    {
+      "index": 162,
+      "key": "total",
+      "canonical": "Line Total",
+      "legacy_key": "total",
+      "reachable": true
+    },
+    {
+      "index": 163,
+      "key": "total amount",
+      "canonical": "Line Total",
+      "legacy_key": "total amount",
+      "reachable": true
+    },
+    {
+      "index": 164,
+      "key": "total_amount",
+      "canonical": "Line Total",
+      "legacy_key": "total_amount",
+      "reachable": true
+    },
+    {
+      "index": 165,
+      "key": "line total",
+      "canonical": "Line Total",
+      "legacy_key": "line total",
+      "reachable": true
+    },
+    {
+      "index": 166,
+      "key": "line_total",
+      "canonical": "Line Total",
+      "legacy_key": "line_total",
+      "reachable": true
+    },
+    {
+      "index": 167,
+      "key": "line amount",
+      "canonical": "Line Total",
+      "legacy_key": "line amount",
+      "reachable": true
+    },
+    {
+      "index": 168,
+      "key": "row total",
+      "canonical": "Line Total",
+      "legacy_key": "row total",
+      "reachable": true
+    },
+    {
+      "index": 169,
+      "key": "sale amount",
+      "canonical": "Line Total",
+      "legacy_key": "sale amount",
+      "reachable": true
+    },
+    {
+      "index": 170,
+      "key": "sales amount",
+      "canonical": "Line Total",
+      "legacy_key": "sales amount",
+      "reachable": true
+    },
+    {
+      "index": 171,
+      "key": "sales value",
+      "canonical": "Line Total",
+      "legacy_key": "sales value",
+      "reachable": true
+    },
+    {
+      "index": 172,
+      "key": "invoice amount",
+      "canonical": "Line Total",
+      "legacy_key": "invoice amount",
+      "reachable": true
+    },
+    {
+      "index": 173,
+      "key": "bill amount",
+      "canonical": "Line Total",
+      "legacy_key": "bill amount",
+      "reachable": true
+    },
+    {
+      "index": 174,
+      "key": "taxable value",
+      "canonical": "Line Total",
+      "legacy_key": "taxable value",
+      "reachable": true
+    },
+    {
+      "index": 175,
+      "key": "taxable amount",
+      "canonical": "Line Total",
+      "legacy_key": "taxable amount",
+      "reachable": true
+    },
+    {
+      "index": 176,
+      "key": "revenue",
+      "canonical": "Line Total",
+      "legacy_key": "revenue",
+      "reachable": true
+    },
+    {
+      "index": 177,
+      "key": "turnover",
+      "canonical": "Line Total",
+      "legacy_key": "turnover",
+      "reachable": true
+    },
+    {
+      "index": 178,
+      "key": "item-total",
+      "canonical": "Line Total",
+      "legacy_key": "item-total",
+      "reachable": true
+    },
+    {
+      "index": 179,
+      "key": "lineitem total",
+      "canonical": "Line Total",
+      "legacy_key": "lineitem total",
+      "reachable": true
+    },
+    {
+      "index": 180,
+      "key": "value",
+      "canonical": "Line Total",
+      "legacy_key": "value",
+      "reachable": true
+    },
+    {
+      "index": 181,
+      "key": "discount",
+      "canonical": "Discount",
+      "legacy_key": "discount",
+      "reachable": true
+    },
+    {
+      "index": 182,
+      "key": "discount amount",
+      "canonical": "Discount",
+      "legacy_key": "discount amount",
+      "reachable": true
+    },
+    {
+      "index": 183,
+      "key": "discount_amount",
+      "canonical": "Discount",
+      "legacy_key": "discount_amount",
+      "reachable": true
+    },
+    {
+      "index": 184,
+      "key": "disc",
+      "canonical": "Discount",
+      "legacy_key": "disc",
+      "reachable": true
+    },
+    {
+      "index": 185,
+      "key": "disc amt",
+      "canonical": "Discount",
+      "legacy_key": "disc amt",
+      "reachable": true
+    },
+    {
+      "index": 186,
+      "key": "rebate",
+      "canonical": "Discount",
+      "legacy_key": "rebate",
+      "reachable": true
+    },
+    {
+      "index": 187,
+      "key": "less discount",
+      "canonical": "Discount",
+      "legacy_key": "less discount",
+      "reachable": true
+    },
+    {
+      "index": 188,
+      "key": "lineitem discount",
+      "canonical": "Discount",
+      "legacy_key": "lineitem discount",
+      "reachable": true
+    },
+    {
+      "index": 189,
+      "key": "tax",
+      "canonical": "Tax",
+      "legacy_key": "tax",
+      "reachable": true
+    },
+    {
+      "index": 190,
+      "key": "tax amount",
+      "canonical": "Tax",
+      "legacy_key": "tax amount",
+      "reachable": true
+    },
+    {
+      "index": 191,
+      "key": "tax_amount",
+      "canonical": "Tax",
+      "legacy_key": "tax_amount",
+      "reachable": true
+    },
+    {
+      "index": 192,
+      "key": "gst",
+      "canonical": "Tax",
+      "legacy_key": "gst",
+      "reachable": true
+    },
+    {
+      "index": 193,
+      "key": "gst amount",
+      "canonical": "Tax",
+      "legacy_key": "gst amount",
+      "reachable": true
+    },
+    {
+      "index": 194,
+      "key": "gst_amount",
+      "canonical": "Tax",
+      "legacy_key": "gst_amount",
+      "reachable": true
+    },
+    {
+      "index": 195,
+      "key": "total gst",
+      "canonical": "Tax",
+      "legacy_key": "total gst",
+      "reachable": true
+    },
+    {
+      "index": 196,
+      "key": "cgst+sgst",
+      "canonical": "Tax",
+      "legacy_key": "cgst+sgst",
+      "reachable": true
+    },
+    {
+      "index": 197,
+      "key": "vat",
+      "canonical": "Tax",
+      "legacy_key": "vat",
+      "reachable": true
+    },
+    {
+      "index": 198,
+      "key": "igst",
+      "canonical": "Tax",
+      "legacy_key": "igst",
+      "reachable": true
+    },
+    {
+      "index": 199,
+      "key": "stock",
+      "canonical": "Stock On Hand",
+      "legacy_key": "stock",
+      "reachable": true
+    },
+    {
+      "index": 200,
+      "key": "stock on hand",
+      "canonical": "Stock On Hand",
+      "legacy_key": "stock on hand",
+      "reachable": true
+    },
+    {
+      "index": 201,
+      "key": "stock_on_hand",
+      "canonical": "Stock On Hand",
+      "legacy_key": "stock_on_hand",
+      "reachable": true
+    },
+    {
+      "index": 202,
+      "key": "on hand",
+      "canonical": "Stock On Hand",
+      "legacy_key": "on hand",
+      "reachable": true
+    },
+    {
+      "index": 203,
+      "key": "in stock",
+      "canonical": "Stock On Hand",
+      "legacy_key": "in stock",
+      "reachable": true
+    },
+    {
+      "index": 204,
+      "key": "closing stock",
+      "canonical": "Stock On Hand",
+      "legacy_key": "closing stock",
+      "reachable": true
+    },
+    {
+      "index": 205,
+      "key": "closing_stock",
+      "canonical": "Stock On Hand",
+      "legacy_key": "closing_stock",
+      "reachable": true
+    },
+    {
+      "index": 206,
+      "key": "closing balance",
+      "canonical": "Stock On Hand",
+      "legacy_key": "closing balance",
+      "reachable": true
+    },
+    {
+      "index": 207,
+      "key": "balance qty",
+      "canonical": "Stock On Hand",
+      "legacy_key": "balance qty",
+      "reachable": true
+    },
+    {
+      "index": 208,
+      "key": "balance_qty",
+      "canonical": "Stock On Hand",
+      "legacy_key": "balance_qty",
+      "reachable": true
+    },
+    {
+      "index": 209,
+      "key": "available qty",
+      "canonical": "Stock On Hand",
+      "legacy_key": "available qty",
+      "reachable": true
+    },
+    {
+      "index": 210,
+      "key": "current stock",
+      "canonical": "Stock On Hand",
+      "legacy_key": "current stock",
+      "reachable": true
+    },
+    {
+      "index": 211,
+      "key": "inventory",
+      "canonical": "Stock On Hand",
+      "legacy_key": "inventory",
+      "reachable": true
+    },
+    {
+      "index": 212,
+      "key": "inventory qty",
+      "canonical": "Stock On Hand",
+      "legacy_key": "inventory qty",
+      "reachable": true
+    },
+    {
+      "index": 213,
+      "key": "branch",
+      "canonical": "Branch",
+      "legacy_key": "branch",
+      "reachable": true
+    },
+    {
+      "index": 214,
+      "key": "store",
+      "canonical": "Branch",
+      "legacy_key": "store",
+      "reachable": true
+    },
+    {
+      "index": 215,
+      "key": "store name",
+      "canonical": "Branch",
+      "legacy_key": "store name",
+      "reachable": true
+    },
+    {
+      "index": 216,
+      "key": "shop",
+      "canonical": "Branch",
+      "legacy_key": "shop",
+      "reachable": true
+    },
+    {
+      "index": 217,
+      "key": "outlet",
+      "canonical": "Branch",
+      "legacy_key": "outlet",
+      "reachable": true
+    },
+    {
+      "index": 218,
+      "key": "location",
+      "canonical": "Branch",
+      "legacy_key": "location",
+      "reachable": true
+    },
+    {
+      "index": 219,
+      "key": "godown",
+      "canonical": "Branch",
+      "legacy_key": "godown",
+      "reachable": true
+    },
+    {
+      "index": 220,
+      "key": "warehouse",
+      "canonical": "Branch",
+      "legacy_key": "warehouse",
+      "reachable": true
+    },
+    {
+      "index": 221,
+      "key": "city",
+      "canonical": "Branch",
+      "legacy_key": "city",
+      "reachable": true
+    },
+    {
+      "index": 222,
+      "key": "payment mode",
+      "canonical": "Payment Mode",
+      "legacy_key": "payment mode",
+      "reachable": true
+    },
+    {
+      "index": 223,
+      "key": "payment_mode",
+      "canonical": "Payment Mode",
+      "legacy_key": "payment_mode",
+      "reachable": true
+    },
+    {
+      "index": 224,
+      "key": "payment method",
+      "canonical": "Payment Mode",
+      "legacy_key": "payment method",
+      "reachable": true
+    },
+    {
+      "index": 225,
+      "key": "mode of payment",
+      "canonical": "Payment Mode",
+      "legacy_key": "mode of payment",
+      "reachable": true
+    },
+    {
+      "index": 226,
+      "key": "paid via",
+      "canonical": "Payment Mode",
+      "legacy_key": "paid via",
+      "reachable": true
+    },
+    {
+      "index": 227,
+      "key": "payment type",
+      "canonical": "Payment Mode",
+      "legacy_key": "payment type",
+      "reachable": true
+    },
+    {
+      "index": 228,
+      "key": "tender",
+      "canonical": "Payment Mode",
+      "legacy_key": "tender",
+      "reachable": true
+    },
+    {
+      "index": 229,
+      "key": "customer",
+      "canonical": "Customer",
+      "legacy_key": "customer",
+      "reachable": true
+    },
+    {
+      "index": 230,
+      "key": "customer name",
+      "canonical": "Customer",
+      "legacy_key": "customer name",
+      "reachable": true
+    },
+    {
+      "index": 231,
+      "key": "customer_name",
+      "canonical": "Customer",
+      "legacy_key": "customer_name",
+      "reachable": true
+    },
+    {
+      "index": 232,
+      "key": "buyer",
+      "canonical": "Customer",
+      "legacy_key": "buyer",
+      "reachable": true
+    },
+    {
+      "index": 233,
+      "key": "party",
+      "canonical": "Customer",
+      "legacy_key": "party",
+      "reachable": true
+    },
+    {
+      "index": 234,
+      "key": "party name",
+      "canonical": "Customer",
+      "legacy_key": "party name",
+      "reachable": true
+    },
+    {
+      "index": 235,
+      "key": "client",
+      "canonical": "Customer",
+      "legacy_key": "client",
+      "reachable": true
+    },
+    {
+      "index": 236,
+      "key": "salesperson",
+      "canonical": "Salesperson",
+      "legacy_key": "salesperson",
+      "reachable": true
+    },
+    {
+      "index": 237,
+      "key": "sales person",
+      "canonical": "Salesperson",
+      "legacy_key": "sales person",
+      "reachable": true
+    },
+    {
+      "index": 238,
+      "key": "sales_person",
+      "canonical": "Salesperson",
+      "legacy_key": "sales_person",
+      "reachable": true
+    },
+    {
+      "index": 239,
+      "key": "salesman",
+      "canonical": "Salesperson",
+      "legacy_key": "salesman",
+      "reachable": true
+    },
+    {
+      "index": 240,
+      "key": "staff",
+      "canonical": "Salesperson",
+      "legacy_key": "staff",
+      "reachable": true
+    },
+    {
+      "index": 241,
+      "key": "employee",
+      "canonical": "Salesperson",
+      "legacy_key": "employee",
+      "reachable": true
+    },
+    {
+      "index": 242,
+      "key": "cashier",
+      "canonical": "Salesperson",
+      "legacy_key": "cashier",
+      "reachable": true
+    },
+    {
+      "index": 243,
+      "key": "biller",
+      "canonical": "Salesperson",
+      "legacy_key": "biller",
+      "reachable": true
+    },
+    {
+      "index": 244,
+      "key": "brand",
+      "canonical": "Brand",
+      "legacy_key": "brand",
+      "reachable": true
+    },
+    {
+      "index": 245,
+      "key": "brand name",
+      "canonical": "Brand",
+      "legacy_key": "brand name",
+      "reachable": true
+    },
+    {
+      "index": 246,
+      "key": "make",
+      "canonical": "Brand",
+      "legacy_key": "make",
+      "reachable": true
+    },
+    {
+      "index": 247,
+      "key": "manufacturer",
+      "canonical": "Brand",
+      "legacy_key": "manufacturer",
+      "reachable": true
+    },
+    {
+      "index": 248,
+      "key": "size",
+      "canonical": "Size",
+      "legacy_key": "size",
+      "reachable": true
+    },
+    {
+      "index": 249,
+      "key": "sizes",
+      "canonical": "Size",
+      "legacy_key": "sizes",
+      "reachable": true
+    },
+    {
+      "index": 250,
+      "key": "item size",
+      "canonical": "Size",
+      "legacy_key": "item size",
+      "reachable": true
+    },
+    {
+      "index": 251,
+      "key": "variant",
+      "canonical": "Size",
+      "legacy_key": "variant",
+      "reachable": true
+    },
+    {
+      "index": 252,
+      "key": "colour",
+      "canonical": "Colour",
+      "legacy_key": "colour",
+      "reachable": true
+    },
+    {
+      "index": 253,
+      "key": "color",
+      "canonical": "Colour",
+      "legacy_key": "color",
+      "reachable": true
+    },
+    {
+      "index": 254,
+      "key": "shade",
+      "canonical": "Colour",
+      "legacy_key": "shade",
+      "reachable": true
+    },
+    {
+      "index": 255,
+      "key": "invoice no",
+      "canonical": "Invoice No",
+      "legacy_key": "invoice no",
+      "reachable": true
+    },
+    {
+      "index": 256,
+      "key": "invoice_no",
+      "canonical": "Invoice No",
+      "legacy_key": "invoice_no",
+      "reachable": true
+    },
+    {
+      "index": 257,
+      "key": "invoice number",
+      "canonical": "Invoice No",
+      "legacy_key": "invoice number",
+      "reachable": true
+    },
+    {
+      "index": 258,
+      "key": "invoice",
+      "canonical": "Invoice No",
+      "legacy_key": "invoice",
+      "reachable": true
+    },
+    {
+      "index": 259,
+      "key": "bill no",
+      "canonical": "Invoice No",
+      "legacy_key": "bill no",
+      "reachable": true
+    },
+    {
+      "index": 260,
+      "key": "bill_no",
+      "canonical": "Invoice No",
+      "legacy_key": "bill_no",
+      "reachable": true
+    },
+    {
+      "index": 261,
+      "key": "bill number",
+      "canonical": "Invoice No",
+      "legacy_key": "bill number",
+      "reachable": true
+    },
+    {
+      "index": 262,
+      "key": "voucher no",
+      "canonical": "Invoice No",
+      "legacy_key": "voucher no",
+      "reachable": true
+    },
+    {
+      "index": 263,
+      "key": "receipt no",
+      "canonical": "Invoice No",
+      "legacy_key": "receipt no",
+      "reachable": true
+    },
+    {
+      "index": 264,
+      "key": "order id",
+      "canonical": "Invoice No",
+      "legacy_key": "order id",
+      "reachable": true
+    },
+    {
+      "index": 265,
+      "key": "order_id",
+      "canonical": "Invoice No",
+      "legacy_key": "order_id",
+      "reachable": true
+    },
+    {
+      "index": 266,
+      "key": "order no",
+      "canonical": "Invoice No",
+      "legacy_key": "order no",
+      "reachable": true
+    },
+    {
+      "index": 267,
+      "key": "txn id",
+      "canonical": "Invoice No",
+      "legacy_key": "txn id",
+      "reachable": true
+    }
+  ]
+}

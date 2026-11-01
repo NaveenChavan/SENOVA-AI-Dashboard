@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "description": "_FUZZY_KEYWORDS in dict order. Order is behaviour: the first key found inside the header wins.",
+  "entries": [
+    {
+      "index": 0,
+      "keyword": "invoice date",
+      "canonical": "Date",
+      "reachable": true
+    },
+    {
+      "index": 1,
+      "keyword": "bill date",
+      "canonical": "Date",
+      "reachable": true
+    },
+    {
+      "index": 2,
+      "keyword": "voucher date",
+      "canonical": "Date",
+      "reachable": true
+    },
+    {
+      "index": 3,
+      "keyword": "order date",
+      "canonical": "Date",
+      "reachable": true
+    },
+    {
+      "index": 4,
+      "keyword": "date",
+      "canonical": "Date",
+      "reachable": true
+    },
+    {
+      "index": 5,
+      "keyword": "stock",
+      "canonical": "Stock On Hand",
+      "reachable": true
+    },
+    {
+      "index": 6,
+      "keyword": "on hand",
+      "canonical": "Stock On Hand",
+      "reachable": true
+    },
+    {
+      "index": 7,
+      "keyword": "closing",
+      "canonical": "Stock On Hand",
+      "reachable": true
+    },
+    {
+      "index": 8,
+      "keyword": "balance",
+      "canonical": "Stock On Hand",
+      "reachable": true
+    },
+    {
+      "index": 9,
+      "keyword": "payment",
+      "canonical": "Payment Mode",
+      "reachable": true
+    },
+    {
+      "index": 10,
+      "keyword": "salesman",
+      "canonical": "Salesperson",
+      "reachable": true
+    },
+    {
+      "index": 11,
+      "keyword": "salesperson",
+      "canonical": "Salesperson",
+      "reachable": true
+    },
+    {
+      "index": 12,
+      "keyword": "cashier",
+      "canonical": "Salesperson",
+      "reachable": true
+    },
+    {
+      "index": 13,
+      "keyword": "customer",
+      "canonical": "Customer",
+      "reachable": true
+    },
+    {
+      "index": 14,
+      "keyword": "party",
+      "canonical": "Customer",
+      "reachable": true
+    },
+    {
+      "index": 15,
+      "keyword": "branch",
+      "canonical": "Branch",
+      "reachable": true
+    },
+    {
+      "index": 16,
+      "keyword": "outlet",
+      "canonical": "Branch",
+      "reachable": true
+    },
+    {
+      "index": 17,
+      "keyword": "store",
+      "canonical": "Branch",
+      "reachable": true
+    },
+    {
+      "index": 18,
+      "keyword": "godown",
+      "canonical": "Branch",
+      "reachable": true
+    },
+    {
+      "index": 19,
+      "keyword": "warehouse",
+      "canonical": "Branch",
+      "reachable": true
+    },
+    {
+      "index": 20,
+      "keyword": "brand",
+      "canonical": "Brand",
+      "reachable": true
+    },
+    {
+      "index": 21,
+      "keyword": "colour",
+      "canonical": "Colour",
+      "reachable": true
+    },
+    {
+      "index": 22,
+      "keyword": "color",
+      "canonical": "Colour",
+      "reachable": true
+    },
+    {
+      "index": 23,
+      "keyword": "size",
+      "canonical": "Size",
+      "reachable": true
+    },
+    {
+      "index": 24,
+      "keyword": "invoice",
+      "canonical": "Invoice No",
+      "reachable": true
+    },
+    {
+      "index": 25,
+      "keyword": "bill no",
+      "canonical": "Invoice No",
+      "reachable": true
+    },
+    {
+      "index": 26,
+      "keyword": "voucher",
+      "canonical": "Invoice No",
+      "reachable": true
+    },
+    {
+      "index": 27,
+      "keyword": "order id",
+      "canonical": "Invoice No",
+      "reachable": true
+    },
+    {
+      "index": 28,
+      "keyword": "discount",
+      "canonical": "Discount",
+      "reachable": true
+    },
+    {
+      "index": 29,
+      "keyword": "gst",
+      "canonical": "Tax",
+      "reachable": true
+    },
+    {
+      "index": 30,
+      "keyword": "tax",
+      "canonical": "Tax",
+      "reachable": true
+    },
+    {
+      "index": 31,
+      "keyword": "qty",
+      "canonical": "Quantity",
+      "reachable": true
+    },
+    {
+      "index": 32,
+      "keyword": "quant",
+      "canonical": "Quantity",
+      "reachable": true
+    },
+    {
+      "index": 33,
+      "keyword": "units",
+      "canonical": "Quantity",
+      "reachable": true
+    },
+    {
+      "index": 34,
+      "keyword": "pcs",
+      "canonical": "Quantity",
+      "reachable": true
+    },
+    {
+      "index": 35,
+      "keyword": "count",
+      "canonical": "Quantity",
+      "reachable": true
+    },
+    {
+      "index": 36,
+      "keyword": "purchase",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 37,
+      "keyword": "cogs",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 38,
+      "keyword": "buying",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 39,
+      "keyword": "wholesale",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 40,
+      "keyword": "landing",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 41,
+      "keyword": "cost",
+      "canonical": "Cost Price",
+      "reachable": true
+    },
+    {
+      "index": 42,
+      "keyword": "taxable",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 43,
+      "keyword": "net amount",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 44,
+      "keyword": "line total",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 45,
+      "keyword": "total",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 46,
+      "keyword": "amount",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 47,
+      "keyword": "turnover",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 48,
+      "keyword": "revenue",
+      "canonical": "Line Total",
+      "reachable": true
+    },
+    {
+      "index": 49,
+      "keyword": "mrp",
+      "canonical": "MRP",
+      "reachable": true
+    },
+    {
+      "index": 50,
+      "keyword": "selling",
+      "canonical": "Selling Price",
+      "reachable": true
+    },
+    {
+      "index": 51,
+      "keyword": "unit price",
+      "canonical": "Selling Price",
+      "reachable": true
+    },
+    {
+      "index": 52,
+      "keyword": "rate",
+      "canonical": "Selling Price",
+      "reachable": true
+    },
+    {
+      "index": 53,
+      "keyword": "price",
+      "canonical": "Selling Price",
+      "reachable": true
+    },
+    {
+      "index": 54,
+      "keyword": "categ",
+      "canonical": "Category",
+      "reachable": true
+    },
+    {
+      "index": 55,
+      "keyword": "dept",
+      "canonical": "Category",
+      "reachable": true
+    },
+    {
+      "index": 56,
+      "keyword": "segment",
+      "canonical": "Category",
+      "reachable": true
+    },
+    {
+      "index": 57,
+      "keyword": "group",
+      "canonical": "Category",
+      "reachable": true
+    },
+    {
+      "index": 58,
+      "keyword": "section",
+      "canonical": "Category",
+      "reachable": true
+    },
+    {
+      "index": 59,
+      "keyword": "item",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 60,
+      "keyword": "product",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 61,
+      "keyword": "particular",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 62,
+      "keyword": "style",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 63,
+      "keyword": "sku",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 64,
+      "keyword": "goods",
+      "canonical": "Item",
+      "reachable": true
+    },
+    {
+      "index": 65,
+      "keyword": "article",
+      "canonical": "Item",
+      "reachable": true
+    }
+  ]
+}
